@@ -48,8 +48,8 @@ Item {
             source:searchitem===-1 ? "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg":nodeimagesource
             anchors.horizontalCenter:parent.horizontalCenter
             anchors.verticalCenter:parent.verticalCenter
-            width:ApplicationInfo.ratio*45
-            height:ApplicationInfo.ratio*45
+            width:parent.width*0.8
+            height:parent.height*0.8
 
         }
          GCText {

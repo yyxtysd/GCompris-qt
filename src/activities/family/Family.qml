@@ -33,7 +33,7 @@ ActivityBase {
     pageComponent: Image {
         id: background
         anchors.fill: parent
-        source:"qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg"
+        source: Activity.url + "back.svg"
         sourceSize.width: parent.width
         fillMode: Image.PreserveAspectCrop
 
@@ -60,40 +60,63 @@ ActivityBase {
         onStop: { Activity.stop() }
 
         Item{
-            id:partition
-            width:background.width
-            height:background.height
+            id: partition
+            width: background.width
+            height: background.height
             Rectangle{
                 id:tree
                 color: "transparent"
                 width: background.width*0.65
                 height: background.height
+                border.color:"black"
+                border.width:5
                 Item{
-                  id:treestructure
-                  Repeater{
-                      id:nodecreator
-                      model:ListModel{}
-                      delegate:
-                       Tree{
-                         id: currentpointer
-                         x: xx*tree.width
-                         y: yy*tree.height
-                         width: ApplicationInfo.ratio*55
-                         height: ApplicationInfo.ratio*55
-                         recwidth: currentpointer.width
-                         recheight: currentpointer.height
-                         searchitem: 3
-                         nodeimagesource: Activity.url+nodee
-                         nodetextvalue: "sad"
-                         bordercolor: "black"
-                         borderwidth:4
-                         colorr: "transparent"
-                         radius:recwidth/2
+                    id:treestructure
+                    Repeater {
+                        id: nodecreator
+                        model: ListModel{}
+                        delegate:
+                            Tree {
+                            id: currentpointer
+                            x: xx*tree.width
+                            y: yy*tree.height
+                            width: ApplicationInfo.ratio*rationn
+                            height: ApplicationInfo.ratio*rationn
+                            recwidth: currentpointer.width
+                            recheight: currentpointer.height
+                            searchitem: 3
+                            nodeimagesource: Activity.url+nodee
+                            nodetextvalue: "sad"
+                            bordercolor: "black"
+                            borderwidth: 4
+                            colorr: "transparent"
+                            radius: recwidth/2
 
-                      }
+                        }
 
-                  }
-               }
+                    }
+                }
+
+                Repeater{
+                    id:edgecreator
+                    model: ListModel{}
+                    delegate:
+                        Rectangle{
+                        id: edge
+                        opacity:1
+                        antialiasing: true
+                        color:"black"
+                        transformOrigin:Item.TopLeft
+                        x: x1
+                        y: y1
+                        property var x2: x22
+                        property var y2: y22
+                        width: Math.sqrt(Math.pow(x - x2, 2) + Math.pow(y- y2, 2))
+                        height: 3 * ApplicationInfo.ratio
+
+
+                    }
+                }
             }
 
             Rectangle {
@@ -102,25 +125,34 @@ ActivityBase {
                 width: background.width*0.35
                 height: background.height
                 anchors.left: tree.right
-                border.color:"black"
-                border.width:5
-                Grid{
-                    columns:1
-                    rowSpacing:10
-                    Repeater{
-                        id:answerschoice
-                        model:ListModel{}
-                        delegate:
-                        AnswerButton {
-                            id:options
-                            width:answers.width*0.80
-                            height:answers.width*0.25
-                            textLabel:hh
-                            onPressed:{
-                                if(textLabel === answer){
-                                       bonus.good("")
-                                } else {
-                                       bonus.bad("")
+                border.color: "black"
+                border.width: 5
+                Image{
+                    width: parent.width * 0.99
+                    height: parent.height * 0.99
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: Activity.url + "answerarea.svg"
+                    Grid{
+                        columns: 1
+                        rowSpacing: 20
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Repeater{
+                            id: answerschoice
+                            model: ListModel{}
+                            delegate:
+                                AnswerButton {
+                                id: options
+                                width: answers.width*0.80
+                                height: answers.width*0.25
+                                textLabel: optionn
+                                onPressed: {
+                                    if(textLabel === answer){
+                                        bonus.good("")
+                                    } else {
+                                        bonus.bad("")
+                                    }
                                 }
                             }
                         }
