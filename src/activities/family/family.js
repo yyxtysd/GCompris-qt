@@ -25,13 +25,27 @@ var currentLevel = 0
 var items
 var url = "qrc:/gcompris/src/activities/family/resource/"
 var treestructure = [
-                    {  edgelist:[],
+                    {  edgelist:[
+                                   [0.41,0.25,0.64,0.25],
+                                   [0.53,0.25,0.53,0.50]
+                                ],
                        nodePositions:[
                                [0.211,0.20],
                                [0.633,0.20],
                                [0.4,0.50]
                        ],
                        rationn:[80,80,80]
+                    },
+                    {  edgelist:[
+                                  [0.41,0.25,0.64,0.25],
+                                  [0.53,0.25,0.53,0.50]
+                                ],
+                      nodePositions:[
+                                  [0.211,0.20],
+                                  [0.633,0.20],
+                                  [0.4,0.50]
+                      ],
+                                rationn:[80,80,80]
                     },
                     {  edgelist:[],
                        nodePositions:[
@@ -97,8 +111,15 @@ var treestructure = [
 
 var dataset = [
               {  nodeleave:["man3.svg","lady2.svg","boy1.svg"],
+                 currentstate:["active","deactive","active"],
                  answer:["Father"],
-                 optionss:["Father","Grandafather","Uncle"]
+                 optionss:["Father","Grandfather","Uncle"]
+
+              },
+              {  nodeleave:["man3.svg","lady2.svg","boy1.svg"],
+                 currentstate:["deactive","active","active"],
+                 answer:["Mother"],
+                 optionss:["Mother","GrandMother","Aunty"]
 
               },
               {  nodeleave:["man3.svg","lady2.svg","boy1.svg","boy2.svg","girl3.svg"],
@@ -128,22 +149,35 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
-    var test = treestructure[0]
-    var test1 = dataset[0]
+    var test = treestructure[currentLevel]
+    var test1 = dataset[currentLevel]
     items.nodecreator.model.clear();
     for(var i =0;i<3;i++){
         items.nodecreator.model.append({
-                       "xx":test.nodePositions[i][0],
-                       "yy":test.nodePositions[i][1],
-                       "nodee":test1.nodeleave[i],
-                       "rationn":test.rationn[i]
+                       "xx": test.nodePositions[i][0],
+                       "yy": test.nodePositions[i][1],
+                       "nodee": test1.nodeleave[i],
+                       "rationn": test.rationn[i],
+                       "currentstate":test1.currentstate[i]
                      });
     }
 
     for(var j = 0;j <3; j++){
        items.answerschoice.model.append({
-               "optionn":test1.optionss[j]
+               "optionn": test1.optionss[j],
+               "answer":test1.answer[0]
        });
+    }
+
+    for(var k =0 ;k < 2; k++){
+        items.edgecreator.model.append({
+             "x1": test.edgelist[k][0],
+             "y1": test.edgelist[k][1],
+             "x22": test.edgelist[k][2],
+             "y22": test.edgelist[k][3]
+
+        });
+
     }
 
 

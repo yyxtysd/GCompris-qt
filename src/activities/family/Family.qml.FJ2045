@@ -81,8 +81,8 @@ ActivityBase {
                             id: currentpointer
                             x: xx*tree.width
                             y: yy*tree.height
-                            width:tree.width/5
-                            height:tree.width/5
+                            width: ApplicationInfo.ratio*rationn
+                            height: ApplicationInfo.ratio*rationn
                             recwidth: currentpointer.width
                             recheight: currentpointer.height
                             searchitem: 3
@@ -93,13 +93,12 @@ ActivityBase {
                             colorr: "transparent"
                             radius: recwidth/2
                             state:currentstate
-
                             states : [
                                State {
                                      name:"active"
                                      PropertyChanges {
                                          target: currentpointer
-                                         bordercolor:"blue"
+                                         bordercolor:"red"
                                      }
                                },
                                State {
@@ -111,35 +110,6 @@ ActivityBase {
                                }
                             ]
 
-                            SequentialAnimation {
-                                id: anim
-                                running:currentpointer.state === "active" ? true : false
-                                loops: Animation.Infinite
-                                alwaysRunToEnd: true
-                                NumberAnimation {
-                                    target: currentpointer
-                                    property: "rotation"
-                                    from: 0; to: 10
-                                    duration: 200
-                                    easing.type: Easing.OutQuad
-                                }
-                                NumberAnimation {
-                                    target: currentpointer
-                                    property: "rotation"
-                                    from: 10; to: -10
-                                    duration: 400
-                                    easing.type: Easing.InOutQuad
-                                }
-                                NumberAnimation {
-                                    target: currentpointer
-                                    property: "rotation"
-                                    from: -10; to: 0
-                                    duration: 200
-                                    easing.type: Easing.InQuad
-                                }
-                            }
-
-
                         }
 
                     }
@@ -148,7 +118,8 @@ ActivityBase {
                     Repeater {
                         id:edgecreator
                         model: ListModel{}
-                        delegate: Rectangle {
+                        delegate:
+                            Rectangle {
                             id: edge
                             opacity:1
                             antialiasing: true
@@ -163,19 +134,6 @@ ActivityBase {
                             height: 4 * ApplicationInfo.ratio
                             rotation: (Math.atan((y2 - y)/(x2-x)) * 180 / Math.PI) + (((y2-y) < 0 && (x2-x) < 0) * 180) + (((y2-y) >= 0 && (x2-x) < 0) * 180)
 
-                            Behavior on height {
-                                NumberAnimation {
-                                    duration: 2000
-                                    easing.type: Easing.OutExpo
-                                }
-                            }
-
-                            Behavior on width {
-                                NumberAnimation {
-                                    duration: 2000
-                                    easing.type: Easing.OutExpo
-                                }
-                            }
                         }
                     }
                 }
@@ -212,9 +170,9 @@ ActivityBase {
                                 textLabel: optionn
                                 onPressed: {
                                     if(textLabel === answer){
-                                        bonus.good("lion")
+                                        bonus.good("")
                                     } else {
-                                        bonus.bad("lion")
+                                        bonus.bad("")
                                     }
                                 }
                             }
