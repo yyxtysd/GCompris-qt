@@ -36,6 +36,7 @@ var treestructure = [
                        ],
                        rationn:[80,80,80]
                     },
+
                     {  edgelist:[
                                   [0.41,0.25,0.64,0.25],
                                   [0.53,0.25,0.53,0.50]
@@ -45,9 +46,26 @@ var treestructure = [
                                   [0.633,0.20],
                                   [0.4,0.50]
                       ],
-                                rationn:[80,80,80]
+                      rationn:[80,80,80]
                     },
-                    {  edgelist:[],
+
+                    {  edgelist:[ [0.41,0.25,0.64,0.25],
+                                  [0.53,0.25,0.44,0.50],
+                                  [0.53,0.25,0.63,0.50]
+                                ],
+                       nodePositions:[
+                                [0.211,0.20],
+                                [0.633,0.20],
+                                [0.33,0.50],
+                                [0.55,0.50]
+                       ],
+                       rationn:[80,80,80]
+
+                    },
+
+                    {  edgelist:[[0.41,0.25,0.64,0.25],
+                                 [0.53,0.20,0.44,0.33],
+                                 [0.53,0.25,0.59,0.33]],
                        nodePositions:[
                                     [0.180,0.09],
                                     [0.55,0.09],
@@ -117,14 +135,15 @@ var dataset = [
 
               },
               {  nodeleave:["man3.svg","lady2.svg","boy1.svg"],
-                 currentstate:["deactive","active","active"],
+                 currentstate:["deactive","active","active",],
                  answer:["Mother"],
                  optionss:["Mother","GrandMother","Aunty"]
 
               },
-              {  nodeleave:["man3.svg","lady2.svg","boy1.svg","boy2.svg","girl3.svg"],
-                 answer:["Father"],
-                 optionss:["Father","Brother","Grandfather","uncle"]
+              {  nodeleave:["man3.svg","lady2.svg","boy1.svg","boy2.svg"],
+                 currentstate:["deactive","deactive","active","active"],
+                 answer:["Brother"],
+                 optionss:["Cousin","Brother","Sister"]
               },
               {  nodeleave:["grandpa.svg","old-lady.svg","man1.svg","lady2.svg","man2.svg","lady1.svg",
                    "boy1.svg","boy2.svg","girl2.svg","girl3.svg","girl4.svg"],
@@ -134,7 +153,7 @@ var dataset = [
 
 ]
 
-var numberOfLevel = 2; 
+var numberOfLevel = 3;
 
 var mode = "image";
 
@@ -152,7 +171,9 @@ function initLevel() {
     var test = treestructure[currentLevel]
     var test1 = dataset[currentLevel]
     items.nodecreator.model.clear();
-    for(var i =0;i<3;i++){
+    items.answerschoice.model.clear();
+    items.edgecreator.model.clear();
+    for(var i = 0 ; i < test.nodePositions.length; i++){
         items.nodecreator.model.append({
                        "xx": test.nodePositions[i][0],
                        "yy": test.nodePositions[i][1],
@@ -169,7 +190,7 @@ function initLevel() {
        });
     }
 
-    for(var k =0 ;k < 2; k++){
+    for(var k =0 ; k < test.edgelist.length ; k++){
         items.edgecreator.model.append({
              "x1": test.edgelist[k][0],
              "y1": test.edgelist[k][1],
