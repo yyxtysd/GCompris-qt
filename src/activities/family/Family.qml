@@ -94,6 +94,12 @@ ActivityBase {
                             radius: recwidth/2
                             state:currentstate
 
+                            MouseArea{
+                                id:nodemousearea
+                                anchors.fill: parent
+
+                            }
+
                             states : [
                                State {
                                      name:"active"
@@ -108,12 +114,20 @@ ActivityBase {
                                           target: currentpointer
 
                                       }
+                               },
+                               State {
+                                    name:"activeto"
+                                    PropertyChanges {
+                                        target: currentpointer
+                                        bordercolor:"red"
+                                    }
                                }
+
                             ]
 
                             SequentialAnimation {
                                 id: anim
-                                running:currentpointer.state === "active" ? true : false
+                                running:currentpointer.state === "active" ? true : currentpointer.state === "activeto" ? true : false
                                 loops: Animation.Infinite
                                 alwaysRunToEnd: true
                                 NumberAnimation {
@@ -214,7 +228,7 @@ ActivityBase {
                                     if(textLabel === answer){
                                         bonus.good("lion")
                                     } else {
-                                        bonus.bad("lion")
+                                       bonus.bad("lion")
                                     }
                                 }
                             }

@@ -62,8 +62,23 @@ var treestructure = [
                        rationn:[80,80,80]
 
                     },
+                    {  edgelist:[ [0.41,0.25,0.64,0.25],
+                                  [0.53,0.26,0.33,0.50],
+                                  [0.53,0.25,0.53,0.50],
+                                  [0.53,0.25,0.70,0.52]
+                              ],
+                      nodePositions:[
+                                 [0.211,0.20],
+                                 [0.633,0.20],
+                                 [0.22,0.50],
+                                 [0.43,0.50],
+                                 [0.65,0.50]
+                            ],
+                      rationn:[80,80,80]
 
-                    {  edgelist:[[0.41,0.25,0.64,0.25],
+                     },
+
+                     {  edgelist:[[0.41,0.25,0.64,0.25],
                                  [0.53,0.20,0.44,0.33],
                                  [0.53,0.25,0.59,0.33]],
                        nodePositions:[
@@ -79,7 +94,8 @@ var treestructure = [
                                     [.61,0.65],
                                     [.81,0.65]
                        ]
-                    },/*
+                    },
+                    /*
                     {  edgelist:[],
                        nodePositions:[]
                     },
@@ -129,31 +145,31 @@ var treestructure = [
 
 var dataset = [
               {  nodeleave:["man3.svg","lady2.svg","boy1.svg"],
-                 currentstate:["active","deactive","active"],
+                 currentstate:["active","deactive","activeto"],
                  answer:["Father"],
-                 optionss:["Father","Grandfather","Uncle"]
+                 optionss:[qsTr("Father"),qsTr("Grandfather"),qsTr("Uncle")]
 
               },
               {  nodeleave:["man3.svg","lady2.svg","boy1.svg"],
-                 currentstate:["deactive","active","active",],
-                 answer:["Mother"],
-                 optionss:["Mother","GrandMother","Aunty"]
+                 currentstate:["deactive","active","activeto",],
+                 answer:[qsTr("Mother")],
+                 optionss:[qsTr("Mother"),qsTr("GrandMother"),qsTr("Aunty")]
 
               },
               {  nodeleave:["man3.svg","lady2.svg","boy1.svg","boy2.svg"],
-                 currentstate:["deactive","deactive","active","active"],
-                 answer:["Brother"],
-                 optionss:["Cousin","Brother","Sister"]
+                 currentstate:["deactive","deactive","active","activeto"],
+                 answer:[qsTr("Brother")],
+                 optionss:[qsTr("Cousin"),qsTr("Brother"),qsTr("Sister")]
               },
-              {  nodeleave:["grandpa.svg","old-lady.svg","man1.svg","lady2.svg","man2.svg","lady1.svg",
-                   "boy1.svg","boy2.svg","girl2.svg","girl3.svg","girl4.svg"],
-                 answer:["Father"],
-                 optionss:["M"]
+              {  nodeleave:["man3.svg","lady2.svg","boy1.svg","girl1.svg","boy2.svg"],
+                 currentstate:["deactive","deactive","active","activeto","deactive"],
+                 answer:[qsTr("Sister")],
+                 optionss:[qsTr("Cousion"),qsTr("Brother"),qsTr("Sister")]
               }
 
 ]
 
-var numberOfLevel = 3;
+var numberOfLevel = 4;
 
 var mode = "image";
 
