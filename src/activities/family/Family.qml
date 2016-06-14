@@ -4,7 +4,7 @@
  *
  * Authors:
  *
- *   RAJDEEP KAUR <rajdeep.kaur@kde.org> (Qt Quick port)
+ *   RAJDEEP KAUR <rajdeep.kaur@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ ActivityBase {
             width: background.width
             height: background.height
             Rectangle {
-                id:tree
+                id: tree
                 color: "transparent"
                 width: background.width*0.65
                 height: background.height
@@ -81,8 +81,8 @@ ActivityBase {
                             id: currentpointer
                             x: xx*tree.width
                             y: yy*tree.height
-                            width:tree.width/5
-                            height:tree.width/5
+                            width: tree.width/5
+                            height: tree.width/5
                             recwidth: currentpointer.width
                             recheight: currentpointer.height
                             searchitem: 3
@@ -93,32 +93,32 @@ ActivityBase {
                             radius: recwidth/2
                             state:currentstate
 
-                            MouseArea{
-                                id:nodemousearea
+                            MouseArea {
+                                id: nodemousearea
                                 anchors.fill: parent
 
                             }
 
-                            states : [
+                            states: [
                                State {
-                                     name:"active"
+                                     name: "active"
                                      PropertyChanges {
                                          target: currentpointer
-                                         bordercolor:"blue"
+                                         bordercolor: "blue"
                                      }
                                },
                                State {
-                                      name:"deactive"
+                                      name: "deactive"
                                       PropertyChanges {
                                           target: currentpointer
 
                                       }
                                },
                                State {
-                                    name:"activeto"
+                                    name: "activeto"
                                     PropertyChanges {
                                         target: currentpointer
-                                        bordercolor:"red"
+                                        bordercolor: "red"
                                     }
                                }
 
@@ -126,7 +126,7 @@ ActivityBase {
 
                             SequentialAnimation {
                                 id: anim
-                                running:currentpointer.state === "active" ? true : currentpointer.state === "activeto" ? true : false
+                                running: currentpointer.state === "active" || currentpointer.state === "activeto"
                                 loops: Animation.Infinite
                                 alwaysRunToEnd: true
                                 NumberAnimation {
@@ -151,39 +151,37 @@ ActivityBase {
                                     easing.type: Easing.InQuad
                                 }
                             }
-
-
                         }
-
                     }
 
                     Image {
-                        id:me
-                        source:Activity.url + "me.svg"
-                        x:Activity.treestructure[bar.level-1].captions[0][0]*tree.width
-                        y:Activity.treestructure[bar.level-1].captions[0][1]*tree.height
-                        width:tree.width/12
-                        height:tree.height/14
+                        id: me
+                        source: Activity.url + "me.svg"
+                        visible: Activity.treestructure[bar.level-1].captions[0] !== undefined
+                        x: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[0][0]*tree.width : 0
+                        y: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[0][1]*tree.height : 0
+                        width: tree.width/12
+                        height: tree.height/14
                     }
 
                     Image {
-                        id:questionmark
-                        source:Activity.url + "questionmark.svg"
-                        x:Activity.treestructure[bar.level-1].captions[1][0]*tree.width
-                        y:Activity.treestructure[bar.level-1].captions[1][1]*tree.height
+                        id: questionmark
+                        source: Activity.url + "questionmark.svg"
+                        visible: Activity.treestructure[bar.level-1].captions[1] !== undefined
+                        x: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[1][0]*tree.width : 0
+                        y: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[1][1]*tree.height : 0
                     }
-
 
                     Repeater {
-                        id:edgecreator
+                        id: edgecreator
                         model: ListModel{}
                         delegate: Rectangle {
                             id: edge
-                            opacity:1
+                            opacity: 1
                             antialiasing: true
-                            color:"black"
+                            color: "black"
 
-                            transformOrigin:Item.TopLeft
+                            transformOrigin: Item.TopLeft
                             x: x1*tree.width
                             y: y1*tree.height
                             property var x2: x22*tree.width
@@ -208,7 +206,6 @@ ActivityBase {
                         }
                     }
                 }
-
             }
 
             Rectangle {
@@ -235,17 +232,12 @@ ActivityBase {
                             model: ListModel{}
                             delegate:
                                 AnswerButton {
-                                id: options
-                                width: answers.width*0.80
-                                height: answers.width*0.25
-                                textLabel: optionn
-                                onPressed: {
-                                    if(textLabel === answer){
-                                        bonus.good("lion")
-                                    } else {
-                                       bonus.bad("lion")
-                                    }
-                                }
+                                    id: options
+                                    width: answers.width*0.80
+                                    height: answers.width*0.25
+                                    textLabel: optionn
+                                    isCorrectAnswer: textLabel === answer
+                                    onCorrectlyPressed: bonus.good("lion")
                             }
                         }
                     }
@@ -274,5 +266,4 @@ ActivityBase {
             Component.onCompleted: win.connect(Activity.nextLevel)
         }
     }
-
 }

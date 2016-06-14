@@ -21,15 +21,15 @@ ActivityInfo {
   name: "family/Family.qml"
   difficulty: 1
   icon: "family/family.svg"
-  author: "Rajdeep Kaur  &lt;rajdeep.kaur@kde.org&gt;"
+  author: "Rajdeep Kaur &lt;rajdeep.kaur@kde.org&gt;"
   demo: true
-  title: "Family"
-  description: "This activity will give teach about who we are related to our relatives"
+  title: qsTr("Family")
+  description: qsTr("This activity will give teach about who we are related to our relatives")
   //intro: "Let us understand what to call our relatives"
-  goal: "To get an idea about Relationships in the family"
-  prerequisite: "Reading Skills"
+  goal: qsTr("To get an idea about relationships in the family")
+  prerequisite: qsTr("Reading Skills")
   manual: ""
   credit: ""
   section: "fun"
-  createdInVersion:6
+  createdInVersion: 7000
 }
