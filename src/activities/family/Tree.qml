@@ -30,12 +30,11 @@ Item {
     property alias recwidth:content.width
     property alias recheight:content.height
     property string nodeimagesource:nodeimage.source
-    property string nodetextvalue:nodetext.text
     property string bordercolor:content.border.color
     property real borderwidth: content.border.width
     property string colorr:content.color
     property alias radius:content.radius
-    Rectangle{
+    Rectangle {
          id:content
          color:colorr
          width:recwidth
@@ -43,21 +42,14 @@ Item {
          border.color:bordercolor
          border.width:borderwidth
          radius:radius
-        Image{
+        Image {
             id:nodeimage
             source:searchitem===-1 ? "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg":nodeimagesource
             anchors.horizontalCenter:parent.horizontalCenter
             anchors.verticalCenter:parent.verticalCenter
-            width:parent.width*0.8
-            height:parent.height*0.8
+            width:parent.width*0.6
+            height:parent.height*0.6
 
         }
-         GCText {
-             id:nodetext
-             visible:false
-             text:nodetextvalue
-             anchors.verticalCenter:parent.verticalCenter
-             anchors.horizontalCenter:parent.horizontalCenter
-         }
     }
 }

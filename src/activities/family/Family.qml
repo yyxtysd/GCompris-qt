@@ -87,7 +87,6 @@ ActivityBase {
                             recheight: currentpointer.height
                             searchitem: 3
                             nodeimagesource: Activity.url+nodee
-                            nodetextvalue: "sad"
                             bordercolor: "black"
                             borderwidth: 4
                             colorr: "transparent"
@@ -156,6 +155,22 @@ ActivityBase {
 
                         }
 
+                    }
+
+                    Image {
+                        id:me
+                        source:Activity.url + "me.svg"
+                        x:Activity.treestructure[bar.level-1].captions[0][0]*tree.width
+                        y:Activity.treestructure[bar.level-1].captions[0][1]*tree.height
+                        width:tree.width/12
+                        height:tree.height/14
+                    }
+
+                    Image {
+                        id:questionmark
+                        source:Activity.url + "questionmark.svg"
+                        x:Activity.treestructure[bar.level-1].captions[1][0]*tree.width
+                        y:Activity.treestructure[bar.level-1].captions[1][1]*tree.height
                     }
 
 
