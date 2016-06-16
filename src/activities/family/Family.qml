@@ -36,6 +36,7 @@ ActivityBase {
         source: Activity.url + "back.svg"
         sourceSize.width: parent.width
         fillMode: Image.PreserveAspectCrop
+        property bool horizontalLayout:background.width > background.height
 
         signal start
         signal stop
@@ -67,8 +68,8 @@ ActivityBase {
             Rectangle {
                 id: tree
                 color: "transparent"
-                width: background.width*0.65
-                height: background.height
+                width: background.horizontalLayout ? background.width*0.65 : background.width
+                height: background.horizontalLayout ? background.height : background.height*0.65
                 border.color: "black"
                 border.width: 5
                 Item {
@@ -211,9 +212,10 @@ ActivityBase {
             Rectangle {
                 id: answers
                 color: "transparent"
-                width: background.width*0.35
-                height: background.height
-                anchors.left: tree.right
+                width: background.horizontalLayout ? background.width*0.35 : background.width
+                height: background.horizontalLayout ? background.height : background.height*0.35
+                anchors.left: background.horizontalLayout ?  tree.right : partition.left
+                anchors.top: background.horizontalLayout ? partition.top: tree.bottom
                 border.color: "black"
                 border.width: 5
                 Image {
@@ -233,8 +235,8 @@ ActivityBase {
                             delegate:
                                 AnswerButton {
                                     id: options
-                                    width: answers.width*0.80
-                                    height: answers.width*0.25
+                                    width: answers.width*0.70
+                                    height: answers.height*Activity.answerbuttonheight
                                     textLabel: optionn
                                     isCorrectAnswer: textLabel === answer
                                     onCorrectlyPressed: bonus.good("lion")
