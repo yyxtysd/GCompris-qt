@@ -20,6 +20,7 @@
  */
 .pragma library
 .import QtQuick 2.0 as Quick
+//.import "engine.js" as Engine
 
 var currentLevel = 0
 var items
@@ -126,8 +127,8 @@ var treestructure = [
                                  [0.65, 0.70]
                               ],
                       rationn: [80, 80, 80],
-                      captions: [  [0.22,0.17],
-                                   [0.118,0.76]
+                      captions: [  [0.118,0.76],
+                                   [0.22,0.17],
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
                       currentstate: ["active", "deactive", "deactive", "deactive", "activeto", "deactive", "deactive"],
@@ -153,8 +154,8 @@ var treestructure = [
                                    [0.65, 0.70],
                            ],
                       rationn: [80, 80, 80],
-                      captions: [  [0.743,0.16],
-                                   [0.85,0.76],
+                      captions: [   [0.85,0.76],
+                                    [0.743,0.16]
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
                       currentstate: ["deactive", "active", "deactive", "deactive", "deactive", "deactive", "activeto", "active"],
@@ -180,8 +181,8 @@ var treestructure = [
                                [0.65, 0.70]
                          ],
                       rationn: [80, 80, 80],
-                      captions: [  [0.85,0.76],
-                                   [0.22,0.17]
+                      captions: [  [0.22,0.17],
+                                   [0.85,0.76]
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "boy2.svg","girl1.svg" ],
                       currentstate: ["activeto", "deactive", "deactive", "deactive", "deactive", "deactive", "active"],
@@ -207,8 +208,8 @@ var treestructure = [
                               [0.65, 0.70]
                   ],
                   rationn: [80, 80, 80],
-                  captions: [ [0.85,0.76],
-                              [0.743,0.16]
+                  captions: [ [0.743,0.16],
+                              [0.85,0.76]
                             ],
                   nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
                   currentstate: ["deactive", "activeto", "deactive", "deactive", "deactive", "deactive", "active", "activeto"],

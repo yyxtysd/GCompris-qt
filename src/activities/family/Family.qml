@@ -155,9 +155,9 @@ ActivityBase {
                         }
                     }
 
-                    Image {
+                   GCText {
                         id: me
-                        source: Activity.url + "me.svg"
+                        text:qsTr("Me")
                         visible: Activity.treestructure[bar.level-1].captions[0] !== undefined
                         x: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[0][0]*tree.width : 0
                         y: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[0][1]*tree.height : 0
