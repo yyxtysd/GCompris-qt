@@ -17,19 +17,51 @@
  */
 .pragma library
 .import QtQuick 2.0 as Quick
+.import GCompris 1.0 as GCompris //for ApplicationInfo
 .import "qrc:/gcompris/src/core/core.js" as Core
 
 var currentLevel = 0
 var numberOfLevel = 4
 var items
-var alphabet = ['a','b','c','d','e','f','g','h','i',
-                'j','k','l','m','n','o','p','q','r',
-                's','t','u','v','w','x','y','z']
+var alphabet = []
 var solution
+var dataSetUrl= "qrc:/gcompris/src/activities/gletters/resource/"
 
 function start(items_) {
     items = items_
     currentLevel = 0
+
+
+//imported from "readingh" activity
+    var locale = items.locale == "system" ? "$LOCALE" : items.locale
+
+    items.wordlist.loadFromFile(GCompris.ApplicationInfo.getLocaleFilePath(
+            dataSetUrl + "default-"+locale+".json"));
+    // If wordlist is empty, we try to load from short locale and if not present again, we switch to default one
+    var localeUnderscoreIndex = locale.indexOf('_')
+    // probably exist a better way to see if the list is empty
+    if(items.wordlist.maxLevel == 0) {
+        var localeShort;
+        // We will first look again for locale xx (without _XX if exist)
+        if(localeUnderscoreIndex > 0) {
+            localeShort = locale.substring(0, localeUnderscoreIndex)
+        }
+        else {
+            localeShort = locale;
+        }
+        // If not found, we will use the default file
+        items.wordlist.useDefault = true
+        items.wordlist.loadFromFile(GCompris.ApplicationInfo.getLocaleFilePath(
+        dataSetUrl + "default-"+localeShort+".json"));
+        // We remove the using of default file for next time we enter this function
+        items.wordlist.useDefault = false
+    }
+
+
+
+    //setup the alphabet from file
+    createAlphabet()
+
     initLevel()
 }
 
@@ -42,9 +74,6 @@ function initLevel() {
 }
 
 function init() {
-
-
-    print("localeee: ", items.locale)
     // ['a','b','c','d']
     solution = getSolution(alphabet, 5)
 
@@ -53,6 +82,7 @@ function init() {
 
     // ['a','_','c','_']
     var model = solution.slice()
+    
     // ['b', 'd']
     var modelAux = []
     for (var i = 0; i < 2; i++) {
@@ -77,6 +107,23 @@ function init() {
     for (i = 0; i < model.length; i++) {
         items.listModel.append({"letter": model[i]})
     }
+}
+
+//goes through each level (in gletters json files) and appends all letters
+//  (removing digits and uppercase duplicates) in the alphabet
+function createAlphabet() {
+    // all levels
+    for (var i = 1; i < items.wordlist.wordList.levels.length; i++) {
+        var words = items.wordlist.getLevelWordList(i).words
+        // se
+        for (var j = 0; j < words.length; j++) {
+            if (alphabet.indexOf(words[j].toLowerCase()) < 0 && (words[j] >= '0' && words[j] <= '9') == false ) {
+                alphabet = alphabet.concat(words[j])
+            }
+        }
+    }
+    alphabet = GCompris.ApplicationInfo.localeSort(alphabet)
+//    print("alphabet: ",alphabet)
 }
 
 function sortNumber(a,b) {
