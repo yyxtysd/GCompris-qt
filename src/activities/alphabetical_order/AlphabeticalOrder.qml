@@ -31,7 +31,7 @@ ActivityBase {
     pageComponent: Rectangle {
         id: background
         anchors.fill: parent
-        color: "#ABCDEF"
+        color: "#fffae6"
 
         signal start
         signal stop
@@ -59,6 +59,7 @@ ActivityBase {
             property alias solutionRepeater: solutionRepeater
             property alias locale: background.locale
             property alias wordlist: wordlist
+            property bool gameFinished: false
         }
 
         onStart: { Activity.start(items) }
@@ -88,19 +89,50 @@ ActivityBase {
             return sum
         }
 
+        Timer {
+            id: finishAnimation
+            interval: 100
+            repeat: true
 
-        Rectangle {
+            property int index: 0
+            property int delay: 3
+
+            onTriggered: {
+                if (index < items.repeater.count) {
+                    items.gameFinished = true
+                    items.repeater.itemAt(index).particleLoader.item.burst(40)
+                    index++
+                } else if (index < items.repeater.count + delay) {
+                    index++
+                } else {
+                    stop()
+                    bonus.good("tux")
+                }
+            }
+        }
+
+        Image {
             id: board
-            width: (background.computeWidth(items.repeater) + guessArea.spacing * (items.repeater.count - 0.5)) * 1.2
-            height: parent.height * 0.6
-            anchors.centerIn: parent
-            color: "black"
+            sourceSize.height: parent.height * 0.8
+            sourceSize.width: parent.width * 0.8
+            width: parent.width * 0.8
+            height: parent.height * 0.8
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -50
+
+            source: "resource/blackboard.svg"
 
             Rectangle {
                 id: topRectangle
                 width: background.computeWidth(items.repeater) + guessArea.spacing * (items.repeater.count - 0.5)
                 height: board.height / 2
+
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: - height / 2
+
                 color: "transparent"
 
                 Flow {
@@ -123,11 +155,40 @@ ActivityBase {
 
                             property var _x
                             property var _y
+                            property alias particleLoader: particleLoader
+                            property alias failureAnimation: failureAnimation
 
+                            // Create a particle only for the strawberry
+                            Loader {
+                                id: particleLoader
+                                anchors.fill: parent
+                                active: true
+                                sourceComponent: particle
+                            }
+
+                            Component {
+                                id: particle
+                                ParticleSystemStarLoader {
+                                    id: particles
+                                    clip: false
+                                }
+                            }
+
+                            SequentialAnimation {
+                                id: failureAnimation
+                                PropertyAction { target: letter; property: "color"; value: "red" }
+                                NumberAnimation { target: letter; property: "scale"; to: 2; duration: 400 }
+                                NumberAnimation { target: letter; property: "scale"; to: 1; duration: 400 }
+                                NumberAnimation { target: letter; property: "opacity"; to: 0; duration: 100 }
+                                PropertyAction { target: letter; property: "color"; value: "white" }
+                                NumberAnimation { target: letter; property: "opacity"; to: 1; duration: 400 }
+                            }
 
                             MouseArea {
                                 anchors.fill: parent
                                 drag.target: parent
+                                enabled: items.gameFinished ? false : true
+
                                 onPressed: {
                                     letter._x = letter.x
                                     letter._y = letter.y
@@ -135,20 +196,49 @@ ActivityBase {
                                 onReleased: {
                                     /* use mouse's coordinates (x and y) to compare to the "guessArea"'s repeater items */
                                     var modified = mapToItem(background,mouse.x,mouse.y)
-                                    print("mouse x: ",modified.x,"  mouse y: ",modified.y)
+                                    //print("mouse x: ",modified.x,"  mouse y: ",modified.y)
 
                                     //search through the "repeater"'s items to find if THIS item can replace it
                                     for (var i=0; i<items.repeater.count; i++) {
                                         var item = items.repeater.itemAt(i)
                                         var guess = items.repeater.parent.mapToItem(background,item.x,item.y)
-                                        print("dimensions: ",guess.x,guess.x+item.width,guess.y,guess.y+item.height)
+                                        //print("dimensions: ",guess.x,guess.x+item.width,guess.y,guess.y+item.height)
 
 
                                         if (modified.x > guess.x && modified.x < guess.x + item.width &&
-                                                modified.y > guess.y - item.height && modified.y < guess.y + item.height * 2) {
+                                                modified.y > guess.y && modified.y < guess.y + item.height * 2) {
+
                                             var textAux = items.listModel.get(i).letter
                                             items.listModel.setProperty(i,"letter",letter.text)
                                             items.listModel.setProperty(index,"letter",textAux)
+
+
+                                            if (index != i) {
+                                                if (Activity.solution[i] == items.repeater.itemAt(i).text) {
+                                                    if (Activity.solution[index] == letter.text) {
+                                                        if (!Activity.checkCorectness()) {
+                                                            items.repeater.itemAt(i).particleLoader.item.burst(40)
+                                                            letter.particleLoader.item.burst(40)
+                                                        }
+                                                    } else {
+                                                        items.repeater.itemAt(i).particleLoader.item.burst(40)
+                                                        if (items.repeater.itemAt(index).text != '_')
+                                                            items.repeater.itemAt(index).failureAnimation.start()
+                                                    }
+                                                } else {
+                                                    if (Activity.solution[index] == letter.text) {
+                                                        letter.particleLoader.item.burst(40)
+                                                        if (items.repeater.itemAt(i).text != '_')
+                                                            items.repeater.itemAt(i).failureAnimation.start()
+                                                    }
+                                                    else {
+                                                        if (items.repeater.itemAt(i).text != '_')
+                                                            items.repeater.itemAt(i).failureAnimation.start()
+                                                        if (items.repeater.itemAt(index).text != '_')
+                                                            items.repeater.itemAt(index).failureAnimation.start()
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
 
@@ -157,11 +247,14 @@ ActivityBase {
                                         var item1 = items.solutionRepeater.itemAt(i)
                                         var guess1 = items.solutionRepeater.parent.mapToItem(background,item1.x,item1.y)
                                         if (modified.x > guess1.x && modified.x < guess1.x + item1.width &&
-                                                modified.y > guess1.y - item1.height && modified.y < guess1.y + item1.height * 2) {
+                                                modified.y > guess1.y && modified.y < guess1.y + item1.height * 2) {
                                             var textAux1 = items.listModel2.get(i).letter
-                                            items.listModel2.setProperty(i,"letter",letter.text)
-                                            items.listModel.setProperty(index,"letter",textAux1)
-                                            break
+                                            if (textAux1 != '_' && letter.text != '_') {
+                                                items.listModel2.setProperty(i,"letter",letter.text)
+                                                items.listModel.setProperty(index,"letter",textAux1)
+                                                break
+                                            }
+
                                         }
                                     }
 
@@ -169,9 +262,9 @@ ActivityBase {
                                     letter.y = letter._y
 
                                     if (Activity.checkCorectness()) {
-                                        bonus.good("tux")
+                                        finishAnimation.index = 0
+                                        finishAnimation.start()
                                     }
-
                                 }
                             }
                         }
@@ -180,10 +273,16 @@ ActivityBase {
             }
 
             Rectangle {
+                id: bottomRectangle
+
+                //TODO: on 3 or more letters (on bottom row of letter), only 2 are shown; have to handle width better
                 width: background.computeWidth(items.solutionRepeater) + solutionArea.spacing + (items.solutionRepeater.count - 0.5)
                 height: parent.height / 2.1
-                anchors.top: topRectangle.bottom
+
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: height / 2
+
                 color: "transparent"
 
                 Flow {
@@ -212,10 +311,12 @@ ActivityBase {
                             property var _y
                             property alias mouseArea: mouseArea
 
+
                             MouseArea {
                                 id: mouseArea
                                 anchors.fill: parent
                                 drag.target: parent
+                                enabled: items.gameFinished ? false : true
 
                                 onPressed: {
                                     missingLetter._x = missingLetter.x
@@ -242,10 +343,17 @@ ActivityBase {
                                                 parent.enabled = false
 
                                             } else {
-
                                                 items.listModel.setProperty(i,"letter",missingLetter.text)
                                                 items.listModel2.setProperty(index,"letter",textAux)
                                             }
+
+                                            //if the letter is placed in the correct spot, the particle is activated
+                                            if (Activity.solution[i] == items.listModel.get(i).letter) {
+                                                if (!Activity.checkCorectness())
+                                                    items.repeater.itemAt(i).particleLoader.item.burst(40)
+                                            } else
+                                                items.repeater.itemAt(i).failureAnimation.start()
+
                                             break
                                         }
                                     }
@@ -254,8 +362,10 @@ ActivityBase {
                                     missingLetter.y = missingLetter._y
 
                                     if (Activity.checkCorectness()) {
-                                        bonus.good("tux")
+                                        finishAnimation.index = 0
+                                        finishAnimation.start()
                                     }
+
                                 }
                             }
                         }

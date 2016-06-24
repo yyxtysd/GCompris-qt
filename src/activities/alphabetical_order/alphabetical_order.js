@@ -21,11 +21,13 @@
 .import "qrc:/gcompris/src/core/core.js" as Core
 
 var currentLevel = 0
-var numberOfLevel = 4
+var numberOfLevel = 10
 var items
 var alphabet = []
 var solution
 var dataSetUrl= "qrc:/gcompris/src/activities/gletters/resource/"
+var totalLetters = [5,5,5,5,5,5,5,5,5,5]
+var guessLetters = [2,2,2,2,2,2,2,2,2,2]
 
 function start(items_) {
     items = items_
@@ -74,18 +76,20 @@ function initLevel() {
 }
 
 function init() {
+    items.gameFinished = false
+
     // ['a','b','c','d']
-    solution = getSolution(alphabet, 5)
+    solution = getSolution(alphabet, totalLetters[currentLevel])
 
     // 3 1 5 2 4
-    var numbers = getNumbers(5)
+    var numbers = getNumbers(totalLetters[currentLevel])
 
     // ['a','_','c','_']
     var model = solution.slice()
     
     // ['b', 'd']
     var modelAux = []
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < guessLetters[currentLevel]; i++) {
         model[numbers[i]] = '_'
         modelAux[i] = solution[numbers[i]]
     }
@@ -107,6 +111,8 @@ function init() {
     for (i = 0; i < model.length; i++) {
         items.listModel.append({"letter": model[i]})
     }
+
+
 }
 
 //goes through each level (in gletters json files) and appends all letters
