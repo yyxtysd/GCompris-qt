@@ -20,8 +20,6 @@ import GCompris 1.0
 import "../../core"
 import "alphabetical_order.js" as Activity
 
-
-
 ActivityBase {
     id: activity
 
@@ -35,7 +33,6 @@ ActivityBase {
 
         signal start
         signal stop
-
 
         // system locale by default
         property string locale: "system"
@@ -52,14 +49,14 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property var missingLetters
             property alias listModel: listModel
-            property alias listModel2: listModel2
+            property alias listModelInput: listModelInput
             property alias repeater: repeater
-            property alias solutionRepeater: solutionRepeater
+            property alias inputRepeater: inputRepeater
             property alias locale: background.locale
             property alias wordlist: wordlist
             property bool gameFinished: false
+            property int delay: 6
         }
 
         onStart: { Activity.start(items) }
@@ -76,17 +73,7 @@ ActivityBase {
         }
 
         ListModel {
-            id: listModel2
-        }
-
-        function computeWidth(repeater) {
-            if (repeater == null)
-                return 0
-            var sum = 0
-            for (var i = 0; i < repeater.count; i++) {
-                sum += repeater.itemAt(i).width
-            }
-            return sum
+            id: listModelInput
         }
 
         Timer {
@@ -94,17 +81,24 @@ ActivityBase {
             interval: 100
             repeat: true
 
+            // repeater index of item to load the particles
             property int index: 0
-            property int delay: 3
+
+            // how much the game should wait untill passing to next level
+            property int delay: items.delay
 
             onTriggered: {
                 if (index < items.repeater.count) {
+                    // set the game to "finished"
                     items.gameFinished = true
+                    // start the particles at index, then increment index
                     items.repeater.itemAt(index).particleLoader.item.burst(40)
                     index++
                 } else if (index < items.repeater.count + delay) {
+                    // wait for the dealy time to pass
                     index++
                 } else {
+                    // pass the level
                     stop()
                     bonus.good("tux")
                 }
@@ -113,38 +107,36 @@ ActivityBase {
 
         Image {
             id: board
+            source: "resource/blackboard.svg"
             sourceSize.height: parent.height * 0.8
             sourceSize.width: parent.width * 0.8
             width: parent.width * 0.8
             height: parent.height * 0.8
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -50
-
-            source: "resource/blackboard.svg"
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -50
+            }
 
             Rectangle {
                 id: topRectangle
-                width: background.computeWidth(items.repeater) + guessArea.spacing * (items.repeater.count - 0.5)
+                width: Activity.computeWidth(items.repeater) + solutionArea.spacing * (items.repeater.count - 0.5)
                 height: board.height / 2
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: - height / 2
-
                 color: "transparent"
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                    verticalCenterOffset: - height / 2
+                }
 
                 Flow {
-                    id: guessArea
-
-                    spacing: background.width / (listModel.count * 1.8)
+                    id: solutionArea
+                    spacing: (board.width- Activity.computeWidth(items.repeater)) / listModel.count
                     anchors.centerIn: parent
 
                     Repeater {
                         id: repeater
                         anchors.horizontalCenter: parent.horizontalCenter
-
                         model: listModel
 
                         GCText {
@@ -153,8 +145,10 @@ ActivityBase {
                             fontSize: hugeSize
                             color: "white"
 
+                            // store the initial coordinates
                             property var _x
                             property var _y
+
                             property alias particleLoader: particleLoader
                             property alias failureAnimation: failureAnimation
 
@@ -194,43 +188,53 @@ ActivityBase {
                                     letter._y = letter.y
                                 }
                                 onReleased: {
-                                    /* use mouse's coordinates (x and y) to compare to the "guessArea"'s repeater items */
-                                    var modified = mapToItem(background,mouse.x,mouse.y)
-                                    //print("mouse x: ",modified.x,"  mouse y: ",modified.y)
+                                    /* use mouse's coordinates (x and y) to compare to the solutionArea's repeater items */
+                                    // map the mouse coordinates to background coordinates
+                                    var mouseMapped = mapToItem(background,mouse.x,mouse.y)
 
-                                    //search through the "repeater"'s items to find if THIS item can replace it
+                                    //search through the repeater's items to find if THIS item can replace it
                                     for (var i=0; i<items.repeater.count; i++) {
+                                        // map the itemAt(i)'s coordinates to background coordinates to match the mouse coordinates
                                         var item = items.repeater.itemAt(i)
-                                        var guess = items.repeater.parent.mapToItem(background,item.x,item.y)
-                                        //print("dimensions: ",guess.x,guess.x+item.width,guess.y,guess.y+item.height)
+                                        var itemMapped = items.repeater.parent.mapToItem(background,item.x,item.y)
 
+                                        // if the mouse click is released in the repeater area
+                                        if (mouseMapped.x > itemMapped.x && mouseMapped.x < itemMapped.x + item.width &&
+                                                mouseMapped.y > itemMapped.y && mouseMapped.y < itemMapped.y + item.height * 2) {
 
-                                        if (modified.x > guess.x && modified.x < guess.x + item.width &&
-                                                modified.y > guess.y && modified.y < guess.y + item.height * 2) {
-
+                                            // interchange the letters
                                             var textAux = items.listModel.get(i).letter
                                             items.listModel.setProperty(i,"letter",letter.text)
                                             items.listModel.setProperty(index,"letter",textAux)
 
-
+                                            // animations & particles
                                             if (index != i) {
                                                 if (Activity.solution[i] == items.repeater.itemAt(i).text) {
+                                                    // both letters are in the right position
                                                     if (Activity.solution[index] == letter.text) {
+                                                        // start the particle only if the solution is partially correct
                                                         if (!Activity.checkCorectness()) {
                                                             items.repeater.itemAt(i).particleLoader.item.burst(40)
-                                                            letter.particleLoader.item.burst(40)
+                                                            items.repeater.itemAt(index).particleLoader.item.burst(40)
                                                         }
+
+                                                    // only itemAt(i) is in the right position
                                                     } else {
                                                         items.repeater.itemAt(i).particleLoader.item.burst(40)
                                                         if (items.repeater.itemAt(index).text != '_')
+                                                            // only start failureAnimation for letters, not '_'
                                                             items.repeater.itemAt(index).failureAnimation.start()
                                                     }
+
+                                                // only itemAt(index), meaning only the current item is in the right position
                                                 } else {
                                                     if (Activity.solution[index] == letter.text) {
                                                         letter.particleLoader.item.burst(40)
                                                         if (items.repeater.itemAt(i).text != '_')
                                                             items.repeater.itemAt(i).failureAnimation.start()
                                                     }
+
+                                                    // both letters are in a wrong position
                                                     else {
                                                         if (items.repeater.itemAt(i).text != '_')
                                                             items.repeater.itemAt(i).failureAnimation.start()
@@ -242,25 +246,34 @@ ActivityBase {
                                         }
                                     }
 
-                                    //search through the "solutionRepeater"'s items to find if THIS item can replace it
-                                    for (i=0; i<items.solutionRepeater.count; i++) {
-                                        var item1 = items.solutionRepeater.itemAt(i)
-                                        var guess1 = items.solutionRepeater.parent.mapToItem(background,item1.x,item1.y)
-                                        if (modified.x > guess1.x && modified.x < guess1.x + item1.width &&
-                                                modified.y > guess1.y && modified.y < guess1.y + item1.height * 2) {
-                                            var textAux1 = items.listModel2.get(i).letter
+                                    // search through the inputRepeater's items to find if THIS item can replace it
+                                    for (i=0; i<items.inputRepeater.count; i++) {
+                                        // map the itemAt(i)'s coordinates to background coordinates to match the mouse coordinates
+                                        var item1 = items.inputRepeater.itemAt(i)
+                                        var itemMapped1 = items.inputRepeater.parent.mapToItem(background,item1.x,item1.y)
+
+                                        // if the mouse click is released in a repeater area
+                                        if (mouseMapped.x > itemMapped1.x && mouseMapped.x < itemMapped1.x + item1.width &&
+                                                mouseMapped.y > itemMapped1.y && mouseMapped.y < itemMapped1.y + item1.height * 2) {
+
+                                            // interchange the letters
+                                            var textAux1 = items.listModelInput.get(i).letter
                                             if (textAux1 != '_' && letter.text != '_') {
-                                                items.listModel2.setProperty(i,"letter",letter.text)
+                                                items.listModelInput.setProperty(i,"letter",letter.text)
                                                 items.listModel.setProperty(index,"letter",textAux1)
+
+                                                // stop searching for another item; only this one can match the mouse's coordinates
                                                 break
                                             }
 
                                         }
                                     }
 
+                                    // move the letter back to its initial position
                                     letter.x = letter._x
                                     letter.y = letter._y
 
+                                    // if the solution is correct, start the finishAnimation
                                     if (Activity.checkCorectness()) {
                                         finishAnimation.index = 0
                                         finishAnimation.start()
@@ -274,46 +287,36 @@ ActivityBase {
 
             Rectangle {
                 id: bottomRectangle
-
-                //TODO: on 3 or more letters (on bottom row of letter), only 2 are shown; have to handle width better
-                width: background.computeWidth(items.solutionRepeater) + solutionArea.spacing + (items.solutionRepeater.count - 0.5)
+                width: Activity.computeWidth(items.inputRepeater) + inputArea.spacing * (items.inputRepeater.count - 0.5)
                 height: parent.height / 2.1
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: height / 2
-
                 color: "transparent"
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                    verticalCenterOffset: height / 2
+                }
 
                 Flow {
-                    id: solutionArea
-
-                    width: parent.width
-                    height: parent.height
-
-                    spacing: board.width / (listModel2.count + 1)
+                    id: inputArea
+                    spacing: (board.width - Activity.computeWidth(items.inputRepeater)) / listModelInput.count
                     anchors.centerIn: parent
 
-
                     Repeater {
-                        id: solutionRepeater
-                        model: listModel2
-
+                        id: inputRepeater
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        model: listModelInput
 
                         GCText {
                             id: missingLetter
-                            text: listModel2.get(index) ? listModel2.get(index).letter : ""
+                            text: listModelInput.get(index) ? listModelInput.get(index).letter : ""
                             fontSize: hugeSize
                             color: "white"
 
-
+                            // store the initial coordinates
                             property var _x
                             property var _y
-                            property alias mouseArea: mouseArea
-
 
                             MouseArea {
-                                id: mouseArea
                                 anchors.fill: parent
                                 drag.target: parent
                                 enabled: items.gameFinished ? false : true
@@ -324,43 +327,56 @@ ActivityBase {
                                 }
 
                                 onReleased: {
-                                    /* use mouse's coordinates (x and y) to compare to the "guessArea"'s repeater items */
-                                    var modified = mapToItem(background,mouse.x,mouse.y)
+                                    /* use mouse's coordinates (x and y) to compare to the solutionArea's repeater items */
+                                    var mouseMapped = mapToItem(background,mouse.x,mouse.y)
 
-                                    //search through the "repeater"'s items to find if THIS item should replace it
+                                    //search through the repeater's items to find if THIS item should replace it
                                     for (var i=0; i<items.repeater.count; i++) {
+                                        // map the itemAt(i)'s coordinates to background coordinates to match the mouse coordinates
                                         var item = items.repeater.itemAt(i)
-                                        var guess = items.repeater.parent.mapToItem(background,item.x,item.y)
-                                        if (modified.x > guess.x && modified.x < guess.x + item.width &&
-                                                modified.y > guess.y && modified.y < guess.y + item.height) {
-                                            //print("belongs to: ",i)
+                                        var itemMapped = items.repeater.parent.mapToItem(background,item.x,item.y)
+
+                                        // if the mouse click is released in the repeater area
+                                        if (mouseMapped.x > itemMapped.x && mouseMapped.x < itemMapped.x + item.width &&
+                                                mouseMapped.y > itemMapped.y && mouseMapped.y < itemMapped.y + item.height) {
+
                                             var textAux = items.listModel.get(i).letter
 
+                                            // if the letter at index i in the repeater is '_', then replace '_' with missingLetter.text
                                             if (textAux == '_') {
                                                 items.listModel.setProperty(i,"letter",missingLetter.text)
-                                                items.listModel2.setProperty(index,"letter",'_')
-                                                items.solutionRepeater.itemAt(index).opacity = 0
+                                                items.listModelInput.setProperty(index,"letter",'_')
+
+                                                // set opacity to 0 and disable the MouseArea of missingLetter
+                                                items.inputRepeater.itemAt(index).opacity = 0
                                                 parent.enabled = false
 
+                                            // else, the letter at intex i is a normal letter, so interchange it with missingLetter.text
                                             } else {
                                                 items.listModel.setProperty(i,"letter",missingLetter.text)
-                                                items.listModel2.setProperty(index,"letter",textAux)
+                                                items.listModelInput.setProperty(index,"letter",textAux)
                                             }
 
-                                            //if the letter is placed in the correct spot, the particle is activated
+                                            // if the letter is placed in the correct spot, the particle is activated for item at index i
                                             if (Activity.solution[i] == items.listModel.get(i).letter) {
+                                                // start the particle only if the solution is partially correct
                                                 if (!Activity.checkCorectness())
                                                     items.repeater.itemAt(i).particleLoader.item.burst(40)
+
+                                            // else, the letter is placed in a wrong place; start the failureAnimation
                                             } else
                                                 items.repeater.itemAt(i).failureAnimation.start()
 
+                                            // stop searching for another item; only this one can match the mouse's coordinates
                                             break
                                         }
                                     }
 
+                                    // move the missingLetter back to its initial position
                                     missingLetter.x = missingLetter._x
                                     missingLetter.y = missingLetter._y
 
+                                    // if the solution is correct, start the finishAnimation
                                     if (Activity.checkCorectness()) {
                                         finishAnimation.index = 0
                                         finishAnimation.start()

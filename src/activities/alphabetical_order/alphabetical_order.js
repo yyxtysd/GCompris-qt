@@ -24,15 +24,14 @@ var currentLevel = 0
 var numberOfLevel = 10
 var items
 var alphabet = []
-var solution
+var solution = []
 var dataSetUrl= "qrc:/gcompris/src/activities/gletters/resource/"
-var totalLetters = [5,5,5,5,5,5,5,5,5,5]
-var guessLetters = [2,2,2,2,2,2,2,2,2,2]
+var totalLetters = [3,4,5,5,6,6,6,7,8,8]
+var guessLetters = [1,2,2,2,2,2,3,3,4,5]
 
 function start(items_) {
     items = items_
     currentLevel = 0
-
 
 //imported from "readingh" activity
     var locale = items.locale == "system" ? "$LOCALE" : items.locale
@@ -59,8 +58,6 @@ function start(items_) {
         items.wordlist.useDefault = false
     }
 
-
-
     //setup the alphabet from file
     createAlphabet()
 
@@ -79,9 +76,9 @@ function init() {
     items.gameFinished = false
 
     // ['a','b','c','d']
-    solution = getSolution(alphabet, totalLetters[currentLevel])
+    solution = makeSolution(alphabet, totalLetters[currentLevel])
 
-    // 3 1 5 2 4
+    // 3 1 4 2
     var numbers = getNumbers(totalLetters[currentLevel])
 
     // ['a','_','c','_']
@@ -94,48 +91,40 @@ function init() {
         modelAux[i] = solution[numbers[i]]
     }
 
-    //debugging
-//    print(solution)
-//    print("numbers: ", numbers)
-//    print("solution: ",solution)
-//    print("model: ",model)
-//    print("modelAux: ",modelAux)
-
     items.listModel.clear()
-    items.listModel2.clear()
+    items.listModelInput.clear()
 
-    for (i = 0; i < modelAux.length; i++) {
-        items.listModel2.append({"letter": modelAux[i]})
-    }
+    for (i = 0; i < modelAux.length; i++)
+        items.listModelInput.append({"letter": modelAux[i]})
 
-    for (i = 0; i < model.length; i++) {
+    for (i = 0; i < model.length; i++)
         items.listModel.append({"letter": model[i]})
-    }
-
 
 }
 
-//goes through each level (in gletters json files) and appends all letters
-//  (removing digits and uppercase duplicates) in the alphabet
+/* goes through each level (in gletters json files) and appends all letters
+  (removing digits and uppercase duplicates) in the alphabet */
 function createAlphabet() {
-    // all levels
+    // all "words"
     for (var i = 1; i < items.wordlist.wordList.levels.length; i++) {
         var words = items.wordlist.getLevelWordList(i).words
-        // se
+        // all letters in "words"
         for (var j = 0; j < words.length; j++) {
-            if (alphabet.indexOf(words[j].toLowerCase()) < 0 && (words[j] >= '0' && words[j] <= '9') == false ) {
+            if (alphabet.indexOf(words[j].toLowerCase()) < 0 &&
+                    (words[j] >= '0' && words[j] <= '9') == false ) {
                 alphabet = alphabet.concat(words[j])
             }
         }
     }
+    // sort the alphabet
     alphabet = GCompris.ApplicationInfo.localeSort(alphabet)
-//    print("alphabet: ",alphabet)
 }
 
 function sortNumber(a,b) {
     return a - b;
 }
 
+// generate a randomized array with "len" numbers
 function getNumbers(len) {
     var numbers = []
     for (var i = 0; i < len; i++) {
@@ -146,18 +135,17 @@ function getNumbers(len) {
     return numbers
 }
 
-function getSolution(alphabet, noOfLetters) {
+// generate an array with "noOfLetters" letters taken from "alphabet"
+function makeSolution(alphabet, noOfLetters) {
     var solution = []
     var aux = getNumbers(alphabet.length)
     //"noOfLetters" numbers sorted of "alphabet.length" numbers shuffeled
-//    print("generate", aux)
 
     var generate = []
     for (var i = 0; i < noOfLetters; i++) {
         generate[i] = aux[i]
     }
     generate.sort(sortNumber)
-
 
     for (i = 0; i < noOfLetters; i++) {
         solution[i] = alphabet[generate[i]]
@@ -166,36 +154,7 @@ function getSolution(alphabet, noOfLetters) {
     return solution
 }
 
-function getModel(alphabet, noOfLetters) {
-    var model
-
-    for (var i = 0; i < noOfLetters; i++) {
-
-    }
-    return model
-}
-
-/* Receives the model (what the player has to complete)
-and the solution (how the result should look like)
-and returns the missing letters from the model
-(the letters from bottom, which the user will place on top) */
-function missingLetters(model,solution) {
-    var missingLetters = []
-    for (var i=0; i<solution.length; i++) {
-        var found = false
-        for (var j = 0; j < model.length; j++)
-            if (model[j] == solution[i]) {
-                found = true
-                break
-            }
-
-        if (!found)
-            missingLetters[missingLetters.length] = solution[i]
-
-    }
-    return missingLetters
-}
-
+// check if the user's answer matches the solution
 function checkCorectness() {
     var nr = solution.length
 
@@ -204,11 +163,25 @@ function checkCorectness() {
         return false
 
     for (var i = 0; i < nr; i++)
-        if  (solution[i]!==items.listModel.get(i).letter)
+        if  (solution[i] !== items.listModel.get(i).letter)
             return false   // the letters are different at index i -> false
 
     return true
 }
+
+
+// compute maximum width of the letters in the repeater given as parameter
+function computeWidth(repeater) {
+    if (repeater == null)
+        return 0
+    var max = -1
+    for (var i = 0; i < repeater.count; i++) {
+        if (max < repeater.itemAt(i).width && repeater.itemAt(i).text != '_')
+            max = repeater.itemAt(i).width
+    }
+    return max * repeater.count
+}
+
 
 function nextLevel() {
     if(numberOfLevel <= ++currentLevel ) {
