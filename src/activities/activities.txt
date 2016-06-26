@@ -63,6 +63,7 @@ intro_gravity
 land_safe
 lang
 leftright
+letter-in-word
 lightsoff
 louis-braille
 magic-hat-minus
