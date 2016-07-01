@@ -159,8 +159,8 @@ ActivityBase {
                         id: me
                         text:qsTr("Me")
                         visible: Activity.treestructure[bar.level-1].captions[0] !== undefined
-                        x: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[0][0]*tree.width : 0
-                        y: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[0][1]*tree.height : 0
+                        x: Activity.treestructure[bar.level-1].captions[0][0]*tree.width
+                        y: Activity.treestructure[bar.level-1].captions[0][1]*tree.height
                         width: tree.width/12
                         height: tree.height/14
                     }
@@ -169,8 +169,8 @@ ActivityBase {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
                         visible: Activity.treestructure[bar.level-1].captions[1] !== undefined
-                        x: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[1][0]*tree.width : 0
-                        y: Activity.treestructure[bar.level-1].captions[0] ? Activity.treestructure[bar.level-1].captions[1][1]*tree.height : 0
+                        x: Activity.treestructure[bar.level-1].captions[1][0]*tree.width
+                        y: Activity.treestructure[bar.level-1].captions[1][1]*tree.height
                     }
 
                     Repeater {
@@ -180,8 +180,7 @@ ActivityBase {
                             id: edge
                             opacity: 1
                             antialiasing: true
-                            color: "black"
-
+                            state: edgestate
                             transformOrigin: Item.TopLeft
                             x: x1*tree.width
                             y: y1*tree.height
@@ -204,7 +203,32 @@ ActivityBase {
                                     easing.type: Easing.OutExpo
                                 }
                             }
+
+                            states:[
+                                State {
+                                    name: "married"
+                                    PropertyChanges {
+                                        target: edge
+                                        color: "#F1C40F"
+                                    }
+                                },
+                                State {
+                                    name: "siblings"
+                                    PropertyChanges {
+                                         target:edge
+                                         color:"#28B463"
+                                    }
+                                },
+                                State {
+                                  name: "others"
+                                  PropertyChanges {
+                                      target: edge
+                                      color:"black"
+                                  }
+                                }
+                            ]
                         }
+
                     }
                 }
             }

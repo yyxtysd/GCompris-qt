@@ -28,8 +28,10 @@ ActivityInfo {
   //intro: "Let us understand what to call our relatives"
   goal: qsTr("To get an idea about relationships in the family")
   prerequisite: qsTr("Reading Skills")
-  manual: ""
-  credit: ""
+  manual: qsTr("To find the relation between two of your family members\n") +
+  qsTr("Here we take some assumptions the red colored lines refers the married couple and blue colored stright lines refers to parents and siblings\n") +
+  qsTr("Red circle will points to you and blue one your relative now you have to think what you should call him\n")
+  credit: "Johnny Jazeix"
   section: "fun"
   createdInVersion: 7000
 }
