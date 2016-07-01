@@ -46,9 +46,11 @@ ActivityBase {
         QtObject {
             id: items
             property Item main: activity.main
+            property GCAudio audioVoices: activity.audioVoices
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
+            property alias score: score
             property alias listModel: listModel
             property alias listModelInput: listModelInput
             property alias repeater: repeater
@@ -57,6 +59,8 @@ ActivityBase {
             property alias wordlist: wordlist
             property bool gameFinished: false
             property int delay: 6
+            property bool okBoxChecked: false
+            property bool easyMode: true
         }
 
         onStart: { Activity.start(items) }
@@ -89,8 +93,6 @@ ActivityBase {
 
             onTriggered: {
                 if (index < items.repeater.count) {
-                    // set the game to "finished"
-                    items.gameFinished = true
                     // start the particles at index, then increment index
                     items.repeater.itemAt(index).particleLoader.item.burst(40)
                     index++
@@ -179,6 +181,7 @@ ActivityBase {
                             }
 
                             MouseArea {
+                                id: mouseArea
                                 anchors.fill: parent
                                 drag.target: parent
                                 enabled: items.gameFinished ? false : true
@@ -186,6 +189,7 @@ ActivityBase {
                                 onPressed: {
                                     letter._x = letter.x
                                     letter._y = letter.y
+                                    Activity.playLetter(letter.text)
                                 }
                                 onReleased: {
                                     /* use mouse's coordinates (x and y) to compare to the solutionArea's repeater items */
@@ -213,32 +217,37 @@ ActivityBase {
                                                     // both letters are in the right position
                                                     if (Activity.solution[index] == letter.text) {
                                                         // start the particle only if the solution is partially correct
-                                                        if (!Activity.checkCorectness()) {
+                                                        if (!Activity.checkCorectness() && items.easyMode) {
+                                                            items.repeater.itemAt(i).particleLoader.item.burst(40)
+                                                            items.repeater.itemAt(index).particleLoader.item.burst(40)
+                                                        }
+                                                        if (items.okBoxChecked && items.easyMode) {
                                                             items.repeater.itemAt(i).particleLoader.item.burst(40)
                                                             items.repeater.itemAt(index).particleLoader.item.burst(40)
                                                         }
 
                                                     // only itemAt(i) is in the right position
                                                     } else {
+                                                        if (items.easyMode)
                                                         items.repeater.itemAt(i).particleLoader.item.burst(40)
-                                                        if (items.repeater.itemAt(index).text != '_')
+                                                        if (items.repeater.itemAt(index).text != '_' && items.easyMode)
                                                             // only start failureAnimation for letters, not '_'
                                                             items.repeater.itemAt(index).failureAnimation.start()
                                                     }
 
                                                 // only itemAt(index), meaning only the current item is in the right position
                                                 } else {
-                                                    if (Activity.solution[index] == letter.text) {
+                                                    if (Activity.solution[index] == letter.text && items.easyMode) {
                                                         letter.particleLoader.item.burst(40)
-                                                        if (items.repeater.itemAt(i).text != '_')
+                                                        if (items.repeater.itemAt(i).text != '_' && items.easyMode)
                                                             items.repeater.itemAt(i).failureAnimation.start()
                                                     }
 
                                                     // both letters are in a wrong position
                                                     else {
-                                                        if (items.repeater.itemAt(i).text != '_')
+                                                        if (items.repeater.itemAt(i).text != '_' && items.easyMode)
                                                             items.repeater.itemAt(i).failureAnimation.start()
-                                                        if (items.repeater.itemAt(index).text != '_')
+                                                        if (items.repeater.itemAt(index).text != '_' && items.easyMode)
                                                             items.repeater.itemAt(index).failureAnimation.start()
                                                     }
                                                 }
@@ -274,7 +283,7 @@ ActivityBase {
                                     letter.y = letter._y
 
                                     // if the solution is correct, start the finishAnimation
-                                    if (Activity.checkCorectness()) {
+                                    if (!items.okBoxChecked && Activity.checkCorectness()) {
                                         finishAnimation.index = 0
                                         finishAnimation.start()
                                     }
@@ -317,6 +326,7 @@ ActivityBase {
                             property var _y
 
                             MouseArea {
+                                id: mouseArea2
                                 anchors.fill: parent
                                 drag.target: parent
                                 enabled: items.gameFinished ? false : true
@@ -324,6 +334,7 @@ ActivityBase {
                                 onPressed: {
                                     missingLetter._x = missingLetter.x
                                     missingLetter._y = missingLetter.y
+                                    Activity.playLetter(missingLetter.text)
                                 }
 
                                 onReleased: {
@@ -360,11 +371,13 @@ ActivityBase {
                                             // if the letter is placed in the correct spot, the particle is activated for item at index i
                                             if (Activity.solution[i] == items.listModel.get(i).letter) {
                                                 // start the particle only if the solution is partially correct
-                                                if (!Activity.checkCorectness())
+                                                if (!Activity.checkCorectness() && items.easyMode)
+                                                    items.repeater.itemAt(i).particleLoader.item.burst(40)
+                                                if (items.okBoxChecked && items.easyMode)
                                                     items.repeater.itemAt(i).particleLoader.item.burst(40)
 
                                             // else, the letter is placed in a wrong place; start the failureAnimation
-                                            } else
+                                            } else if (items.easyMode)
                                                 items.repeater.itemAt(i).failureAnimation.start()
 
                                             // stop searching for another item; only this one can match the mouse's coordinates
@@ -377,14 +390,82 @@ ActivityBase {
                                     missingLetter.y = missingLetter._y
 
                                     // if the solution is correct, start the finishAnimation
-                                    if (Activity.checkCorectness()) {
+                                    if (!items.okBoxChecked && Activity.checkCorectness()) {
                                         finishAnimation.index = 0
                                         finishAnimation.start()
                                     }
-
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        BarButton {
+            id: okButton
+            source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
+            sourceSize.width: Math.min(66 * bar.barZoom, background.width / background.height * 100)
+            visible: items.okBoxChecked
+            enabled: items.gameFinished ? false : true
+
+            anchors {
+                bottom: bar.top
+                left: parent.left
+            }
+
+            MouseArea {
+                id: mouseAreaOk
+                anchors.fill: parent
+                property bool bad: false
+                onClicked: {
+                    print("bad: ",mouseAreaOk.bad)
+                    if (Activity.checkCorectness()) {
+                        // set the game to "finished"
+                        items.gameFinished = true
+
+                        // start the finishAnimation
+                        finishAnimation.index = 0
+                        finishAnimation.start()
+
+                        // the level was won -> add 1 to progress
+                        if (mouseAreaOk.bad == false) { //current level was not failed before
+                            print("add 1")
+                            Activity.progress = Activity.progress.concat(1)
+                        }
+                        mouseAreaOk.bad = false
+                    } else {
+                        for (var i = 0; i < items.listModel.count; i++)
+                            if  (Activity.solution[i] !== items.listModel.get(i).letter) { // letters are different => not correct
+                                mouseAreaOk.bad = true
+                                items.repeater.itemAt(i).failureAnimation.start()
+
+                                // saving current state (model and modelAux) in a vector for using it again
+                                var ok = true
+                                for (var j = 0; j < Activity.badAnswers.length; j++)
+                                    // current state already in the vetor
+                                    if (Activity.badAnswers[j].model == Activity.model && Activity.badAnswers[j].modelAux == Activity.modelAux)
+                                        ok = false
+
+                                // ok == true only if the current state is not already in the vector
+                                if (ok == true)
+                                    // add current state to the vector
+                                    Activity.badAnswers = Activity.badAnswers.concat({model: Activity.model, modelAux: Activity.modelAux, solution: Activity.solution})
+
+                                print("Wrong: _________")
+                                for (j = 0; j < Activity.badAnswers.length; j++)
+                                    print(Activity.badAnswers[j].model + "    " + Activity.badAnswers[j].modelAux + "      " + Activity.badAnswers[j].solution)
+                        }
+
+                        // decrease the levelsPassed counter
+                        if (mouseAreaOk.bad && Activity.levelsPassed >= 1) {
+                            Activity.levelsPassed --
+                        }
+
+                        // the level was lost -> add 0 to progress
+                        Activity.progress = Activity.progress.concat(0)
+                        print("add 0")
+                        print("progress: ",Activity.progress)
                     }
                 }
             }
@@ -430,6 +511,31 @@ ActivityBase {
                             }
                         }
 */
+                        GCDialogCheckBox {
+                            id: okButtonBox
+                            width: 250 * ApplicationInfo.ratio
+                            text: qsTr("OK button active")
+                            checked: items.okBoxChecked
+                            onCheckedChanged: {
+                                items.okBoxChecked = checked
+                                okButton.visible = checked
+                                print("okBox: ",checked)
+
+
+                                Activity.currentLevel = 0
+                                Activity.progress = []
+                                score.currentSubLevel = 1
+                                Activity.initLevel()
+                            }
+                        }
+
+                        GCDialogCheckBox {
+                            id: easyMode
+                            width: 250 * ApplicationInfo.ratio
+                            text: qsTr("Easy mode")
+                            checked: items.easyMode
+                            onCheckedChanged: items.easyMode = checked
+                        }
                     }
                 }
             }
@@ -485,6 +591,11 @@ ActivityBase {
             onError: console.log("Reading: Wordlist error: " + msg);
         }
 
+        Score {
+            id: score
+            currentSubLevel: 1
+            numberOfSubLevels: 5
+        }
 
         DialogHelp {
             id: dialogHelp
@@ -509,7 +620,7 @@ ActivityBase {
 
         Bonus {
             id: bonus
-            Component.onCompleted: win.connect(Activity.nextLevel)
+            Component.onCompleted: win.connect(Activity.nextSubLevel)
         }
 
     }

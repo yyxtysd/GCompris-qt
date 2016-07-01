@@ -17,72 +17,6 @@
   <defs
      id="defs5446">
     <linearGradient
-       id="linearGradient7226"
-       y2="335.09"
-       gradientUnits="userSpaceOnUse"
-       x2="411.64"
-       gradientTransform="matrix(-0.96884,-0.24771,0.24771,-0.96884,618.23,659.014)"
-       y1="330.39"
-       x1="412.44"
-       inkscape:collect="always">
-      <stop
-         id="stop7104-5"
-         style="stop-color:#b8b8b8"
-         offset="0" />
-      <stop
-         id="stop7110-4"
-         style="stop-color:#e3e3e3"
-         offset=".5" />
-      <stop
-         id="stop7106-1"
-         style="stop-color:#b9b9b9"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient7229"
-       y2="335.09"
-       gradientUnits="userSpaceOnUse"
-       x2="411.64"
-       gradientTransform="matrix(0.90747,-0.42013,0.42013,0.90747,-226.313,106.404)"
-       y1="330.39"
-       x1="412.44"
-       inkscape:collect="always">
-      <stop
-         id="stop7104-7"
-         style="stop-color:#b8b8b8"
-         offset="0" />
-      <stop
-         id="stop7110-8"
-         style="stop-color:#e3e3e3"
-         offset=".5" />
-      <stop
-         id="stop7106-8"
-         style="stop-color:#b9b9b9"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient7232"
-       y2="335.09"
-       gradientUnits="userSpaceOnUse"
-       x2="411.64"
-       y1="330.39"
-       x1="412.44"
-       inkscape:collect="always"
-       gradientTransform="translate(-129.82,-97.676)">
-      <stop
-         id="stop7104"
-         style="stop-color:#b8b8b8"
-         offset="0" />
-      <stop
-         id="stop7110"
-         style="stop-color:#e3e3e3"
-         offset=".5" />
-      <stop
-         id="stop7106"
-         style="stop-color:#b9b9b9"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient7236"
        y2="130.07"
        gradientUnits="userSpaceOnUse"
@@ -111,16 +45,16 @@
      inkscape:pageshadow="2"
      inkscape:window-y="21"
      pagecolor="#ffffff"
-     inkscape:window-height="1029"
+     inkscape:window-height="1179"
      inkscape:window-maximized="1"
      inkscape:zoom="2.042453"
-     inkscape:window-x="57"
+     inkscape:window-x="1680"
      showgrid="false"
      borderopacity="1.0"
      inkscape:current-layer="svg5444"
-     inkscape:cx="217.4116"
-     inkscape:cy="126.45715"
-     inkscape:window-width="1623"
+     inkscape:cx="177.37684"
+     inkscape:cy="99.711371"
+     inkscape:window-width="1920"
      inkscape:pageopacity="0.0"
      inkscape:document-units="px" />
   <rect
@@ -142,19 +76,19 @@
   <path
      inkscape:connector-curvature="0"
      d="m 267.84,230.554 30.171,3.838 -0.79998,5.4618 -30.018,-4.881 0.64721,-4.4188 z"
-     style="color:#000000;fill:url(#linearGradient7232);stroke:#858585;stroke-width:0.1;stroke-linejoin:round"
+     style="color:#000000;fill:#e8e8e8;stroke:#858585;stroke-width:0.1;stroke-linejoin:round;fill-opacity:1"
      sodipodi:nodetypes="ccccc"
      id="rect7048-4" />
   <path
      inkscape:connector-curvature="0"
      d="m 272.45,237.194 28.991,-9.1927 1.5687,5.2925 -29.291,8.1821 -1.2691,-4.2818 z"
-     style="color:#000000;fill:url(#linearGradient7229);stroke:#858585;stroke-width:0.1;stroke-linejoin:round"
+     style="color:#000000;fill:#e8e8e8;stroke:#858585;stroke-width:0.1;stroke-linejoin:round;fill-opacity:1"
      sodipodi:nodetypes="ccccc"
      id="rect7048-4-2" />
   <path
      inkscape:connector-curvature="0"
      d="m 314.27,242.514 -28.28,-11.192 2.128,-5.0934 27.873,12.165 -1.7216,4.1208 z"
-     style="color:#000000;fill:url(#linearGradient7226);stroke:#858585;stroke-width:0.1;stroke-linejoin:round"
+     style="color:#000000;fill:#e8e8e8;stroke:#858585;stroke-width:0.1;stroke-linejoin:round;fill-opacity:1"
      sodipodi:nodetypes="ccccc"
      id="rect7048-4-27" />
   <rect
