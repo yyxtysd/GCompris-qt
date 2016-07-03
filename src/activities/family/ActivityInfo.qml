@@ -19,7 +19,7 @@ import GCompris 1.0
 
 ActivityInfo {
   name: "family/Family.qml"
-  difficulty: 1
+  difficulty: 2
   icon: "family/family.svg"
   author: "Rajdeep Kaur &lt;rajdeep.kaur@kde.org&gt;"
   demo: true
@@ -27,11 +27,11 @@ ActivityInfo {
   description: qsTr("This activity will give teach about who we are related to our relatives")
   //intro: "Let us understand what to call our relatives"
   goal: qsTr("To get an idea about relationships in the family")
-  prerequisite: qsTr("Reading Skills")
-  manual: qsTr("To find the relation between two of your family members\n") +
-  qsTr("Here we take some assumptions the red colored lines refers the married couple and blue colored stright lines refers to parents and siblings\n") +
-  qsTr("Red circle will points to you and blue one your relative now you have to think what you should call him\n")
-  credit: "Johnny Jazeix"
+  prerequisite: qsTr("Reading skills")
+  manual: qsTr("To find the relation between two family members.\n") +
+  qsTr("Here we take some assumptions: the red lines refer to the married couple and blue straight lines refer to parents and siblings.\n") +
+  qsTr("Red circle will point to you and blue one to your relative. Now you have to think what you should call him.\n")
+  credit: ""
   section: "fun"
   createdInVersion: 7000
 }

@@ -36,7 +36,7 @@ ActivityBase {
         source: Activity.url + "back.svg"
         sourceSize.width: parent.width
         fillMode: Image.PreserveAspectCrop
-        property bool horizontalLayout:background.width > background.height
+        property bool horizontalLayout: background.width > background.height
 
         signal start
         signal stop
@@ -53,9 +53,9 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property alias nodecreator:nodecreator
-            property alias answerschoice: answerschoice
-            property alias edgecreator: edgecreator
+            property alias nodeCreator: nodeCreator
+            property alias answersChoice: answersChoice
+            property alias edgeCreator: edgeCreator
         }
 
         onStart: { Activity.start(items) }
@@ -73,79 +73,71 @@ ActivityBase {
                 border.color: "black"
                 border.width: 5
                 Item {
-                    id: treestructure
+                    id: treeItem
                     Repeater {
-                        id: nodecreator
+                        id: nodeCreator
                         model: ListModel{}
                         delegate:
                             Tree {
-                            id: currentpointer
+                            id: currentPointer
                             x: xx*tree.width
                             y: yy*tree.height
                             width: tree.width/5
                             height: tree.width/5
-                            recwidth: currentpointer.width
-                            recheight: currentpointer.height
+                            recwidth: currentPointer.width
+                            recheight: currentPointer.height
                             searchitem: 3
                             nodeimagesource: Activity.url+nodee
                             bordercolor: "black"
                             borderwidth: 4
                             colorr: "transparent"
                             radius: recwidth/2
-                            state:currentstate
-
-                            MouseArea {
-                                id: nodemousearea
-                                anchors.fill: parent
-
-                            }
+                            state: currentstate
 
                             states: [
                                State {
                                      name: "active"
                                      PropertyChanges {
-                                         target: currentpointer
+                                         target: currentPointer
                                          bordercolor: "blue"
                                      }
                                },
                                State {
                                       name: "deactive"
                                       PropertyChanges {
-                                          target: currentpointer
-
+                                          target: currentPointer
                                       }
                                },
                                State {
                                     name: "activeto"
                                     PropertyChanges {
-                                        target: currentpointer
+                                        target: currentPointer
                                         bordercolor: "red"
                                     }
                                }
-
                             ]
 
                             SequentialAnimation {
                                 id: anim
-                                running: currentpointer.state === "active" || currentpointer.state === "activeto"
+                                running: currentPointer.state === "active" || currentPointer.state === "activeto"
                                 loops: Animation.Infinite
                                 alwaysRunToEnd: true
                                 NumberAnimation {
-                                    target: currentpointer
+                                    target: currentPointer
                                     property: "rotation"
                                     from: 0; to: 10
                                     duration: 200
                                     easing.type: Easing.OutQuad
                                 }
                                 NumberAnimation {
-                                    target: currentpointer
+                                    target: currentPointer
                                     property: "rotation"
                                     from: 10; to: -10
                                     duration: 400
                                     easing.type: Easing.InOutQuad
                                 }
                                 NumberAnimation {
-                                    target: currentpointer
+                                    target: currentPointer
                                     property: "rotation"
                                     from: -10; to: 0
                                     duration: 200
@@ -157,10 +149,10 @@ ActivityBase {
 
                    GCText {
                         id: me
-                        text:qsTr("Me")
-                        visible: Activity.treestructure[bar.level-1].captions[0] !== undefined
-                        x: Activity.treestructure[bar.level-1].captions[0][0]*tree.width
-                        y: Activity.treestructure[bar.level-1].captions[0][1]*tree.height
+                        text: qsTr("Me")
+                        visible: Activity.treeStructure[bar.level-1].captions[0] !== undefined
+                        x: Activity.treeStructure[bar.level-1].captions[0][0]*tree.width
+                        y: Activity.treeStructure[bar.level-1].captions[0][1]*tree.height
                         width: tree.width/12
                         height: tree.height/14
                     }
@@ -168,19 +160,19 @@ ActivityBase {
                     Image {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
-                        visible: Activity.treestructure[bar.level-1].captions[1] !== undefined
-                        x: Activity.treestructure[bar.level-1].captions[1][0]*tree.width
-                        y: Activity.treestructure[bar.level-1].captions[1][1]*tree.height
+                        visible: Activity.treeStructure[bar.level-1].captions[1] !== undefined
+                        x: Activity.treeStructure[bar.level-1].captions[1][0]*tree.width
+                        y: Activity.treeStructure[bar.level-1].captions[1][1]*tree.height
                     }
 
                     Repeater {
-                        id: edgecreator
-                        model: ListModel{}
+                        id: edgeCreator
+                        model: ListModel {}
                         delegate: Rectangle {
                             id: edge
                             opacity: 1
                             antialiasing: true
-                            state: edgestate
+                            state: edgeState
                             transformOrigin: Item.TopLeft
                             x: x1*tree.width
                             y: y1*tree.height
@@ -220,11 +212,11 @@ ActivityBase {
                                     }
                                 },
                                 State {
-                                  name: "others"
-                                  PropertyChanges {
-                                      target: edge
-                                      color:"black"
-                                  }
+                                    name: "others"
+                                    PropertyChanges {
+                                        target: edge
+                                        color:"black"
+                                    }
                                 }
                             ]
                         }
@@ -238,7 +230,7 @@ ActivityBase {
                 color: "transparent"
                 width: background.horizontalLayout ? background.width*0.35 : background.width
                 height: background.horizontalLayout ? background.height : background.height*0.35
-                anchors.left: background.horizontalLayout ?  tree.right : partition.left
+                anchors.left: background.horizontalLayout ? tree.right : partition.left
                 anchors.top: background.horizontalLayout ? partition.top: tree.bottom
                 border.color: "black"
                 border.width: 5
@@ -254,13 +246,13 @@ ActivityBase {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         Repeater {
-                            id: answerschoice
-                            model: ListModel{}
+                            id: answersChoice
+                            model: ListModel {}
                             delegate:
                                 AnswerButton {
                                     id: options
                                     width: answers.width*0.70
-                                    height: answers.height*Activity.answerbuttonheight
+                                    height: answers.height*Activity.answerButtonRatio
                                     textLabel: optionn
                                     isCorrectAnswer: textLabel === answer
                                     onCorrectlyPressed: bonus.good("lion")

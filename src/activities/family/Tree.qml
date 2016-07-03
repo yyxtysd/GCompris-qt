@@ -1,6 +1,6 @@
-/* GCompris - family.qml
+/* GCompris - Tree.qml
  *
- * Copyright (C) Holger Kaelberer <holger.k@elberer.de>
+ * Copyright (C) RAJDEEP KAUR <rajdeep.kaur@kde.org> (Qt Quick port)
  *
  * Authors:
  *   Holger Kaelberer <holger.k@elberer.de>
@@ -25,30 +25,31 @@ import "../../core"
 import "family.js" as Activity
 
 Item {
-    id:tree
-    property int  searchitem:-1
-    property alias recwidth:content.width
-    property alias recheight:content.height
-    property string nodeimagesource:nodeimage.source
-    property string bordercolor:content.border.color
+    id: tree
+    property int searchitem: -1
+    property alias recwidth: content.width
+    property alias recheight: content.height
+    property string nodeimagesource: nodeimage.source
+    property string bordercolor: content.border.color
     property real borderwidth: content.border.width
-    property string colorr:content.color
-    property alias radius:content.radius
+    property string colorr: content.color
+    property alias radius: content.radius
+
     Rectangle {
-         id:content
-         color:colorr
-         width:recwidth
-         height:recheight
-         border.color:bordercolor
-         border.width:borderwidth
-         radius:radius
+        id: content
+        color: colorr
+        width: recwidth
+        height: recheight
+        border.color: bordercolor
+        border.width: borderwidth
+        radius: radius
         Image {
-            id:nodeimage
-            source:searchitem===-1 ? "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg":nodeimagesource
-            anchors.horizontalCenter:parent.horizontalCenter
-            anchors.verticalCenter:parent.verticalCenter
-            width:parent.width*0.6
-            height:parent.height*0.6
+            id: nodeimage
+            source: searchitem === -1 ? "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg" : nodeimagesource
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            width: parent.width*0.6
+            height: parent.height*0.6
 
         }
     }

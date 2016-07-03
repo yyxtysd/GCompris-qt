@@ -3,7 +3,7 @@
  * Copyright (C) 2016 RAJDEEP KAUR <rajdeep.kaur@kde.org>
  *
  * Authors:
- *   "RAJDEEP KAUR" <rajdeep.kaur@kde.org>
+ *   RAJDEEP KAUR <rajdeep.kaur@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@
 var currentLevel = 0
 var items
 var url = "qrc:/gcompris/src/activities/family/resource/"
-var treestructure = [
-                    {  edgelist: [
+var treeStructure = [
+                    // level 1
+                    {  edgeList: [
                                    [0.41, 0.25, 0.64, 0.25],
                                    [0.53, 0.25, 0.53, 0.50]
                                 ],
@@ -40,13 +41,13 @@ var treestructure = [
                                 ],
                        nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
                        currentstate: ["activeto", "deactive", "active"],
-                       edgestate:["married","others"],
+                       edgeState:["married","others"],
                        answer: [qsTr("Father")],
                        optionss: [qsTr("Father"), qsTr("Grandfather"), qsTr("Uncle")]
 
                     },
-
-                    {  edgelist: [
+                    // level 2
+                    {  edgeList: [
                                   [0.41, 0.25, 0.64, 0.25],
                                   [0.53, 0.25, 0.53, 0.50]
                                 ],
@@ -61,13 +62,13 @@ var treestructure = [
                                ],
                       nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
                       currentstate: ["deactive", "activeto", "active"],
-                      edgestate:["married","others"],
+                      edgeState:["married","others"],
                       answer: [qsTr("Mother")],
-                      optionss: [qsTr("Mother"), qsTr("GrandMother"), qsTr("Aunty")]
+                      optionss: [qsTr("Mother"), qsTr("Grandmother"), qsTr("Aunt")]
 
                     },
-
-                    {  edgelist: [ [0.41, 0.25, 0.64, 0.25],
+                    // level 3
+                    {  edgeList: [ [0.41, 0.25, 0.64, 0.25],
                                   [0.53, 0.257, 0.44, 0.50],
                                   [0.53, 0.257, 0.63, 0.50]
                                 ],
@@ -83,12 +84,12 @@ var treestructure = [
                                 ],
                        nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "boy2.svg"],
                        currentstate: ["deactive", "deactive", "active", "activeto"],
-                       edgestate:["married","others","others","others"],
+                       edgeState:["married","others","others","others"],
                        answer: [qsTr("Brother")],
                        optionss: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
-
                     },
-                    {  edgelist: [ [0.41, 0.25, 0.64, 0.25],
+                    // level 4
+                    {  edgeList: [ [0.41, 0.25, 0.64, 0.25],
                                   [0.53, 0.26, 0.33, 0.50],
                                   [0.53, 0.25, 0.53, 0.50],
                                   [0.53, 0.25, 0.70, 0.52]
@@ -106,12 +107,12 @@ var treestructure = [
                                 ],
                       nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
                       currentstate: ["deactive", "deactive", "active", "activeto", "deactive"],
-                      edgestate:["married","others","others","others"],
+                      edgeState:["married","others","others","others"],
                       answer: [qsTr("Sister")],
                       optionss: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
-
-                   },
-                   {  edgelist: [ [0.491, 0.17, 0.54, 0.17],
+                    },
+                    // level 5
+                    {  edgeList: [ [0.491, 0.17, 0.54, 0.17],
                                  [0.525, 0.17, 0.525, 0.45],
                                  [0.44, 0.45, 0.60, 0.45],
                                  [0.525, 0.45, 0.525, 0.65],
@@ -135,11 +136,12 @@ var treestructure = [
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
                       currentstate: ["activeto", "deactive", "deactive", "deactive", "active", "deactive", "deactive"],
-                      edgestate:["married","others","married","others","others","others","others","others" ],
-                      answer: [qsTr("Grand Father")],
-                      optionss: [qsTr("Grand Daughter"), qsTr("Grand Son"), qsTr("Grand Father"), qsTr("Grand Mother")]
+                      edgeState:["married","others","married","others","others","others","others","others" ],
+                      answer: [qsTr("Grandfather")],
+                      optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
                      },
-                     {  edgelist: [ [0.50, 0.17, 0.54, 0.17],
+                     // level 6
+                     {  edgeList: [ [0.50, 0.17, 0.54, 0.17],
                                    [0.525, 0.17, 0.525, 0.45],
                                    [0.44, 0.45, 0.60, 0.45],
                                    [0.525, 0.45, 0.525, 0.65],
@@ -163,11 +165,12 @@ var treestructure = [
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
                       currentstate: ["deactive", "activeto", "deactive", "deactive", "deactive", "deactive", "active", "active"],
-                      edgestate:["married","others","married","others","others","others","others","others" ],
-                      answer: [qsTr("Grand Mother")],
-                      optionss: [qsTr("Grand Daughter"), qsTr("Grand Son"), qsTr("Grand Father"), qsTr("Grand Mother")],
+                      edgeState:["married","others","married","others","others","others","others","others" ],
+                      answer: [qsTr("Grandmother")],
+                      optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")],
                    },
-                   {  edgelist: [ [0.50, 0.17, 0.54, 0.17],
+                   // level 7
+                   {  edgeList: [ [0.50, 0.17, 0.54, 0.17],
                                [0.525, 0.17, 0.525, 0.45],
                                [0.44, 0.45, 0.60, 0.45],
                                [0.525, 0.45, 0.525, 0.65],
@@ -191,11 +194,12 @@ var treestructure = [
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "boy2.svg","girl1.svg" ],
                       currentstate: ["active", "deactive", "deactive", "deactive", "deactive", "deactive", "activeto"],
-                      edgestate:["married","others","married","others","others","others","others","others" ],
-                      answer: [qsTr("Grand Daughter")],
-                      optionss: [qsTr("Grand Daughter"), qsTr("Grand Son"), qsTr("Grand Father"), qsTr("Grand Mother")]
-                },
-                {  edgelist: [ [0.50, 0.17, 0.54, 0.17],
+                      edgeState:["married","others","married","others","others","others","others","others" ],
+                      answer: [qsTr("Granddaughter")],
+                      optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
+                   },
+                   // level 8
+                   {  edgeList: [ [0.50, 0.17, 0.54, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
                               [0.44, 0.45, 0.60, 0.45],
                               [0.525, 0.45, 0.525, 0.65],
@@ -218,12 +222,13 @@ var treestructure = [
                               [0.85,0.76]
                             ],
                   nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
-                  currentstate: ["deactive", "activeto", "deactive", "deactive", "deactive", "deactive", "active", "activeto"],
-                  edgestate:["married","others","married","others","others","others","others","others" ],
-                  answer: [qsTr("Grand Son")],
-                  optionss: [qsTr("Grand Daughter"), qsTr("Grand Son"), qsTr("Grand Father"), qsTr("Grand Mother")]
-               },
-               {  edgelist: [  [0.50, 0.17, 0.53, 0.17],
+                  currentstate: ["deactive", "active", "deactive", "deactive", "deactive", "deactive", "activeto", "active"],
+                  edgeState:["married","others","married","others","others","others","others","others" ],
+                  answer: [qsTr("Grandson")],
+                  optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
+                   },
+                   // level 9
+                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
                               [0.44, 0.45, 0.60, 0.45],
                               [0.22, 0.45, 0.254, 0.45],
@@ -243,13 +248,12 @@ var treestructure = [
                             ],
                   nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
                   currentstate: ["deactive", "deactive", "activeto", "active"],
-                  edgestate:["others","others","siblings","others","others","others"],
+                  edgeState:["others","others","siblings","others","others","others"],
                   answer: [qsTr("Uncle")],
-                  optionss: [qsTr("Uncle"), qsTr("Aunty"), qsTr("Nephew"), qsTr("Niece")]
-
-
-               },
-               {  edgelist: [  [0.50, 0.17, 0.53, 0.17],
+                  optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
+                   },
+                   // level 10
+                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
                               [0.44, 0.45, 0.60, 0.45],
                               [0.22, 0.45, 0.254, 0.45],
@@ -269,12 +273,12 @@ var treestructure = [
                            ],
                  nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
                  currentstate: ["deactive", "deactive", "active", "activeto"],
-                 edgestate:["others","others","siblings","others","others","others"],
+                 edgeState:["others","others","siblings","others","others","others"],
                  answer: [qsTr("Nephew")],
-                 optionss: [qsTr("Uncle"), qsTr("Aunty"), qsTr("Nephew"), qsTr("Niece")]
-
-            },
-            {  edgelist: [  [0.50, 0.17, 0.53, 0.17],
+                 optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
+                   },
+                   // level 11
+                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                            [0.525, 0.17, 0.525, 0.45],
                            [0.44, 0.45, 0.60, 0.45],
                            [0.22, 0.45, 0.254, 0.45],
@@ -295,12 +299,12 @@ var treestructure = [
                         ],
               nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
               currentstate: ["deactive", "deactive", "deactive", "activeto", "active"],
-              edgestate:["others","others","siblings","others","others","others"],
-              answer: [qsTr("Aunty")],
-              optionss: [qsTr("Uncle"), qsTr("Aunty"), qsTr("Nephew"), qsTr("Niece")]
-
-         },
-         {  edgelist: [  [0.50, 0.17, 0.53, 0.17],
+              edgeState:["others","others","siblings","others","others","others"],
+              answer: [qsTr("Aunt")],
+              optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
+                   },
+                   // level 12
+                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                            [0.525, 0.17, 0.525, 0.45],
                            [0.44, 0.45, 0.60, 0.45],
                            [0.22, 0.45, 0.254, 0.45],
@@ -320,12 +324,12 @@ var treestructure = [
                         ],
               nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
               currentstate: ["deactive", "deactive", "deactive", "active", "activeto"],
-              edgestate:["married","others","siblings","others","others","others"],
+              edgeState:["married","others","siblings","others","others","others"],
               answer: [qsTr("Niece")],
-              optionss: [qsTr("Uncle"), qsTr("Aunty"), qsTr("Nephew"), qsTr("Niece")]
-
-         },
-         {  edgelist: [     [0.65, 0.16, 0.745, 0.16],
+              optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
+                   },
+                   // level 13
+                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                            [0.70, 0.16, 0.70, 0.70],
                            [0.70, 0.50, 0.58, 0.50],
                            [0.40, 0.52, 0.34, 0.52],
@@ -344,11 +348,12 @@ var treestructure = [
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
             currentstate: ["activeto", "deactive", "deactive", "active", "deactive"],
-            edgestate:["married","others","others","married","others"],
+            edgeState:["married","others","others","married","others"],
             answer: [qsTr("Father-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
-         },
-         {  edgelist: [     [0.65, 0.16, 0.745, 0.16],
+                   },
+                   // level 14
+                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                               [0.70, 0.16, 0.70, 0.70],
                               [0.70, 0.50, 0.58, 0.50],
                               [0.40, 0.52, 0.34, 0.52],
@@ -367,11 +372,12 @@ var treestructure = [
                        ],
              nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
              currentstate: ["deactive", "activeto", "deactive", "active", "deactive"],
-              edgestate:["married","others","others","married","others"],
+              edgeState:["married","others","others","married","others"],
              answer: [qsTr("Mother-in-law")],
              optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
-          },
-          {  edgelist: [     [0.65, 0.16, 0.745, 0.16],
+                   },
+                   // level 15
+                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                             [0.70, 0.16, 0.70, 0.70],
                             [0.70, 0.50, 0.58, 0.50],
                             [0.40, 0.52, 0.34, 0.52],
@@ -390,11 +396,12 @@ var treestructure = [
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
             currentstate: ["deactive", "deactive", "deactive", "active", "activeto"],
-             edgestate:["married","others","others","married","others"],
+             edgeState:["married","others","others","married","others"],
             answer: [qsTr("Brother-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
-          },
-          {  edgelist: [     [0.54, 0.16, 0.61, 0.16],
+                   },
+                   // level 16
+                   {  edgeList: [     [0.54, 0.16, 0.61, 0.16],
                             [0.58, 0.16, 0.58, 0.70],
                             [0.58, 0.50, 0.475, 0.50],
                             [0.310, 0.52, 0.235, 0.52],
@@ -415,11 +422,12 @@ var treestructure = [
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg", "lady1.svg"],
             currentstate: ["dective", "deactive", "deactive", "active", "deactive", "activeto"],
-            edgestate:["married","others","others","married","others","married"],
+            edgeState:["married","others","others","married","others","married"],
             answer: [qsTr("Sister-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
-          },
-          {  edgelist: [     [0.65, 0.16, 0.745, 0.16],
+                   },
+                   // level 17
+                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                             [0.70, 0.16, 0.70, 0.70],
                             [0.70, 0.50, 0.58, 0.50],
                             [0.40, 0.52, 0.34, 0.52],
@@ -438,14 +446,14 @@ var treestructure = [
                        ],
              nodeleave: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
              currentstate: ["active", "deactive", "deactive", "activeto", "deactive", "deactive"],
-             edgestate:["married","others","others","married","others"],
+             edgeState:["married","others","others","married","others"],
              answer: [qsTr("Son-in-law")],
              optionss: [qsTr("Son-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
             }
 ]
 
-var numberOfLevel = treestructure.length;
-var answerbuttonheight = 0 ;
+var numberOfLevel = treeStructure.length;
+var answerButtonRatio = 0;
 
 function start(items_) {
     items = items_
@@ -458,13 +466,13 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
-    var levelTree = treestructure[currentLevel]
-    answerbuttonheight =  1/(levelTree.optionss.length+4);
-    items.nodecreator.model.clear();
-    items.answerschoice.model.clear();
-    items.edgecreator.model.clear();
+    var levelTree = treeStructure[currentLevel]
+    answerButtonRatio = 1/(levelTree.optionss.length+4);
+    items.nodeCreator.model.clear();
+    items.answersChoice.model.clear();
+    items.edgeCreator.model.clear();
     for(var i = 0 ; i < levelTree.nodePositions.length ; i++) {
-        items.nodecreator.model.append({
+        items.nodeCreator.model.append({
                        "xx": levelTree.nodePositions[i][0],
                        "yy": levelTree.nodePositions[i][1],
                        "nodee": levelTree.nodeleave[i],
@@ -474,19 +482,19 @@ function initLevel() {
     }
 
     for(var j = 0 ; j <levelTree.optionss.length ; j++) {
-       items.answerschoice.model.append({
+       items.answersChoice.model.append({
                "optionn": levelTree.optionss[j],
                "answer": levelTree.answer[0]
        });
     }
 
-    for(var k =0 ; k < levelTree.edgelist.length ; k++) {
-        items.edgecreator.model.append({
-             "x1": levelTree.edgelist[k][0],
-             "y1": levelTree.edgelist[k][1],
-             "x22": levelTree.edgelist[k][2],
-             "y22": levelTree.edgelist[k][3],
-             "edgestate": levelTree.edgestate[k]
+    for(var k =0 ; k < levelTree.edgeList.length ; k++) {
+        items.edgeCreator.model.append({
+             "x1": levelTree.edgeList[k][0],
+             "y1": levelTree.edgeList[k][1],
+             "x22": levelTree.edgeList[k][2],
+             "y22": levelTree.edgeList[k][3],
+             "edgeState": levelTree.edgeState[k]
 
         });
     }
