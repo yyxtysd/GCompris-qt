@@ -61,6 +61,8 @@ ActivityBase {
             property int delay: 6
             property bool okBoxChecked: false
             property bool easyMode: true
+            property bool playLetter: true
+            property double startTime
         }
 
         onStart: { Activity.start(items) }
@@ -79,6 +81,64 @@ ActivityBase {
         ListModel {
             id: listModelInput
         }
+
+        property int delay: 20
+        function resetTime(timeDelay) {
+            items.startTime = Math.round(Activity.date.getTime() / 1000)
+            background.delay = timeDelay
+        }
+
+        // checks if the user had not made a move in "background.delay" time and shows help
+        Timer {
+            interval: 2000; running: true; repeat: true
+            onTriggered: {
+                // reinitialize the date
+                Activity.date = new Date()
+                // check if "background.delay" time has passed since the last move
+                if (Math.round(Activity.date.getTime() / 1000) - items.startTime > background.delay ) {
+                    // on easyMode, show the first "good" move
+                    if (items.easyMode) {
+                        for (var i = 0; i < items.listModel.count; i++) {
+                            var found = false
+                            // letter at index i is in the wrong place
+                            if (items.listModel.get(i).letter != Activity.solution[i]) {
+                                // search for the good letter in the listModel
+                                for (var j = 0; j < items.listModel.count; j++) {
+                                    if (items.listModel.get(j).letter == Activity.solution[i]) {
+                                        items.repeater.itemAt(i).failureAnimation.start()
+                                        items.repeater.itemAt(j).failureAnimation.start()
+                                        found = true
+                                        break
+                                    }
+                                }
+                                // search for the good letter in the listModelInput
+                                if (!found) {
+                                    for (j = 0; j < items.listModelInput.count; j++)
+                                        if (items.listModelInput.get(j).letter == Activity.solution[i]) {
+                                            items.repeater.itemAt(i).failureAnimation.start()
+                                            items.inputRepeater.itemAt(j).failureAnimation1.start()
+                                            break
+                                        }
+                                }
+                                // found the first wrong => break
+                                break
+                            }
+                        }
+
+                    // if not easy mode, show all the wrong placed letters
+                    } else {
+                        for (i = 0; i < items.listModel.count; i++)
+                            // letter at index i is in the wrong place
+                            if (items.listModel.get(i).letter != Activity.solution[i])
+                                items.repeater.itemAt(i).failureAnimation.start()
+                    }
+
+                    // repeat after 10 seconds
+                    background.resetTime(10)
+                }
+            }
+        }
+
 
         Timer {
             id: finishAnimation
@@ -189,7 +249,9 @@ ActivityBase {
                                 onPressed: {
                                     letter._x = letter.x
                                     letter._y = letter.y
-                                    Activity.playLetter(letter.text)
+                                    if (items.playLetter)
+                                        Activity.playLetter(letter.text)
+                                    background.resetTime(20)
                                 }
                                 onReleased: {
                                     /* use mouse's coordinates (x and y) to compare to the solutionArea's repeater items */
@@ -287,6 +349,8 @@ ActivityBase {
                                         finishAnimation.index = 0
                                         finishAnimation.start()
                                     }
+
+                                    background.resetTime(20)
                                 }
                             }
                         }
@@ -324,6 +388,17 @@ ActivityBase {
                             // store the initial coordinates
                             property var _x
                             property var _y
+                            property alias failureAnimation1: failureAnimation1
+
+                            SequentialAnimation {
+                                id: failureAnimation1
+                                PropertyAction { target: missingLetter; property: "color"; value: "red" }
+                                NumberAnimation { target: missingLetter; property: "scale"; to: 2; duration: 400 }
+                                NumberAnimation { target: missingLetter; property: "scale"; to: 1; duration: 400 }
+                                NumberAnimation { target: missingLetter; property: "opacity"; to: 0; duration: 100 }
+                                PropertyAction { target: missingLetter; property: "color"; value: "white" }
+                                NumberAnimation { target: missingLetter; property: "opacity"; to: 1; duration: 400 }
+                            }
 
                             MouseArea {
                                 id: mouseArea2
@@ -334,7 +409,9 @@ ActivityBase {
                                 onPressed: {
                                     missingLetter._x = missingLetter.x
                                     missingLetter._y = missingLetter.y
-                                    Activity.playLetter(missingLetter.text)
+                                    if (items.playLetter)
+                                        Activity.playLetter(missingLetter.text)
+                                    background.resetTime(20)
                                 }
 
                                 onReleased: {
@@ -394,6 +471,8 @@ ActivityBase {
                                         finishAnimation.index = 0
                                         finishAnimation.start()
                                     }
+
+                                    background.resetTime(20)
                                 }
                             }
                         }
@@ -467,6 +546,7 @@ ActivityBase {
                         print("add 0")
                         print("progress: ",Activity.progress)
                     }
+                    background.resetTime(20)
                 }
             }
         }
@@ -519,8 +599,7 @@ ActivityBase {
                             onCheckedChanged: {
                                 items.okBoxChecked = checked
                                 okButton.visible = checked
-                                print("okBox: ",checked)
-
+                                print("okButtonBox: ",checked)
 
                                 Activity.currentLevel = 0
                                 Activity.progress = []
@@ -530,11 +609,25 @@ ActivityBase {
                         }
 
                         GCDialogCheckBox {
-                            id: easyMode
+                            id: easyModeBox
                             width: 250 * ApplicationInfo.ratio
                             text: qsTr("Easy mode")
                             checked: items.easyMode
-                            onCheckedChanged: items.easyMode = checked
+                            onCheckedChanged: {
+                                print("easyModeBox: ",checked)
+                                items.easyMode = checked
+                            }
+                        }
+
+                        GCDialogCheckBox {
+                            id: playLetterBox
+                            width: 250 * ApplicationInfo.ratio
+                            text: qsTr("Play letter sound")
+                            checked: items.playLetter
+                            onCheckedChanged: {
+                                print("playLetterBox: ",checked)
+                                items.playLetter = checked
+                            }
                         }
                     }
                 }

@@ -47,15 +47,18 @@ var difficulty = 0  // 0 = extremely easy; 1 = very easy; 2 = easy; 3 = normal; 
 // 5 = very hard: totalLetters = [7]; guessLetters = [4-6]
 // 6 = insane: totalLetters = [8]; guessLetters = [6-8]
 
-var interchange = 0
+var interchange = 1
 //var progress = {totalPassed: 0, totalFailed: 0, lastSubLevel: 0} // lastSubLevel = 0 if lost; = 1 if won
 var progress = []  // 0 if lost, 1 if won   => [1,1,0,1,1,0,0,1,1,1,1,1...]
-
+var date
 
 function start(items_) {
     items = items_
     currentLevel = 0
     progress = []
+    date = new Date()
+    items.startTime = Math.round(date.getTime() / 1000)
+    print("time: ", items.startTime)
 
     items.score.numberOfSubLevels = 5
     items.score.currentSubLevel = 1
@@ -96,6 +99,8 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
+    date = new Date()
+    items.startTime = Math.round(date.getTime() / 1000)
 
     // custom levels - change difficulty starting from level two (so the user gives feedback from solving at least 5 sublevels)
     if (currentLevel > 0 && items.okBoxChecked) {
@@ -238,10 +243,6 @@ function init() {
                 model[a] = model[b]
                 model[b] = aux
             }
-
-                    //starting from level 9, shuffle the model so no letter is placed in the right spot
-                    //model = Core.shuffle(model)
-
 
             // a level was passed
             levelsPassed ++
