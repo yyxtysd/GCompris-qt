@@ -40,6 +40,7 @@ ActivityBase {
         Component.onCompleted: {
             activity.start.connect(start)
             activity.stop.connect(stop)
+            dialogActivityConfig.getInitialConfiguration()
         }
 
         // Add here the QML items you need to access in javascript
@@ -244,7 +245,7 @@ ActivityBase {
                                 id: mouseArea
                                 anchors.fill: parent
                                 drag.target: parent
-                                enabled: items.gameFinished ? false : true
+                                enabled: items.gameFinished || letter.text == '_' ? false : true
 
                                 onPressed: {
                                     letter._x = letter.x
@@ -346,6 +347,7 @@ ActivityBase {
 
                                     // if the solution is correct, start the finishAnimation
                                     if (!items.okBoxChecked && Activity.checkCorectness()) {
+                                        items.gameFinished = true
                                         finishAnimation.index = 0
                                         finishAnimation.start()
                                     }
@@ -468,6 +470,7 @@ ActivityBase {
 
                                     // if the solution is correct, start the finishAnimation
                                     if (!items.okBoxChecked && Activity.checkCorectness()) {
+                                        items.gameFinished = true
                                         finishAnimation.index = 0
                                         finishAnimation.start()
                                     }
