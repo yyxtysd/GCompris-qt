@@ -21,6 +21,7 @@
  */
 import QtQuick 2.1
 import GCompris 1.0
+import QtGraphicalEffects 1.0
 import "../../core"
 import "family.js" as Activity
 
