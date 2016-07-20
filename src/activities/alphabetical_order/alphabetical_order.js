@@ -102,6 +102,10 @@ function initLevel() {
     date = new Date()
     items.startTime = Math.round(date.getTime() / 1000)
 
+    if (currentLevel == 0 && items.score.currentSubLevel == 1) {
+        items.message.opacity = 1
+    } else items.message.opacity = 0
+
     // custom levels - change difficulty starting from level two (so the user gives feedback from solving at least 5 sublevels)
     if (currentLevel > 0 && items.okBoxChecked) {
         print("PROGRESS: ",progress)

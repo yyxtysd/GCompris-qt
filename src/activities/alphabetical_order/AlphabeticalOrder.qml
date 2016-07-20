@@ -58,6 +58,7 @@ ActivityBase {
             property alias inputRepeater: inputRepeater
             property alias locale: background.locale
             property alias wordlist: wordlist
+            property alias message: message
             property bool gameFinished: false
             property int delay: 6
             property bool okBoxChecked: false
@@ -73,6 +74,23 @@ ActivityBase {
             if(focus) {
                 Activity.focusTextInput()
             }
+        }
+
+        IntroMessage {
+            id: message
+            z: 1
+            anchors {
+                top: parent.top
+                topMargin: 10
+                right: parent.right
+                rightMargin: 5
+                left: parent.left
+                leftMargin: 5
+            }
+            intro: [
+                qsTr("Drag and alphabetically order the letters from bottom to their place on top.")
+            ]
+            Behavior on opacity { PropertyAnimation { duration: 200 } }
         }
 
         ListModel {
