@@ -57,7 +57,7 @@ ActivityBase {
             property alias nodeCreator: nodeCreator
             property alias answersChoice: answersChoice
             property alias edgeCreator: edgeCreator
-            property alias weddingringcreator: weddingringcreator
+            property alias wringcreator: wringcreator
         }
 
         onStart: { Activity.start(items) }
@@ -97,26 +97,26 @@ ActivityBase {
                             state: currentstate
 
                             states: [
-                                State {
-                                    name: "active"
-                                    PropertyChanges {
-                                        target: currentPointer
-                                        bordercolor: "blue"
-                                    }
-                                },
-                                State {
-                                    name: "deactive"
-                                    PropertyChanges {
-                                        target: currentPointer
-                                    }
-                                },
-                                State {
+                               State {
+                                     name: "active"
+                                     PropertyChanges {
+                                         target: currentPointer
+                                         bordercolor: "blue"
+                                     }
+                               },
+                               State {
+                                      name: "deactive"
+                                      PropertyChanges {
+                                          target: currentPointer
+                                      }
+                               },
+                               State {
                                     name: "activeto"
                                     PropertyChanges {
                                         target: currentPointer
                                         bordercolor: "red"
                                     }
-                                }
+                               }
                             ]
 
                             SequentialAnimation {
@@ -149,7 +149,7 @@ ActivityBase {
                         }
                     }
 
-                    GCText {
+                   GCText {
                         id: me
                         text: qsTr("Me")
                         visible: Activity.treeStructure[bar.level-1].captions[0] !== undefined
@@ -174,7 +174,6 @@ ActivityBase {
                             id: edge
                             opacity: 1
                             antialiasing: true
-                            state: edgeState
                             transformOrigin: Item.TopLeft
                             x: x1*tree.width
                             y: y1*tree.height
@@ -183,7 +182,7 @@ ActivityBase {
                             width: Math.sqrt(Math.pow(x - x2, 2) + Math.pow(y- y2, 2))
                             height: 4 * ApplicationInfo.ratio
                             rotation: (Math.atan((y2 - y)/(x2-x)) * 180 / Math.PI) + (((y2-y) < 0 && (x2-x) < 0) * 180) + (((y2-y) >= 0 && (x2-x) < 0) * 180)
-
+                            color: "black"
                             Behavior on height {
                                 NumberAnimation {
                                     duration: 2000
@@ -198,43 +197,21 @@ ActivityBase {
                                 }
                             }
 
-                            states:[
-                                State {
-                                    name: "married"
-                                    PropertyChanges {
-                                        target: edge
-                                        color: "#F1C40F"
-                                    }
-                                },
-                                State {
-                                    name: "siblings"
-                                    PropertyChanges {
-                                        target:edge
-                                        color:"#28B463"
-                                    }
-                                },
-                                State {
-                                    name: "others"
-                                    PropertyChanges {
-                                        target: edge
-                                        color:"black"
-                                    }
-                                }
-                            ]
+
                         }
 
                     }
 
                     Repeater {
-                        id: weddingringcreator
-                        model: ListModel {}
+                        id: wringcreator
+                        model: ListModel{}
                         delegate: Image {
-                            id: weddingring
+                            id: wring
+                            source: Activity.url + "rings.svg"
                             width: tree.width*0.04
                             height: tree.width*0.04
                             x:ringx*tree.width
                             y:ringy*tree.height
-                            source: Activity.url + "weddingrings.svg"
                         }
                     }
                 }
@@ -265,12 +242,12 @@ ActivityBase {
                             model: ListModel {}
                             delegate:
                                 AnswerButton {
-                                id: options
-                                width: answers.width*0.70
-                                height: answers.height*Activity.answerButtonRatio
-                                textLabel: optionn
-                                isCorrectAnswer: textLabel === answer
-                                onCorrectlyPressed: bonus.good("lion")
+                                    id: options
+                                    width: answers.width*0.70
+                                    height: answers.height*Activity.answerButtonRatio
+                                    textLabel: optionn
+                                    isCorrectAnswer: textLabel === answer
+                                    onCorrectlyPressed: bonus.good("lion")
                             }
                         }
                     }
