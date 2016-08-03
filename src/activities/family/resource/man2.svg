@@ -16,7 +16,7 @@
    height="520"
    xml:space="preserve"
    sodipodi:docname="man2.svg"
-   inkscape:version="0.91 r"
+   inkscape:version="0.91 r13725"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"><metadata
      id="metadata23"><rdf:RDF><cc:Work
@@ -184,10 +184,10 @@
      inkscape:zoom="0.33193016"
      inkscape:cx="341.58474"
      inkscape:cy="251.17823"
-     inkscape:window-width="1355"
-     inkscape:window-height="712"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="1303"
+     inkscape:window-height="744"
+     inkscape:window-x="63"
+     inkscape:window-y="24"
      inkscape:current-layer="svg690"
      inkscape:window-maximized="1" /><ellipse
      id="path2896"
@@ -200,7 +200,7 @@
      id="g3215"
      style="enable-background:new"
      inkscape:label="Layer 1"
-     transform="matrix(0.56195643,-0.01135616,0.00936115,0.53978382,170.1913,-21.194634)"><g
+     transform="matrix(1.0630828,-0.01291873,0.01770898,0.61405643,-0.14102537,-30.486064)"><g
        id="g11781"
        transform="matrix(1.0000138,-8.3064909e-4,-6.5770628e-4,1.0394826,-16.64741,-5.2531275)"><path
          id="path9980"

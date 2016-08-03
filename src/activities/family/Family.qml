@@ -36,6 +36,7 @@ ActivityBase {
         anchors.fill: parent
         source: Activity.url + "back.svg"
         sourceSize.width: parent.width
+        height: parent.height
         fillMode: Image.PreserveAspectCrop
         property bool horizontalLayout: background.width > background.height
 
@@ -226,12 +227,12 @@ ActivityBase {
                 anchors.top: background.horizontalLayout ? partition.top: tree.bottom
                 border.color: "black"
                 border.width: 5
-                Image {
+                Rectangle {
                     width: parent.width * 0.99
                     height: parent.height * 0.99
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    source: Activity.url + "answerarea.svg"
+                    color: "transparent"
                     Grid {
                         columns: 1
                         rowSpacing: 20

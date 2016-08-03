@@ -229,6 +229,38 @@ var treeStructure = [
                    },
                    // level 9
                    {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
+                                   [0.525, 0.17, 0.525, 0.45],
+                                   [0.44, 0.45, 0.60, 0.45],
+                                   [0.22, 0.45, 0.254, 0.45],
+                                   [0.22, 0.45, 0.22, 0.72],
+                                   [0.22, 0.71, 0.25, 0.71],
+                                   [0.78, 0.45, 0.83, 0.45],
+                                   [0.83, 0.45, 0.83, 0.72],
+                                   [0.83, 0.72, 0.78, 0.72]
+
+
+                        ],
+                      nodePositions: [
+                                   [0.311, 0.10],
+                                   [0.251, 0.40],
+                                   [0.588, 0.40],
+                                   [0.22, 0.70],
+                                   [0.610, 0.70]
+
+
+                        ],
+                     rationn: [80, 80, 80],
+                     captions: [  [0.83,0.76],
+                                  [0.118,0.76],
+                        ],
+                     nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg","boy2.svg"],
+                     currentstate: ["deactive", "deactive", "deactive", "active","activeto"],
+                     edgeState:["others","others","others","others","others","others"],
+                     answer: [qsTr("Cousin")],
+                     optionss: [qsTr("Brother"), qsTr("Sister"), qsTr("Cousin")]
+                   },
+                   // level 10
+                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
                               [0.44, 0.45, 0.60, 0.45],
                               [0.22, 0.45, 0.254, 0.45],
@@ -252,7 +284,7 @@ var treeStructure = [
                   answer: [qsTr("Uncle")],
                   optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
-                   // level 10
+                   // level 11
                    {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
                               [0.44, 0.45, 0.60, 0.45],
@@ -277,7 +309,7 @@ var treeStructure = [
                  answer: [qsTr("Nephew")],
                  optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
-                   // level 11
+                   // level 12
                    {  edgeList: [  [0.49, 0.17, 0.56, 0.17],
                            [0.525, 0.17, 0.525, 0.45],
                            [0.44, 0.45, 0.60, 0.45],
@@ -303,7 +335,7 @@ var treeStructure = [
               answer: [qsTr("Aunt")],
               optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
-                   // level 12
+                   // level 13
                    {  edgeList: [  [0.48, 0.17, 0.55, 0.17],
                            [0.525, 0.17, 0.525, 0.45],
                            [0.44, 0.45, 0.60, 0.45],
@@ -328,7 +360,7 @@ var treeStructure = [
               answer: [qsTr("Niece")],
               optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
-                   // level 13
+                   // level 14
                    {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                            [0.70, 0.16, 0.70, 0.70],
                            [0.70, 0.50, 0.58, 0.50],
@@ -352,7 +384,7 @@ var treeStructure = [
             answer: [qsTr("Father-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
-                   // level 14
+                   // level 15
                    {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                               [0.70, 0.16, 0.70, 0.70],
                               [0.70, 0.50, 0.58, 0.50],
@@ -376,7 +408,7 @@ var treeStructure = [
              answer: [qsTr("Mother-in-law")],
              optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
-                   // level 15
+                   // level 16
                    {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                             [0.70, 0.16, 0.70, 0.70],
                             [0.70, 0.50, 0.58, 0.50],
@@ -400,7 +432,7 @@ var treeStructure = [
             answer: [qsTr("Brother-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
-                   // level 16
+                   // level 17
                    {  edgeList: [     [0.54, 0.16, 0.61, 0.16],
                             [0.58, 0.16, 0.58, 0.70],
                             [0.58, 0.50, 0.475, 0.50],
@@ -426,7 +458,7 @@ var treeStructure = [
             answer: [qsTr("Sister-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
-                   // level 17
+                   // level 18
                    {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
                             [0.70, 0.16, 0.70, 0.70],
                             [0.70, 0.50, 0.58, 0.50],
