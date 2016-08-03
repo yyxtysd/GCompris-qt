@@ -308,7 +308,7 @@ var treeStructure = [
                  edgeState:["others","others","siblings","others","others","others"],
                  answer: [qsTr("Nephew")],
                  optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
-                   },
+                  },
                    // level 12
                    {  edgeList: [  [0.49, 0.17, 0.56, 0.17],
                            [0.525, 0.17, 0.525, 0.45],
@@ -354,7 +354,7 @@ var treeStructure = [
               captions: [  [0.83,0.45],
                            [0.118,0.76]
                         ],
-              nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
+              nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babygirl.svg"],
               currentstate: ["deactive", "deactive", "deactive", "active", "activeto"],
               edgeState:["married","others","siblings","others","others","others"],
               answer: [qsTr("Niece")],

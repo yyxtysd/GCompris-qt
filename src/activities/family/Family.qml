@@ -244,11 +244,12 @@ ActivityBase {
                             delegate:
                                 AnswerButton {
                                     id: options
-                                    width: answers.width*0.70
+                                    width: answers.width*0.75
                                     height: answers.height*Activity.answerButtonRatio
                                     textLabel: optionn
                                     isCorrectAnswer: textLabel === answer
                                     onCorrectlyPressed: bonus.good("lion")
+                                    onIncorrectlyPressed: bonus.bad("lion")
                             }
                         }
                     }
