@@ -29,7 +29,7 @@ ActivityInfo {
   goal: qsTr("To get an idea about relationships in the family")
   prerequisite: qsTr("Reading skills")
   manual: qsTr("To find the relation between two family members.\n") +
-  qsTr("Here we take some assumptions: the red lines refer to the married couple and blue straight lines refer to parents and siblings.\n") +
+  qsTr("For the married couple we have highlighted with the rings that is between two circles for the rest of relations we have only solid lines\n") +
   qsTr("Red circle will point to you and blue one to your relative. Now you have to think what you should call him.\n")
   credit: ""
   section: "fun"
