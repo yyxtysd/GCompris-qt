@@ -19,7 +19,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.3
 import "digital_electricity.js" as Activity
 
 import GCompris 1.0
@@ -34,9 +34,13 @@ Image {
     property double imgHeight
     property int index
     property string toolTipTxt
-    property int rotationAngle
-    property int initialAngle
+    property int rotationAngle: 0
+    property int initialAngle: 0
+    property int startingAngle: 0
     property int output
+    property double terminalSize
+    property variant inputs: []
+    property variant outputs: []
 
     property alias rotateComponent: rotateComponent
 
@@ -45,26 +49,40 @@ Image {
     width: imgWidth * parent.width
     height: imgHeight * parent.height
     fillMode: Image.PreserveAspectFit
-    state: "Initial"
     opacity: 1.0
     source: Activity.url + imgSrc
     z: 2
+    mipmap: true
+    antialiasing: true
 
-    onPaintedWidthChanged: {updateDragConstraints()}
+    onPaintedWidthChanged: {
+        updateDragConstraints()
+        Activity.updateWires(index)
+    }
 
     //SequentialAnimation {
         //id: rotateComponent
         //loops: Animation.Infinite
         PropertyAnimation {
             id: rotateComponent
+            //loops: 90
             target: electricalComponent
             property: "rotation"
-            from: initialAngle; to: rotationAngle
-            duration: 750
+            from: initialAngle; to: initialAngle + rotationAngle
+            duration: 1
             onStarted:{Activity.animationInProgress = true}
             onStopped: {
-                Activity.animationInProgress = false
-                updateDragConstraints()
+                initialAngle = initialAngle + rotationAngle
+                //console.log("initialAngle",initialAngle)
+                Activity.updateWires(index)
+                if(initialAngle == startingAngle + rotationAngle * 45) {
+                    if(initialAngle == 360 || initialAngle == -360)
+                        initialAngle = 0
+                    startingAngle = initialAngle
+                    Activity.animationInProgress = false
+                    updateDragConstraints()
+                }
+                else rotateComponent.start()
             }
             easing.type: Easing.InOutQuad
         }
@@ -95,13 +113,17 @@ Image {
 
     MouseArea {
         id: mouseArea
-        anchors.fill: parent
+        //anchors.fill: parent
+        width: parent.paintedWidth
+        height: parent.paintedHeight
+        anchors.centerIn: parent
         drag.target: electricalComponent
         //drag.minimumX: 0
         //drag.maximumX: electricalComponent.parent.width - (electricalComponent.width + electricalComponent.paintedWidth)/2
         //drag.minimumY: 0
         //drag.maximumY: (!parent && !parent.parent) ? (parent.parent.height - parent.height) : 0
         onPressed: {
+            console.log("Component index",index)
             if(Activity.toolDelete) {
                 Activity.updateToolTip("")
                 Activity.removeComponent(index)
@@ -110,6 +132,9 @@ Image {
                 Activity.updateToolTip(toolTipTxt)
                 Activity.componentSelected(index)
             }
+        }
+        onPositionChanged: {
+            Activity.updateWires(index)
         }
         onReleased: {
             /*

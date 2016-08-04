@@ -19,7 +19,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.3
 import QtGraphicalEffects 1.0
 import GCompris 1.0
 import "digital_electricity.js" as Activity
@@ -36,6 +36,7 @@ Item {
     property double tileWidth
     property double tileHeight
     property bool selected: false
+    //property double terminalSize: size
 
     signal pressed
 
@@ -67,6 +68,8 @@ Item {
             height: smallHeight
             fillMode: Image.PreserveAspectFit
             source: Activity.url + imgName
+            mipmap: true
+            antialiasing: true
 
             property double smallWidth: widthInColumn
             property double smallHeight: heightInColumn
@@ -125,8 +128,9 @@ Item {
                         //console.log("dropped parent.x",parent.x,"parent.y",parent.y)
                         var coord = backgroundContainer.mapFromItem(tileImage.parent, parent.x, parent.y)
                         //console.log("coord.x",coord.x,"coord.y",coord.y)
+                        //console.log("dropped",terminalSize)
                         if(coord.x > 0 && (backgroundContainer.width - coord.x > tileImage.fullWidth))
-                            Activity.createComponent(coord.x, coord.y, imgName, imgWidth, imgHeight, toolTipText)
+                            Activity.createComponent(coord.x, coord.y, imgName, imgWidth, imgHeight, toolTipText, terminalSize)
                         tileImage.anchors.centerIn = tile
                         tileImage.toSmall()
                         toolTip.show("")

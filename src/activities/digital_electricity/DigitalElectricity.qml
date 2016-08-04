@@ -72,6 +72,8 @@ ActivityBase {
             height: background.vert ?
                        background.height - (bar.height * 1.1) :
                        background.height - (bar.height * 1.1) - 90 * ApplicationInfo.ratio
+            //onHeightChanged: Activity.updateAllWires()
+            //onWidthChanged: Activity.updateAllWires()
             MouseArea {
                 anchors.fill: parent
                 onClicked: Activity.deselect()
@@ -81,7 +83,7 @@ ActivityBase {
                 id: infoTxt
                 anchors {
                     horizontalCenter: parent.horizontalCenter
-                    top: tutorialTxtContainer.top
+                    top: infoTxtContainer.top
                     topMargin: 2
                 }
                 fontSizeMode: Text.Fit
