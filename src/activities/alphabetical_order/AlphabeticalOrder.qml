@@ -88,7 +88,11 @@ ActivityBase {
                 leftMargin: 5
             }
             intro: [
-                qsTr("Drag and alphabetically order the letters from bottom to their place on top.")
+                qsTr("Drag and alphabetically order the letters from bottom to their place on top."),
+                qsTr("You can press on the configuration button to select different options."),
+                qsTr("If the OK button is activated, the level correctness will be checked only after pressing the OK button; else, if the answer is correct, the next level will be automatically loaded."),
+                qsTr("If the 'easy mode' is activated, when dragging a letter to its right place, a sparkle effect will appear, otherwise the letter will glow in red."),
+                qsTr("When pressing on a letter, a voice will spell it if the 'Play letter sound' is activated.")
             ]
             Behavior on opacity { PropertyAnimation { duration: 200 } }
         }
@@ -291,6 +295,8 @@ ActivityBase {
                                             var textAux = items.listModel.get(i).letter
                                             items.listModel.setProperty(i,"letter",letter.text)
                                             items.listModel.setProperty(index,"letter",textAux)
+                                            repeater.itemAt(i).text = letter.text
+                                            repeater.itemAt(index).text = textAux
 
                                             // animations & particles
                                             if (index != i) {
@@ -349,6 +355,8 @@ ActivityBase {
                                             // interchange the letters
                                             var textAux1 = items.listModelInput.get(i).letter
                                             if (textAux1 != '_' && letter.text != '_') {
+                                                inputRepeater.itemAt(i).text = letter.text
+                                                repeater.itemAt(index).text = textAux1
                                                 items.listModelInput.setProperty(i,"letter",letter.text)
                                                 items.listModel.setProperty(index,"letter",textAux1)
 
@@ -452,6 +460,7 @@ ActivityBase {
 
                                             // if the letter at index i in the repeater is '_', then replace '_' with missingLetter.text
                                             if (textAux == '_') {
+                                                repeater.itemAt(i).text = missingLetter.text
                                                 items.listModel.setProperty(i,"letter",missingLetter.text)
                                                 items.listModelInput.setProperty(index,"letter",'_')
 
@@ -461,6 +470,7 @@ ActivityBase {
 
                                             // else, the letter at intex i is a normal letter, so interchange it with missingLetter.text
                                             } else {
+                                                repeater.itemAt(i).text = missingLetter.text
                                                 items.listModel.setProperty(i,"letter",missingLetter.text)
                                                 items.listModelInput.setProperty(index,"letter",textAux)
                                             }
