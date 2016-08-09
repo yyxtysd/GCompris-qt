@@ -60,33 +60,28 @@ Image {
         Activity.updateWires(index)
     }
 
-    //SequentialAnimation {
-        //id: rotateComponent
-        //loops: Animation.Infinite
-        PropertyAnimation {
-            id: rotateComponent
-            //loops: 90
-            target: electricalComponent
-            property: "rotation"
-            from: initialAngle; to: initialAngle + rotationAngle
-            duration: 1
-            onStarted:{Activity.animationInProgress = true}
-            onStopped: {
-                initialAngle = initialAngle + rotationAngle
-                //console.log("initialAngle",initialAngle)
-                Activity.updateWires(index)
-                if(initialAngle == startingAngle + rotationAngle * 45) {
-                    if(initialAngle == 360 || initialAngle == -360)
-                        initialAngle = 0
-                    startingAngle = initialAngle
-                    Activity.animationInProgress = false
-                    updateDragConstraints()
-                }
-                else rotateComponent.start()
+    PropertyAnimation {
+        id: rotateComponent
+        target: electricalComponent
+        property: "rotation"
+        from: initialAngle; to: initialAngle + rotationAngle
+        duration: 1
+        onStarted:{Activity.animationInProgress = true}
+        onStopped: {
+            initialAngle = initialAngle + rotationAngle
+            //console.log("initialAngle",initialAngle)
+            Activity.updateWires(index)
+            if(initialAngle == startingAngle + rotationAngle * 45) {
+                if(initialAngle == 360 || initialAngle == -360)
+                    initialAngle = 0
+                startingAngle = initialAngle
+                Activity.animationInProgress = false
+                updateDragConstraints()
             }
-            easing.type: Easing.InOutQuad
+            else rotateComponent.start()
         }
-    //}
+        easing.type: Easing.InOutQuad
+    }
 
     function updateDragConstraints() {
         if(rotationAngle == 0 || rotationAngle == 180 || rotationAngle == 360 || rotationAngle == -360
@@ -118,10 +113,6 @@ Image {
         height: parent.paintedHeight
         anchors.centerIn: parent
         drag.target: electricalComponent
-        //drag.minimumX: 0
-        //drag.maximumX: electricalComponent.parent.width - (electricalComponent.width + electricalComponent.paintedWidth)/2
-        //drag.minimumY: 0
-        //drag.maximumY: (!parent && !parent.parent) ? (parent.parent.height - parent.height) : 0
         onPressed: {
             console.log("Component index",index)
             if(Activity.toolDelete) {
@@ -137,24 +128,6 @@ Image {
             Activity.updateWires(index)
         }
         onReleased: {
-            /*
-            console.log(parent.y, parent.height,parent.width,parent.height - parent.width/2)
-            console.log(parent.paintedHeight,parent.paintedWidth)
-            console.log("mouseArea",mouseArea.drag.minimumX,mouseArea.drag.minimumY)
-            if(initialAngle == 0 || initialAngle == 180) {
-                if ((parent.parent.height - parent.y > parent.paintedHeight) &&
-                    (parent.parent.width - parent.x > parent.paintedWidth) && parent.x > 0 && parent.y > 0) {
-                    parent.posX = parent.x / parent.parent.width
-                    parent.posY = parent.y / parent.parent.height
-                }
-            }
-            else if ((parent.parent.height - parent.y > parent.paintedHeight/2) &&
-                     (parent.parent.width - parent.x > parent.paintedWidth/2) &&
-                      parent.x > (parent.paintedHeight/2 - parent.paintedWidth/2) && parent.y > 0)  {
-                parent.posX = parent.x / parent.parent.width
-                parent.posY = parent.y / parent.parent.height
-            }
-            */
             parent.posX = parent.x / parent.parent.width
             parent.posY = parent.y / parent.parent.height
             parent.x = Qt.binding(function() { return parent.posX * parent.parent.width })

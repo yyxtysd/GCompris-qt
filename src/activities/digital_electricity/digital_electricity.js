@@ -31,9 +31,11 @@ var toolDelete
 var selectedIndex
 var animationInProgress
 var selectedTerminal
+var mapSrc = {}
 var terminals = []
 var deletedIndex = []
 var components = []
+var componentsInfo = []
 var wires = []
 var connected = []
 var deletedWireIndex = []
@@ -42,7 +44,61 @@ var colors = ["red","green","blue","blueviolet","silver"]
 function start(items_) {
     items = items_
     currentLevel = 0
-    items.availablePieces.model.append( {
+    var filename = url + "Components.qml"
+    items.dataset.source = filename
+    var componentsData = items.dataset.item
+    var componentsDataLength = componentsData.components.length
+
+    for(var i = 0 ; i < componentsDataLength ; ++i) {
+        var component = componentsData.components[i]
+
+        items.availablePieces.model.append( {
+            "imgName": component.imgName,
+            "imgWidth": component.imgWidth,
+            "imgHeight": component.imgHeight,
+            "toolTipText": component.toolTipText,
+            "terminalSize": component.terminalSize,
+        });
+
+
+        mapSrc[component.imgName] = i
+        if(component.imgName == "ledOff.svg")
+            mapSrc["ledOn.svg"] = i
+        else if(component.imgName == "switchOff.svg")
+            mapSrc["switchOn.svg"] = i
+
+        componentsInfo[i] = []
+        componentsInfo[i][0] = component.imgWidth
+        componentsInfo[i][1] = component.imgHeight
+        componentsInfo[i][2] = component.toolTipText
+        componentsInfo[i][3] = component.terminalSize
+
+        componentsInfo[i][4] = []
+        var inputs = component.inputTerminals
+        for(var j = 0 ; j < inputs.length ; ++j) {
+            componentsInfo[i][4][j] = []
+            var input = inputs[j]
+            componentsInfo[i][4][j][0] = input.posX
+            componentsInfo[i][4][j][1] = input.posY
+            componentsInfo[i][4][j][2] = input.value == undefined ? -1 : input.value
+        }
+
+        componentsInfo[i][5] = []
+        var outputs = component.outputTerminals
+        //console.log("outputs.length",outputs.length)
+        for(var j = 0 ; j < outputs.length ; ++j) {
+            componentsInfo[i][5][j] = []
+            var output = outputs[j]
+            componentsInfo[i][5][j][0] = output.posX
+            componentsInfo[i][5][j][1] = output.posY
+            componentsInfo[i][5][j][2] = output.value == undefined ? -1 : output.value
+        }
+
+        componentsInfo[i][6] = component.information
+        componentsInfo[i][7] = component.truthTable
+    }
+
+    /*items.availablePieces.model.append( {
         "imgName": "zero.svg",
         "imgWidth": 0.12,
         "imgHeight": 0.2,
@@ -67,7 +123,7 @@ function start(items_) {
         "imgWidth": 0.3,
         "imgHeight": 0.25,
         "toolTipText": qsTr("Comparator")
-    });*/
+    });
     items.availablePieces.model.append( {
         "imgName": "ledOff.svg",
         "imgWidth": 0.16,
@@ -94,7 +150,6 @@ function start(items_) {
         "toolTipText": qsTr("7 Segment Display"),
         "terminalSize": 0.097
     });
-    */
     items.availablePieces.model.append( {
         "imgName": "gateAnd.svg",
         "imgWidth": 0.15,
@@ -176,6 +231,7 @@ function initLevel() {
     deletedWireIndex = []
     animationInProgress = false
     deselect()
+    toolDelete = false
     updateToolTip("")
 }
 
@@ -203,16 +259,17 @@ function createComponent(x, y, src, imgWidth, imgHeight, toolTipTxt, terminalSiz
     else
         index = components.length
 
+    var componentInfo = componentsInfo[mapSrc[src]]
     components[index] = electricComponent.createObject(
                         items.backgroundContainer, {
                             "index": index,
                             "posX": x,
                             "posY": y,
                             "imgSrc": src,
-                            "imgWidth": imgWidth,
-                            "imgHeight": imgHeight,
-                            "toolTipTxt": toolTipTxt,
-                            "terminalSize": terminalSize
+                            "imgWidth": componentInfo[0],
+                            "imgHeight": componentInfo[1],
+                            "toolTipTxt": componentInfo[2],
+                            "terminalSize": componentInfo[3]
                         });
 
     var electricComponentCreated = components[index]
@@ -220,124 +277,40 @@ function createComponent(x, y, src, imgWidth, imgHeight, toolTipTxt, terminalSiz
     //console.log("Error loading component:", terminalComponent.errorString())
     var terminalIndex = terminals.length
     //console.log("terminalIndex",terminalIndex)
-    if(src == "zero.svg") {
+
+    var inputs = componentInfo[4]
+    for(var i = 0 ; i < inputs.length ; ++i) {
+        var input = inputs[i]
+        electricComponentCreated.inputs.push(terminalIndex)
+        terminals[terminalIndex++] = terminalComponent.createObject(
+                                     electricComponentCreated, {
+                                         "posX": input[0],
+                                         "posY": input[1],
+                                         "index": terminalIndex - 1,
+                                         "type": "In",
+                                         "componentIndex": index,
+                                         "value": input[2]
+                                     });
+         //console.log("posX",input[0])
+    }
+
+    var outputs = componentInfo[5]
+    //console.log("outputs.length",outputs.length)
+    for(var i = 0 ; i < outputs.length ; ++i) {
+        var output = outputs[i]
         electricComponentCreated.outputs.push(terminalIndex)
         terminals[terminalIndex++] = terminalComponent.createObject(
                                      electricComponentCreated, {
-                                         "posX": 0.91,
-                                         "posY": 0.5,
+                                         "posX": output[0],
+                                         "posY": output[1],
                                          "index": terminalIndex - 1,
                                          "type": "Out",
                                          "componentIndex": index,
-                                         "value": 0
+                                         "value": output[2]
                                      });
     }
-    else if(src == "one.svg") {
-        electricComponentCreated.outputs.push(terminalIndex)
-        terminals[terminalIndex++] = terminalComponent.createObject(
-                                     electricComponentCreated, {
-                                         "posX": 0.91,
-                                         "posY": 0.5,
-                                         "index": terminalIndex - 1,
-                                         "type": "Out",
-                                         "componentIndex": index,
-                                         "value": 1
-                                     });
-    }
-    else if(src == "gateAnd.svg") {
-        electricComponentCreated.inputs.push(terminalIndex)
-        terminals[terminalIndex++] = terminalComponent.createObject(
-                                     electricComponentCreated, {
-                                         "posX": 0.045,
-                                         "posY": 0.219,
-                                         "index": terminalIndex - 1,
-                                         "type": "In",
-                                         "componentIndex": index
-                                     });
-        electricComponentCreated.inputs.push(terminalIndex)
-        terminals[terminalIndex++] = terminalComponent.createObject(
-                                     electricComponentCreated, {
-                                         "posX": 0.045,
-                                         "posY": 0.773,
-                                         "index": terminalIndex - 1,
-                                         "type": "In",
-                                         "componentIndex": index
-                                     });
-        electricComponentCreated.outputs.push(terminalIndex)
-        terminals[terminalIndex++] = terminalComponent.createObject(
-                                     electricComponentCreated, {
-                                         "posX": 0.955,
-                                         "posY": 0.5,
-                                         "index": terminalIndex - 1,
-                                         "type": "Out",
-                                         "componentIndex": index
-                                     });
-    }
-    else if(src == "ledOff.svg") {
-        electricComponentCreated.inputs.push(terminalIndex)
-        terminals[terminalIndex++] = terminalComponent.createObject(
-                                     electricComponentCreated, {
-                                         "posX": 0.319,
-                                         "posY": 0.945,
-                                         "index": terminalIndex - 1,
-                                         "type": "In",
-                                         "componentIndex": index
-                                     });
-        electricComponentCreated.inputs.push(terminalIndex)
-        terminals[terminalIndex++] = terminalComponent.createObject(
-                                     electricComponentCreated, {
-                                         "posX": 0.776,
-                                         "posY": 0.698,
-                                         "index": terminalIndex - 1,
-                                         "type": "In",
-                                         "componentIndex": index
-                                     });
-    }
-    //terminal[index] = []
-    /*if(src == "sevenSegmentDisplay.svg") {
-        var i = 0
-        terminal[0] = terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.049
-        });
-        terminal[1] = terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.196
-        });
-        terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.336
-        });
-        terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.484
-        });
-        terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.641
-        });
-        terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.796
-        });
-        terminalComponent.createObject(
-        electricComponentCreated, {
-            "posX": 0.05,
-            "posY": 0.951
-        });
-    }*/
 
-
-    //console.log("Error loading component:", electricComponent.errorString());
     componentSelected(index)
-    //console.log("index",index,"toolTipTxt",toolTipTxt,components[index].toolTipTxt)
-    //console.log("posX",x,"posX",components[components.length-1].posX)
 }
 
 function terminalPointSelected(index) {
@@ -352,16 +325,6 @@ function terminalPointSelected(index) {
         if(connected[inIndex] == undefined || connected[inIndex] == -1) {
             //console.log("in2")
             var wireComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Wire.qml")
-            //console.log("Error loading component:", wireComponent.errorString())
-            /*var x1 = terminals[outIndex].xCenter
-            var y1 = terminals[outIndex].yCenter
-            var x2 = terminals[inIndex].xCenter
-            var y2 = terminals[inIndex].yCenter
-            //console.log("index",index,"selectedTerminal",selectedTerminal,"x1",x1,"x2",x2,"y1",y1,"y2",y2)
-            var width = Math.pow((Math.pow(x1 - x2, 2) +  Math.pow(y1 - y2, 2)),0.5) + 2
-            var angle = (180/Math.PI)*Math.atan((y2-y1)/(x2-x1))
-            if(x2 - x1 < 0) angle = angle - 180
-            *///console.log("angle=",angle)
 
             var index
             if(deletedWireIndex.length > 0) {
@@ -375,21 +338,14 @@ function terminalPointSelected(index) {
             //console.log("colorIndex",colorIndex)
             wires[index] = wireComponent.createObject(
             items.backgroundContainer, {
-                //"posX1": x1,
-                //"posY1": y1,
-                //"posX2": x2,
-                //"posY2": y2,
                 "from": outIndex,
                 "to": inIndex,
-                //"rectWidth": width,
-                //"rotateAngle": angle,
                 "wireColor": colors[colorIndex],
                 "index": index
             });
             terminals[inIndex].value = terminals[outIndex].value
             terminals[inIndex].wireIndex.push(index)
             terminals[outIndex].wireIndex.push(index)
-            //console.log("terminals[outIndex].wireIndex.length",terminals[outIndex].wireIndex.length)
             updateWires(terminals[inIndex].componentIndex)
             updateWires(terminals[outIndex].componentIndex)
             updateComponent(terminals[inIndex].componentIndex)
@@ -408,16 +364,6 @@ function terminalPointSelected(index) {
 function updateComponent(index) {
 
     var visited = []
-    /*for(var i = 0 ; i < components.length ; ++i) {
-        var j
-        for(j = 0 ; j < deletedIndex.length ; ++j) {
-            if(deletedIndex[j] == i)
-                break
-        }
-        if(j == deletedIndex.length)
-            visited[i] = false
-    }*/
-
     updateComponentUtility(index, visited)
 }
 
@@ -469,20 +415,6 @@ function updateComponentUtility(index, visited) {
     }
 }
 
-/*
-function updateAllWires() {
-
-    for(var i = 0 ; i < components.length ; ++i) {
-        var j
-        for(j = 0 ; j < deletedIndex.length ; ++j) {
-            if(deletedIndex[j] == i)
-                break
-        }
-        if(j == deletedIndex.length)
-            updateWires(i)
-    }
-}*/
-
 function updateWires(index) {
 
     var component = components[index]
@@ -522,10 +454,6 @@ function updateWires(index) {
             var width = Math.pow((Math.pow(x1 - x2, 2) +  Math.pow(y1 - y2, 2)),0.5) + 2
             var angle = (180/Math.PI)*Math.atan((y2-y1)/(x2-x1))
             if(x2 - x1 < 0) angle = angle - 180
-            //wire.posX1 = x1
-            //wire.posY1 = y1
-            //wire.posX2 = x2
-            //wire.posY2 = y2
             wire.x = x1
             wire.y = y1
             wire.width = width
@@ -581,12 +509,12 @@ function updateWires(index) {
 
 function deselect() {
 
-    items.availablePieces.toolDelete.state = "notSelected"
+    //items.availablePieces.toolDelete.state = "notSelected"
     items.availablePieces.rotateLeft.state = "canNotBeSelected"
     items.availablePieces.rotateRight.state = "canNotBeSelected"
     items.availablePieces.info.state = "canNotBeSelected"
     items.infoTxt.visible = false
-    toolDelete = false
+    //toolDelete = false
     selectedIndex = -1
     selectedTerminal = -1
     for(var i = 0 ; i < terminals.length ; ++i) {
@@ -611,6 +539,7 @@ function removeComponent(index) {
     }
     components[index].destroy()
     deletedIndex.push(index)
+    deselect()
 }
 
 function removeWire(index) {
@@ -658,9 +587,26 @@ function rotateRight() {
 }
 
 function displayInfo() {
-    var componentName = components[selectedIndex].imgSrc
+
+    var component = componentsInfo[mapSrc[components[selectedIndex].imgSrc]]
     deselect()
     items.infoTxt.visible = true
+    items.infoTxt.text = component[6]
+    if(component[7].length == 0)
+        items.displayTruthTable = false
+    else {
+        items.displayTruthTable = true
+        var truthTable = items.truthTablesModel
+        truthTable.clear()
+        truthTable.rows = component[7].length
+        truthTable.columns = component[7][0].length
+        truthTable.inputs = component[4].length
+        truthTable.outputs = component[5].length
+        for(var i = 0 ; i < component[7].length ; ++i)
+            for(var j = 0 ; j < component[7][i].length ; ++j)
+                truthTable.append({'value': component[7][i][j]})
+    }
+
     //console.log(componentName,componentName=="battery.svg")
     /*if(componentName == "battery.svg") {
         items.infoTxt.text = qsTr("Battery is a power source of DC voltage. In analog electronics, the positive " +
@@ -669,10 +615,12 @@ function displayInfo() {
                                   "depending on its rating. In digital electronics, positive voltage is represented " +
                                   "by symbol ‘1’ and ground is represented by symbol ‘0’. Therefore in digital " +
                                   "electronics, there are only two states of voltage produced by battery – ‘1’ and ‘0’.")
-        items.infoImage.source = ""
+        //items.infoImage.source = ""
     }*/
 
-    if(componentName == "one.svg" || componentName == "zero.svg") {
+
+
+    /*if(componentName == "one.svg" || componentName == "zero.svg") {
         items.infoTxt.text = qsTr("Digital electronics is a branch of electronics that handle digital signals " +
                                   "(i.e discrete signals instead of continous signals). Therefore all values within " +
                                   "a range or band represent the same numeric value. In most cases, the number of " +
@@ -682,44 +630,52 @@ function displayInfo() {
                                   "of the Boolean domain respectively (named after its inventor, George Boole). " +
                                   "In this activity, you can give '0' and '1' as input to other logical devices, " +
                                   "and see their output through an output device.")
-        items.infoImage.source = ""
+        //items.infoImage.source = ""
     }
     else if(componentName == "gateAnd.svg") {
         items.infoTxt.text = qsTr("AND gate takes 2 or more binary input in its input terminals and outputs a single " +
                                   "value. The output is 0 if any of the input is 0, else it is 1. In this activity, " +
                                   "a 2 input AND gate is shown. Truth table for 2 input AND gate is:")
-        items.infoImage.source = url + "AndTruthTable.svg"
+        //items.infoImage.source = url + "AndTruthTable.svg"
+        items.truthTablesModel.rows = 1
+        items.truthTablesModel.columns = 3
+        items.truthTablesModel.inputs = 2
+        items.truthTablesModel.outputs = 1
+        items.truthTablesModel.append({'value': "A"})
+        items.truthTablesModel.append({'value': "B"})
+        items.truthTablesModel.append({'value': "C"})
+
     }
     else if(componentName == "gateNand.svg") {
         items.infoTxt.text = qsTr("NAND gate takes 2 or more binary input in its input terminals and outputs a single " +
                                   "value. It is the complement of AND gate. In this activity, a 2 input NAND gate is " +
                                   "shown. Truth table for 2 input NAND gate is:")
-        items.infoImage.source = url + "NandTruthTable.svg"
+        //items.infoImage.source = url + "NandTruthTable.svg"
     }
     else if(componentName == "gateNor.svg") {
         items.infoTxt.text = qsTr("NOR gate takes 2 or more binary input in its input terminals and outputs a single " +
                                   "value. It is the complement of OR gate. In this activity, a 2 input NOR gate is " +
                                   "shown. Truth table for 2 input NOR gate is:")
-        items.infoImage.source = url + "NorTruthTable.svg"
+        //items.infoImage.source = url + "NorTruthTable.svg"
     }
     else if(componentName == "gateNot.svg") {
         items.infoTxt.text = qsTr("Not gate (also known as inverter) takes a binary input in its input terminal and " +
                                   "outputs a single value. The output is the complement of the input value, that is, it " +
                                   "is 0 if input is 1, and 1 if input is 0. Truth table for NOT gate is:")
-        items.infoImage.source = url + "NotTruthTable.svg"
+        //items.infoImage.source = url + "NotTruthTable.svg"
     }
     else if(componentName == "gateOr.svg") {
         items.infoTxt.text = qsTr("OR gate takes 2 or more binary input in its input terminals and outputs a single " +
                                   "value. The output is 1 if any of the input is 1, else it is 0. In this activity, a " +
                                   "2 input OR gate is shown. Truth table for 2 input OR gate is:")
-        items.infoImage.source = url + "OrTruthTable.svg"
+        //items.infoImage.source = url + "OrTruthTable.svg"
     }
     else if(componentName == "gateXor.svg") {
         items.infoTxt.text = qsTr("XOR gate takes 2 or more binary input in its input terminals and outputs a single " +
                                   "value. The output is 1 if number of '1' in input is odd, and 0 if number of '1' in " +
                                   "input is even. In this activity, a 2 input XOR gate is shown. Truth table for " +
                                   "2 input XOR gate is:")
-        items.infoImage.source = url + "XorTruthTable.svg"
+        //items.infoImage.source = url + "XorTruthTable.svg"
     }
     else if(componentName == "comparator.svg") {
         items.infoTxt.text = qsTr("Comparator takes 2 numbers as input, A and B. It compares them and outputs 3 " +
@@ -734,20 +690,20 @@ function displayInfo() {
                                   "The converter converts this BCD number to corresponding bits, which are used to " +
                                   "display the decimal number (represented by the BCD number) on the 7 segment display. " +
                                   "The truth table for BCD To 7 Segment converted is:")
-        items.infoImage.source = url + "BCDTo7SegmentTruthTable.svg"
-    }*/
+        //items.infoImage.source = url + "BCDTo7SegmentTruthTable.svg"
+    }
     else if(componentName == "BCDTo7Segment.svg") {
         items.infoTxt.text = qsTr("BCD to 7 segment converter takes 4 binary inputs which represent a BCD number, " +
                                   "and convert them to 7 binary bits which represent corresponding number in 7 segment " +
                                   "format. The truth table is:")
-        items.infoImage.source = url + "BCDTo7SegmentTruthTable.svg"
+        //items.infoImage.source = url + "BCDTo7SegmentTruthTable.svg"
     }
     else if(componentName == "sevenSegmentDisplay.svg") {
         items.infoTxt.text = qsTr("7 segment display takes 7 binary inputs in its input terminals. The display " +
                                   "consists of 7 segments and each segment gets lighted according to the input. " +
                                   "By generating different combination of binary inputs, the display can be used to " +
                                   "display various different symbols. The diagram is:")
-        items.infoImage.source = url + "7SegmentDisplay.svg"
+        //items.infoImage.source = url + "7SegmentDisplay.svg"
     }
     else if(componentName == "ledOn.svg" || componentName == "ledOff.svg") {
         items.infoTxt.text = qsTr("LED (Light-emitting diode) is a two-lead semiconductor light source. It emits " +
@@ -758,15 +714,15 @@ function displayInfo() {
                                   "the cathode of LED to ground ('0') and anode of LED to the output of the " +
                                   "component. If output is 1, the LED will be activated (emit light), and if " +
                                   "output is 0, the LED will be deactivated.")
-        items.infoImage.source = ""
+        //items.infoImage.source = ""
     }
     else if(componentName == "switchOn.svg" || componentName == "switchOff.svg") {
         items.infoTxt.text = qsTr("Switch is used to maintain easy connection between two terminals. If the switch is " +
                                   "turned on, then the two terminals are connected and current can flow through the " +
                                   "switch. If the switch is turned off, then the connection between terminal is broken, " +
                                   "and current can not flow through it.")
-        items.infoImage.source = ""
-    }
+        //items.infoImage.source = ""
+    }*/
     //console.log(items.infoTxt.text)
 }
 

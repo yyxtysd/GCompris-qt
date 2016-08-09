@@ -20,6 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.1
+//import QtQuick.Controls 1.4
 import GCompris 1.0
 
 import "../../core"
@@ -55,7 +56,15 @@ ActivityBase {
             property alias availablePieces: availablePieces
             property alias toolTip: toolTip
             property alias infoTxt: infoTxt
-            property alias infoImage: infoImage
+            property alias truthTablesModel: truthTablesModel
+            property alias displayTruthTable: inputOutputTxt.displayTruthTable
+            property alias dataset: dataset
+            //property alias infoImage: infoImage
+        }
+
+        Loader {
+            id: dataset
+            asynchronous: false
         }
 
         onStart: { Activity.start(items) }
@@ -72,8 +81,6 @@ ActivityBase {
             height: background.vert ?
                        background.height - (bar.height * 1.1) :
                        background.height - (bar.height * 1.1) - 90 * ApplicationInfo.ratio
-            //onHeightChanged: Activity.updateAllWires()
-            //onWidthChanged: Activity.updateAllWires()
             MouseArea {
                 anchors.fill: parent
                 onClicked: Activity.deselect()
@@ -92,9 +99,8 @@ ActivityBase {
                 style: Text.Outline
                 styleColor: "black"
                 horizontalAlignment: Text.AlignHLeft
-                width: Math.min(implicitWidth, 0.90 * parent.width) //background.vert ? Math.min(implicitWidth, 0.95 * parent.width) :
-                       //Math.min(implicitWidth, 0.85 * parent.width)
-                height: infoImage.source == "" ? Math.min(implicitHeight, 0.9 * parent.height) :
+                width: Math.min(implicitWidth, 0.90 * parent.width)
+                height: inputOutputTxt.visible == false ? Math.min(implicitHeight, 0.9 * parent.height) :
                         Math.min(implicitHeight, 0.4 * parent.height)
                 wrapMode: TextEdit.WordWrap
                 visible: false
@@ -105,7 +111,8 @@ ActivityBase {
                 id: infoTxtContainer
                 anchors.centerIn: parent
                 width: infoTxt.width + 20
-                height: infoTxt.height + infoImage.height + 8
+                height: inputOutputTxt.visible == false ? infoTxt.height :
+                        infoTxt.height + inputOutputTxt.height + truthTable.height + 8
                 opacity: 0.8
                 radius: 10
                 border.width: 2
@@ -123,7 +130,7 @@ ActivityBase {
                 z: 3
             }
 
-            Image {
+            /*Image {
                 id: infoImage
                 property int heightNeed: parent.height - infoTxt.height
                 height: source == "" ? 0 : parent.height - infoTxt.height - 10
@@ -135,8 +142,120 @@ ActivityBase {
                     horizontalCenter: parent.horizontalCenter
                 }
                 z: 5
+            }*/
+
+
+            ListModel {
+                id: truthTablesModel
+                property int rows
+                property int columns
+                property int inputs
+                property int outputs
             }
 
+            Row {
+                id: inputOutputTxt
+                z: 5
+                property bool displayTruthTable
+                visible: infoTxt.visible && displayTruthTable
+                property int cellSize: Math.min(parent.height - infoTxt.height - 10, 0.45 * parent.height) /
+                                       truthTablesModel.rows
+                property int inputs: truthTablesModel.inputs
+                property int outputs: truthTablesModel.outputs
+                property int minSize: 2 * cellSize
+                //width: truthTable.width
+                height: cellSize
+                anchors {
+                    top: infoTxt.bottom
+                    horizontalCenter: parent.horizontalCenter
+                }
+                Rectangle {
+                    color: "#c7ecfb"
+                    width: Math.max(inputOutputTxt.minSize, inputOutputTxt.cellSize * inputOutputTxt.inputs)
+                    height: inputOutputTxt.cellSize
+                    border.color: "black"
+                    border.width: 1
+                    GCText {
+                        anchors.centerIn: parent
+                        fontSizeMode: Text.Fit
+                        minimumPixelSize: 10
+                        color: "white"
+                        style: Text.Outline
+                        styleColor: "black"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        height: parent.height
+                        width: parent.width
+                        text: qsTr("Input")
+                    }
+                }
+                Rectangle {
+                    color: "#c7ecfb"
+                    width: Math.max(inputOutputTxt.minSize, inputOutputTxt.cellSize * inputOutputTxt.outputs)
+                    height: inputOutputTxt.cellSize
+                    border.color: "black"
+                    border.width: 1
+                    GCText {
+                        anchors.centerIn: parent
+                        fontSizeMode: Text.Fit
+                        minimumPixelSize: 10
+                        color: "white"
+                        style: Text.Outline
+                        styleColor: "black"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        height: parent.height
+                        width: parent.width
+                        text: qsTr("Output")
+                    }
+                }
+            }
+
+            Grid {
+                id: truthTable
+                rows: truthTablesModel.rows
+                columns: truthTablesModel.columns
+                //width: columns * inputOutputTxt.cellSize
+                height: rows * inputOutputTxt.cellSize
+                z: 5
+                visible: inputOutputTxt.visible
+                anchors {
+                    top: inputOutputTxt.bottom
+                    horizontalCenter: parent.horizontalCenter
+                }
+                //spacing: 1
+                Repeater {
+                    id: repeater
+                    model: truthTablesModel //15//pieces
+                    delegate: blueSquare
+                    Component {
+                        id: blueSquare
+                        Rectangle {
+                            width: ((index % truthTable.columns) / (truthTablesModel.inputs - 1)) <= 1 ?
+                                   (inputOutputTxt.inputs > 1 ? inputOutputTxt.cellSize : inputOutputTxt.minSize) :
+                                   (inputOutputTxt.outputs > 1 ? inputOutputTxt.cellSize : inputOutputTxt.minSize)
+                            height: inputOutputTxt.cellSize
+                            border.color: "black"
+                            border.width: 1
+                            //radius: 1
+                            color: "#c7ecfb"
+                            GCText {
+                                id: truthTableValue
+                                anchors.centerIn: parent
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 10
+                                color: "white"
+                                style: Text.Outline
+                                styleColor: "black"
+                                horizontalAlignment: Text.AlignHCenter
+                                height: parent.height
+                                width: parent.width
+                                text: value
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         Rectangle {

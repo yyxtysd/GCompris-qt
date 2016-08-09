@@ -119,8 +119,8 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            toolDelete.state = "selected"
-                            Activity.toolDelete = true
+                            toolDelete.state = toolDelete.state == "selected" ? "notSelected" : "selected"
+                            Activity.toolDelete = !Activity.toolDelete //true
                             //console.log("state",toolDelete.state)
                         }
                     }
@@ -129,14 +129,14 @@ Item {
                             name: "selected"
                             PropertyChanges{
                                 target: toolDelete
-                                source: Activity.url + "tool-del_on.png"
+                                source: Activity.url + "deleteOn.svg"
                             }
                         },
                         State {
                             name: "notSelected"
                             PropertyChanges {
                                 target: toolDelete
-                                source: Activity.url + "tool-del.png"
+                                source: Activity.url + "deleteOff.svg"
                             }
                         }
                     ]
