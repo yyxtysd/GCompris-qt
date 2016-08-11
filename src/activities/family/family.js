@@ -35,7 +35,6 @@ var treeStructure = [
                                [0.633, 0.20],
                                [0.40, 0.50]
                        ],
-                       rationn: [80, 80, 80],
                        captions: [ [0.28, 0.60],
                                   [0.101, 0.25]
                                 ],
@@ -56,7 +55,6 @@ var treeStructure = [
                                   [0.633, 0.20],
                                   [0.4, 0.50]
                       ],
-                      rationn: [80, 80, 80],
                       captions: [  [0.28, 0.60],
                                   [0.8283, 0.24]
                                ],
@@ -78,7 +76,6 @@ var treeStructure = [
                                 [0.33, 0.50],
                                 [0.55, 0.50]
                        ],
-                       rationn: [80, 80, 80],
                        captions:[ [0.22, 0.605],
                                    [0.760, 0.605]
                                 ],
@@ -101,7 +98,6 @@ var treeStructure = [
                                  [0.43, 0.50],
                                  [0.65, 0.50]
                             ],
-                      rationn: [80, 80, 80],
                       captions: [ [0.281,0.77],
                                   [0.50,0.75]
                                 ],
@@ -130,7 +126,6 @@ var treeStructure = [
                                    [0.43, 0.70],
                                    [0.65, 0.70]
                       ],
-                      rationn: [80, 80, 80],
                       captions: [  [0.118,0.76],
                                    [0.22,0.17],
                                 ],
@@ -159,7 +154,7 @@ var treeStructure = [
                                   [0.43, 0.70],
                                   [0.65, 0.70]
                       ],
-                      rationn: [80, 80, 80],
+
                       captions: [   [0.85,0.76],
                                     [0.743,0.16]
                                 ],
@@ -188,7 +183,7 @@ var treeStructure = [
                                  [0.43, 0.70],
                                  [0.65, 0.70]
                       ],
-                      rationn: [80, 80, 80],
+
                       captions: [  [0.17,0.17],
                                    [0.85,0.76]
                                 ],
@@ -217,7 +212,7 @@ var treeStructure = [
                               [0.43, 0.70],
                               [0.65, 0.70]
                   ],
-                  rationn: [80, 80, 80],
+
                   captions: [ [0.743,0.16],
                               [0.85,0.76]
                             ],
@@ -249,7 +244,7 @@ var treeStructure = [
 
 
                         ],
-                     rationn: [80, 80, 80],
+
                      captions: [  [0.83,0.76],
                                   [0.118,0.76],
                         ],
@@ -274,7 +269,7 @@ var treeStructure = [
                               [0.22, 0.70]
 
                   ],
-                  rationn: [80, 80, 80],
+
                   captions: [   [0.118,0.76],
                                 [0.83,0.45]
                             ],
@@ -299,7 +294,7 @@ var treeStructure = [
                               [0.22, 0.70]
 
                        ],
-                 rationn: [80, 80, 80],
+
                  captions: [  [0.83,0.45],
                               [0.118,0.76],
                            ],
@@ -325,7 +320,7 @@ var treeStructure = [
                            [0.22, 0.70]
 
                     ],
-              rationn: [80, 80, 80],
+
               captions: [  [0.118,0.76],
                            [0.83,0.45],
                         ],
@@ -350,7 +345,7 @@ var treeStructure = [
                            [0.588, 0.40],
                            [0.22, 0.70]
                ],
-              rationn: [80, 80, 80],
+
               captions: [  [0.83,0.45],
                            [0.118,0.76]
                         ],
@@ -374,7 +369,7 @@ var treeStructure = [
                           [0.150, 0.45],
                           [0.733, 0.67]
             ],
-            rationn: [80, 80, 80],
+
             captions: [   [0.02,0.51],
                           [0.32,0.16]
                       ],
@@ -398,7 +393,7 @@ var treeStructure = [
                            [0.150, 0.45],
                            [0.733, 0.67]
               ],
-             rationn: [80, 80, 80],
+
              captions: [  [0.02,0.51],
                           [0.80,0.365],
                        ],
@@ -422,7 +417,7 @@ var treeStructure = [
                             [0.150, 0.45],
                             [0.733, 0.67]
                  ],
-            rationn: [80, 80, 80],
+
             captions: [ [0.02,0.51],
                         [0.78,0.5340]
                       ],
@@ -448,7 +443,7 @@ var treeStructure = [
                             [0.603, 0.67],
                             [0.30, 0.70]
                     ],
-            rationn: [80, 80, 80],
+
             captions: [ [0.10,0.34],
                         [0.20,0.76]
                       ],
@@ -472,7 +467,7 @@ var treeStructure = [
                             [0.150, 0.45],
                             [0.733, 0.67]
                    ],
-             rationn: [80, 80, 80],
+
              captions: [ [0.32,0.15],
                          [0.05,0.50]
                        ],
@@ -509,7 +504,6 @@ function initLevel() {
                        "xx": levelTree.nodePositions[i][0],
                        "yy": levelTree.nodePositions[i][1],
                        "nodee": levelTree.nodeleave[i],
-                       "rationn": levelTree.rationn[i],
                        "currentstate": levelTree.currentstate[i]
                      });
     }
