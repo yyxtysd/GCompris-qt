@@ -26,31 +26,29 @@ import "family.js" as Activity
 
 Item {
     id: tree
-    property int searchitem: -1
-    property alias recwidth: content.width
-    property alias recheight: content.height
-    property string nodeimagesource: nodeimage.source
-    property string bordercolor: content.border.color
-    property real borderwidth: content.border.width
-    property string colorr: content.color
-    property alias radius: content.radius
+    property int recWidth
+    property int recHeight
+    property string nodeImageSource
+    property string borderColor
+    property real borderWidth
+    property string color
+    property real radius
 
     Rectangle {
         id: content
-        color: colorr
-        width: recwidth
-        height: recheight
-        border.color: bordercolor
-        border.width: borderwidth
-        radius: radius
+        color: tree.color
+        width: recWidth
+        height: recHeight
+        border.color: borderColor
+        border.width: borderWidth
+        radius: tree.radius
         Image {
             id: nodeimage
-            source: searchitem === -1 ? "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg" : nodeimagesource
+            source: nodeImageSource
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width*0.6
             height: parent.height*0.6
-
         }
     }
 }

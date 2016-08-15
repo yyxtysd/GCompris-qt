@@ -87,14 +87,13 @@ ActivityBase {
                             y: yy*tree.height
                             width: tree.width/5
                             height: tree.width/5
-                            recwidth: currentPointer.width
-                            recheight: currentPointer.height
-                            searchitem: 3
-                            nodeimagesource: Activity.url+nodee
-                            bordercolor: "black"
-                            borderwidth: 4
-                            colorr: "transparent"
-                            radius: recwidth/2
+                            recWidth: currentPointer.width
+                            recHeight: currentPointer.height
+                            nodeImageSource: Activity.url+nodee
+                            borderColor: "black"
+                            borderWidth: 4
+                            color: "transparent"
+                            radius: recWidth/2
                             state: currentstate
 
                             states: [
@@ -102,7 +101,7 @@ ActivityBase {
                                      name: "active"
                                      PropertyChanges {
                                          target: currentPointer
-                                         bordercolor: "blue"
+                                         borderColor: "blue"
                                      }
                                },
                                State {
@@ -115,7 +114,7 @@ ActivityBase {
                                     name: "activeto"
                                     PropertyChanges {
                                         target: currentPointer
-                                        bordercolor: "red"
+                                        borderColor: "red"
                                     }
                                }
                             ]
@@ -197,10 +196,7 @@ ActivityBase {
                                     easing.type: Easing.OutExpo
                                 }
                             }
-
-
                         }
-
                     }
 
                     Repeater {

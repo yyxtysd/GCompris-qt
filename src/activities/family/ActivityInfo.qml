@@ -28,9 +28,9 @@ ActivityInfo {
   //intro: "Let us understand what to call our relatives"
   goal: qsTr("To get an idea about relationships in the family")
   prerequisite: qsTr("Reading skills")
-  manual: qsTr("To find the relation between two family members.\n") +
-  qsTr("For the married couple we have highlighted with the rings that is between two circles for the rest of relations we have only solid lines\n") +
-  qsTr("Red circle will point to you and blue one to your relative. Now you have to think what you should call him.\n")
+  manual: qsTr("To find the relation between two family members.\n" +
+     "For the married couple we have highlighted with the rings that is between two circles for the rest of relations we have only solid lines.\n" +
+  "Red circle will point to you and blue one to your relative. Now you have to think what you should call him.\n")
   credit: ""
   section: "fun"
   createdInVersion: 7000
