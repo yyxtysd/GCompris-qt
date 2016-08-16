@@ -61,10 +61,11 @@ ActivityBase {
             property alias message: message
             property bool gameFinished: false
             property int delay: 6
-            property bool okBoxChecked: false
-            property bool easyMode: true
-            property bool playLetter: true
+            property bool okBoxChecked
+            property bool easyMode
+            property bool playLetter
             property double startTime
+            property bool passedLevel: false
         }
 
         onStart: { Activity.start(items) }
@@ -185,6 +186,7 @@ ActivityBase {
                 } else {
                     // pass the level
                     stop()
+                    items.passedLevel = true
                     bonus.good("tux")
                 }
             }
@@ -255,11 +257,11 @@ ActivityBase {
 
                             SequentialAnimation {
                                 id: failureAnimation
-                                PropertyAction { target: letter; property: "color"; value: "red" }
+                                PropertyAction  { target: letter; property: "color"; value: "red" }
                                 NumberAnimation { target: letter; property: "scale"; to: 2; duration: 400 }
                                 NumberAnimation { target: letter; property: "scale"; to: 1; duration: 400 }
                                 NumberAnimation { target: letter; property: "opacity"; to: 0; duration: 100 }
-                                PropertyAction { target: letter; property: "color"; value: "white" }
+                                PropertyAction  { target: letter; property: "color"; value: "white" }
                                 NumberAnimation { target: letter; property: "opacity"; to: 1; duration: 400 }
                             }
 
@@ -356,9 +358,19 @@ ActivityBase {
                                             var textAux1 = items.listModelInput.get(i).letter
                                             if (textAux1 != '_' && letter.text != '_') {
                                                 inputRepeater.itemAt(i).text = letter.text
-                                                repeater.itemAt(index).text = textAux1
                                                 items.listModelInput.setProperty(i,"letter",letter.text)
+
+                                                repeater.itemAt(index).text = textAux1
                                                 items.listModel.setProperty(index,"letter",textAux1)
+
+                                                if (items.easyMode) {
+                                                    if (letter.text == Activity.model[index]) {
+                                                        particleLoader.item.burst(40)
+                                                    } else {
+                                                        failureAnimation.start()
+                                                    }
+                                                }
+
 
                                                 // stop searching for another item; only this one can match the mouse's coordinates
                                                 break
@@ -446,8 +458,8 @@ ActivityBase {
                                     /* use mouse's coordinates (x and y) to compare to the solutionArea's repeater items */
                                     var mouseMapped = mapToItem(background,mouse.x,mouse.y)
 
-                                    //search through the repeater's items to find if THIS item should replace it
-                                    for (var i=0; i<items.repeater.count; i++) {
+                                    // search through the repeater's items to find if THIS item should replace it
+                                    for (var i = 0; i < items.repeater.count; i++) {
                                         // map the itemAt(i)'s coordinates to background coordinates to match the mouse coordinates
                                         var item = items.repeater.itemAt(i)
                                         var itemMapped = items.repeater.parent.mapToItem(background,item.x,item.y)
@@ -472,6 +484,8 @@ ActivityBase {
                                             } else {
                                                 repeater.itemAt(i).text = missingLetter.text
                                                 items.listModel.setProperty(i,"letter",missingLetter.text)
+
+                                                inputRepeater.itemAt(index).text = textAux
                                                 items.listModelInput.setProperty(index,"letter",textAux)
                                             }
 
@@ -529,7 +543,6 @@ ActivityBase {
                 anchors.fill: parent
                 property bool bad: false
                 onClicked: {
-                    print("bad: ",mouseAreaOk.bad)
                     if (Activity.checkCorectness()) {
                         // set the game to "finished"
                         items.gameFinished = true
@@ -540,7 +553,6 @@ ActivityBase {
 
                         // the level was won -> add 1 to progress
                         if (mouseAreaOk.bad == false) { //current level was not failed before
-                            print("add 1")
                             Activity.progress = Activity.progress.concat(1)
                         }
                         mouseAreaOk.bad = false
@@ -561,10 +573,6 @@ ActivityBase {
                                 if (ok == true)
                                     // add current state to the vector
                                     Activity.badAnswers = Activity.badAnswers.concat({model: Activity.model, modelAux: Activity.modelAux, solution: Activity.solution})
-
-                                print("Wrong: _________")
-                                for (j = 0; j < Activity.badAnswers.length; j++)
-                                    print(Activity.badAnswers[j].model + "    " + Activity.badAnswers[j].modelAux + "      " + Activity.badAnswers[j].solution)
                         }
 
                         // decrease the levelsPassed counter
@@ -574,8 +582,6 @@ ActivityBase {
 
                         // the level was lost -> add 0 to progress
                         Activity.progress = Activity.progress.concat(0)
-                        print("add 0")
-                        print("progress: ",Activity.progress)
                     }
                     background.resetTime(20)
                 }
@@ -666,8 +672,15 @@ ActivityBase {
 
             onClose: home()
             onLoadData: {
-                if(dataToSave && dataToSave["locale"]) {
-                    background.locale = dataToSave["locale"];
+                if(dataToSave) {
+                    if (dataToSave["locale"])
+                        background.locale = dataToSave["locale"];
+                    if (dataToSave["okButton"])
+                        items.okBoxChecked = dataToSave["okButton"]
+                    if (dataToSave["mode"])
+                        items.easyMode = dataToSave["mode"]
+                    if (dataToSave["play"])
+                        items.playLetter = dataToSave["play"]
                 }
             }
             onSaveData: {
@@ -677,7 +690,7 @@ ActivityBase {
                 if(newLocale.indexOf('.') != -1) {
                     newLocale = newLocale.substring(0, newLocale.indexOf('.'))
                 }
-                dataToSave = {"locale": newLocale}
+                dataToSave = {"locale": newLocale,"okButton": items.okBoxChecked,"mode": items.easyMode,"play": items.playLetter}
 
                 background.locale = newLocale;
 

@@ -58,12 +58,11 @@ function start(items_) {
     progress = []
     date = new Date()
     items.startTime = Math.round(date.getTime() / 1000)
-    print("time: ", items.startTime)
 
     items.score.numberOfSubLevels = 5
     items.score.currentSubLevel = 1
 
-//imported from "readingh" activity
+    // imported from "readingh" activity
     var locale = items.locale == "system" ? "$LOCALE" : items.locale
 
     items.wordlist.loadFromFile(GCompris.ApplicationInfo.getLocaleFilePath(
@@ -107,8 +106,7 @@ function initLevel() {
     } else items.message.opacity = 0
 
     // custom levels - change difficulty starting from level two (so the user gives feedback from solving at least 5 sublevels)
-    if (currentLevel > 0 && items.okBoxChecked) {
-        print("PROGRESS: ",progress)
+    if (currentLevel > 0 && items.okBoxChecked && items.passedLevel) {
         var currentProgress = progress.slice(Math.max(progress.length - 5,0),progress.length)  // take only the last 6 levels
         var sum = currentProgress.reduce(function(a, b) { return a + b; }, 0)
 
@@ -118,23 +116,19 @@ function initLevel() {
                 if (difficulty <= 4)
                     difficulty += 2
                 else difficulty = 6
-                print("sum is 5; difficulty increased by 2: ", difficulty)
             }
         } else if (sum == 4) {
             if (progress[progress.length - 1] != 0 && progress[progress.length - 2] != 0) {
                 if (difficulty <= 5)
                     difficulty ++
-                print("sum is 4; difficulty increased by 1: ", difficulty)
             }
         } else if (sum == 2) {
             if (difficulty >= 1)
                 difficulty --
-            print("sum is 2; difficulty decreased by 1: ", difficulty)
         } else if (sum < 2) {
             if (difficulty >= 2)
                 difficulty -= 2
             else difficulty = 0
-            print("sum is lower than 2; difficulty decreased by 2: ", difficulty)
         }
     }
 
@@ -150,7 +144,7 @@ function init() {
         if (currentLevel < 3)
             interchange = 0
         else interchange = Math.floor(currentLevel / 2)
-    } else {
+    } else if (items.passedLevel) {
         // setup number of total letters and guess letters depending the difficulty
         if (difficulty == 0) {
             interchange = 0
@@ -181,9 +175,8 @@ function init() {
             interchange = 4
             totalLetters = 8
             guessLetters = Math.floor(Math.random() * (8 - 6 + 1)) + 6
-        } else {
-            print("difficulty?? ",difficulty)
         }
+        items.passedLevel = false
     }
 
     // if 2 levels have past and there are badAnsers saved, assign them as model and modelAux
@@ -196,17 +189,8 @@ function init() {
                 solution = badAnswers[0].solution
             }
 
-            print("len: ", badAnswers.length - 1)
-
             // remove first element in vector badAnsers
             badAnswers = badAnswers.slice(1,badAnswers.length)
-
-            print("len: ", badAnswers.length)
-
-            print("after ___________")
-            for (var j = 0; j < badAnswers.length; j++) {
-                print(badAnswers[j].model + "    " + badAnswers[j].modelAux + "      " + badAnswers[j].solution)
-            }
 
     // else, use normal levels
     } else {
@@ -237,7 +221,6 @@ function init() {
             // from level 6 to 8 interchange two good letters
             // repeat the interchange
             for (var k = 0; k < interchange; k++) {
-                print("interchange")
                 var a = Math.floor(Math.random() * (totalLetters))
                 var b = Math.floor(Math.random() * (totalLetters))
                 while (b == a)
