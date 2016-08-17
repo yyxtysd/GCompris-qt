@@ -59,7 +59,7 @@ ActivityBase {
             property alias truthTablesModel: truthTablesModel
             property alias displayTruthTable: inputOutputTxt.displayTruthTable
             property alias dataset: dataset
-            //property alias infoImage: infoImage
+            property alias infoImage: infoImage
         }
 
         Loader {
@@ -101,7 +101,7 @@ ActivityBase {
                 horizontalAlignment: Text.AlignHLeft
                 width: Math.min(implicitWidth, 0.90 * parent.width)
                 height: inputOutputTxt.visible == false ? Math.min(implicitHeight, 0.9 * parent.height) :
-                        Math.min(implicitHeight, 0.4 * parent.height)
+                        Math.min(implicitHeight, (inputOutputTxt.inputs > 2 ? 0.3 : 0.4) * parent.height)
                 wrapMode: TextEdit.WordWrap
                 visible: false
                 z: 4
@@ -111,7 +111,7 @@ ActivityBase {
                 id: infoTxtContainer
                 anchors.centerIn: parent
                 width: infoTxt.width + 20
-                height: inputOutputTxt.visible == false ? infoTxt.height :
+                height: inputOutputTxt.visible == false ? infoTxt.height + infoImage.height + 6 :
                         infoTxt.height + inputOutputTxt.height + truthTable.height + 8
                 opacity: 0.8
                 radius: 10
@@ -130,19 +130,20 @@ ActivityBase {
                 z: 3
             }
 
-            /*Image {
+            Image {
                 id: infoImage
                 property int heightNeed: parent.height - infoTxt.height
+                property bool imgVisible: false
                 height: source == "" ? 0 : parent.height - infoTxt.height - 10
                 width: source == "" ? 0 : parent.width - 10
                 fillMode: Image.PreserveAspectFit
-                visible: infoTxt.visible
+                visible: infoTxt.visible && imgVisible
                 anchors {
                     top: infoTxt.bottom
                     horizontalCenter: parent.horizontalCenter
                 }
                 z: 5
-            }*/
+            }
 
 
             ListModel {
@@ -158,10 +159,10 @@ ActivityBase {
                 z: 5
                 property bool displayTruthTable
                 visible: infoTxt.visible && displayTruthTable
-                property int cellSize: Math.min(parent.height - infoTxt.height - 10, 0.45 * parent.height) /
-                                       truthTablesModel.rows
                 property int inputs: truthTablesModel.inputs
                 property int outputs: truthTablesModel.outputs
+                property int cellSize: Math.min(parent.height - infoTxt.height - 10, (inputs > 2 ? 0.6 :
+                                       0.45) * parent.height) / truthTablesModel.rows
                 property int minSize: 2 * cellSize
                 //width: truthTable.width
                 height: cellSize

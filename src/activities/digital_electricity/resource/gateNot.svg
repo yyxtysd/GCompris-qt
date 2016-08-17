@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="139.25372mm"
+   width="144.5963mm"
    height="51.325428mm"
-   viewBox="0 0 493.4187 181.86175"
+   viewBox="0 0 512.34908 181.86175"
    id="svg4793"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="-307.388"
-     inkscape:cy="194.93248"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="162.10849"
+     inkscape:cy="83.658434"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -56,42 +56,34 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-105.01066,-452.73018)">
-    <g
-       id="g5481"
-       transform="translate(-45.126438,12.266724)">
-      <path
-         inkscape:connector-curvature="0"
-         id="path2906"
-         style="fill:none;stroke:#000000;stroke-width:7.06982613px"
-         d="m 607.99581,531.39985 -121.143,0" />
-      <circle
-         r="16.254402"
-         cy="531.39435"
-         cx="625.22589"
-         id="path5637"
-         style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:4.15100002;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013" />
-    </g>
-    <g
-       id="g4147"
-       transform="translate(0,-52.109497)">
-      <circle
-         r="16.254402"
-         cy="595.77057"
-         cx="123.34056"
-         id="path5637-7"
-         style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:4.15100002;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path2904"
-         style="fill:none;stroke:#000000;stroke-width:7.07004118px"
-         d="m 259.78175,595.34882 -121.14312,0" />
-    </g>
+     transform="translate(-94.909127,-452.73019)">
+    <path
+       d="m 562.86937,543.66657 -121.143,0"
+       style="fill:none;stroke:#000000;stroke-width:7.06982613px"
+       id="path2906"
+       inkscape:connector-curvature="0" />
+    <circle
+       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:5.37945747;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
+       id="path5637"
+       cx="583.50372"
+       cy="542.27704"
+       r="21.064772" />
+    <circle
+       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:5.37945747;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
+       id="path5637-7"
+       cx="118.66363"
+       cy="544.29736"
+       r="21.064772" />
+    <path
+       d="m 259.78175,543.23932 -121.14312,0"
+       style="fill:none;stroke:#000000;stroke-width:7.07004118px"
+       id="path2904"
+       inkscape:connector-curvature="0" />
     <path
        sodipodi:sides="3"
        inkscape:rounded="0"
        sodipodi:cx="311.49783"
-       sodipodi:cy="543.66105"
+       sodipodi:cy="543.66107"
        inkscape:randomized="0"
        sodipodi:arg2="1.0471976"
        sodipodi:arg1="0"
@@ -99,7 +91,7 @@
        sodipodi:r1="100.49161"
        d="m 411.98944,543.66107 -150.73741,87.02829 0,-174.05657 z"
        sodipodi:type="star"
-       style="fill:none;stroke:#0000a9;stroke-width:7.80575609;stroke-linejoin:round;fill-opacity:1;opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#0000a9;stroke-width:7.80575609;stroke-linejoin:round"
        sodipodi:r2="50.245804"
        id="path6830" />
     <ellipse

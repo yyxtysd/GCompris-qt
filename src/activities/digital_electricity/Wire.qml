@@ -57,7 +57,7 @@ Rectangle {
         height: parent.height * 3
         anchors.centerIn: parent
         onPressed: {
-            console.log("Pressed Wire",index,color,wireColor)
+            //console.log("Pressed Wire",index,color,wireColor)
             if(Activity.toolDelete) {
                 Activity.removeWire(index)
             }

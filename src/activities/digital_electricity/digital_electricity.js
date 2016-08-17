@@ -40,11 +40,12 @@ var wires = []
 var connected = []
 var deletedWireIndex = []
 var colors = ["red","green","blue","blueviolet","silver"]
+var sevenSegmentDisplay = []
 
 function start(items_) {
     items = items_
     currentLevel = 0
-    var filename = url + "Components.qml"
+    var filename = url + "ElectricalComponents.qml"
     items.dataset.source = filename
     var componentsData = items.dataset.item
     var componentsDataLength = componentsData.components.length
@@ -200,8 +201,11 @@ function stop() {
             if(deletedIndex[j] == i)
                 break
         }
-        if(j == deletedIndex.length)
+        if(j == deletedIndex.length) {
+            if(components[i].imgSrc == "sevenSegmentDisplay.svg")
+                sevenSegmentDisplay[i].destroy()
             components[i].destroy()
+        }
     }
 
     /*for(var i = 0 ; i < terminals.length ; ++i) {
@@ -229,6 +233,7 @@ function initLevel() {
     wires = []
     connected = []
     deletedWireIndex = []
+    sevenSegmentDisplay = []
     animationInProgress = false
     deselect()
     toolDelete = false
@@ -242,7 +247,7 @@ function reset() {
 }
 
 function createComponent(x, y, src, imgWidth, imgHeight, toolTipTxt, terminalSize) {
-    var electricComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Component.qml")
+    var electricComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/ElectricalComponent.qml")
     if (electricComponent.status == electricComponent.Error) {
         // Error Handling
         console.log("Error loading component:", electricComponent.errorString());
@@ -277,6 +282,15 @@ function createComponent(x, y, src, imgWidth, imgHeight, toolTipTxt, terminalSiz
     //console.log("Error loading component:", terminalComponent.errorString())
     var terminalIndex = terminals.length
     //console.log("terminalIndex",terminalIndex)
+
+    if(src == "sevenSegmentDisplay.svg") {
+        var sevenSegmentComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/SevenSegment.qml")
+        sevenSegmentDisplay[index] = sevenSegmentComponent.createObject(
+                                     electricComponentCreated, {
+                                         "code": [0,0,0,0,0,0]
+                                     });
+        sevenSegmentDisplay[index].anchors.centerIn = electricComponentCreated
+    }
 
     var inputs = componentInfo[4]
     for(var i = 0 ; i < inputs.length ; ++i) {
@@ -375,20 +389,7 @@ function updateComponentUtility(index, visited) {
     visited[index] = true
 
     var component = components[index]
-    if(component.imgSrc == "gateAnd.svg") {
-        var output = 1
-        for(var i = 0 ; i < 2 ; ++i) {
-            var value = terminals[component.inputs[i]].value
-            if(value == -1) {
-                output = -1
-                break
-            }
-            output = output && value
-        }
-        //console.log("output",output)
-        terminals[component.outputs[0]].value = output
-    }
-    else if(component.imgSrc == "ledOff.svg") {
+    if(component.imgSrc == "ledOff.svg") {
         if(terminals[component.inputs[0]].value == 1 &&  terminals[component.inputs[1]].value == 0)
             component.source = url + "ledOn.svg"
         else
@@ -396,7 +397,63 @@ function updateComponentUtility(index, visited) {
         //console.log("component.source",component.source)
         return
     }
-    //console.log("component index",index)
+    else if(component.imgSrc == "sevenSegmentDisplay.svg") {
+        var code = []
+        for(var i = 0 ; i < 7 ; ++i) {
+            var value = terminals[component.inputs[i]].value
+            if(value == -1) {
+                for(var j = 0 ; j < 7 ; ++j) code[j] = 0
+            }
+            code[i] = value
+        }
+        sevenSegmentDisplay[index].code = code
+        return
+    }
+    else if(component.imgSrc == "switchOff.svg") {
+        terminals[component.outputs[0]].value = -1
+    }
+    else if(component.imgSrc == "switchOn.svg") {
+        terminals[component.outputs[0]].value = terminals[component.inputs[0]].value
+    }
+    else if(component.imgSrc == "comparator.svg") {
+        var firstInput = terminals[component.inputs[0]].value
+        var secondInput = terminals[component.inputs[1]].value
+        if(firstInput != -1 && secondInput != -1) {
+            terminals[component.outputs[0]].value = firstInput < secondInput ? 1 : 0
+            terminals[component.outputs[1]].value = firstInput == secondInput ? 1 : 0
+            terminals[component.outputs[2]].value = firstInput > secondInput ? 1 : 0
+        }
+        else {
+            terminals[component.outputs[0]].value = -1
+            terminals[component.outputs[1]].value = -1
+            terminals[component.outputs[2]].value = -1
+        }
+    }
+    else {
+        var inputSet = false
+        var compnentInfo = componentsInfo[mapSrc[component.imgSrc]]
+        var truthTable = compnentInfo[7]
+        var i
+        var input = component.inputs
+        for(i = 1 ; i < truthTable.length ; ++i) {
+            var j
+            for(j = 0 ; j < input.length; ++j) {
+                if(terminals[input[j]].value != truthTable[i][j])
+                    break
+            }
+            if(j == input.length)
+                break
+        }
+        var output = component.outputs
+        if(i == truthTable.length) {
+            for(var j = 0 ; j < output.length ; ++j)
+                terminals[output[j]].value = -1
+        }
+        else {
+            for(var j = 0 ; j < output.length ; ++j)
+                terminals[output[j]].value = truthTable[i][j + input.length]
+        }
+    }
 
     for(var i = 0 ; i < component.outputs.length ; ++i) {
         var terminal = terminals[component.outputs[i]]
@@ -523,7 +580,10 @@ function deselect() {
 }
 
 function removeComponent(index) {
+
     var component = components[index]
+    if(component.src == "sevenSegmentDisplay.svg")
+        sevenSegmentDisplay[index].destroy()
     for(var i = 0 ; i < component.inputs.length ; ++i) {
         var terminal = terminals[component.inputs[i]]
         if(terminal.wireIndex.length != 0) // Input Terminal can have only 1 wire
@@ -588,7 +648,8 @@ function rotateRight() {
 
 function displayInfo() {
 
-    var component = componentsInfo[mapSrc[components[selectedIndex].imgSrc]]
+    var src = components[selectedIndex].imgSrc
+    var component = componentsInfo[mapSrc[src]]
     deselect()
     items.infoTxt.visible = true
     items.infoTxt.text = component[6]
@@ -606,6 +667,15 @@ function displayInfo() {
             for(var j = 0 ; j < component[7][i].length ; ++j)
                 truthTable.append({'value': component[7][i][j]})
     }
+    if(src == "sevenSegmentDisplay.svg") {
+        items.infoImage.imgVisible = true
+        items.infoImage.source = url + "7SegmentDisplay.svg"
+    }
+    else {
+        items.infoImage.imgVisible = false
+        items.infoImage.source = ""
+    }
+
 
     //console.log(componentName,componentName=="battery.svg")
     /*if(componentName == "battery.svg") {

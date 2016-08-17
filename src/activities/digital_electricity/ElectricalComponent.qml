@@ -84,8 +84,9 @@ Image {
     }
 
     function updateDragConstraints() {
-        if(rotationAngle == 0 || rotationAngle == 180 || rotationAngle == 360 || rotationAngle == -360
-           || rotationAngle == -180) {
+        //console.log("initialAngle",initialAngle)
+        if(initialAngle == 0 || initialAngle == 180 || initialAngle == 360 || initialAngle == -360
+           || initialAngle == -180) {
             mouseArea.drag.minimumX = (electricalComponent.paintedWidth - electricalComponent.width)/2
             mouseArea.drag.minimumY = (electricalComponent.paintedHeight - electricalComponent.height)/2
 
@@ -114,19 +115,29 @@ Image {
         anchors.centerIn: parent
         drag.target: electricalComponent
         onPressed: {
-            console.log("Component index",index)
+            //console.log("Component index",index)
+            Activity.updateToolTip(toolTipTxt)
+            Activity.componentSelected(index)
+        }
+        onClicked: {
+            //console.log("Component index",index)
             if(Activity.toolDelete) {
-                Activity.updateToolTip("")
                 Activity.removeComponent(index)
             }
             else {
-                Activity.updateToolTip(toolTipTxt)
-                Activity.componentSelected(index)
+                if(imgSrc == "switchOff.svg") {
+                    imgSrc = "switchOn.svg"
+                    Activity.updateComponent(index)
+                }
+                else if(imgSrc == "switchOn.svg") {
+                    imgSrc = "switchOff.svg"
+                    Activity.updateComponent(index)
+                }
             }
         }
-        onPositionChanged: {
+        /*onPositionChanged: {
             Activity.updateWires(index)
-        }
+        }*/
         onReleased: {
             parent.posX = parent.x / parent.parent.width
             parent.posY = parent.y / parent.parent.height

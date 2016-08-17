@@ -70,7 +70,7 @@ Rectangle {
         anchors.fill: parent
         onPressed: {
             selected = true
-            console.log("Pressed Terminal",index,type,value)
+            //console.log("Pressed Terminal",index,type,value)
             Activity.terminalPointSelected(index)
             //parent.parent.parent.moveFromX = parent.parent.x + mouseX
             //parent.parent.parent.moveFromY = parent.parent.y + mouseY
