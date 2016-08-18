@@ -20,7 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.3 as Quick
 
 var currentLevel = 0
 var numberOfLevel = 4
@@ -41,8 +41,10 @@ var connected = []
 var deletedWireIndex = []
 var colors = ["red","green","blue","blueviolet","silver"]
 var sevenSegmentDisplay = []
+var BCDTo7Segment = []
 
 function start(items_) {
+
     items = items_
     currentLevel = 0
     var filename = url + "ElectricalComponents.qml"
@@ -99,97 +101,6 @@ function start(items_) {
         componentsInfo[i][7] = component.truthTable
     }
 
-    /*items.availablePieces.model.append( {
-        "imgName": "zero.svg",
-        "imgWidth": 0.12,
-        "imgHeight": 0.2,
-        "toolTipText": qsTr("Zero input"),
-        "terminalSize": 0.205
-    });
-    items.availablePieces.model.append( {
-        "imgName": "one.svg",
-        "imgWidth": 0.12,
-        "imgHeight": 0.2,
-        "toolTipText": qsTr("One input"),
-        "terminalSize": 0.218
-    });
-    /*items.availablePieces.model.append( {
-        "imgName": "battery.svg",
-        "imgWidth": 0.13,
-        "imgHeight": 0.18,
-        "toolTipText": qsTr("Battery")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "comparator.svg",
-        "imgWidth": 0.3,
-        "imgHeight": 0.25,
-        "toolTipText": qsTr("Comparator")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "ledOff.svg",
-        "imgWidth": 0.16,
-        "imgHeight": 0.2,
-        "toolTipText": qsTr("LED"),
-        "terminalSize": 0.111
-    });
-    /*items.availablePieces.model.append( {
-        "imgName": "switchOff.svg",
-        "imgWidth": 0.18,
-        "imgHeight": 0.15,
-        "toolTipText": qsTr("Switch")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "BCDTo7Segment.svg",
-        "imgWidth": 0.3,
-        "imgHeight": 0.4,
-        "toolTipText": qsTr("BCD To 7 Segment")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "sevenSegmentDisplay.svg",
-        "imgWidth": 0.18,
-        "imgHeight": 0.4,
-        "toolTipText": qsTr("7 Segment Display"),
-        "terminalSize": 0.097
-    });
-    items.availablePieces.model.append( {
-        "imgName": "gateAnd.svg",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("AND gate"),
-        "terminalSize": 0.246
-    });
-    /*items.availablePieces.model.append( {
-        "imgName": "gateNand.svg",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("NAND gate")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "gateNor.svg",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("NOR gate")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "gateNot.svg",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("Not gate")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "gateOr.svg",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("Or gate")
-    });
-    items.availablePieces.model.append( {
-        "imgName": "gateXor.svg",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("Xor gate")
-    });
-    //*/
-    //items.availablePieces.view.refreshLeftWidget()
     initLevel()
 }
 
@@ -202,8 +113,10 @@ function stop() {
                 break
         }
         if(j == deletedIndex.length) {
-            if(components[i].imgSrc == "sevenSegmentDisplay.svg")
+            if(components[i].imgSrc == "sevenSegmentDisplay.svgz")
                 sevenSegmentDisplay[i].destroy()
+            else if(components[i].imgSrc == "BCDTo7Segment.svg")
+                BCDTo7Segment[i].destroy()
             components[i].destroy()
         }
     }
@@ -224,6 +137,7 @@ function stop() {
 }
 
 function initLevel() {
+
     items.availablePieces.view.currentDisplayedGroup = 0
     items.availablePieces.view.previousNavigation = 1
     items.availablePieces.view.nextNavigation = 1
@@ -234,6 +148,7 @@ function initLevel() {
     connected = []
     deletedWireIndex = []
     sevenSegmentDisplay = []
+    BCDTo7Segment = []
     animationInProgress = false
     deselect()
     toolDelete = false
@@ -241,17 +156,15 @@ function initLevel() {
 }
 
 function reset() {
+
     deselect()
     stop()
     initLevel()
 }
 
 function createComponent(x, y, src, imgWidth, imgHeight, toolTipTxt, terminalSize) {
+
     var electricComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/ElectricalComponent.qml")
-    if (electricComponent.status == electricComponent.Error) {
-        // Error Handling
-        console.log("Error loading component:", electricComponent.errorString());
-    }
     //console.log("Inside createComponent")
     x = x / items.backgroundContainer.width
     y = y / items.backgroundContainer.height
@@ -283,13 +196,22 @@ function createComponent(x, y, src, imgWidth, imgHeight, toolTipTxt, terminalSiz
     var terminalIndex = terminals.length
     //console.log("terminalIndex",terminalIndex)
 
-    if(src == "sevenSegmentDisplay.svg") {
+    if(src == "sevenSegmentDisplay.svgz") {
         var sevenSegmentComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/SevenSegment.qml")
         sevenSegmentDisplay[index] = sevenSegmentComponent.createObject(
                                      electricComponentCreated, {
-                                         "code": [0,0,0,0,0,0]
+                                         "code": [0, 0, 0, 0, 0, 0, 0]
                                      });
         sevenSegmentDisplay[index].anchors.centerIn = electricComponentCreated
+    }
+    else if(src == "BCDTo7Segment.svg") {
+        var BCDTo7SegmentComponent = Qt.createComponent(
+                                     "qrc:/gcompris/src/activities/digital_electricity/BCDToSevenSegment.qml")
+        BCDTo7Segment[index] = BCDTo7SegmentComponent.createObject(
+                               electricComponentCreated, {
+                                   "code": [0, 0, 0, 0, 0, 0, 0]
+                               });
+        BCDTo7Segment[index].anchors.centerIn = electricComponentCreated
     }
 
     var inputs = componentInfo[4]
@@ -397,12 +319,14 @@ function updateComponentUtility(index, visited) {
         //console.log("component.source",component.source)
         return
     }
-    else if(component.imgSrc == "sevenSegmentDisplay.svg") {
+    else if(component.imgSrc == "sevenSegmentDisplay.svgz") {
         var code = []
         for(var i = 0 ; i < 7 ; ++i) {
             var value = terminals[component.inputs[i]].value
             if(value == -1) {
-                for(var j = 0 ; j < 7 ; ++j) code[j] = 0
+                for(var j = 0 ; j < 7 ; ++j)
+                    code[j] = 0
+                break
             }
             code[i] = value
         }
@@ -429,7 +353,7 @@ function updateComponentUtility(index, visited) {
             terminals[component.outputs[2]].value = -1
         }
     }
-    else {
+    else { // For the components that have a truth table
         var inputSet = false
         var compnentInfo = componentsInfo[mapSrc[component.imgSrc]]
         var truthTable = compnentInfo[7]
@@ -453,6 +377,22 @@ function updateComponentUtility(index, visited) {
             for(var j = 0 ; j < output.length ; ++j)
                 terminals[output[j]].value = truthTable[i][j + input.length]
         }
+    }
+
+    if(component.imgSrc == "BCDTo7Segment.svg") {
+        var code = []
+        for(var i = 0 ; i < 7 ; ++i) {
+            var value = terminals[component.outputs[i]].value
+            if(value == -1) {
+                for(var j = 0 ; j < 7 ; ++j)
+                    code[j] = 0
+                break
+            }
+            code[i] = value
+        }
+        BCDTo7Segment[index].code = code
+        //for(var i=0;i<7;++i) console.log("code[i]",i,code[i],"BCDTo7Segment[index].code[i]",BCDTo7Segment[index].code[i])
+
     }
 
     for(var i = 0 ; i < component.outputs.length ; ++i) {
@@ -582,7 +522,7 @@ function deselect() {
 function removeComponent(index) {
 
     var component = components[index]
-    if(component.src == "sevenSegmentDisplay.svg")
+    if(component.src == "sevenSegmentDisplay.svgz")
         sevenSegmentDisplay[index].destroy()
     for(var i = 0 ; i < component.inputs.length ; ++i) {
         var terminal = terminals[component.inputs[i]]
@@ -631,6 +571,7 @@ function componentSelected(index) {
 }
 
 function rotateLeft() {
+
     components[selectedIndex].rotationAngle = -2//components[selectedIndex].initialAngle - 90
     //console.log("rotationAngle",components[selectedIndex].rotationAngle)
     components[selectedIndex].rotateComponent.start()
@@ -639,6 +580,7 @@ function rotateLeft() {
 }
 
 function rotateRight() {
+
     components[selectedIndex].rotationAngle = 2//components[selectedIndex].initialAngle + 90
     //console.log("rotationAngle",components[selectedIndex].rotationAngle)
     components[selectedIndex].rotateComponent.start()
@@ -667,7 +609,7 @@ function displayInfo() {
             for(var j = 0 ; j < component[7][i].length ; ++j)
                 truthTable.append({'value': component[7][i][j]})
     }
-    if(src == "sevenSegmentDisplay.svg") {
+    if(src == "sevenSegmentDisplay.svgz") {
         items.infoImage.imgVisible = true
         items.infoImage.source = url + "7SegmentDisplay.svg"
     }
@@ -675,125 +617,6 @@ function displayInfo() {
         items.infoImage.imgVisible = false
         items.infoImage.source = ""
     }
-
-
-    //console.log(componentName,componentName=="battery.svg")
-    /*if(componentName == "battery.svg") {
-        items.infoTxt.text = qsTr("Battery is a power source of DC voltage. In analog electronics, the positive " +
-                                  "terminal gives positive voltage, equal to the rating of battery and negative " +
-                                  "terminal acts as ground (zero voltage). The battery can have different values " +
-                                  "depending on its rating. In digital electronics, positive voltage is represented " +
-                                  "by symbol ‘1’ and ground is represented by symbol ‘0’. Therefore in digital " +
-                                  "electronics, there are only two states of voltage produced by battery – ‘1’ and ‘0’.")
-        //items.infoImage.source = ""
-    }*/
-
-
-
-    /*if(componentName == "one.svg" || componentName == "zero.svg") {
-        items.infoTxt.text = qsTr("Digital electronics is a branch of electronics that handle digital signals " +
-                                  "(i.e discrete signals instead of continous signals). Therefore all values within " +
-                                  "a range or band represent the same numeric value. In most cases, the number of " +
-                                  "these states is two and they are represented by two voltage bands: one near a " +
-                                  "reference value (typically termed as 'ground' or zero volts), and other value near " +
-                                  "the supply voltage. These correspond to the 'false' ('0') and 'true' ('1') values " +
-                                  "of the Boolean domain respectively (named after its inventor, George Boole). " +
-                                  "In this activity, you can give '0' and '1' as input to other logical devices, " +
-                                  "and see their output through an output device.")
-        //items.infoImage.source = ""
-    }
-    else if(componentName == "gateAnd.svg") {
-        items.infoTxt.text = qsTr("AND gate takes 2 or more binary input in its input terminals and outputs a single " +
-                                  "value. The output is 0 if any of the input is 0, else it is 1. In this activity, " +
-                                  "a 2 input AND gate is shown. Truth table for 2 input AND gate is:")
-        //items.infoImage.source = url + "AndTruthTable.svg"
-        items.truthTablesModel.rows = 1
-        items.truthTablesModel.columns = 3
-        items.truthTablesModel.inputs = 2
-        items.truthTablesModel.outputs = 1
-        items.truthTablesModel.append({'value': "A"})
-        items.truthTablesModel.append({'value': "B"})
-        items.truthTablesModel.append({'value': "C"})
-
-    }
-    else if(componentName == "gateNand.svg") {
-        items.infoTxt.text = qsTr("NAND gate takes 2 or more binary input in its input terminals and outputs a single " +
-                                  "value. It is the complement of AND gate. In this activity, a 2 input NAND gate is " +
-                                  "shown. Truth table for 2 input NAND gate is:")
-        //items.infoImage.source = url + "NandTruthTable.svg"
-    }
-    else if(componentName == "gateNor.svg") {
-        items.infoTxt.text = qsTr("NOR gate takes 2 or more binary input in its input terminals and outputs a single " +
-                                  "value. It is the complement of OR gate. In this activity, a 2 input NOR gate is " +
-                                  "shown. Truth table for 2 input NOR gate is:")
-        //items.infoImage.source = url + "NorTruthTable.svg"
-    }
-    else if(componentName == "gateNot.svg") {
-        items.infoTxt.text = qsTr("Not gate (also known as inverter) takes a binary input in its input terminal and " +
-                                  "outputs a single value. The output is the complement of the input value, that is, it " +
-                                  "is 0 if input is 1, and 1 if input is 0. Truth table for NOT gate is:")
-        //items.infoImage.source = url + "NotTruthTable.svg"
-    }
-    else if(componentName == "gateOr.svg") {
-        items.infoTxt.text = qsTr("OR gate takes 2 or more binary input in its input terminals and outputs a single " +
-                                  "value. The output is 1 if any of the input is 1, else it is 0. In this activity, a " +
-                                  "2 input OR gate is shown. Truth table for 2 input OR gate is:")
-        //items.infoImage.source = url + "OrTruthTable.svg"
-    }
-    else if(componentName == "gateXor.svg") {
-        items.infoTxt.text = qsTr("XOR gate takes 2 or more binary input in its input terminals and outputs a single " +
-                                  "value. The output is 1 if number of '1' in input is odd, and 0 if number of '1' in " +
-                                  "input is even. In this activity, a 2 input XOR gate is shown. Truth table for " +
-                                  "2 input XOR gate is:")
-        //items.infoImage.source = url + "XorTruthTable.svg"
-    }
-    else if(componentName == "comparator.svg") {
-        items.infoTxt.text = qsTr("Comparator takes 2 numbers as input, A and B. It compares them and outputs 3 " +
-                                  "values. First value is true if A < B, else it is false. Second value is true " +
-                                  "if A = B, else it is false. Third value is true if A > B, else it is false. " +
-                                  "In digital electronics, true value is represented as 1, and false value is " +
-                                  "represented as 0")
-    }
-    /*else if(componentName == "BCDTo7Segment.svg") {
-        items.infoTxt.text = qsTr("BCD to 7 segment converter takes 4 binary inputs in its input terminals and gives " +
-                                  "7 binary outputs. The 4 binary inputs represents a BCD number (binary-coded decimal). " +
-                                  "The converter converts this BCD number to corresponding bits, which are used to " +
-                                  "display the decimal number (represented by the BCD number) on the 7 segment display. " +
-                                  "The truth table for BCD To 7 Segment converted is:")
-        //items.infoImage.source = url + "BCDTo7SegmentTruthTable.svg"
-    }
-    else if(componentName == "BCDTo7Segment.svg") {
-        items.infoTxt.text = qsTr("BCD to 7 segment converter takes 4 binary inputs which represent a BCD number, " +
-                                  "and convert them to 7 binary bits which represent corresponding number in 7 segment " +
-                                  "format. The truth table is:")
-        //items.infoImage.source = url + "BCDTo7SegmentTruthTable.svg"
-    }
-    else if(componentName == "sevenSegmentDisplay.svg") {
-        items.infoTxt.text = qsTr("7 segment display takes 7 binary inputs in its input terminals. The display " +
-                                  "consists of 7 segments and each segment gets lighted according to the input. " +
-                                  "By generating different combination of binary inputs, the display can be used to " +
-                                  "display various different symbols. The diagram is:")
-        //items.infoImage.source = url + "7SegmentDisplay.svg"
-    }
-    else if(componentName == "ledOn.svg" || componentName == "ledOff.svg") {
-        items.infoTxt.text = qsTr("LED (Light-emitting diode) is a two-lead semiconductor light source. It emits " +
-                                  "light when activated. LED has 2 input terminals, the longer terminal is the " +
-                                  "positive terminal (anode) and smaller terminal is the negative terminal (cathode)" +
-                                  ". LED is activated when anode has a higher potential than cathode. In digital " +
-                                  "electronics LED can be used to check the output of the components. Connect " +
-                                  "the cathode of LED to ground ('0') and anode of LED to the output of the " +
-                                  "component. If output is 1, the LED will be activated (emit light), and if " +
-                                  "output is 0, the LED will be deactivated.")
-        //items.infoImage.source = ""
-    }
-    else if(componentName == "switchOn.svg" || componentName == "switchOff.svg") {
-        items.infoTxt.text = qsTr("Switch is used to maintain easy connection between two terminals. If the switch is " +
-                                  "turned on, then the two terminals are connected and current can flow through the " +
-                                  "switch. If the switch is turned off, then the connection between terminal is broken, " +
-                                  "and current can not flow through it.")
-        //items.infoImage.source = ""
-    }*/
-    //console.log(items.infoTxt.text)
 }
 
 function updateToolTip(toolTipTxt) {

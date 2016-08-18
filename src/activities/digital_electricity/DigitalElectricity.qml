@@ -19,8 +19,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
-//import QtQuick.Controls 1.4
+import QtQuick 2.3
 import GCompris 1.0
 
 import "../../core"
@@ -191,8 +190,8 @@ ActivityBase {
                     }
                 }
                 Rectangle {
-                    color: "#c7ecfb"
-                    width: Math.max(inputOutputTxt.minSize, inputOutputTxt.cellSize * inputOutputTxt.outputs)
+                    color: "#47ffc2"
+                    width: Math.max(inputOutputTxt.minSize, inputOutputTxt.cellSize * inputOutputTxt.outputs) * 1.5
                     height: inputOutputTxt.cellSize
                     border.color: "black"
                     border.width: 1
@@ -234,12 +233,13 @@ ActivityBase {
                         Rectangle {
                             width: ((index % truthTable.columns) / (truthTablesModel.inputs - 1)) <= 1 ?
                                    (inputOutputTxt.inputs > 1 ? inputOutputTxt.cellSize : inputOutputTxt.minSize) :
-                                   (inputOutputTxt.outputs > 1 ? inputOutputTxt.cellSize : inputOutputTxt.minSize)
+                                   (inputOutputTxt.outputs > 1 ? inputOutputTxt.cellSize : inputOutputTxt.minSize) * 1.5
                             height: inputOutputTxt.cellSize
                             border.color: "black"
                             border.width: 1
                             //radius: 1
-                            color: "#c7ecfb"
+                            color: ((index % truthTable.columns) / (truthTablesModel.inputs - 1)) <= 1 ?
+                                   "#c7ecfb" : "#47ffc2"
                             GCText {
                                 id: truthTableValue
                                 anchors.centerIn: parent

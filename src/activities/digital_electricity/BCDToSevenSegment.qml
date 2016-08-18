@@ -1,4 +1,4 @@
-/* GCompris - SevenSegment.qml
+/* GCompris - BCDToSevenSegment.qml
  *
  * Copyright (C) 2016 Pulkit Gupta <pulkitnsit@gmail.com>
  *
@@ -25,14 +25,13 @@ import "digital_electricity.js" as Activity
 import GCompris 1.0
 
 Item {
-    id: sevenSegment
+    id: bcdTosevenSegment
     property variant code
     height: parent.height
     width: parent.width
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayA.svgz"
-        visible: code[0] == 1
+        source: Activity.url + (code[0] == 1 ? "BCDTo7SegmentA_red.svgz" : "BCDTo7SegmentA_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
@@ -42,8 +41,7 @@ Item {
     }
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayB.svgz"
-        visible: code[1] == 1
+        source: Activity.url + (code[1] == 1 ? "BCDTo7SegmentB_red.svgz" : "BCDTo7SegmentB_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
@@ -53,8 +51,7 @@ Item {
     }
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayC.svgz"
-        visible: code[2] == 1
+        source: Activity.url + (code[2] == 1 ? "BCDTo7SegmentC_red.svgz" : "BCDTo7SegmentC_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
@@ -64,8 +61,7 @@ Item {
     }
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayD.svgz"
-        visible: code[3] == 1
+        source: Activity.url + (code[3] == 1 ? "BCDTo7SegmentD_red.svgz" : "BCDTo7SegmentD_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
@@ -75,8 +71,7 @@ Item {
     }
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayE.svgz"
-        visible: code[4] == 1
+        source: Activity.url + (code[4] == 1 ? "BCDTo7SegmentE_red.svgz" : "BCDTo7SegmentE_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
@@ -86,8 +81,7 @@ Item {
     }
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayF.svgz"
-        visible: code[5] == 1
+        source: Activity.url + (code[5] == 1 ? "BCDTo7SegmentF_red.svgz" : "BCDTo7SegmentF_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
@@ -97,8 +91,7 @@ Item {
     }
 
     Image {
-        source: Activity.url + "sevenSegmentDisplayG.svgz"
-        visible: code[6] == 1
+        source: Activity.url + (code[6] == 1 ? "BCDTo7SegmentG_red.svgz" : "BCDTo7SegmentG_black.svgz")
         anchors.centerIn: parent
         height: parent.height
         width: parent.width

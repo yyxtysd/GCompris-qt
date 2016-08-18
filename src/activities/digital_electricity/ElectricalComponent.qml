@@ -50,7 +50,7 @@ Image {
     height: imgHeight * parent.height
     fillMode: Image.PreserveAspectFit
     opacity: 1.0
-    source: Activity.url + imgSrc
+    source: Activity.url + (imgSrc == "BCDTo7Segment.svg" ? "BCDTo7SegmentDropped.svg" : imgSrc)
     z: 2
     mipmap: true
     antialiasing: true
