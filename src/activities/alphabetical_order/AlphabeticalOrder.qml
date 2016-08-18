@@ -61,9 +61,9 @@ ActivityBase {
             property alias message: message
             property bool gameFinished: false
             property int delay: 6
-            property bool okBoxChecked
-            property bool easyMode
-            property bool playLetter
+            property bool okBoxChecked: false
+            property bool easyMode: false
+            property bool playLetter: false
             property double startTime
             property bool passedLevel: false
         }
@@ -673,14 +673,10 @@ ActivityBase {
             onClose: home()
             onLoadData: {
                 if(dataToSave) {
-                    if (dataToSave["locale"])
-                        background.locale = dataToSave["locale"];
-                    if (dataToSave["okButton"])
-                        items.okBoxChecked = dataToSave["okButton"]
-                    if (dataToSave["mode"])
-                        items.easyMode = dataToSave["mode"]
-                    if (dataToSave["play"])
-                        items.playLetter = dataToSave["play"]
+                    background.locale = dataToSave["locale"];
+                    items.okBoxChecked = dataToSave["okButton"] === "true" ? true : false
+                    items.easyMode = dataToSave["mode"] === "true" ? true : false
+                    items.playLetter = dataToSave["play"] === "true" ? true : false
                 }
             }
             onSaveData: {
