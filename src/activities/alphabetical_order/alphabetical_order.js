@@ -47,7 +47,7 @@ var difficulty = 0  // 0 = extremely easy; 1 = very easy; 2 = easy; 3 = normal; 
 // 5 = very hard: totalLetters = [7]; guessLetters = [4-6]
 // 6 = insane: totalLetters = [8]; guessLetters = [6-8]
 
-var interchange = 1
+var interchange = 0
 //var progress = {totalPassed: 0, totalFailed: 0, lastSubLevel: 0} // lastSubLevel = 0 if lost; = 1 if won
 var progress = []  // 0 if lost, 1 if won   => [1,1,0,1,1,0,0,1,1,1,1,1...]
 var date
