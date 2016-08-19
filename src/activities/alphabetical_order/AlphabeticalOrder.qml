@@ -295,10 +295,13 @@ ActivityBase {
 
                                             // interchange the letters
                                             var textAux = items.listModel.get(i).letter
-                                            items.listModel.setProperty(i,"letter",letter.text)
-                                            items.listModel.setProperty(index,"letter",textAux)
-                                            repeater.itemAt(i).text = letter.text
+                                            var textAux2 = letter.text
+
+                                            repeater.itemAt(i).text = textAux2
                                             repeater.itemAt(index).text = textAux
+
+                                            items.listModel.setProperty(i,"letter",textAux2)
+                                            items.listModel.setProperty(index,"letter",textAux)
 
                                             // animations & particles
                                             if (index != i) {
@@ -356,15 +359,17 @@ ActivityBase {
 
                                             // interchange the letters
                                             var textAux1 = items.listModelInput.get(i).letter
-                                            if (textAux1 != '_' && letter.text != '_') {
-                                                inputRepeater.itemAt(i).text = letter.text
-                                                items.listModelInput.setProperty(i,"letter",letter.text)
+                                            var textAux2 = letter.text
+
+                                            if (textAux1 != '_' && textAux2 != '_') {
+                                                inputRepeater.itemAt(i).text = textAux2
+                                                items.listModelInput.setProperty(i,"letter",textAux2)
 
                                                 repeater.itemAt(index).text = textAux1
                                                 items.listModel.setProperty(index,"letter",textAux1)
 
                                                 if (items.easyMode) {
-                                                    if (letter.text == Activity.model[index]) {
+                                                    if (textAux2 == Activity.model[index]) {
                                                         particleLoader.item.burst(40)
                                                     } else {
                                                         failureAnimation.start()
@@ -469,11 +474,12 @@ ActivityBase {
                                                 mouseMapped.y > itemMapped.y && mouseMapped.y < itemMapped.y + item.height) {
 
                                             var textAux = items.listModel.get(i).letter
+                                            var textAux2 = missingLetter.text
 
                                             // if the letter at index i in the repeater is '_', then replace '_' with missingLetter.text
                                             if (textAux == '_') {
-                                                repeater.itemAt(i).text = missingLetter.text
-                                                items.listModel.setProperty(i,"letter",missingLetter.text)
+                                                repeater.itemAt(i).text = textAux2
+                                                items.listModel.setProperty(i,"letter",textAux2)
                                                 items.listModelInput.setProperty(index,"letter",'_')
 
                                                 // set opacity to 0 and disable the MouseArea of missingLetter
@@ -482,8 +488,8 @@ ActivityBase {
 
                                             // else, the letter at intex i is a normal letter, so interchange it with missingLetter.text
                                             } else {
-                                                repeater.itemAt(i).text = missingLetter.text
-                                                items.listModel.setProperty(i,"letter",missingLetter.text)
+                                                repeater.itemAt(i).text = textAux2
+                                                items.listModel.setProperty(i,"letter",textAux2)
 
                                                 inputRepeater.itemAt(index).text = textAux
                                                 items.listModelInput.setProperty(index,"letter",textAux)
