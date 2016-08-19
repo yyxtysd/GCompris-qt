@@ -324,9 +324,7 @@ function updateComponentUtility(index, visited) {
         for(var i = 0 ; i < 7 ; ++i) {
             var value = terminals[component.inputs[i]].value
             if(value == -1) {
-                for(var j = 0 ; j < 7 ; ++j)
-                    code[j] = 0
-                break
+                code[i] = 0
             }
             code[i] = value
         }
@@ -380,19 +378,25 @@ function updateComponentUtility(index, visited) {
     }
 
     if(component.imgSrc == "BCDTo7Segment.svg") {
+        var inputChar = 0
+        for(var i = 0 ; i < 4 ; ++i) {
+            var value = terminals[component.inputs[i]].value
+            if(value == -1)
+                value = 0
+            inputChar += value * Math.pow(2, i)
+        }
+
+        // 7 segment encoding as defined on
+        // https://en.wikipedia.org/wiki/Seven-segment_display#Displaying_letters
+        var coding = [ 0x7E, 0x30, 0x6D, 0x79, 0x33, 0x5B, 0x5F, 0x70,
+                      0x7F, 0x7B, 0x77, 0x1F, 0x4E, 0x3D, 0x4F, 0x47]
+
         var code = []
-        for(var i = 0 ; i < 7 ; ++i) {
-            var value = terminals[component.outputs[i]].value
-            if(value == -1) {
-                for(var j = 0 ; j < 7 ; ++j)
-                    code[j] = 0
-                break
-            }
-            code[i] = value
+        for(var i = 0; i < 7; ++i) {
+            terminals[component.outputs[i]].value = ((coding[inputChar] & (1 << (6 - i))) ? 1 : 0)
+            code[i] = terminals[component.outputs[i]].value
         }
         BCDTo7Segment[index].code = code
-        //for(var i=0;i<7;++i) console.log("code[i]",i,code[i],"BCDTo7Segment[index].code[i]",BCDTo7Segment[index].code[i])
-
     }
 
     for(var i = 0 ; i < component.outputs.length ; ++i) {
