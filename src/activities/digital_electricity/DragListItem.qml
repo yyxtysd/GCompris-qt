@@ -129,7 +129,7 @@ Item {
                         //console.log("coord.x",coord.x,"coord.y",coord.y)
                         //console.log("dropped",terminalSize)
                         if(coord.x > 0 && (backgroundContainer.width - coord.x > tileImage.fullWidth))
-                            Activity.createComponent(coord.x, coord.y, imgName, imgWidth, imgHeight, toolTipText, terminalSize)
+                            Activity.createComponent(coord.x, coord.y, imgName)
                         tileImage.anchors.centerIn = tile
                         tileImage.toSmall()
                         toolTip.show("")

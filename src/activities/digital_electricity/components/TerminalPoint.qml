@@ -20,7 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.3
-import "digital_electricity.js" as Activity
+import "../digital_electricity.js" as Activity
 
 import GCompris 1.0
 
@@ -32,10 +32,8 @@ Rectangle {
     property double size: parent.terminalSize
     property bool selected: false
     property string type
-    property int value: -1
-    property int index
-    property int componentIndex
-    property variant wireIndex: []
+    property int value: 0
+    property variant wires: []
 
     width: size * parent.paintedHeight
     height: size * parent.paintedHeight
@@ -45,12 +43,8 @@ Rectangle {
     x: (parent.width - parent.paintedWidth) / 2 + posX * parent.paintedWidth - width / 2
     y: (parent.height - parent.paintedHeight) / 2 + posY * parent.paintedHeight - height / 2
 
-    //property variant coord: parent.parent.mapFromItem(terminalPoint, terminalPoint.x + width / 2, terminalPoint.y + height / 2)
-
     property double xCenter: terminalPoint.parent.x + terminalPoint.x + width/2
     property double yCenter: terminalPoint.parent.y + terminalPoint.y + height/2
-    //property double xCenterFromComponent: terminalPoint.parent.x + terminalPoint.parent.width / 2 - xCenter
-    //property double yCenterFromComponent: terminalPoint.parent.y + terminalPoint.parent.height / 2 - yCenter
     property double xCenterFromComponent: terminalPoint.x + width/2 - terminalPoint.parent.width / 2
     property double yCenterFromComponent: terminalPoint.y + height/2 - terminalPoint.parent.height / 2
 
@@ -70,18 +64,8 @@ Rectangle {
         anchors.fill: parent
         onPressed: {
             selected = true
-            //console.log("Pressed Terminal",index,type,value)
-            Activity.terminalPointSelected(index)
-            //parent.parent.parent.moveFromX = parent.parent.x + mouseX
-            //parent.parent.parent.moveFromY = parent.parent.y + mouseY
+            console.log("Pressed Terminal",type,value)
+            Activity.terminalPointSelected(terminalPoint)
         }
-        /*
-        onPositionChanged: {
-            parent.parent.parent.moveToX = parent.parent.x + mouseX
-            parent.parent.parent.moveToY = parent.parent.y + mouseY
-            //console.log(parent.parent.parent.moveToX,parent.parent.parent.moveToY)
-            //console.log(parent.parent.x + mouseX,parent.parent.y + mouseY)
-            parent.parent.parent.requestPaint()
-        }*/
     }
 }

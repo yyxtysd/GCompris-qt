@@ -20,27 +20,27 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.3
-import "digital_electricity.js" as Activity
+import "../digital_electricity.js" as Activity
 
 import GCompris 1.0
 
 Image {
     id: electricalComponent
-    property QtObject pieceParent
-    property string imgSrc
     property double posX
     property double posY
     property double imgWidth
     property double imgHeight
-    property int index
+    property string imgSrc
+    property string information
     property string toolTipTxt
+    property variant truthTable: []
+    property int index
+    property int noOfInputs
+    property int noOfOutputs
     property int rotationAngle: 0
     property int initialAngle: 0
     property int startingAngle: 0
-    property int output
     property double terminalSize
-    property variant inputs: []
-    property variant outputs: []
 
     property alias rotateComponent: rotateComponent
 
@@ -49,8 +49,8 @@ Image {
     width: imgWidth * parent.width
     height: imgHeight * parent.height
     fillMode: Image.PreserveAspectFit
-    opacity: 1.0
-    source: Activity.url + (imgSrc == "BCDTo7Segment.svg" ? "BCDTo7SegmentDropped.svg" : imgSrc)
+
+    source: Activity.url + imgSrc
     z: 2
     mipmap: true
     antialiasing: true
@@ -120,7 +120,7 @@ Image {
             Activity.componentSelected(index)
         }
         onClicked: {
-            //console.log("Component index",index)
+            console.log("Component index",index,electricalComponent)
             if(Activity.toolDelete) {
                 Activity.removeComponent(index)
             }
@@ -135,9 +135,6 @@ Image {
                 }
             }
         }
-        /*onPositionChanged: {
-            Activity.updateWires(index)
-        }*/
         onReleased: {
             parent.posX = parent.x / parent.parent.width
             parent.posY = parent.y / parent.parent.height

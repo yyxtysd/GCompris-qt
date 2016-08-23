@@ -27,28 +27,14 @@ import GCompris 1.0
 Rectangle {
     id: wire
 
-    //property double posX1
-    //property double posY1
-    //property double posX2
-    //property double posY2
-    //property double rectWidth
-    //property double rotateAngle
     property string wireColor
+    property QtObject from
+    property QtObject to
 
-    property int index
-    property int from
-    property int to
-
-    //width: rectWidth
     height: 5
-    color: wireColor //"Red"
+    color: wireColor
     radius: height / 2
-
-    //x: posX1
-    //y: posY1
-
     transformOrigin: Item.Left
-    //rotation: rotateAngle
 
     MouseArea {
         id: mouseArea
@@ -57,9 +43,9 @@ Rectangle {
         height: parent.height * 3
         anchors.centerIn: parent
         onPressed: {
-            //console.log("Pressed Wire",index,color,wireColor)
+            //console.log("Pressed Wire",color,wireColor)
             if(Activity.toolDelete) {
-                Activity.removeWire(index)
+                Activity.removeWire(wire)
             }
         }
     }

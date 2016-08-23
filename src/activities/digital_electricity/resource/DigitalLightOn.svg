@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg16385"
+   sodipodi:docname="DigitalLightOn2.svg"
+   viewBox="0 0 372.36472 137.649"
+   sodipodi:version="0.32"
+   version="1.0"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:version="0.91 r13725"
+   width="372.36472"
+   height="137.649">
+  <defs
+     id="defs16387">
+    <radialGradient
+       id="radialGradient10493"
+       gradientUnits="userSpaceOnUse"
+       cy="260.35999"
+       cx="387"
+       r="14.136"
+       inkscape:collect="always"
+       gradientTransform="matrix(4.8685999,0,0,4.8685999,-1761.4586,-1181.1004)">
+      <stop
+         id="stop3714"
+         style="stop-color:#f7c76a"
+         offset="0" />
+      <stop
+         id="stop3716"
+         style="stop-color:red"
+         offset=".83767" />
+      <stop
+         id="stop3718"
+         style="stop-color:#631a04"
+         offset=".89703" />
+      <stop
+         id="stop4764"
+         style="stop-color:#63210e"
+         offset=".91966" />
+      <stop
+         id="stop4768"
+         style="stop-color:#fd0005;stop-opacity:.58549"
+         offset=".96896" />
+      <stop
+         id="stop3720"
+         style="stop-color:#ff1501;stop-opacity:0"
+         offset="1" />
+    </radialGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     inkscape:pageshadow="2"
+     inkscape:window-y="-8"
+     pagecolor="#ffffff"
+     inkscape:window-height="705"
+     width="107px"
+     inkscape:zoom="0.99954595"
+     inkscape:window-x="-8"
+     height="161px"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="49.212024"
+     inkscape:cy="99.276241"
+     inkscape:window-width="1366"
+     inkscape:pageopacity="0.0"
+     inkscape:document-units="px"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-maximized="1" />
+  <g
+     id="layer1"
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     transform="translate(79.133758,-17.674438)">
+    <circle
+       r="68.1604"
+       cy="86.49894"
+       cx="122.68963"
+       style="fill:url(#radialGradient10493);stroke:#000000;stroke-width:1.32820272"
+       id="path3749" />
+    <path
+       d="m 247.42711,86.023435 -56.45776,0.24423"
+       style="fill:none;stroke:#000000;stroke-width:5.10401392px"
+       id="path2906-6"
+       inkscape:connector-curvature="0" />
+    <circle
+       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:5.58755302;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
+       id="path5637-1"
+       cx="268.18237"
+       cy="87.306503"
+       r="21.879631"
+       transform="matrix(0.99999064,-0.00432583,0.00432583,0.99999064,0,0)" />
+    <path
+       d="m -33.337894,86.145555 56.458285,0"
+       style="fill:none;stroke:#000000;stroke-width:5.10401392px"
+       id="path2906"
+       inkscape:connector-curvature="0" />
+    <circle
+       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:5.58755302;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
+       id="path5637"
+       cx="54.46035"
+       cy="-86.145531"
+       r="21.879631"
+       transform="scale(-1,-1)" />
+    <rect
+       style="opacity:0.71399997;fill:#b3a9a9;fill-opacity:0.93377482"
+       id="rect4432"
+       width="30.713917"
+       height="76.253799"
+       x="23.222921"
+       y="48.018642" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:31.01107788px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="32.053612"
+       y="78.145836"
+       id="text4434"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4436"
+         x="32.053612"
+         y="78.145836"
+         style="text-align:start;text-anchor:start">I</tspan><tspan
+         sodipodi:role="line"
+         x="32.053612"
+         y="116.90968"
+         id="tspan4438"
+         style="text-align:center;text-anchor:middle" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:19.03339005px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="27.159842"
+       y="112.64072"
+       id="text4232"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4234"
+         x="27.159842"
+         y="112.64072"
+         style="font-size:30.45342445px">N</tspan></text>
+  </g>
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Voyant Rouge Allume - Red Light ON</dc:title>
+        <dc:date>2007-09-06T13:40:36</dc:date>
+        <dc:description>Voyant rouge de l'électricien et de l'automaticien insdustriel</dc:description>
+        <dc:source>https://openclipart.org/detail/5288/voyant-rouge-allume---red-light-on-by-fatboy178</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>fatboy178</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>automatisme</rdf:li>
+            <rdf:li>electrique</rdf:li>
+            <rdf:li>insdustrie</rdf:li>
+            <rdf:li>rouge</rdf:li>
+            <rdf:li>voyant</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
