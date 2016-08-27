@@ -121,7 +121,7 @@ Image {
         }
         onClicked: {
             console.log("Component index",index,electricalComponent)
-            if(Activity.toolDelete) {
+            if(Activity.toolDelete || Activity.toolDeleteSticky) {
                 Activity.removeComponent(index)
             }
             else {

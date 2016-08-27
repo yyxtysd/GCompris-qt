@@ -120,8 +120,14 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             toolDelete.state = toolDelete.state == "selected" ? "notSelected" : "selected"
-                            Activity.toolDelete = !Activity.toolDelete //true
+                            Activity.toolDelete = !Activity.toolDelete
+                            Activity.toolDeleteSticky = false
                             //console.log("state",toolDelete.state)
+                        }
+                        onDoubleClicked: {
+                            Activity.toolDeleteSticky = true
+                            Activity.toolDelete = true
+                            toolDelete.state = "selected"
                         }
                     }
                     states: [

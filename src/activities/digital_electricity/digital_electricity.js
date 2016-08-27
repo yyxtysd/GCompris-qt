@@ -27,6 +27,7 @@ var numberOfLevel = 4
 var items
 var url = "qrc:/gcompris/src/activities/digital_electricity/resource/"
 var toolDelete
+var toolDeleteSticky
 var selectedIndex
 var animationInProgress
 var selectedTerminal
@@ -76,6 +77,12 @@ function start(items_) {
         "imgHeight": 0.18,
         "toolTipText": qsTr("Digital Light")
     })
+    items.availablePieces.model.append( {
+        "imgName": "signalGenerator.svg",
+        "imgWidth": 0.25,
+        "imgHeight": 0.18,
+        "toolTipText": qsTr("Signal Generator")
+    })
     initLevel()
 }
 
@@ -101,8 +108,9 @@ function initLevel() {
     components = []
     connected = []
     animationInProgress = false
-    deselect()
     toolDelete = false
+    toolDeleteSticky = false
+    deselect()
     updateToolTip("")
 }
 
@@ -140,6 +148,8 @@ function createComponent(x, y, src) {
         electricComponent = Qt.createComponent(componentLocation + "SevenSegment.qml")
     else if(src == "DigitalLightOff.svg")
         electricComponent = Qt.createComponent(componentLocation + "DigitalLight.qml")
+    else if(src == "signalGenerator.svg")
+        electricComponent = Qt.createComponent(componentLocation + "SignalGenerator.qml")
 
     //console.log("Error loading component:", electricComponent.errorString())
     components[index] = electricComponent.createObject(
@@ -148,7 +158,8 @@ function createComponent(x, y, src) {
                             "posX": x,
                             "posY": y
                         });
-
+    toolDeleteSticky = false
+    deselect()
     componentSelected(index)
     updateComponent(index)
 }
@@ -192,7 +203,7 @@ function terminalPointSelected(terminal) {
 }
 
 function updateComponent(index) {
-
+    //console.log("updateComponent",index)
     var wireVisited = []
     components[index].updateOutput(wireVisited)
 }
@@ -262,12 +273,14 @@ function updateWires(index) {
 
 function deselect() {
 
-    //items.availablePieces.toolDelete.state = "notSelected"
+    if(toolDeleteSticky == false) {
+        toolDelete = false
+        items.availablePieces.toolDelete.state = "notSelected"
+    }
     items.availablePieces.rotateLeft.state = "canNotBeSelected"
     items.availablePieces.rotateRight.state = "canNotBeSelected"
     items.availablePieces.info.state = "canNotBeSelected"
     items.infoTxt.visible = false
-    //toolDelete = false
     selectedIndex = -1
     selectedTerminal = -1
     for(var i = 0 ; i < components.length ; ++i) {
