@@ -48,7 +48,7 @@ ElectricalComponent {
                       "display the decimal number (represented by the BCD number) on the 7 segment display. " +
                       "The truth table for BCD To 7 Segment converted is:")
 
-    truthTable: [['A','B','C','D','a','b','c','d','e','f','g'],
+    truthTable: [['D','C','B','A','a','b','c','d','e','f','g'],
                 ['0','0','0','0','1','1','1','1','1','1','0'],
                 ['0','0','0','1','0','1','1','0','0','0','0'],
                 ['0','0','1','0','1','1','0','1','1','0','1'],

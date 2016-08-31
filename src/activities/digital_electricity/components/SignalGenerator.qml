@@ -30,21 +30,23 @@ ElectricalComponent {
     imgHeight: 0.18
     imgSrc: "signalGenerator.svg"
     toolTipTxt: qsTr("Signal Generator")
-    terminalSize: 0.451
+    terminalSize: 0.24
     noOfInputs: 0
     noOfOutputs: 1
 
     information: qsTr("Signal Generator is used to generate alternating signals of 0 and 1. " +
-                      "It takes frequency as input, and generate outputs accordingly. Frequency " +
-                      "refers to the number of times the output will change in 1 second. So 1 Hz " +
-                      "means that the output will change after every 1 second, 0.5 Hz means that " +
-                      "the output will change after every 2 seconds, and so on. For the demonstration " +
-                      "purpose, the minimum frequency of signal generator in this activity is " +
-                      "0.25 Hz, and maximum frequency is 2 Hz. The frequency can be changed by clicking " +
+                      "It takes period as input, and generate outputs accordingly. Period " +
+                      "refers to the number of seconds after which the output will. So 1s " +
+                      "means that the output will change after every 1 second, 0.5s means that " +
+                      "the output will change after every 0.5 seconds, and so on. For the demonstration " +
+                      "purpose, the minimum period of signal generator in this activity is " +
+                      "0.25s, and maximum period is 2s. The period can be changed by clicking " +
                       "on the arrows on the signal generator")
 
     property alias outputTerminals: outputTerminals
-    property double frequency: 0.25
+    property double period: 1
+    property variant periodFraction: ["1/4","1/2","1","2"]
+    property int periodIndex: 2
 
     Repeater {
         id: outputTerminals
@@ -53,8 +55,8 @@ ElectricalComponent {
         Component {
             id: outputTerminal
             TerminalPoint {
-                posX: 0.914
-                posY: 0.512
+                posX: 0.95
+                posY: 0.504
                 value: 0
                 type: "Out"
             }
@@ -81,7 +83,7 @@ ElectricalComponent {
 
     Timer {
         id: timer
-        interval: 1000 / signalGenerator.frequency
+        interval: 1000 * signalGenerator.period
         running: true
         repeat: true
         onTriggered: Activity.updateComponent(signalGenerator.index)
@@ -91,7 +93,7 @@ ElectricalComponent {
         source: Activity.url + "arrowUp.svg"
         height: 0.339 * parent.height
         width: 0.123 * parent.width
-        property double posX: 0.632
+        property double posX: 0.688
         property double posY: 0.284
         x: (parent.width - parent.paintedWidth) / 2 + posX * parent.paintedWidth - width / 2
         y: (parent.height - parent.paintedHeight) / 2 + posY * parent.paintedHeight - height / 2
@@ -101,10 +103,11 @@ ElectricalComponent {
         MouseArea {
             anchors.fill: parent
             anchors.centerIn: parent
-            enabled: signalGenerator.frequency != 2
+            enabled: signalGenerator.period != 2
             onPressed: {
                 //console.log("Up pressed")
-                signalGenerator.frequency += 0.25
+                signalGenerator.period *= 2
+                periodIndex++
                 timer.restart()
                 outputTerminals.itemAt(0).value = 1
                 Activity.updateComponent(signalGenerator.index)
@@ -115,8 +118,8 @@ ElectricalComponent {
     Image {
         source: Activity.url + "arrowDown.svg"
         height: 0.339 * parent.height
-        width: 0.123 * parent.width
-        property double posX: 0.632
+        width: 0.133 * parent.width
+        property double posX: 0.688
         property double posY: 0.713
         x: (parent.width - parent.paintedWidth) / 2 + posX * parent.paintedWidth - width / 2
         y: (parent.height - parent.paintedHeight) / 2 + posY * parent.paintedHeight - height / 2
@@ -126,10 +129,11 @@ ElectricalComponent {
         MouseArea {
             anchors.fill: parent
             anchors.centerIn: parent
-            enabled: signalGenerator.frequency != 0.25
+            enabled: signalGenerator.period != 0.25
             onPressed: {
                 //console.log("Down pressed")
-                signalGenerator.frequency -= 0.25
+                signalGenerator.period /= 2
+                periodIndex--
                 timer.restart()
                 outputTerminals.itemAt(0).value = 1
                 Activity.updateComponent(signalGenerator.index)
@@ -141,8 +145,8 @@ ElectricalComponent {
         //id: valueContainer
         source: Activity.url + "valueContainer.svg"
         sourceSize.height: 0.818 * parent.height
-        sourceSize.width: 0.512 * parent.width
-        property double posX: 0.306
+        sourceSize.width: 0.557 * parent.width
+        property double posX: 0.333
         property double posY: 0.503
         x: (parent.width - parent.paintedWidth) / 2 + posX * parent.paintedWidth - width / 2
         y: (parent.height - parent.paintedHeight) / 2 + posY * parent.paintedHeight - height / 2
@@ -160,7 +164,7 @@ ElectricalComponent {
             verticalAlignment: Text.AlignVCenter
             height: parent.height - 10
             width: parent.width - 10
-            text: qsTr("%1 Hz").arg(signalGenerator.frequency.toFixed(2))
+            text: qsTr("%1s").arg(signalGenerator.periodFraction[periodIndex])
         }
     }
 }

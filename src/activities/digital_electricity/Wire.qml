@@ -27,12 +27,12 @@ import GCompris 1.0
 Rectangle {
     id: wire
 
-    property string wireColor
+    //property string wireColor
     property QtObject from
     property QtObject to
 
     height: 5
-    color: wireColor
+    color: from.value == 0 ? "Red" : "Green" //wireColor
     radius: height / 2
     transformOrigin: Item.Left
 

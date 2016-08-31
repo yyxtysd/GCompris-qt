@@ -34,7 +34,7 @@ var selectedTerminal
 var deletedIndex = []
 var components = []
 var connected = []
-var colors = ["red","green","blue","blueviolet","silver"]
+//var colors = ["red","green","blue","blueviolet","silver"]
 
 function start(items_) {
 
@@ -43,42 +43,49 @@ function start(items_) {
 
     items.availablePieces.model.append( {
         "imgName": "zero.svg",
+        "componentSrc": "Zero.qml",
         "imgWidth": 0.12,
         "imgHeight": 0.2,
         "toolTipText": qsTr("Zero input")
     })
     items.availablePieces.model.append( {
         "imgName": "one.svg",
+        "componentSrc": "One.qml",
         "imgWidth": 0.12,
         "imgHeight": 0.2,
         "toolTipText": qsTr("One input")
     })
     items.availablePieces.model.append( {
         "imgName": "gateAnd.svg",
+        "componentSrc": "AndGate.qml",
         "imgWidth": 0.15,
         "imgHeight": 0.12,
         "toolTipText": qsTr("AND gate")
     })
     items.availablePieces.model.append( {
         "imgName": "BCDTo7Segment.svg",
+        "componentSrc": "BCDToSevenSegment.qml",
         "imgWidth": 0.3,
         "imgHeight": 0.4,
         "toolTipText": qsTr("BCD To 7 Segment")
     })
     items.availablePieces.model.append( {
         "imgName": "sevenSegmentDisplay.svgz",
+        "componentSrc": "SevenSegment.qml",
         "imgWidth": 0.18,
         "imgHeight": 0.4,
         "toolTipText": qsTr("7 Segment Display")
     })
     items.availablePieces.model.append( {
         "imgName": "DigitalLightOff.svg",
+        "componentSrc": "DigitalLight.qml",
         "imgWidth": 0.2,
         "imgHeight": 0.18,
         "toolTipText": qsTr("Digital Light")
     })
     items.availablePieces.model.append( {
         "imgName": "signalGenerator.svg",
+        "componentSrc": "SignalGenerator.qml",
         "imgWidth": 0.25,
         "imgHeight": 0.18,
         "toolTipText": qsTr("Signal Generator")
@@ -134,7 +141,7 @@ function createComponent(x, y, src) {
     else
         index = components.length
 
-    var electricComponent
+    /*var electricComponent
     var componentLocation = "qrc:/gcompris/src/activities/digital_electricity/components/"
     if(src == "one.svg")
         electricComponent = Qt.createComponent(componentLocation + "One.qml")
@@ -149,7 +156,9 @@ function createComponent(x, y, src) {
     else if(src == "DigitalLightOff.svg")
         electricComponent = Qt.createComponent(componentLocation + "DigitalLight.qml")
     else if(src == "signalGenerator.svg")
-        electricComponent = Qt.createComponent(componentLocation + "SignalGenerator.qml")
+        electricComponent = Qt.createComponent(componentLocation + "SignalGenerator.qml")*/
+        
+    var electricComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + src)
 
     //console.log("Error loading component:", electricComponent.errorString())
     components[index] = electricComponent.createObject(
@@ -176,12 +185,12 @@ function terminalPointSelected(terminal) {
             //console.log("in2")
             var wireComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Wire.qml")
 
-            var colorIndex = Math.floor(Math.random() * colors.length)
+            //var colorIndex = Math.floor(Math.random() * colors.length)
             var wire = wireComponent.createObject(
                        items.backgroundContainer, {
                             "from": outTerminal,
-                            "to": inTerminal,
-                            "wireColor": colors[colorIndex]
+                            "to": inTerminal
+                            //"wireColor": colors[colorIndex]
                             //"index": index
                         });
             inTerminal.value = outTerminal.value
