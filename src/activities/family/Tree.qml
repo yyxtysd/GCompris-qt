@@ -37,8 +37,8 @@ Item {
     Rectangle {
         id: content
         color: tree.color
-        width: recWidth
-        height: recHeight
+        width: 0.8*recWidth
+        height: 0.8*recHeight
         border.color: borderColor
         border.width: borderWidth
         radius: tree.radius

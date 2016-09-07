@@ -20,22 +20,24 @@
  */
 .pragma library
 .import QtQuick 2.0 as Quick
+.import GCompris 1.0 as GCompris
 
 var currentLevel = 0
-var items
+var items;
+var barAtStart;
 var url = "qrc:/gcompris/src/activities/family/resource/"
 var treeStructure = [
                     // level 1
                     {  edgeList: [
-                                   [0.41, 0.25, 0.64, 0.25],
-                                   [0.53, 0.25, 0.53, 0.50]
+                                   [0.37, 0.25, 0.64, 0.25],
+                                   [0.51, 0.25, 0.51, 0.50]
                                 ],
                        nodePositions: [
                                [0.211, 0.20],
                                [0.633, 0.20],
                                [0.40, 0.50]
                        ],
-                       captions: [ [0.28, 0.60],
+                       captions: [ [0.27, 0.57],
                                   [0.101, 0.25]
                                 ],
                        nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
@@ -47,15 +49,15 @@ var treeStructure = [
                     },
                     // level 2
                     {  edgeList: [
-                                  [0.41, 0.25, 0.64, 0.25],
-                                  [0.53, 0.25, 0.53, 0.50]
+                                   [0.37, 0.25, 0.64, 0.25],
+                                   [0.51, 0.25, 0.51, 0.50]
                                 ],
                       nodePositions: [
                                   [0.211, 0.20],
                                   [0.633, 0.20],
                                   [0.4, 0.50]
                       ],
-                      captions: [  [0.28, 0.60],
+                      captions: [  [0.27, 0.57],
                                   [0.8283, 0.24]
                                ],
                       nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
@@ -66,9 +68,9 @@ var treeStructure = [
 
                     },
                     // level 3
-                    {  edgeList: [ [0.41, 0.25, 0.64, 0.25],
-                                  [0.53, 0.257, 0.44, 0.50],
-                                  [0.53, 0.257, 0.63, 0.50]
+                    {  edgeList: [ [0.37, 0.25, 0.64, 0.25],
+                                  [0.51, 0.257, 0.42, 0.50],
+                                  [0.51, 0.257, 0.63, 0.50]
                                 ],
                        nodePositions: [
                                 [0.211, 0.20],
@@ -76,8 +78,8 @@ var treeStructure = [
                                 [0.33, 0.50],
                                 [0.55, 0.50]
                        ],
-                       captions:[ [0.22, 0.605],
-                                   [0.760, 0.605]
+                       captions:[ [0.21, 0.59],
+                                   [0.740, 0.595]
                                 ],
                        nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "boy2.svg"],
                        currentstate: ["deactive", "deactive", "active", "activeto"],
@@ -86,10 +88,10 @@ var treeStructure = [
                        optionss: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
                     },
                     // level 4
-                    {  edgeList: [ [0.41, 0.25, 0.64, 0.25],
-                                  [0.53, 0.26, 0.33, 0.50],
-                                  [0.53, 0.25, 0.53, 0.50],
-                                  [0.53, 0.25, 0.70, 0.52]
+                    {  edgeList: [ [0.37, 0.25, 0.64, 0.25],
+                                  [0.51, 0.26, 0.33, 0.50],
+                                  [0.51, 0.25, 0.51, 0.50],
+                                  [0.51, 0.25, 0.70, 0.51]
                               ],
                       nodePositions: [
                                  [0.211, 0.20],
@@ -98,8 +100,8 @@ var treeStructure = [
                                  [0.43, 0.50],
                                  [0.65, 0.50]
                             ],
-                      captions: [ [0.281,0.77],
-                                  [0.50,0.75]
+                      captions: [ [0.27,0.74],
+                                  [0.49,0.74]
                                 ],
                       nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
                       currentstate: ["deactive", "deactive", "active", "activeto", "deactive"],
@@ -108,26 +110,26 @@ var treeStructure = [
                       optionss: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
                     },
                     // level 5
-                    {  edgeList: [ [0.48, 0.17, 0.567, 0.17],
-                                   [0.525, 0.17, 0.525, 0.45],
-                                   [0.44, 0.45, 0.60, 0.45],
-                                   [0.525, 0.45, 0.525, 0.65],
+                    {  edgeList: [ [0.445, 0.17, 0.567, 0.17],
+                                   [0.515, 0.17, 0.515, 0.45],
+                                   [0.41, 0.45, 0.60, 0.45],
+                                   [0.515, 0.45, 0.515, 0.65],
                                    [0.33, 0.65, 0.70, 0.65],
                                    [0.33, 0.65, 0.33, 0.70],
-                                   [0.525, 0.65, 0.525, 0.70],
+                                   [0.515, 0.65, 0.515, 0.70],
                                    [0.70, 0.65, 0.70, 0.725]
                       ],
                       nodePositions: [
                                    [0.2911, 0.10],
                                    [0.553, 0.10],
-                                   [0.251, 0.40],
-                                   [0.588, 0.40],
+                                   [0.251, 0.390],
+                                   [0.588, 0.390],
                                    [0.22, 0.70],
                                    [0.43, 0.70],
                                    [0.65, 0.70]
                       ],
-                      captions: [  [0.118,0.76],
-                                   [0.22,0.17],
+                      captions: [  [0.10,0.76],
+                                   [0.20,0.17],
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
                       currentstate: ["activeto", "deactive", "deactive", "deactive", "active", "deactive", "deactive"],
@@ -136,20 +138,20 @@ var treeStructure = [
                       optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
                      },
                      // level 6
-                     { edgeList: [ [0.48, 0.17, 0.567, 0.17],
-                                   [0.525, 0.17, 0.525, 0.45],
-                                   [0.44, 0.45, 0.60, 0.45],
-                                   [0.525, 0.45, 0.525, 0.65],
+                     { edgeList: [ [0.445, 0.17, 0.567, 0.17],
+                                   [0.515, 0.17, 0.515, 0.45],
+                                   [0.41, 0.45, 0.60, 0.45],
+                                   [0.515, 0.45, 0.515, 0.65],
                                    [0.33, 0.65, 0.70, 0.65],
                                    [0.33, 0.65, 0.33, 0.70],
-                                   [0.525, 0.65, 0.525, 0.70],
+                                   [0.515, 0.65, 0.515, 0.70],
                                    [0.70, 0.65, 0.70, 0.725]
                        ],
                        nodePositions: [
                                   [0.2911, 0.10],
                                   [0.553, 0.10],
-                                  [0.251, 0.40],
-                                  [0.588, 0.40],
+                                  [0.251, 0.390],
+                                  [0.588, 0.390],
                                   [0.22, 0.70],
                                   [0.43, 0.70],
                                   [0.65, 0.70]
@@ -165,10 +167,10 @@ var treeStructure = [
                       optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")],
                    },
                    // level 7
-                   {  edgeList: [ [0.48, 0.17, 0.567, 0.17],
-                                  [0.525, 0.17, 0.525, 0.45],
-                                  [0.44, 0.45, 0.60, 0.45],
-                                  [0.525, 0.45, 0.525, 0.65],
+                   {  edgeList: [ [0.44, 0.17, 0.567, 0.17],
+                                  [0.515, 0.17, 0.515, 0.45],
+                                  [0.41, 0.45, 0.60, 0.45],
+                                  [0.515, 0.45, 0.515, 0.65],
                                   [0.33, 0.65, 0.70, 0.65],
                                   [0.33, 0.65, 0.33, 0.70],
                                   [0.525, 0.65, 0.525, 0.70],
@@ -177,8 +179,8 @@ var treeStructure = [
                       nodePositions: [
                                  [0.2911, 0.10],
                                  [0.553, 0.10],
-                                 [0.251, 0.40],
-                                 [0.588, 0.40],
+                                 [0.251, 0.39],
+                                 [0.588, 0.39],
                                  [0.22, 0.70],
                                  [0.43, 0.70],
                                  [0.65, 0.70]
@@ -194,20 +196,20 @@ var treeStructure = [
                       optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
                    },
                    // level 8
-                   {  edgeList: [ [0.48, 0.17, 0.567, 0.17],
-                              [0.525, 0.17, 0.525, 0.45],
-                              [0.44, 0.45, 0.60, 0.45],
-                              [0.525, 0.45, 0.525, 0.65],
+                   {  edgeList: [ [0.44, 0.17, 0.567, 0.17],
+                              [0.515, 0.17, 0.515, 0.45],
+                              [0.41, 0.45, 0.60, 0.45],
+                              [0.515, 0.45, 0.515, 0.65],
                               [0.33, 0.65, 0.70, 0.65],
                               [0.33, 0.65, 0.33, 0.70],
-                              [0.525, 0.65, 0.525, 0.70],
+                              [0.515, 0.65, 0.515, 0.70],
                               [0.70, 0.65, 0.70, 0.725]
                    ],
                    nodePositions: [
                               [0.2911, 0.10],
                               [0.553, 0.10],
-                              [0.251, 0.40],
-                              [0.588, 0.40],
+                              [0.251, 0.39],
+                              [0.588, 0.39],
                               [0.22, 0.70],
                               [0.43, 0.70],
                               [0.65, 0.70]
@@ -225,7 +227,7 @@ var treeStructure = [
                    // level 9
                    {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                                    [0.525, 0.17, 0.525, 0.45],
-                                   [0.44, 0.45, 0.60, 0.45],
+                                   [0.41, 0.45, 0.60, 0.45],
                                    [0.22, 0.45, 0.254, 0.45],
                                    [0.22, 0.45, 0.22, 0.72],
                                    [0.22, 0.71, 0.25, 0.71],
@@ -257,7 +259,7 @@ var treeStructure = [
                    // level 10
                    {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
-                              [0.44, 0.45, 0.60, 0.45],
+                              [0.41, 0.45, 0.60, 0.45],
                               [0.22, 0.45, 0.254, 0.45],
                               [0.22, 0.45, 0.22, 0.72],
                               [0.22, 0.71, 0.25, 0.71]
@@ -270,8 +272,8 @@ var treeStructure = [
 
                   ],
 
-                  captions: [   [0.118,0.76],
-                                [0.83,0.45]
+                  captions: [   [0.10,0.76],
+                                [0.77,0.45]
                             ],
                   nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
                   currentstate: ["deactive", "deactive", "activeto", "active"],
@@ -282,7 +284,7 @@ var treeStructure = [
                    // level 11
                    {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
                               [0.525, 0.17, 0.525, 0.45],
-                              [0.44, 0.45, 0.60, 0.45],
+                              [0.41, 0.45, 0.60, 0.45],
                               [0.22, 0.45, 0.254, 0.45],
                               [0.22, 0.45, 0.22, 0.72],
                               [0.22, 0.71, 0.25, 0.71]
@@ -295,7 +297,7 @@ var treeStructure = [
 
                        ],
 
-                 captions: [  [0.83,0.45],
+                 captions: [  [0.77,0.45],
                               [0.118,0.76],
                            ],
                  nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
@@ -305,9 +307,9 @@ var treeStructure = [
                  optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                   },
                    // level 12
-                   {  edgeList: [  [0.49, 0.17, 0.56, 0.17],
-                           [0.525, 0.17, 0.525, 0.45],
-                           [0.44, 0.45, 0.60, 0.45],
+                   {  edgeList: [  [0.45, 0.17, 0.56, 0.17],
+                           [0.515, 0.17, 0.515, 0.45],
+                           [0.41, 0.45, 0.60, 0.45],
                            [0.22, 0.45, 0.254, 0.45],
                            [0.22, 0.45, 0.22, 0.72],
                            [0.22, 0.71, 0.25, 0.71]
@@ -331,9 +333,9 @@ var treeStructure = [
               optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
                    // level 13
-                   {  edgeList: [  [0.48, 0.17, 0.55, 0.17],
-                           [0.525, 0.17, 0.525, 0.45],
-                           [0.44, 0.45, 0.60, 0.45],
+                   {  edgeList: [  [0.44, 0.17, 0.55, 0.17],
+                           [0.505, 0.17, 0.505, 0.45],
+                           [0.41, 0.45, 0.60, 0.45],
                            [0.22, 0.45, 0.254, 0.45],
                            [0.22, 0.45, 0.22, 0.72],
                            [0.22, 0.71, 0.25, 0.71]
@@ -356,11 +358,11 @@ var treeStructure = [
               optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
                    // level 14
-                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
-                           [0.70, 0.16, 0.70, 0.70],
-                           [0.70, 0.50, 0.58, 0.50],
-                           [0.405, 0.53, 0.345, 0.53],
-                           [0.69, 0.695, 0.75, 0.695]
+                   {  edgeList: [     [0.62, 0.16, 0.745, 0.16],
+                           [0.69, 0.16, 0.69, 0.70],
+                           [0.69, 0.52, 0.555, 0.52],
+                           [0.405, 0.53, 0.32, 0.53],
+                           [0.68, 0.695, 0.75, 0.695]
             ],
             nodePositions: [
                           [0.463, 0.10],
@@ -380,11 +382,11 @@ var treeStructure = [
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
                    // level 15
-                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
-                              [0.70, 0.16, 0.70, 0.70],
-                              [0.70, 0.50, 0.58, 0.50],
-                              [0.405, 0.53, 0.345, 0.53],
-                              [0.69, 0.695, 0.75, 0.695]
+                   {  edgeList: [     [0.62, 0.16, 0.745, 0.16],
+                              [0.69, 0.16, 0.69, 0.70],
+                              [0.69, 0.50, 0.555, 0.50],
+                              [0.405, 0.53, 0.32, 0.53],
+                              [0.68, 0.695, 0.75, 0.695]
                ],
             nodePositions: [
                            [0.463, 0.10],
@@ -404,11 +406,11 @@ var treeStructure = [
              optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
                    // level 16
-                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
-                            [0.70, 0.16, 0.70, 0.70],
-                            [0.70, 0.50, 0.58, 0.50],
-                            [0.405, 0.53, 0.345, 0.53],
-                            [0.69, 0.695, 0.75, 0.695]
+                   {  edgeList: [     [0.62, 0.16, 0.745, 0.16],
+                            [0.69, 0.16, 0.69, 0.70],
+                            [0.69, 0.50, 0.555, 0.50],
+                            [0.405, 0.53, 0.32, 0.53],
+                            [0.68, 0.695, 0.75, 0.695]
                   ],
              nodePositions: [
                             [0.463, 0.10],
@@ -419,7 +421,7 @@ var treeStructure = [
                  ],
 
             captions: [ [0.02,0.51],
-                        [0.78,0.5340]
+                        [0.78,0.52]
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
             currentstate: ["deactive", "deactive", "deactive", "active", "activeto"],
@@ -428,12 +430,12 @@ var treeStructure = [
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
                    // level 17
-                   {  edgeList: [     [0.54, 0.16, 0.61, 0.16],
-                            [0.58, 0.16, 0.58, 0.70],
-                            [0.58, 0.50, 0.475, 0.50],
-                            [0.310, 0.53, 0.235, 0.53],
-                            [0.57, 0.695, 0.63, 0.695],
-                            [0.615, 0.765, 0.51, 0.765]
+                   {  edgeList: [     [0.50, 0.16, 0.61, 0.16],
+                            [0.56, 0.16, 0.56, 0.70],
+                            [0.56, 0.50, 0.44, 0.50],
+                            [0.310, 0.53, 0.21, 0.53],
+                            [0.555, 0.695, 0.63, 0.695],
+                            [0.615, 0.765, 0.47, 0.765]
                     ],
             nodePositions: [
                             [0.343, 0.10],
@@ -454,10 +456,10 @@ var treeStructure = [
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
                    // level 18
-                   {  edgeList: [     [0.65, 0.16, 0.745, 0.16],
-                            [0.70, 0.16, 0.70, 0.70],
-                            [0.70, 0.50, 0.58, 0.50],
-                            [0.41, 0.53, 0.34, 0.53],
+                   {  edgeList: [     [0.61, 0.16, 0.745, 0.16],
+                            [0.69, 0.16, 0.69, 0.70],
+                            [0.69, 0.50, 0.56, 0.50],
+                            [0.41, 0.53, 0.32, 0.53],
                             [0.69, 0.695, 0.75, 0.695]
                     ],
             nodePositions: [
@@ -485,10 +487,13 @@ var answerButtonRatio = 0;
 function start(items_) {
     items = items_
     currentLevel = 0
+    barAtStart = GCompris.ApplicationSettings.isBarHidden;
+    GCompris.ApplicationSettings.isBarHidden = true;
     initLevel()
 }
 
 function stop() {
+    GCompris.ApplicationSettings.isBarHidden = barAtStart;
 }
 
 function initLevel() {
