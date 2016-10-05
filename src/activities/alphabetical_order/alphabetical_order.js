@@ -23,22 +23,20 @@
 var currentLevel = 0
 var numberOfLevel = 10
 var items
-var alphabet = []
-var asciiAlphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+//var alphabet = ['ab','cd','ef','gh']
+var alphabet = ['a','b','c','d','e','f','g','h','i',
+                'j','k','l','m','n','o','p','q','r',
+                's','t','u','v','w','x','y','z']
 var solution = []
-var dataSetUrl= "qrc:/gcompris/src/activities/gletters/resource/"
-
 var totalLettersNoOk = [3,3,5,5,6,6,6,7,8,8]
 var guessLettersNoOk = [2,3,2,2,2,2,3,3,4,5]
-
 var totalLetters = 3
 var guessLetters = 1
-
 var modelAux
 var model
 var badAnswers = []   //[{model: [], modelAux: [], solution: []}]
 var levelsPassed = 0
-var difficulty = 0  // 0 = extremely easy; 1 = very easy; 2 = easy; 3 = normal; 4 = hard; 5 = very hard; 6 = insane
+var difficulty = 0
 // 0 = extremely easy: totalLetters = [3]; guessLetters = [1-2]
 // 1 = very easy: totalLetters = [3]; guessLetters = [2-3]
 // 2 = easy: totalLetters = [4]; guessLetters = [2-4]
@@ -61,34 +59,6 @@ function start(items_) {
 
     items.score.numberOfSubLevels = 5
     items.score.currentSubLevel = 1
-
-    // imported from "readingh" activity
-    var locale = items.locale == "system" ? "$LOCALE" : items.locale
-
-    items.wordlist.loadFromFile(GCompris.ApplicationInfo.getLocaleFilePath(
-            dataSetUrl + "default-"+locale+".json"));
-    // If wordlist is empty, we try to load from short locale and if not present again, we switch to default one
-    var localeUnderscoreIndex = locale.indexOf('_')
-    // probably exist a better way to see if the list is empty
-    if(items.wordlist.maxLevel == 0) {
-        var localeShort;
-        // We will first look again for locale xx (without _XX if exist)
-        if(localeUnderscoreIndex > 0) {
-            localeShort = locale.substring(0, localeUnderscoreIndex)
-        }
-        else {
-            localeShort = locale;
-        }
-        // If not found, we will use the default file
-        items.wordlist.useDefault = true
-        items.wordlist.loadFromFile(GCompris.ApplicationInfo.getLocaleFilePath(
-        dataSetUrl + "default-"+localeShort+".json"));
-        // We remove the using of default file for next time we enter this function
-        items.wordlist.useDefault = false
-    }
-
-    //setup the alphabet from file
-    createAlphabet()
 
     initLevel()
 }
@@ -197,12 +167,7 @@ function init() {
         if (badAnswers.length == 0)
             levelsPassed = 0
 
-            // ['a','b','c','d']
-            if (currentLevel > 1)
-                solution = makeSolution(alphabet, totalLetters)
-            // just for first level, use the standard english (ascii) alphabet
-            else
-                solution = makeSolution(asciiAlphabet, totalLetters)
+            solution = makeSolution(alphabet, totalLetters)
 
             // 3 1 4 2
             var numbers = getNumbers(totalLetters)
@@ -246,25 +211,6 @@ function init() {
     for (i = 0; i < model.length; i++)
         items.listModel.append({"letter": model[i]})
 
-}
-
-/* goes through each level (in gletters json files) and appends all letters
-  (removing digits and uppercase duplicates) in the alphabet */
-function createAlphabet() {
-    alphabet = []
-    // all "words"
-    for (var i = 1; i < items.wordlist.wordList.levels.length; i++) {
-        var words = items.wordlist.getLevelWordList(i).words
-        // all letters in "words"
-        for (var j = 0; j < words.length; j++) {
-            if (alphabet.indexOf(words[j].toLowerCase()) < 0 &&
-                    (words[j] >= '0' && words[j] <= '9') == false ) {
-                alphabet = alphabet.concat(words[j])
-            }
-        }
-    }
-    // sort the alphabet
-    alphabet = GCompris.ApplicationInfo.localeSort(alphabet)
 }
 
 function sortNumber(a,b) {

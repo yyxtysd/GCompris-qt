@@ -34,9 +34,6 @@ ActivityBase {
         signal start
         signal stop
 
-        // system locale by default
-        property string locale: "system"
-
         Component.onCompleted: {
             activity.start.connect(start)
             activity.stop.connect(stop)
@@ -56,8 +53,6 @@ ActivityBase {
             property alias listModelInput: listModelInput
             property alias repeater: repeater
             property alias inputRepeater: inputRepeater
-            property alias locale: background.locale
-            property alias wordlist: wordlist
             property alias message: message
             property bool gameFinished: false
             property int delay: 6
@@ -600,7 +595,6 @@ ActivityBase {
             currentActivity: activity
             content: Component {
                 Item {
-                    property alias localeBox: localeBox
                     height: column.height
 
                     property alias availableLangs: langs.languages
@@ -613,27 +607,6 @@ ActivityBase {
                         spacing: 10
                         width: parent.width
 
-                        Flow {
-                            spacing: 5
-                            width: dialogActivityConfig.width
-                            GCComboBox {
-                                id: localeBox
-                                model: langs.languages
-                                background: dialogActivityConfig
-                                label: qsTr("Select your locale")
-                            }
-                        }
-                        /* TODO handle this:
-                        GCDialogCheckBox {
-                            id: uppercaseBox
-                            width: 250 * ApplicationInfo.ratio
-                            text: qsTr("Uppercase only mode")
-                            checked: true
-                            onCheckedChanged: {
-                                print("uppercase changed")
-                            }
-                        }
-*/
                         GCDialogCheckBox {
                             id: okButtonBox
                             width: 250 * ApplicationInfo.ratio
@@ -679,55 +652,11 @@ ActivityBase {
             onClose: home()
             onLoadData: {
                 if(dataToSave) {
-                    background.locale = dataToSave["locale"];
                     items.okBoxChecked = dataToSave["okButton"] === "true" ? true : false
                     items.easyMode = dataToSave["mode"] === "true" ? true : false
                     items.playLetter = dataToSave["play"] === "true" ? true : false
                 }
             }
-            onSaveData: {
-                var oldLocale = background.locale;
-                var newLocale = dialogActivityConfig.configItem.availableLangs[dialogActivityConfig.loader.item.localeBox.currentIndex].locale;
-                // Remove .UTF-8
-                if(newLocale.indexOf('.') != -1) {
-                    newLocale = newLocale.substring(0, newLocale.indexOf('.'))
-                }
-                dataToSave = {"locale": newLocale,"okButton": items.okBoxChecked,"mode": items.easyMode,"play": items.playLetter}
-
-                background.locale = newLocale;
-
-                // Restart the activity with new information
-                if(oldLocale !== newLocale) {
-                    background.stop();
-                    background.start();
-                }
-            }
-
-
-            function setDefaultValues() {
-                var localeUtf8 = background.locale;
-                if(background.locale != "system") {
-                    localeUtf8 += ".UTF-8";
-                }
-
-                for(var i = 0 ; i < dialogActivityConfig.configItem.availableLangs.length ; i ++) {
-                    if(dialogActivityConfig.configItem.availableLangs[i].locale === localeUtf8) {
-                        dialogActivityConfig.loader.item.localeBox.currentIndex = i;
-                        break;
-                    }
-                }
-            }
-        }
-
-        Wordlist {
-            id: wordlist
-            defaultFilename: Activity.dataSetUrl + "default-en.json"
-            // To switch between locales: xx_XX stored in configuration and
-            // possibly correct xx if available (ie fr_FR for french but dataset is fr.)
-            useDefault: false
-            filename: ""
-
-            onError: console.log("Reading: Wordlist error: " + msg);
         }
 
         Score {
@@ -752,7 +681,6 @@ ActivityBase {
             onHomeClicked: activity.home()
             onConfigClicked: {
                 dialogActivityConfig.active = true
-                dialogActivityConfig.setDefaultValues()
                 displayDialog(dialogActivityConfig)
             }
         }
@@ -761,7 +689,5 @@ ActivityBase {
             id: bonus
             Component.onCompleted: win.connect(Activity.nextSubLevel)
         }
-
     }
-
 }
