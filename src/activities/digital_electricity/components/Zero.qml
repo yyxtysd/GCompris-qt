@@ -20,16 +20,10 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.3
-//import "digital_electricity.js" as Activity
-
 import GCompris 1.0
 
 ElectricalComponent {
     id: zero
-    imgWidth: 0.12
-    imgHeight: 0.2
-    imgSrc: "zero.svg"
-    toolTipTxt: qsTr("Zero input")
     terminalSize: 0.205
     noOfInputs: 0
     noOfOutputs: 1

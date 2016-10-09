@@ -24,22 +24,16 @@ import GCompris 1.0
 
 ElectricalComponent {
     id: digitalLight
-    imgWidth: 0.2
-    imgHeight: 0.18
-    imgSrc: "DigitalLightOff.svg"
-    toolTipTxt: qsTr("Digital Light")
-    terminalSize: 0.358
+    terminalSize: 0.219
     noOfInputs: 1
-    noOfOutputs: 1
+    noOfOutputs: 0
 
-    information: qsTr("Digital light is used to check the output of other digital components. It forwards " +
-                      "its input to its output. If the input is 1, then the digital light will glow, else " +
-                      "it will turn off.")
+    information: qsTr("Digital light is used to check the output of other digital components. It turns " +
+                      "green if the input is 1, and turns red if the input is 0.")
 
     truthTable: []
 
     property alias inputTerminals: inputTerminals
-    property alias outputTerminals: outputTerminals
 
     Repeater {
         id: inputTerminals
@@ -48,48 +42,18 @@ ElectricalComponent {
         Component {
             id: inputTerminal
             TerminalPoint {
-                posX: 0.066
-                posY: 0.497
+                posX: 0.068
+                posY: 0.495
                 type: "In"
-            }
-        }
-    }
-
-    Repeater {
-        id: outputTerminals
-        model: 1
-        delegate: outputTerminal
-        Component {
-            id: outputTerminal
-            TerminalPoint {
-                posX: 0.934
-                posY: 0.497
-                type: "Out"
             }
         }
     }
 
     function updateOutput(wireVisited) {
 
-        var terminal = outputTerminals.itemAt(0)
-        terminal.value = inputTerminals.itemAt(0).value == 1 ? 1 : 0
-        if(terminal.value == 1)
+        if(inputTerminals.itemAt(0).value == 1)
             imgSrc = "DigitalLightOn.svg"
         else
             imgSrc = "DigitalLightOff.svg"
-
-        for(var i = 0 ; i < terminal.wires.length ; ++i)
-            terminal.wires[i].to.value = terminal.value
-
-        var componentVisited = []
-        for(var i = 0 ; i < terminal.wires.length ; ++i) {
-            var wire = terminal.wires[i]
-            var component = wire.to.parent
-            if(componentVisited[component] != true && wireVisited[wire] != true) {
-                componentVisited[component] = true
-                wireVisited[wire] = true
-                component.updateOutput(wireVisited)
-            }
-        }
     }
 }

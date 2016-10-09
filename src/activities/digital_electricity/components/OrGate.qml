@@ -1,4 +1,4 @@
-/* GCompris - One.qml
+/* GCompris - OrGate.qml
  *
  * Copyright (C) 2016 Pulkit Gupta <pulkitnsit@gmail.com>
  *
@@ -23,22 +23,37 @@ import QtQuick 2.3
 import GCompris 1.0
 
 ElectricalComponent {
-    id: one
-    terminalSize: 0.218
-    noOfInputs: 0
+    id: orGate
+    terminalSize: 0.251
+    noOfInputs: 2
     noOfOutputs: 1
+    property variant inputTerminalPosY: [0.223, 0.786]
 
-    information: qsTr("Digital electronics is a branch of electronics that handle digital signals " +
-                      "(i.e discrete signals instead of continous signals). Therefore all values within " +
-                      "a range or band represent the same numeric value. In most cases, the number of " +
-                      "these states is two and they are represented by two voltage bands: one near a " +
-                      "reference value (typically termed as 'ground' or zero volts), and other value near " +
-                      "the supply voltage. These correspond to the 'false' ('0') and 'true' ('1') values " +
-                      "of the Boolean domain respectively (named after its inventor, George Boole). " +
-                      "In this activity, you can give '0' and '1' as input to other logical devices, " +
-                      "and see their output through an output device.")
+    information: qsTr("OR gate takes 2 or more binary input in its input terminals and outputs a single " +
+                      "value. The output is 1 if any of the input is 1, else it is 0. In this activity, a " +
+                      "2 input OR gate is shown. Truth table for 2 input OR gate is:")
+    truthTable: [['A','B',"A+B"],
+                 ['0','0','0'],
+                 ['0','1','1'],
+                 ['1','0','1'],
+                 ['1','1','1']]
 
+    property alias inputTerminals: inputTerminals
     property alias outputTerminals: outputTerminals
+
+    Repeater {
+        id: inputTerminals
+        model: 2
+        delegate: inputTerminal
+        Component {
+            id: inputTerminal
+            TerminalPoint {
+                posX: 0.045
+                posY: inputTerminalPosY[index]
+                type: "In"
+            }
+        }
+    }
 
     Repeater {
         id: outputTerminals
@@ -47,9 +62,8 @@ ElectricalComponent {
         Component {
             id: outputTerminal
             TerminalPoint {
-                posX: 0.91
-                posY: 0.5
-                value: 1
+                posX: 0.955
+                posY: 0.509
                 type: "Out"
             }
         }
@@ -57,6 +71,7 @@ ElectricalComponent {
 
     function updateOutput(wireVisited) {
         var terminal = outputTerminals.itemAt(0)
+        terminal.value = inputTerminals.itemAt(0).value | inputTerminals.itemAt(1).value
         for(var i = 0 ; i < terminal.wires.length ; ++i)
             terminal.wires[i].to.value = terminal.value
 

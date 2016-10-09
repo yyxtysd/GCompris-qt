@@ -24,10 +24,6 @@ import GCompris 1.0
 
 ElectricalComponent {
     id: andGate
-    imgWidth: 0.15
-    imgHeight: 0.12
-    imgSrc: "gateAnd.svg"
-    toolTipTxt: qsTr("AND gate")
     terminalSize: 0.246
     noOfInputs: 2
     noOfOutputs: 1
@@ -38,10 +34,10 @@ ElectricalComponent {
                       "a 2 input AND gate is shown. Truth table for 2 input AND gate is:")
 
     truthTable: [['A','B',"A.B"],
-                ['0','0','0'],
-                ['0','1','0'],
-                ['1','0','0'],
-                ['1','1','1']]
+                 ['0','0','0'],
+                 ['0','1','0'],
+                 ['1','0','0'],
+                 ['1','1','1']]
 
     property alias inputTerminals: inputTerminals
     property alias outputTerminals: outputTerminals
@@ -77,7 +73,6 @@ ElectricalComponent {
     function updateOutput(wireVisited) {
         var terminal = outputTerminals.itemAt(0)
         terminal.value = inputTerminals.itemAt(0).value & inputTerminals.itemAt(1).value
-        //console.log("component",andGate,terminal.value)
         for(var i = 0 ; i < terminal.wires.length ; ++i)
             terminal.wires[i].to.value = terminal.value
 

@@ -22,7 +22,7 @@
 .pragma library
 .import QtQuick 2.3 as Quick
 
-var currentLevel = 0
+var currentLevel = 1
 var numberOfLevel = 4
 var items
 var url = "qrc:/gcompris/src/activities/digital_electricity/resource/"
@@ -34,62 +34,11 @@ var selectedTerminal
 var deletedIndex = []
 var components = []
 var connected = []
-//var colors = ["red","green","blue","blueviolet","silver"]
 
 function start(items_) {
 
     items = items_
-    currentLevel = 0
-
-    items.availablePieces.model.append( {
-        "imgName": "zero.svg",
-        "componentSrc": "Zero.qml",
-        "imgWidth": 0.12,
-        "imgHeight": 0.2,
-        "toolTipText": qsTr("Zero input")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "one.svg",
-        "componentSrc": "One.qml",
-        "imgWidth": 0.12,
-        "imgHeight": 0.2,
-        "toolTipText": qsTr("One input")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateAnd.svg",
-        "componentSrc": "AndGate.qml",
-        "imgWidth": 0.15,
-        "imgHeight": 0.12,
-        "toolTipText": qsTr("AND gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "BCDTo7Segment.svg",
-        "componentSrc": "BCDToSevenSegment.qml",
-        "imgWidth": 0.3,
-        "imgHeight": 0.4,
-        "toolTipText": qsTr("BCD To 7 Segment")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "sevenSegmentDisplay.svgz",
-        "componentSrc": "SevenSegment.qml",
-        "imgWidth": 0.18,
-        "imgHeight": 0.4,
-        "toolTipText": qsTr("7 Segment Display")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "DigitalLightOff.svg",
-        "componentSrc": "DigitalLight.qml",
-        "imgWidth": 0.2,
-        "imgHeight": 0.18,
-        "toolTipText": qsTr("Digital Light")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "signalGenerator.svg",
-        "componentSrc": "SignalGenerator.qml",
-        "imgWidth": 0.25,
-        "imgHeight": 0.18,
-        "toolTipText": qsTr("Signal Generator")
-    })
+    currentLevel = 1
     initLevel()
 }
 
@@ -108,6 +57,121 @@ function stop() {
 
 function initLevel() {
 
+    items.bar.level = currentLevel
+    var sizeMultiplier = 1 + (1 / (1.5 * currentLevel))
+
+    items.availablePieces.model.append( {
+        "imgName": "zero.svg",
+        "componentSrc": "Zero.qml",
+        "imgWidth": sizeMultiplier * 0.12,
+        "imgHeight": sizeMultiplier * 0.2,
+        "toolTipText": qsTr("Zero input")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "one.svg",
+        "componentSrc": "One.qml",
+        "imgWidth": sizeMultiplier * 0.12,
+        "imgHeight": sizeMultiplier * 0.2,
+        "toolTipText": qsTr("One input")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "DigitalLightOff.svg",
+        "componentSrc": "DigitalLight.qml",
+        "imgWidth": sizeMultiplier * 0.12,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("Digital Light")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "gateAnd.svg",
+        "componentSrc": "AndGate.qml",
+        "imgWidth": sizeMultiplier * 0.15,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("AND gate")
+    })
+    if(currentLevel > 1) {
+        items.availablePieces.model.append( {
+            "imgName": "gateNand.svg",
+            "componentSrc": "NandGate.qml",
+            "imgWidth": sizeMultiplier * 0.15,
+            "imgHeight": sizeMultiplier * 0.12,
+            "toolTipText": qsTr("NAND gate")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "gateNor.svg",
+            "componentSrc": "NorGate.qml",
+            "imgWidth": sizeMultiplier * 0.15,
+            "imgHeight": sizeMultiplier * 0.12,
+            "toolTipText": qsTr("NOR gate")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "gateNot.svg",
+            "componentSrc": "NotGate.qml",
+            "imgWidth": sizeMultiplier * 0.15,
+            "imgHeight": sizeMultiplier * 0.12,
+            "toolTipText": qsTr("NOT gate")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "gateOr.svg",
+            "componentSrc": "OrGate.qml",
+            "imgWidth": sizeMultiplier * 0.15,
+            "imgHeight": sizeMultiplier * 0.12,
+            "toolTipText": qsTr("OR gate")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "gateXor.svg",
+            "componentSrc": "XorGate.qml",
+            "imgWidth": sizeMultiplier * 0.15,
+            "imgHeight": sizeMultiplier * 0.12,
+            "toolTipText": qsTr("XOR gate")
+        })
+    }
+    if(currentLevel > 2) {
+        items.availablePieces.model.append( {
+            "imgName": "comparator.svg",
+            "componentSrc": "Comparator.qml",
+            "imgWidth": sizeMultiplier * 0.3,
+            "imgHeight": sizeMultiplier * 0.25,
+            "toolTipText": qsTr("Comparator")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "BCDTo7Segment.svg",
+            "componentSrc": "BCDToSevenSegment.qml",
+            "imgWidth": sizeMultiplier * 0.3,
+            "imgHeight": sizeMultiplier * 0.4,
+            "toolTipText": qsTr("BCD To 7 Segment")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "sevenSegmentDisplay.svgz",
+            "componentSrc": "SevenSegment.qml",
+            "imgWidth": sizeMultiplier * 0.18,
+            "imgHeight": sizeMultiplier * 0.4,
+            "toolTipText": qsTr("7 Segment Display")
+        })
+    }
+    if(currentLevel > 3) {
+        items.availablePieces.model.append( {
+            "imgName": "switchOff.svg",
+            "componentSrc": "Switch.qml",
+            "imgWidth": sizeMultiplier * 0.18,
+            "imgHeight": sizeMultiplier * 0.15,
+            "toolTipText": qsTr("Switch")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "signalGenerator.svg",
+            "componentSrc": "SignalGenerator.qml",
+            "imgWidth": sizeMultiplier * 0.25,
+            "imgHeight": sizeMultiplier * 0.18,
+            "toolTipText": qsTr("Signal Generator")
+        })
+        items.availablePieces.model.append( {
+            "imgName": "bcdCounter.svg",
+            "componentSrc": "BcdCounter.qml",
+            "imgWidth": sizeMultiplier * 0.3,
+            "imgHeight": sizeMultiplier * 0.4,
+            "toolTipText": qsTr("BCD Counter")
+        })
+    }
+
     items.availablePieces.view.currentDisplayedGroup = 0
     items.availablePieces.view.previousNavigation = 1
     items.availablePieces.view.nextNavigation = 1
@@ -121,18 +185,36 @@ function initLevel() {
     updateToolTip("")
 }
 
+function nextLevel() {
+
+    if(numberOfLevel < ++currentLevel ) {
+        currentLevel = 1
+    }
+    reset();
+}
+
+function previousLevel() {
+
+    if(--currentLevel < 1) {
+        currentLevel = numberOfLevel
+    }
+    reset();
+}
+
 function reset() {
 
     deselect()
     stop()
+    items.availablePieces.model.clear()
     initLevel()
 }
 
-function createComponent(x, y, src) {
+// Creates component from ListWidget to the drawing board area
+function createComponent(x, y, componentIndex) {
 
     x = x / items.backgroundContainer.width
     y = y / items.backgroundContainer.height
-    //console.log("x",x,"y",y)
+
     var index
     if(deletedIndex.length > 0) {
         index = deletedIndex[deletedIndex.length - 1]
@@ -141,38 +223,33 @@ function createComponent(x, y, src) {
     else
         index = components.length
 
-    /*var electricComponent
-    var componentLocation = "qrc:/gcompris/src/activities/digital_electricity/components/"
-    if(src == "one.svg")
-        electricComponent = Qt.createComponent(componentLocation + "One.qml")
-    else if(src == "zero.svg")
-        electricComponent = Qt.createComponent(componentLocation + "Zero.qml")
-    else if(src == "gateAnd.svg")
-        electricComponent = Qt.createComponent(componentLocation + "AndGate.qml")
-    else if(src == "BCDTo7Segment.svg")
-        electricComponent = Qt.createComponent(componentLocation + "BCDToSevenSegment.qml")
-    else if(src == "sevenSegmentDisplay.svgz")
-        electricComponent = Qt.createComponent(componentLocation + "SevenSegment.qml")
-    else if(src == "DigitalLightOff.svg")
-        electricComponent = Qt.createComponent(componentLocation + "DigitalLight.qml")
-    else if(src == "signalGenerator.svg")
-        electricComponent = Qt.createComponent(componentLocation + "SignalGenerator.qml")*/
-        
-    var electricComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + src)
+    var component = items.availablePieces.repeater.itemAt(componentIndex)
+    var electricComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" +
+                                               component.source)
 
     //console.log("Error loading component:", electricComponent.errorString())
     components[index] = electricComponent.createObject(
                         items.backgroundContainer, {
                             "index": index,
                             "posX": x,
-                            "posY": y
+                            "posY": y,
+                            "imgSrc": component.imageName,
+                            "toolTipTxt": component.toolTipTxt,
+                            "imgWidth": component.imageWidth,
+                            "imgHeight": component.imageHeight
                         });
+
     toolDeleteSticky = false
     deselect()
     componentSelected(index)
     updateComponent(index)
 }
 
+/* Creates wire between two terminals. Condition for creation of wire is that an input terminal
+ * can only be connected to 1 wire, output terminals can be connected by any number of wires, and
+ * an input terminal can be connected with an output terminal only. 'connected' variable is used
+ * to make sure that an input is connected by only 1 wire.
+*/
 function terminalPointSelected(terminal) {
 
     if(selectedTerminal == -1 || selectedTerminal == terminal)
@@ -180,18 +257,12 @@ function terminalPointSelected(terminal) {
     else if((selectedTerminal.type != terminal.type) && (selectedTerminal.parent != terminal.parent)) {
         var inTerminal = terminal.type == "In" ? terminal : selectedTerminal
         var outTerminal = terminal.type == "Out" ? terminal : selectedTerminal
-        //console.log("in, connected[inIndex]",connected[inIndex],"inIndex",inIndex)
         if(connected[inTerminal] == undefined || connected[inTerminal] == -1) {
-            //console.log("in2")
             var wireComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Wire.qml")
-
-            //var colorIndex = Math.floor(Math.random() * colors.length)
             var wire = wireComponent.createObject(
                        items.backgroundContainer, {
                             "from": outTerminal,
                             "to": inTerminal
-                            //"wireColor": colors[colorIndex]
-                            //"index": index
                         });
             inTerminal.value = outTerminal.value
             inTerminal.wires.push(wire)
@@ -204,19 +275,23 @@ function terminalPointSelected(terminal) {
         deselect()
     }
     else {
-        //console.log("else")
         deselect()
         selectedTerminal = terminal
         terminal.selected = true
     }
 }
 
+/* Updates the output of the component. 'wireVisited' is used to update the value of
+ * each wire once which will avoid updating the outputs of components in an infinite loop.
+*/
 function updateComponent(index) {
-    //console.log("updateComponent",index)
     var wireVisited = []
     components[index].updateOutput(wireVisited)
 }
 
+/* Updates the orientation of the wire. It is called whenever a new wire is created or
+ * an object is rotated.
+*/
 function updateWires(index) {
 
     var component = components[index]
@@ -225,16 +300,14 @@ function updateWires(index) {
 
     var rotatedAngle = component.initialAngle * Math.PI / 180
     for(var i = 0 ; i < component.noOfInputs ; ++i) {
-        var terminal = component.inputTerminals.itemAt(i) //terminals[component.inputs[i]]
+        var terminal = component.inputTerminals.itemAt(i)
         if(terminal.wires.length != 0) {
             var wire = terminal.wires[0]
             var otherAngle = wire.from.parent.initialAngle * Math.PI / 180
-            //components[terminals[wire.from].componentIndex].initialAngle * Math.PI / 180
             var x = wire.from.xCenterFromComponent
             var y = wire.from.yCenterFromComponent
             var x1 = wire.from.xCenter - x + x * Math.cos(otherAngle) - y * Math.sin(otherAngle)
             var y1 = wire.from.yCenter - y + x * Math.sin(otherAngle) + y * Math.cos(otherAngle)
-            //console.log(otherComponentAngle,x,y,x1,y1)
 
             x = terminal.xCenterFromComponent
             y = terminal.yCenterFromComponent
@@ -248,13 +321,10 @@ function updateWires(index) {
             wire.y = y1
             wire.width = width
             wire.rotation = angle
-            //wire.rotateAngle = angle
         }
     }
-    //console.log("component index",component.index,"component.outputs.length",component.outputs.length)
     for(var i = 0 ; i < component.noOfOutputs ; ++i) {
-        var terminal = component.outputTerminals.itemAt(i) //terminals[component.outputs[i]]
-        //console.log("terminal index",terminal.index,"component.outputs[i]",component.outputs[i])
+        var terminal = component.outputTerminals.itemAt(i)
         for(var j = 0 ; j < terminal.wires.length ; ++j) {
             var x = terminal.xCenterFromComponent
             var y = terminal.yCenterFromComponent
@@ -305,15 +375,13 @@ function removeComponent(index) {
 
     var component = components[index]
     for(var i = 0 ; i < component.noOfInputs ; ++i) {
-        var terminal = component.inputTerminals.itemAt(i) //terminals[component.inputs[i]]
+        var terminal = component.inputTerminals.itemAt(i)
         if(terminal.wires.length != 0) // Input Terminal can have only 1 wire
             removeWire(terminal.wires[0])
     }
     for(var i = 0 ; i < component.noOfOutputs ; ++i) {
         var terminal = component.outputTerminals.itemAt(i)
-        //console.log("Remove terminal.wireIndex.length",terminal.wireIndex.length)
         while (terminal.wires.length != 0) {
-            //console.log("terminal.wireIndex[j]",terminal.wireIndex[j])
             removeWire(terminal.wires[0]) // Output Terminal can have more than 1 wire
         }
     }
@@ -331,13 +399,10 @@ function removeWire(wire) {
     inTerminal.wires.splice(removeIndex,1)
     removeIndex = outTerminal.wires.indexOf(wire)
     outTerminal.wires.splice(removeIndex,1)
-    //removeIndex = connected.indexOf(wire.to)
-    //connected.splice(wire.to,1)
     connected[wire.to] = -1
 
     inTerminal.value = 0
     wire.destroy()
-    //deletedWireIndex.push(index)
     updateComponent(inTerminal.parent.index)
     deselect()
 }
@@ -354,16 +419,12 @@ function rotateLeft() {
 
     components[selectedIndex].rotationAngle = -2
     components[selectedIndex].rotateComponent.start()
-    /*components[selectedIndex].initialAngle = components[selectedIndex].rotationAngle == -360 ? 0 :
-                                             components[selectedIndex].rotationAngle*/
 }
 
 function rotateRight() {
 
     components[selectedIndex].rotationAngle = 2
     components[selectedIndex].rotateComponent.start()
-    /*components[selectedIndex].initialAngle = components[selectedIndex].rotationAngle == 360 ? 0 :
-                                             components[selectedIndex].rotationAngle*/
 }
 
 function displayInfo() {
@@ -401,18 +462,4 @@ function displayInfo() {
 
 function updateToolTip(toolTipTxt) {
     items.toolTip.show(toolTipTxt)
-}
-
-function nextLevel() {
-    if(numberOfLevel <= ++currentLevel ) {
-        currentLevel = 0
-    }
-    initLevel();
-}
-
-function previousLevel() {
-    if(--currentLevel < 0) {
-        currentLevel = numberOfLevel - 1
-    }
-    initLevel();
 }

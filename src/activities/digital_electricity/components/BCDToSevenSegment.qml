@@ -26,15 +26,13 @@ import GCompris 1.0
 
 ElectricalComponent {
     id: bcdTo7Segment
-    imgWidth: 0.3
-    imgHeight: 0.4
-    imgSrc: "BCDTo7SegmentDropped.svg"
-    toolTipTxt: qsTr("BCD To 7 Segment")
     terminalSize: 0.097
     noOfInputs: 4
     noOfOutputs: 7
+
     property variant inputTerminalPosY: [0.057,0.35,0.649,0.935]
     property variant outputTerminalPosY: [0.048,0.198,0.353,0.509,0.664,0.812,0.952]
+
     property variant blackChar: ["BCDTo7SegmentA_black.svgz","BCDTo7SegmentB_black.svgz","BCDTo7SegmentC_black.svgz",
                                  "BCDTo7SegmentD_black.svgz","BCDTo7SegmentE_black.svgz","BCDTo7SegmentF_black.svgz",
                                  "BCDTo7SegmentG_black.svgz"]
@@ -49,16 +47,16 @@ ElectricalComponent {
                       "The truth table for BCD To 7 Segment converted is:")
 
     truthTable: [['D','C','B','A','a','b','c','d','e','f','g'],
-                ['0','0','0','0','1','1','1','1','1','1','0'],
-                ['0','0','0','1','0','1','1','0','0','0','0'],
-                ['0','0','1','0','1','1','0','1','1','0','1'],
-                ['0','0','1','1','1','1','1','1','0','0','1'],
-                ['0','1','0','0','0','1','1','0','0','1','1'],
-                ['0','1','0','1','1','0','1','1','0','1','1'],
-                ['0','1','1','0','1','0','1','1','1','1','1'],
-                ['0','1','1','1','1','1','1','0','0','0','0'],
-                ['1','0','0','0','1','1','1','1','1','1','1'],
-                ['1','0','0','1','1','1','1','1','0','1','1']]
+                 ['0','0','0','0','1','1','1','1','1','1','0'],
+                 ['0','0','0','1','0','1','1','0','0','0','0'],
+                 ['0','0','1','0','1','1','0','1','1','0','1'],
+                 ['0','0','1','1','1','1','1','1','0','0','1'],
+                 ['0','1','0','0','0','1','1','0','0','1','1'],
+                 ['0','1','0','1','1','0','1','1','0','1','1'],
+                 ['0','1','1','0','1','0','1','1','1','1','1'],
+                 ['0','1','1','1','1','1','1','0','0','0','0'],
+                 ['1','0','0','0','1','1','1','1','1','1','1'],
+                 ['1','0','0','1','1','1','1','1','0','1','1']]
 
     property alias inputTerminals: inputTerminals
     property alias outputTerminals: outputTerminals
@@ -110,7 +108,6 @@ ElectricalComponent {
             }
         }
         else {
-            // truthTable[i][j + noOfInputs] gives value of the outputs (which are just after the inputs)
             for(var j = 0 ; j < noOfOutputs ; ++j) {
                 var terminal = outputTerminals.itemAt(j)
                 terminal.value = truthTable[i][j + noOfInputs]

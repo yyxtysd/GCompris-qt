@@ -69,7 +69,6 @@ Image {
         onStarted:{Activity.animationInProgress = true}
         onStopped: {
             initialAngle = initialAngle + rotationAngle
-            //console.log("initialAngle",initialAngle)
             Activity.updateWires(index)
             if(initialAngle == startingAngle + rotationAngle * 45) {
                 if(initialAngle == 360 || initialAngle == -360)
@@ -84,7 +83,6 @@ Image {
     }
 
     function updateDragConstraints() {
-        //console.log("initialAngle",initialAngle)
         if(initialAngle == 0 || initialAngle == 180 || initialAngle == 360 || initialAngle == -360
            || initialAngle == -180) {
             mouseArea.drag.minimumX = (electricalComponent.paintedWidth - electricalComponent.width)/2
@@ -104,23 +102,19 @@ Image {
             mouseArea.drag.maximumY = electricalComponent.parent.height -
                                       (electricalComponent.height + electricalComponent.paintedWidth)/2
         }
-        //console.log("mouseArea",mouseArea.drag.minimumX,mouseArea.drag.minimumY)
     }
 
     MouseArea {
         id: mouseArea
-        //anchors.fill: parent
         width: parent.paintedWidth
         height: parent.paintedHeight
         anchors.centerIn: parent
         drag.target: electricalComponent
         onPressed: {
-            //console.log("Component index",index)
             Activity.updateToolTip(toolTipTxt)
             Activity.componentSelected(index)
         }
         onClicked: {
-            console.log("Component index",index,electricalComponent)
             if(Activity.toolDelete || Activity.toolDeleteSticky) {
                 Activity.removeComponent(index)
             }

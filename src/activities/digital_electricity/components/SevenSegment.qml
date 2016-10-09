@@ -26,10 +26,6 @@ import GCompris 1.0
 
 ElectricalComponent {
     id: sevenSegmentDisplay
-    imgWidth: 0.18
-    imgHeight: 0.4
-    imgSrc: "sevenSegmentDisplay.svgz"
-    toolTipTxt: qsTr("7 Segment Display")
     terminalSize: 0.116
     noOfInputs: 7
     noOfOutputs: 0

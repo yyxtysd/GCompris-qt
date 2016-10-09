@@ -26,10 +26,6 @@ import "../../../core"
 
 ElectricalComponent {
     id: signalGenerator
-    imgWidth: 0.25
-    imgHeight: 0.18
-    imgSrc: "signalGenerator.svg"
-    toolTipTxt: qsTr("Signal Generator")
     terminalSize: 0.24
     noOfInputs: 0
     noOfOutputs: 1
@@ -105,7 +101,6 @@ ElectricalComponent {
             anchors.centerIn: parent
             enabled: signalGenerator.period != 2
             onPressed: {
-                //console.log("Up pressed")
                 signalGenerator.period *= 2
                 periodIndex++
                 timer.restart()
@@ -131,7 +126,6 @@ ElectricalComponent {
             anchors.centerIn: parent
             enabled: signalGenerator.period != 0.25
             onPressed: {
-                //console.log("Down pressed")
                 signalGenerator.period /= 2
                 periodIndex--
                 timer.restart()
@@ -142,7 +136,6 @@ ElectricalComponent {
     }
 
     Image {
-        //id: valueContainer
         source: Activity.url + "valueContainer.svg"
         sourceSize.height: 0.818 * parent.height
         sourceSize.width: 0.557 * parent.width
@@ -156,7 +149,6 @@ ElectricalComponent {
             fontSizeMode: Text.Fit
             minimumPointSize: 6
             font.pointSize: 40
-            //font.pixelSize: 40
             color: "white"
             style: Text.Outline
             styleColor: "black"

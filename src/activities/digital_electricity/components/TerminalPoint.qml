@@ -64,7 +64,6 @@ Rectangle {
         anchors.fill: parent
         onPressed: {
             selected = true
-            console.log("Pressed Terminal",type,value)
             Activity.terminalPointSelected(terminalPoint)
         }
     }

@@ -1,4 +1,4 @@
-/* GCompris - One.qml
+/* GCompris - Switch.qml
  *
  * Copyright (C) 2016 Pulkit Gupta <pulkitnsit@gmail.com>
  *
@@ -20,25 +20,39 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.3
+import "../digital_electricity.js" as Activity
+
 import GCompris 1.0
 
 ElectricalComponent {
-    id: one
-    terminalSize: 0.218
-    noOfInputs: 0
+    id: switchComponent
+    terminalSize: 0.275
+    noOfInputs: 1
     noOfOutputs: 1
 
-    information: qsTr("Digital electronics is a branch of electronics that handle digital signals " +
-                      "(i.e discrete signals instead of continous signals). Therefore all values within " +
-                      "a range or band represent the same numeric value. In most cases, the number of " +
-                      "these states is two and they are represented by two voltage bands: one near a " +
-                      "reference value (typically termed as 'ground' or zero volts), and other value near " +
-                      "the supply voltage. These correspond to the 'false' ('0') and 'true' ('1') values " +
-                      "of the Boolean domain respectively (named after its inventor, George Boole). " +
-                      "In this activity, you can give '0' and '1' as input to other logical devices, " +
-                      "and see their output through an output device.")
+    information: qsTr("Switch is used to maintain easy connection between two terminals. If the switch is " +
+                      "turned on, then the two terminals are connected and current can flow through the " +
+                      "switch. If the switch is turned off, then the connection between terminal is broken, " +
+                      "and current can not flow through it.")
 
+    truthTable: []
+
+    property alias inputTerminals: inputTerminals
     property alias outputTerminals: outputTerminals
+
+    Repeater {
+        id: inputTerminals
+        model: 1
+        delegate: inputTerminal
+        Component {
+            id: inputTerminal
+            TerminalPoint {
+                posX: 0.037
+                posY: 0.499
+                type: "In"
+            }
+        }
+    }
 
     Repeater {
         id: outputTerminals
@@ -47,9 +61,8 @@ ElectricalComponent {
         Component {
             id: outputTerminal
             TerminalPoint {
-                posX: 0.91
-                posY: 0.5
-                value: 1
+                posX: 0.963
+                posY: 0.499
                 type: "Out"
             }
         }
@@ -57,6 +70,7 @@ ElectricalComponent {
 
     function updateOutput(wireVisited) {
         var terminal = outputTerminals.itemAt(0)
+        terminal.value = imgSrc == "switchOn.svg" ? inputTerminals.itemAt(0).value : 0
         for(var i = 0 ; i < terminal.wires.length ; ++i)
             terminal.wires[i].to.value = terminal.value
 

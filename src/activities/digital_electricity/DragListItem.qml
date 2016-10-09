@@ -29,13 +29,16 @@ Item {
     width: tile.width
     height: tile.height
 
-    property string source: imgName
+    property string source: componentSrc
+    property string imageName: imgName
+    property string toolTipTxt: toolTipText
+    property double imageWidth: imgWidth
+    property double imageHeight: imgHeight
     property double heightInColumn
     property double widthInColumn
     property double tileWidth
     property double tileHeight
     property bool selected: false
-    //property double terminalSize: size
 
     signal pressed
 
@@ -99,11 +102,7 @@ Item {
                 anchors.fill: parent
 
                 onPressed: {
-                    //item.pressed()
-                    //tileImage.toSmall()
-                    //console.log("onPressed 1",tileImage.parent)
                     tileImage.anchors.centerIn = undefined
-                    //console.log("onPressed 2",tileImage.parent)
                     startX = point1.x
                     startY = point1.y
                     tileImage.toFull()
@@ -117,19 +116,15 @@ Item {
                     var moveY = point1.y - startY
                     parent.x = parent.x + moveX
                     parent.y = parent.y + moveY
-                    //console.log("parent.x",parent.x,"parent.y",parent.y)
                 }
 
                 onReleased: {
                     if (pressedOnce) {
                         pressedOnce = false
                         item.selected = false
-                        //console.log("dropped parent.x",parent.x,"parent.y",parent.y)
                         var coord = backgroundContainer.mapFromItem(tileImage.parent, parent.x, parent.y)
-                        //console.log("coord.x",coord.x,"coord.y",coord.y)
-                        //console.log("dropped",terminalSize)
                         if(coord.x > 0 && (backgroundContainer.width - coord.x > tileImage.fullWidth))
-                            Activity.createComponent(coord.x, coord.y, componentSrc)
+                            Activity.createComponent(coord.x, coord.y, index)
                         tileImage.anchors.centerIn = tile
                         tileImage.toSmall()
                         toolTip.show("")

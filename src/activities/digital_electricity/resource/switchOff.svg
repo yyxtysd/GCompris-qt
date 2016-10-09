@@ -10,9 +10,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="282.29874mm"
+   width="246.68341mm"
    height="66.751198mm"
-   viewBox="0 0 1000.2711 236.51998"
+   viewBox="0 0 874.07506 236.51998"
    id="svg4287"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -246,7 +246,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="281.83123"
+     inkscape:cx="219.20178"
      inkscape:cy="161.11459"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -276,7 +276,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-39.512972,-372.36225)">
+     transform="translate(-102.14243,-372.36225)">
     <rect
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.90100002;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.96688741"
        id="rect5610"
@@ -292,17 +292,17 @@
        x="161.85126"
        y="488.19547" />
     <circle
-       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:14.78639317;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
+       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:7.35996771;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
        id="path5637"
-       cx="974.49066"
-       cy="489.90796"
-       r="57.900265" />
+       cx="943.71753"
+       cy="490.37653"
+       r="28.820017" />
     <circle
-       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:14.7864027;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
+       style="opacity:0.64899998;fill:#000000;fill-opacity:0.93377482;stroke:#000000;stroke-width:7.35996819;stroke-miterlimit:3.54999995;stroke-dasharray:none;stroke-opacity:0.05298013"
        id="path5637-7"
-       cx="104.80647"
-       cy="491.33649"
-       r="57.900299" />
+       cx="134.64243"
+       cy="490.37622"
+       r="28.820015" />
     <g
        id="g5249"
        transform="matrix(1.7324934,0,0,1.7324934,-11.127632,-810.78349)">

@@ -27,23 +27,20 @@ import GCompris 1.0
 Rectangle {
     id: wire
 
-    //property string wireColor
     property QtObject from
     property QtObject to
 
     height: 5
-    color: from.value == 0 ? "Red" : "Green" //wireColor
+    color: from.value == 0 ? "Red" : "Green"
     radius: height / 2
     transformOrigin: Item.Left
 
     MouseArea {
         id: mouseArea
-        //anchors.fill: parent
         width: parent.width
         height: parent.height * 3
         anchors.centerIn: parent
         onPressed: {
-            //console.log("Pressed Wire",color,wireColor)
             if(Activity.toolDelete) {
                 Activity.removeWire(wire)
             }

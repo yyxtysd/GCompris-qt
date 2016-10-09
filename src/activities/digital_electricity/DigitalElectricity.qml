@@ -163,7 +163,6 @@ ActivityBase {
                 property int cellSize: Math.min(parent.height - infoTxt.height - 10, (inputs > 2 ? 0.6 :
                                        0.45) * parent.height) / truthTablesModel.rows
                 property int minSize: 2 * cellSize
-                //width: truthTable.width
                 height: cellSize
                 anchors {
                     top: infoTxt.bottom
@@ -215,7 +214,6 @@ ActivityBase {
                 id: truthTable
                 rows: truthTablesModel.rows
                 columns: truthTablesModel.columns
-                //width: columns * inputOutputTxt.cellSize
                 height: rows * inputOutputTxt.cellSize
                 z: 5
                 visible: inputOutputTxt.visible
@@ -223,10 +221,9 @@ ActivityBase {
                     top: inputOutputTxt.bottom
                     horizontalCenter: parent.horizontalCenter
                 }
-                //spacing: 1
                 Repeater {
                     id: repeater
-                    model: truthTablesModel //15//pieces
+                    model: truthTablesModel
                     delegate: blueSquare
                     Component {
                         id: blueSquare
@@ -237,7 +234,6 @@ ActivityBase {
                             height: inputOutputTxt.cellSize
                             border.color: "black"
                             border.width: 1
-                            //radius: 1
                             color: ((index % truthTable.columns) / (truthTablesModel.inputs - 1)) <= 1 ?
                                    "#c7ecfb" : "#47ffc2"
                             GCText {
@@ -328,10 +324,8 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | reload}
-            onHelpClicked: {
-                displayDialog(dialogHelp)
-            }
+            content: BarEnumContent { value: help | home | level | reload}
+            onHelpClicked: {displayDialog(dialogHelp)}
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
