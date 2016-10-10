@@ -23,8 +23,9 @@
 var currentLevel = 0
 var numberOfLevel = 10
 var items
-//var alphabet = ['ab','cd','ef','gh']
-var alphabet = ['a','b','c','d','e','f','g','h','i',
+var alphabet = []
+var words = ['ab','cd','ef','gh']
+var letters = ['a','b','c','d','e','f','g','h','i',
                 'j','k','l','m','n','o','p','q','r',
                 's','t','u','v','w','x','y','z']
 var solution = []
@@ -50,7 +51,7 @@ var interchange = 0
 var progress = []  // 0 if lost, 1 if won   => [1,1,0,1,1,0,0,1,1,1,1,1...]
 var date
 
-function start(items_) {
+function start(items_,type) {
     items = items_
     currentLevel = 0
     progress = []
@@ -59,6 +60,11 @@ function start(items_) {
 
     items.score.numberOfSubLevels = 5
     items.score.currentSubLevel = 1
+
+
+    if (type.localeCompare("letter") == 0)
+        alphabet = letters
+    else alphabet = words
 
     initLevel()
 }

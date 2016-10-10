@@ -23,6 +23,8 @@ import "alphabetical_order.js" as Activity
 ActivityBase {
     id: activity
 
+    property string type: "letter"
+
     onStart: focus = true
     onStop: {}
 
@@ -63,7 +65,7 @@ ActivityBase {
             property bool passedLevel: false
         }
 
-        onStart: { Activity.start(items) }
+        onStart: { Activity.start(items,type) }
         onStop: { Activity.stop() }
 
         onFocusChanged: {
