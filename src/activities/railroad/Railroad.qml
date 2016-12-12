@@ -30,11 +30,9 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
-    property string resourceURL: "qrc:/gcompris/src/activities/railroad/resource/"
-
     pageComponent: Image {
         id: background
-        source: resourceURL + "railroad-bg.svg"
+        source: Activity.resourceURL + "railroad-bg.svg"
         height: activity.height / 2
         width: activity.width
         anchors.fill: parent
@@ -53,17 +51,63 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
+            property alias sampleList: sampleList
+            property alias listModel: listModel
+            property alias displayList: displayList
         }
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
-//        GCText {
-//            anchors.centerIn: parent
-//            text: "UTKARSH TIWARI"
-//            fontSize: largeSize
-//        }
+        //        GCText {
+        //            anchors.centerIn: parent
+        //            text: "UTKARSH TIWARI"
+        //            fontSize: largeSize
+        //        }
 
+        // Top Display Area
+        Rectangle {
+            x: 2
+            y: background.height / 14
+            Flow {
+                id: displayFlow
+                Repeater {
+                    id: displayList
+                    model: listModel
+                    delegate: Image {
+                        id: wagon
+                        source: Activity.resourceURL + "loco1.svg"
+                        height: background.height / 8.5
+                        width: background.width / (Activity.railWidthArray[0] + 1)
+                        visible: true
+
+                        MouseArea {
+                            id: displayWagonMouseArea
+                            hoverEnabled: true
+                            enabled: true
+                            anchors.fill: parent
+
+                            onClicked: {
+                                listModel.remove(index);
+                            }
+                        }
+                        states: State {
+                            name: "waganHover"
+                            when: displayWagonMouseArea.containsMouse
+                            PropertyChanges {
+                                target: wagon
+                                scale: 1.1
+                            }
+                        }
+                    }
+                }
+            }
+            ListModel {
+                id: listModel
+            }
+        }
+
+        // Lower Sample Wagon Display Area
         Rectangle {
             id: railCollection
             Flow {
@@ -73,18 +117,35 @@ ActivityBase {
                 height: background.height - (background.height / 5)
                 width: background.width
                 anchors.margins: 1
-                spacing: 4
-
+                anchors.bottomMargin: 10
+                spacing: 8
                 flow: Flow.LeftToRight
-                //layoutDirection: Grid.LeftToRight
-
                 Repeater {
+                    id: sampleList
                     model: 22
                     Image {
-                        source: resourceURL + "loco" + (index + 1) + ".svg"
+                        id: loco
+                        source: Activity.resourceURL + "loco" + (index + 1) + ".svg"
                         height: background.height / 7.5
                         width: background.width / Activity.railWidthArray[index]
                         visible: true
+                        MouseArea {
+                            id: mouseArea
+                            hoverEnabled: true
+                            enabled: true
+                            anchors.fill: parent
+                            onClicked: {
+                                Activity.addWagon(index);
+                            }
+                        }
+                        states: State {
+                            name: "carHover"
+                            when: mouseArea.containsMouse
+                            PropertyChanges {
+                                target: loco
+                                scale: 1.1
+                            }
+                        }
                     }
                 }
             }
