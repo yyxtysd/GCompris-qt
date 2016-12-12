@@ -28,6 +28,7 @@ var noOfCarriages = [4, 5, 4, 4, 5]
 var railWidthArray = [5, 4, 3.8, 3.8, 5, 6.5, 6.5, 3.8, 6.5, 4, 4,
                       4, 4.5, 4, 4, 4.5, 4, 5, 5.5, 6.5, 6.5, 3.8]
 var items
+var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 
 function start(items_) {
     items = items_
@@ -54,4 +55,11 @@ function previousLevel() {
         currentLevel = numberOfLevel - 1
     }
     initLevel();
+}
+
+function addWagon(index) {
+    /* Appends wagons to the display area */
+    items.listModel.append({"name" : index});
+    (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index + 1) + ".svg"
+
 }
