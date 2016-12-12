@@ -60,6 +60,8 @@ function previousLevel() {
 function addWagon(index) {
     /* Appends wagons to the display area */
     items.listModel.append({"name" : index});
-    (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index + 1) + ".svg"
+    (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index + 1) + ".svg";
+    (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index] + 1);
+
 
 }
