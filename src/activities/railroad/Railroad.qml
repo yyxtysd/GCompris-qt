@@ -67,10 +67,10 @@ ActivityBase {
 
         // Top Display Area
         Rectangle {
-            x: 2
-            y: background.height / 14
             Flow {
                 id: displayFlow
+                x: 2
+                y: background.height / 12
                 Repeater {
                     id: displayList
                     model: listModel
