@@ -45,6 +45,7 @@ function stop() {
 function initLevel() {
     var index = 0;
     memoryMode = false;
+    items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
     items.displayList.model = items.listModel;
     if (isReset == false) {
@@ -53,11 +54,15 @@ function initLevel() {
         for (var i = 0; i < currentLevel + 2; i++) {
             if (i == (currentLevel + 1)) {
                 // Selects the last carriage
-                index = Math.floor(Math.random() * 9) + 1;
+                do {
+                    index = Math.floor(Math.random() * 9) + 1;
+                } while (backupArray.indexOf(index) != -1) // Ensures non-repeative wagons setup
 
             } else {
                 // Selects the follow up wagons
-                index = Math.floor(Math.random() * 12) + 10;
+                do {
+                    index = Math.floor(Math.random() * 12) + 10;
+                } while (backupArray.indexOf(index) != -1)
             }
             backupArray.push(index);
             items.listModel.append({"name" : index});
@@ -94,7 +99,6 @@ function previousLevel() {
 
 function reset() {
     isReset = true;
-    items.animateFlow.stop();
     initLevel();
 }
 
