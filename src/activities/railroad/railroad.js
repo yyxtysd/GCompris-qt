@@ -27,8 +27,11 @@ var numberOfLevel = 4
 var noOfCarriages = [4, 5, 4, 4, 5]
 var railWidthArray = [5, 4, 3.8, 3.8, 5, 6.5, 6.5, 3.8, 6.5, 4, 4,
                       4, 4.5, 4, 4, 4.5, 4, 5, 5.5, 6.5, 6.5, 3.8]
-var items
+var memoryMode = false
+var backupArray = []
+var isReset = false
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
+var items
 
 function start(items_) {
     items = items_
@@ -40,7 +43,39 @@ function stop() {
 }
 
 function initLevel() {
-    items.bar.level = currentLevel + 1
+    var index = 0;
+    memoryMode = false;
+    items.listModel.clear();
+    items.displayList.model = items.listModel;
+    if (isReset == false) {
+        // Initiates a new level
+        backupArray = [];
+        for (var i = 0; i < currentLevel + 2; i++) {
+            if (i == (currentLevel + 1)) {
+                // Selects the last carriage
+                index = Math.floor(Math.random() * 9) + 1;
+
+            } else {
+                // Selects the follow up wagons
+                index = Math.floor(Math.random() * 12) + 10;
+            }
+            backupArray.push(index);
+            items.listModel.append({"name" : index});
+            (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
+            (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index - 1] + 1);
+
+        }
+    } else {
+        // Re-setup the same level
+        for ( var i = 0; i < backupArray.length; i++) {
+            items.listModel.append({"name" : backupArray[i]});
+            (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (backupArray[i]) + ".svg";
+            (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[backupArray[i] - 1] + 1);
+        }
+        isReset = false;
+    }
+    items.animateFlow.start()
+    items.bar.level = currentLevel + 1;
 }
 
 function nextLevel() {
@@ -57,11 +92,15 @@ function previousLevel() {
     initLevel();
 }
 
+function reset() {
+    isReset = true;
+    items.animateFlow.stop();
+    initLevel();
+}
+
 function addWagon(index) {
     /* Appends wagons to the display area */
     items.listModel.append({"name" : index});
     (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index + 1) + ".svg";
     (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index] + 1);
-
-
 }
