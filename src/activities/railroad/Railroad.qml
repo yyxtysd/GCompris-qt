@@ -54,6 +54,7 @@ ActivityBase {
             property alias sampleList: sampleList
             property alias listModel: listModel
             property alias displayList: displayList
+            property alias animateFlow: animateFlow
         }
 
         onStart: { Activity.start(items) }
@@ -88,7 +89,14 @@ ActivityBase {
                             anchors.fill: parent
 
                             onClicked: {
-                                listModel.remove(index);
+                                if (Activity.memoryMode == true) {
+                                    listModel.remove(index);
+                                } else {
+                                    animateFlow.stop();
+                                    displayFlow.x = 2;
+                                    listModel.clear();
+                                    Activity.memoryMode = true;
+                                }
                             }
                         }
                         states: State {
@@ -100,6 +108,24 @@ ActivityBase {
                             }
                         }
                     }
+                }
+                onXChanged: {
+                    if (displayFlow.x >= background.width) {
+                        animateFlow.stop();
+                        displayFlow.x = 2;
+                        listModel.clear();
+                        Activity.memoryMode = true;
+                    }
+                }
+                PropertyAnimation {
+                    id: animateFlow
+                    target: displayFlow
+                    properties: "x"
+                    from: 2
+                    to: background.width
+                    duration: 11000
+                    easing.type: Easing.InExpo
+                    loops: 1
                 }
             }
             ListModel {
@@ -158,13 +184,16 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level }
+            content: BarEnumContent { value: help | home | level | reload}
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
+            onReloadClicked: {
+                Activity.reset()
+            }
         }
 
         Bonus {
