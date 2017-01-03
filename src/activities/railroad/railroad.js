@@ -21,6 +21,7 @@
  */
 .pragma library
 .import QtQuick 2.0 as Quick
+.import GCompris 1.0 as GCompris
 
 var currentLevel = 0
 var numberOfLevel = 4
@@ -31,11 +32,15 @@ var memoryMode = false
 var backupArray = []
 var isReset = false
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
+var maxSubLevel = 3
+var sampleIsVisible = false
 var items
 
 function start(items_) {
     items = items_
     currentLevel = 0
+    items.score.numberOfSubLevels = maxSubLevel;
+    items.score.currentSubLevel = 1;
     initLevel()
 }
 
@@ -45,6 +50,7 @@ function stop() {
 function initLevel() {
     var index = 0;
     memoryMode = false;
+    items.railCollection.visible = false;
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
     items.displayList.model = items.listModel;
@@ -87,6 +93,7 @@ function nextLevel() {
     if(numberOfLevel <= ++currentLevel ) {
         currentLevel = 0
     }
+    items.score.currentSubLevel = 1;
     initLevel();
 }
 
@@ -94,6 +101,7 @@ function previousLevel() {
     if(--currentLevel < 0) {
         currentLevel = numberOfLevel - 1
     }
+    items.score.currentSubLevel = 1;
     initLevel();
 }
 
@@ -102,9 +110,34 @@ function reset() {
     initLevel();
 }
 
+function advanceSubLevel() {
+    items.score.currentSubLevel++;
+    if (items.score.currentSubLevel > maxSubLevel) {
+        nextLevel();
+        items.score.currentSubLevel = 1;
+    } else {
+        initLevel();
+    }
+}
+
+function isAnswer() {
+    if (items.listModel.count === backupArray.length) {
+        var flag = true;
+        for (var index = 0; index < items.listModel.count; index++) {
+            if (items.listModel.get(index).name != backupArray[index]) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag == true) {
+            items.bonus.good("flower");
+        }
+    }
+}
+
 function addWagon(index) {
     /* Appends wagons to the display area */
     items.listModel.append({"name" : index});
-    (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index + 1) + ".svg";
-    (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index] + 1);
+    (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
+    (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index - 1] + 1);
 }
