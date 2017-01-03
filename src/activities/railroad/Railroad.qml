@@ -1,6 +1,6 @@
 /* GCompris - railroad.qml
  *
- * Copyright (C) 2016 YOUR NAME <xx@yy.org>
+ * Copyright (C) 2016  <xx@yy.org>
  *
  * Authors:
  *   <THE GTK VERSION AUTHOR> (GTK+ version)
@@ -20,7 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.1
-
+import GCompris 1.0
 import "../../core"
 import "railroad.js" as Activity
 
@@ -29,6 +29,8 @@ ActivityBase {
 
     onStart: focus = true
     onStop: {}
+
+    property variant barAtStart
 
     pageComponent: Image {
         id: background
@@ -51,20 +53,20 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
+            property alias score: score
             property alias sampleList: sampleList
             property alias listModel: listModel
             property alias displayList: displayList
             property alias animateFlow: animateFlow
+            property alias railCollection: railCollection
         }
 
-        onStart: { Activity.start(items) }
+        onStart: {
+            barAtStart = ApplicationSettings.isBarHidden;
+            ApplicationSettings.isBarHidden = true;
+            Activity.start(items)
+        }
         onStop: { Activity.stop() }
-
-        //        GCText {
-        //            anchors.centerIn: parent
-        //            text: "UTKARSH TIWARI"
-        //            fontSize: largeSize
-        //        }
 
         // Top Display Area
         Rectangle {
@@ -91,11 +93,14 @@ ActivityBase {
                             onClicked: {
                                 if (Activity.memoryMode == true) {
                                     listModel.remove(index);
+                                    Activity.isAnswer();
                                 } else {
                                     animateFlow.stop();
                                     displayFlow.x = 2;
                                     listModel.clear();
                                     Activity.memoryMode = true;
+                                    Activity.items.railCollection.visible = true
+                                    ApplicationSettings.isBarHidden = true;
                                 }
                             }
                         }
@@ -115,6 +120,8 @@ ActivityBase {
                         displayFlow.x = 2;
                         listModel.clear();
                         Activity.memoryMode = true;
+                        Activity.items.railCollection.visible = true;
+                        ApplicationSettings.isBarHidden = true;
                     }
                 }
                 PropertyAnimation {
@@ -123,7 +130,7 @@ ActivityBase {
                     properties: "x"
                     from: 2
                     to: background.width
-                    duration: 11000
+                    duration: 18000
                     easing.type: Easing.InExpo
                     loops: 1
                 }
@@ -136,6 +143,7 @@ ActivityBase {
         // Lower Sample Wagon Display Area
         Rectangle {
             id: railCollection
+            visible: false
             Flow {
                 id: railCarriages
                 x: 2
@@ -149,6 +157,7 @@ ActivityBase {
                 Repeater {
                     id: sampleList
                     model: 22
+
                     Image {
                         id: loco
                         source: Activity.resourceURL + "loco" + (index + 1) + ".svg"
@@ -161,7 +170,8 @@ ActivityBase {
                             enabled: true
                             anchors.fill: parent
                             onClicked: {
-                                Activity.addWagon(index);
+                                Activity.addWagon(index + 1);
+                                Activity.isAnswer();
                             }
                         }
                         states: State {
@@ -182,6 +192,16 @@ ActivityBase {
             onClose: home()
         }
 
+        Score {
+            id: score
+            anchors.top: parent.top
+            anchors.topMargin: 10 * ApplicationInfo.ratio
+            anchors.right: parent.right
+            anchors.leftMargin: 10 * ApplicationInfo.ratio
+            anchors.bottom: undefined
+            anchors.left: undefined
+        }
+
         Bar {
             id: bar
             content: BarEnumContent { value: help | home | level | reload}
@@ -198,7 +218,7 @@ ActivityBase {
 
         Bonus {
             id: bonus
-            Component.onCompleted: win.connect(Activity.nextLevel)
+            Component.onCompleted: win.connect(Activity.advanceSubLevel)
         }
     }
 
