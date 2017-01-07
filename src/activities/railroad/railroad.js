@@ -111,6 +111,7 @@ function reset() {
 }
 
 function advanceSubLevel() {
+    /* Sets up the next sublevel */
     items.score.currentSubLevel++;
     if (items.score.currentSubLevel > maxSubLevel) {
         nextLevel();
@@ -121,6 +122,7 @@ function advanceSubLevel() {
 }
 
 function isAnswer() {
+    /* Checks if the top level setup equals the solutions */
     if (items.listModel.count === backupArray.length) {
         var flag = true;
         for (var index = 0; index < items.listModel.count; index++) {
@@ -133,6 +135,14 @@ function isAnswer() {
             items.bonus.good("flower");
         }
     }
+}
+
+function sum(index) {
+    /* Returns the sum up till the specified index */
+    var total = 0
+    for (var i = 0; i <index; i++)
+        total += noOfCarriages[i];
+    return total;
 }
 
 function addWagon(index) {
