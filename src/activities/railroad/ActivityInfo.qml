@@ -21,15 +21,15 @@ ActivityInfo {
   name: "railroad/Railroad.qml"
   difficulty: 1
   icon: "railroad/railroad.svg"
-  author: "Your Name &lt;yy@zz.org&gt;"
+  author: "Utkarsh Tiwari &lt;iamutkarshtiwari@kde.org&gt;"
   demo: true
-  title: "Railroad activity"
+  title: qsTr("Railroad activity")
   description: ""
   //intro: "put here in comment the text for the intro voice"
-  goal: ""
-  prerequisite: ""
-  manual: ""
+  goal: qsTr("Improves your memory")
+  prerequisite: qsTr("Good memory")
+  manual: qsTr("A train - a locomotive and carriage(s) - is displayed at the top of the main area for a few seconds. Rebuild it at the top of the screen by selecting the appropriate carriages and locomotive. Deselect an item by clicking on it again.")
   credit: ""
-  section: "fun"
+  section: "memory"
   createdInVersion: 7000
 }

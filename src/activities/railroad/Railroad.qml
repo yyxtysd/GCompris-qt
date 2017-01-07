@@ -143,47 +143,71 @@ ActivityBase {
         // Lower Sample Wagon Display Area
         Rectangle {
             id: railCollection
+            color: "transparent"
             visible: false
-            Flow {
-                id: railCarriages
-                x: 2
-                y: background.height / 4.7
-                height: background.height - (background.height / 5)
-                width: background.width
-                anchors.margins: 1
-                anchors.bottomMargin: 10
-                spacing: 8
-                flow: Flow.LeftToRight
-                Repeater {
-                    id: sampleList
-                    model: 22
+            Repeater {
+                id: sampleList
+                model: 5
+                Flow {
+                    id: railCarriages
+                    property real rowNo: index
+                    anchors.margins: 1
+                    anchors.bottomMargin: 10
+                    spacing: 8
+                    x: 2
+                    y: (background.height / 4.7) + (index * (background.height / 6.5))
+                    height: background.height / 7.5
+                    width: background.width
+                    flow: Flow.LeftToRight
 
-                    Image {
-                        id: loco
-                        source: Activity.resourceURL + "loco" + (index + 1) + ".svg"
-                        height: background.height / 7.5
-                        width: background.width / Activity.railWidthArray[index]
-                        visible: true
-                        MouseArea {
-                            id: mouseArea
-                            hoverEnabled: true
-                            enabled: true
-                            anchors.fill: parent
-                            onClicked: {
-                                Activity.addWagon(index + 1);
-                                Activity.isAnswer();
+                    Repeater {
+
+                        id: eachRow
+                        model: Activity.noOfCarriages[railCarriages.rowNo]
+
+                        Image {
+                            id: loco
+                            readonly property int uniqueID: Activity.sum(railCarriages.rowNo) + index
+                            source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
+                            height: background.height / 7.5
+                            width: background.width / (Activity.railWidthArray[uniqueID]);
+                            visible: true
+                            MouseArea {
+                                id: mouseArea
+                                hoverEnabled: true
+                                enabled: true
+                                anchors.fill: parent
+                                onClicked: {
+                                    Activity.addWagon(parent.uniqueID + 1);
+                                    Activity.isAnswer();
+                                }
                             }
-                        }
-                        states: State {
-                            name: "carHover"
-                            when: mouseArea.containsMouse
-                            PropertyChanges {
-                                target: loco
-                                scale: 1.1
+                            states: State {
+                                name: "carHover"
+                                when: mouseArea.containsMouse
+                                PropertyChanges {
+                                    target: loco
+                                    scale: 1.1
+                                }
                             }
                         }
                     }
                 }
+            }
+        }
+
+        // Lower level wagons shelves
+        Repeater {
+            id: railSupporter
+            model: 5
+            Rectangle {
+                x: 0
+                y: (background.height / 2.9) + (index * (background.height / 6.5))
+                width: background.width
+                height: 5
+                border.color: "#808180"
+                color: "transparent"
+                border.width: 5
             }
         }
 
@@ -221,5 +245,4 @@ ActivityBase {
             Component.onCompleted: win.connect(Activity.advanceSubLevel)
         }
     }
-
 }
