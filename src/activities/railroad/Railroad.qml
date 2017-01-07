@@ -1,10 +1,10 @@
 /* GCompris - railroad.qml
  *
- * Copyright (C) 2016  <xx@yy.org>
+ * Copyright (C) 2016  Utkarsh Tiwari <iamutkarshtiwari@kde.org>
  *
  * Authors:
- *   <THE GTK VERSION AUTHOR> (GTK+ version)
- *   YOUR NAME <YOUR EMAIL> (Qt Quick port)
+ *   Pascal Georges (GTK+ version)
+ *   Utkarsh Tiwari <iamutkarshtiwari@kde.org> (Qt Quick port)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
