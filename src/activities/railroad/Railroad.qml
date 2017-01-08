@@ -148,7 +148,7 @@ ActivityBase {
             Repeater {
                 id: sampleList
                 model: 5
-                Flow {
+                Row {
                     id: railCarriages
                     property real rowNo: index
                     anchors.margins: 1
@@ -158,13 +158,9 @@ ActivityBase {
                     y: (background.height / 4.7) + (index * (background.height / 6.5))
                     height: background.height / 7.5
                     width: background.width
-                    flow: Flow.LeftToRight
-
                     Repeater {
-
                         id: eachRow
                         model: Activity.noOfCarriages[railCarriages.rowNo]
-
                         Image {
                             id: loco
                             readonly property int uniqueID: Activity.sum(railCarriages.rowNo) + index
