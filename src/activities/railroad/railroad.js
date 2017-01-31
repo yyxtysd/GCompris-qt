@@ -25,11 +25,14 @@
 
 var currentLevel = 0
 var numberOfLevel = 4
-var noOfCarriages = [4, 5, 4, 4, 5]
-var railWidthArray = [5, 4, 3.8, 3.8, 5, 6.5, 6.5, 3.8, 6.5, 4, 4,
-                      4, 4.5, 4, 4, 4.5, 4, 5, 5.5, 6.5, 6.5, 3.8]
+var noOfCarriages = [5, 6, 5, 6]
+var rowWidth = [0.95, 0.1, 0.1, 0.1]
+//var rowWidth = [[1.3, 1.80], [1.16, 0.99], [1.12, 0.97], [1.14, 0.99]]
+//var rowWidth = [2000, 1000, 1000, 1000]
+//var railWidthArray = [5, 4, 3.8, 3.8, 5, 6.0, 6.0, 3.8, 6.0, 4, 4,
+//                      4, 4.5, 4, 4, 4.5, 4, 5, 5.5, 6.0, 6.0, 3.8]
 var memoryMode = false
-var backupArray = []
+var solutionArray = []
 var isReset = false
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var maxSubLevel = 3
@@ -56,32 +59,30 @@ function initLevel() {
     items.displayList.model = items.listModel;
     if (isReset == false) {
         // Initiates a new level
-        backupArray = [];
+        solutionArray = [];
         for (var i = 0; i < currentLevel + 2; i++) {
             if (i == (currentLevel + 1)) {
                 // Selects the last carriage
                 do {
                     index = Math.floor(Math.random() * 9) + 1;
-                } while (backupArray.indexOf(index) != -1) // Ensures non-repeative wagons setup
+                } while (solutionArray.indexOf(index) != -1) // Ensures non-repeative wagons setup
 
             } else {
                 // Selects the follow up wagons
                 do {
                     index = Math.floor(Math.random() * 12) + 10;
-                } while (backupArray.indexOf(index) != -1)
+                } while (solutionArray.indexOf(index) != -1)
             }
-            backupArray.push(index);
-            items.listModel.append({"name" : index});
+            solutionArray.push(index);
+            items.listModel.append({"id" : index});
             (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
-            (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index - 1] + 1);
 
         }
     } else {
         // Re-setup the same level
-        for ( var i = 0; i < backupArray.length; i++) {
-            items.listModel.append({"name" : backupArray[i]});
-            (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (backupArray[i]) + ".svg";
-            (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[backupArray[i] - 1] + 1);
+        for ( var i = 0; i < solutionArray.length; i++) {
+            items.listModel.append({"id" : solutionArray[i]});
+            (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (solutionArray[i]) + ".svg";
         }
         isReset = false;
     }
@@ -123,10 +124,10 @@ function advanceSubLevel() {
 
 function isAnswer() {
     /* Checks if the top level setup equals the solutions */
-    if (items.listModel.count === backupArray.length) {
+    if (items.listModel.count === solutionArray.length) {
         var flag = true;
         for (var index = 0; index < items.listModel.count; index++) {
-            if (items.listModel.get(index).name != backupArray[index]) {
+            if (items.listModel.get(index).id != solutionArray[index]) {
                 flag = false;
                 break;
             }
@@ -147,7 +148,6 @@ function sum(index) {
 
 function addWagon(index) {
     /* Appends wagons to the display area */
-    items.listModel.append({"name" : index});
+    items.listModel.append({"id" : index});
     (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
-    (items.displayList.itemAt(items.listModel.count - 1)).width = items.background.width / (railWidthArray[index - 1] + 1);
 }

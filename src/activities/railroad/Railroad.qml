@@ -38,6 +38,10 @@ ActivityBase {
         height: activity.height / 2
         width: activity.width
         anchors.fill: parent
+
+        onWidthChanged: { console.log(railCarriages.width +" " + background.width) }
+        onHeightChanged: { Activity.calculateNewRowWidths() }
+
         signal start
         signal stop
 
@@ -59,84 +63,94 @@ ActivityBase {
             property alias displayList: displayList
             property alias animateFlow: animateFlow
             property alias railCollection: railCollection
+            property alias railCarriages: railCarriages
         }
 
         onStart: {
-            barAtStart = ApplicationSettings.isBarHidden;
-            ApplicationSettings.isBarHidden = true;
             Activity.start(items)
+            Activity.calculateNewRowWidths()
         }
         onStop: { Activity.stop() }
 
         // Top Display Area
         Rectangle {
-            Flow {
-                id: displayFlow
+            Flickable {
+                id: flickTop
+                width: background.width
+                height: background.height
+                contentWidth: displayFlow.width
+                contentHeight: width
+                flickableDirection: Flickable.HorizontalFlick
                 x: 2
-                y: background.height / 12
-                Repeater {
-                    id: displayList
-                    model: listModel
-                    delegate: Image {
-                        id: wagon
-                        source: Activity.resourceURL + "loco1.svg"
-                        height: background.height / 8.5
-                        width: background.width / (Activity.railWidthArray[0] + 1)
-                        visible: true
+                y : background.height / 12
+                Row {
+                    id: displayFlow
+                    x: flickTop.x
+                    y: 0
+                    width: childrenRect.width
+                    spacing: background.width * 0.0025
+                    Repeater {
+                        id: displayList
+                        model: listModel
+                        Image {
+                            id: wagon
+                            source: Activity.resourceURL + "loco1.svg"
+                            height: background.height / 8.0
+                            width: ((background.width > background.height) ? background.width : background.height) / 4.66
+                            visible: true
 
-                        MouseArea {
-                            id: displayWagonMouseArea
-                            hoverEnabled: true
-                            enabled: true
-                            anchors.fill: parent
+                            MouseArea {
+                                id: displayWagonMouseArea
+                                hoverEnabled: true
+                                enabled: true
+                                anchors.fill: parent
 
-                            onClicked: {
-                                if (Activity.memoryMode == true) {
-                                    listModel.remove(index);
-                                    Activity.isAnswer();
-                                } else {
-                                    animateFlow.stop();
-                                    displayFlow.x = 2;
-                                    listModel.clear();
-                                    Activity.memoryMode = true;
-                                    Activity.items.railCollection.visible = true
-                                    ApplicationSettings.isBarHidden = true;
+                                onClicked: {
+                                    if (Activity.memoryMode == true) {
+                                        listModel.remove(index);
+                                        Activity.isAnswer();
+                                    } else {
+                                        animateFlow.stop();
+                                        displayFlow.x = 2;
+                                        listModel.clear();
+                                        Activity.memoryMode = true;
+                                        Activity.items.railCollection.visible = true
+                                    }
+                                }
+                            }
+                            states: State {
+                                name: "waganHover"
+                                when: displayWagonMouseArea.containsMouse
+                                PropertyChanges {
+                                    target: wagon
+                                    scale: 1.1
                                 }
                             }
                         }
-                        states: State {
-                            name: "waganHover"
-                            when: displayWagonMouseArea.containsMouse
-                            PropertyChanges {
-                                target: wagon
-                                scale: 1.1
-                            }
+                    }
+                    onXChanged: {
+                        if (displayFlow.x >= background.width) {
+                            animateFlow.stop();
+                            displayFlow.x = 2;
+                            listModel.clear();
+                            Activity.memoryMode = true;
+                            Activity.items.railCollection.visible = true;
                         }
                     }
-                }
-                onXChanged: {
-                    if (displayFlow.x >= background.width) {
-                        animateFlow.stop();
-                        displayFlow.x = 2;
-                        listModel.clear();
-                        Activity.memoryMode = true;
-                        Activity.items.railCollection.visible = true;
-                        ApplicationSettings.isBarHidden = true;
+                    PropertyAnimation {
+                        id: animateFlow
+                        target: displayFlow
+                        properties: "x"
+                        from: 2
+                        to: background.width
+                        duration: 18000
+                        easing.type: Easing.InExpo
+                        loops: 1
                     }
                 }
-                PropertyAnimation {
-                    id: animateFlow
-                    target: displayFlow
-                    properties: "x"
-                    from: 2
-                    to: background.width
-                    duration: 18000
-                    easing.type: Easing.InExpo
-                    loops: 1
+                ListModel {
+                    id: listModel
                 }
-            }
-            ListModel {
-                id: listModel
             }
         }
 
@@ -147,43 +161,52 @@ ActivityBase {
             visible: false
             Repeater {
                 id: sampleList
-                model: 5
-                Row {
-                    id: railCarriages
-                    property real rowNo: index
-                    anchors.margins: 1
-                    anchors.bottomMargin: 10
-                    spacing: 8
+                model: 4
+                Flickable {
                     x: 2
                     y: (background.height / 4.7) + (index * (background.height / 6.5))
                     height: background.height / 7.5
                     width: background.width
-                    Repeater {
-                        id: eachRow
-                        model: Activity.noOfCarriages[railCarriages.rowNo]
-                        Image {
-                            id: loco
-                            readonly property int uniqueID: Activity.sum(railCarriages.rowNo) + index
-                            source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
-                            height: background.height / 7.5
-                            width: background.width / (Activity.railWidthArray[uniqueID]);
-                            visible: true
-                            MouseArea {
-                                id: mouseArea
-                                hoverEnabled: true
-                                enabled: true
-                                anchors.fill: parent
-                                onClicked: {
-                                    Activity.addWagon(parent.uniqueID + 1);
-                                    Activity.isAnswer();
+                    contentWidth:  railCarriages.childrenRect.width
+                    contentHeight: height
+                    flickableDirection: Flickable.HorizontalFlick
+                    Row {
+                     id: railCarriages
+                        property real rowNo: index
+                        anchors.margins: 1
+                        anchors.bottomMargin: 10
+                        spacing: background.width * 0.0025
+                        x: parent.x
+                        y: 0
+                        height: background.height / 7.5
+                        width: childrenRect.width
+                        Repeater {
+                            id: eachRow
+                            model: Activity.noOfCarriages[parent.rowNo]
+                            Image {
+                                id: loco
+                                readonly property int uniqueID: Activity.sum(parent.rowNo) + index
+                                source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
+                                height: background.height / 7.5
+                                width: ((background.width > background.height) ? background.width : background.height) / 4.66
+                                visible: true
+                                MouseArea {
+                                    id: mouseArea
+                                    hoverEnabled: true
+                                    enabled: true
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        Activity.addWagon(parent.uniqueID + 1);
+                                        Activity.isAnswer();
+                                    }
                                 }
-                            }
-                            states: State {
-                                name: "carHover"
-                                when: mouseArea.containsMouse
-                                PropertyChanges {
-                                    target: loco
-                                    scale: 1.1
+                                states: State {
+                                    name: "carHover"
+                                    when: mouseArea.containsMouse
+                                    PropertyChanges {
+                                        target: loco
+                                        scale: 1.1
+                                    }
                                 }
                             }
                         }
