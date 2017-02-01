@@ -39,9 +39,6 @@ ActivityBase {
         width: activity.width
         anchors.fill: parent
 
-        onWidthChanged: { console.log(railCarriages.width +" " + background.width) }
-        onHeightChanged: { Activity.calculateNewRowWidths() }
-
         signal start
         signal stop
 
@@ -63,12 +60,10 @@ ActivityBase {
             property alias displayList: displayList
             property alias animateFlow: animateFlow
             property alias railCollection: railCollection
-            property alias railCarriages: railCarriages
         }
 
         onStart: {
             Activity.start(items)
-            Activity.calculateNewRowWidths()
         }
         onStop: { Activity.stop() }
 
@@ -82,7 +77,7 @@ ActivityBase {
                 contentHeight: width
                 flickableDirection: Flickable.HorizontalFlick
                 x: 2
-                y : background.height / 12
+                y : background.height / 12.5
                 Row {
                     id: displayFlow
                     x: flickTop.x
@@ -120,7 +115,7 @@ ActivityBase {
                             }
                             states: State {
                                 name: "waganHover"
-                                when: displayWagonMouseArea.containsMouse
+                                when: displayWagonMouseArea.containsMouse && (Activity.memoryMode === true)
                                 PropertyChanges {
                                     target: wagon
                                     scale: 1.1
@@ -171,12 +166,11 @@ ActivityBase {
                     contentHeight: height
                     flickableDirection: Flickable.HorizontalFlick
                     Row {
-                     id: railCarriages
+                        id: railCarriages
                         property real rowNo: index
                         anchors.margins: 1
                         anchors.bottomMargin: 10
                         spacing: background.width * 0.0025
-                        x: parent.x
                         y: 0
                         height: background.height / 7.5
                         width: childrenRect.width
@@ -218,7 +212,7 @@ ActivityBase {
         // Lower level wagons shelves
         Repeater {
             id: railSupporter
-            model: 5
+            model: 4
             Rectangle {
                 x: 0
                 y: (background.height / 2.9) + (index * (background.height / 6.5))
@@ -227,6 +221,40 @@ ActivityBase {
                 border.color: "#808180"
                 color: "transparent"
                 border.width: 5
+            }
+        }
+
+        Rectangle {
+            id: quickText
+            width: parent.width
+            height: problemText.height
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            border.width: 2
+            border.color: "black"
+            color: "red"
+            z: 5
+            visible: true
+
+            property alias problemText: problemText
+
+            GCText {
+                id: problemText
+                anchors.centerIn: parent
+                width: parent.width * 3 / 4
+                fontSize: mediumSize
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                text: qsTr("Swap left-right to view all the carriages outside display area!")
+                color: "white"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    parent.visible = false;
+                    items.animateFlow.start();
+                }
             }
         }
 
