@@ -27,16 +27,12 @@ var currentLevel = 0
 var numberOfLevel = 4
 var noOfCarriages = [5, 6, 5, 6]
 var rowWidth = [0.95, 0.1, 0.1, 0.1]
-//var rowWidth = [[1.3, 1.80], [1.16, 0.99], [1.12, 0.97], [1.14, 0.99]]
-//var rowWidth = [2000, 1000, 1000, 1000]
-//var railWidthArray = [5, 4, 3.8, 3.8, 5, 6.0, 6.0, 3.8, 6.0, 4, 4,
-//                      4, 4.5, 4, 4, 4.5, 4, 5, 5.5, 6.0, 6.0, 3.8]
 var memoryMode = false
 var solutionArray = []
 var isReset = false
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var maxSubLevel = 3
-var sampleIsVisible = false
+var quickText = true
 var items
 
 function start(items_) {
@@ -86,7 +82,9 @@ function initLevel() {
         }
         isReset = false;
     }
-    items.animateFlow.start()
+    if (quickText === false) {
+        items.animateFlow.start()
+    }
     items.bar.level = currentLevel + 1;
 }
 
