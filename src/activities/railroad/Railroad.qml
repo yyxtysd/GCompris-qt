@@ -129,7 +129,7 @@ ActivityBase {
                             displayFlow.x = 2;
                             listModel.clear();
                             Activity.memoryMode = true;
-                            Activity.items.railCollection.visible = true;
+                            items.railCollection.visible = true;
                         }
                     }
                     PropertyAnimation {
