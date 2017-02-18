@@ -59,7 +59,9 @@ ActivityBase {
             property alias listModel: listModel
             property alias displayList: displayList
             property alias animateFlow: animateFlow
+            property alias displayFlow: displayFlow
             property alias railCollection: railCollection
+            property alias introMessage: introMessage
         }
 
         onStart: {
@@ -84,6 +86,8 @@ ActivityBase {
                     y: 0
                     width: childrenRect.width
                     spacing: background.width * 0.0025
+                    rotation: 0
+
                     Repeater {
                         id: displayList
                         model: listModel
@@ -93,11 +97,12 @@ ActivityBase {
                             height: background.height / 8.0
                             width: ((background.width > background.height) ? background.width : background.height) / 4.66
                             visible: true
+                            rotation: displayFlow.rotation
 
                             MouseArea {
                                 id: displayWagonMouseArea
                                 hoverEnabled: true
-                                enabled: true
+                                enabled: introMessage.visible ? false : true
                                 anchors.fill: parent
 
                                 onClicked: {
@@ -109,6 +114,7 @@ ActivityBase {
                                         displayFlow.x = 2;
                                         listModel.clear();
                                         Activity.memoryMode = true;
+                                        Activity.items.displayFlow.rotation = 180;
                                         Activity.items.railCollection.visible = true
                                     }
                                 }
@@ -129,6 +135,7 @@ ActivityBase {
                             displayFlow.x = 2;
                             listModel.clear();
                             Activity.memoryMode = true;
+                            displayFlow.rotation = 180;
                             items.railCollection.visible = true;
                         }
                     }
@@ -138,7 +145,7 @@ ActivityBase {
                         properties: "x"
                         from: 2
                         to: background.width
-                        duration: 18000
+                        duration: 14000
                         easing.type: Easing.InExpo
                         loops: 1
                     }
@@ -224,38 +231,22 @@ ActivityBase {
             }
         }
 
-        Rectangle {
-            id: quickText
-            width: parent.width
-            height: problemText.height
-            anchors.top: parent.top
-            anchors.topMargin: 10
-            border.width: 2
-            border.color: "black"
-            color: "red"
-            z: 5
-            visible: true
-
-            property alias problemText: problemText
-
-            GCText {
-                id: problemText
-                anchors.centerIn: parent
-                width: parent.width * 3 / 4
-                fontSize: mediumSize
-                wrapMode: Text.WordWrap
-                horizontalAlignment: Text.AlignHCenter
-                text: qsTr("Swap left-right to view all the carriages outside display area!")
-                color: "white"
+        IntroMessage {
+            id: introMessage
+            y: (background.height / 4.7)
+            anchors {
+                right: parent.right
+                rightMargin: 5
+                left: parent.left
+                leftMargin: 5
             }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    parent.visible = false;
-                    items.animateFlow.start();
-                }
+            z: 100
+            onIntroDone: {
+                items.animateFlow.start();
             }
+            intro: [
+                qsTr("Swap left-right to view all the carriages outside display area!")
+            ]
         }
 
         DialogHelp {
