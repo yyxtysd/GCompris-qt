@@ -32,7 +32,6 @@ var solutionArray = []
 var isReset = false
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var maxSubLevel = 3
-var quickText = true
 var items
 
 function start(items_) {
@@ -49,6 +48,7 @@ function stop() {
 function initLevel() {
     var index = 0;
     memoryMode = false;
+    items.displayFlow.rotation = 0;
     items.railCollection.visible = false;
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
@@ -82,7 +82,7 @@ function initLevel() {
         }
         isReset = false;
     }
-    if (quickText === false) {
+    if (items.introMessage.visible === false) {
         items.animateFlow.start()
     }
     items.bar.level = currentLevel + 1;
@@ -124,8 +124,8 @@ function isAnswer() {
     /* Checks if the top level setup equals the solutions */
     if (items.listModel.count === solutionArray.length) {
         var flag = true;
-        for (var index = 0; index < items.listModel.count; index++) {
-            if (items.listModel.get(index).id != solutionArray[index]) {
+        for (var index = items.listModel.count - 1; index > 0; index--) {
+            if (items.listModel.get(index).id != solutionArray[items.listModel.count - 1 - index]) {
                 flag = false;
                 break;
             }
