@@ -187,6 +187,8 @@ ActivityBase {
                             Image {
                                 id: loco
                                 readonly property int uniqueID: Activity.sum(parent.rowNo) + index
+                                property real originXAxis
+                                property real originYAxis
                                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
                                 height: background.height / 7.5
                                 width: ((background.width > background.height) ? background.width : background.height) / 4.66
@@ -196,10 +198,40 @@ ActivityBase {
                                     hoverEnabled: true
                                     enabled: true
                                     anchors.fill: parent
-                                    onClicked: {
-                                        Activity.addWagon(parent.uniqueID + 1);
-                                        Activity.isAnswer();
+                                    drag.target: parent
+                                    //                                    onClicked: {
+                                    //                                        Activity.addWagon(parent.uniqueID + 1);
+                                    //                                        Activity.isAnswer();
+                                    //                                    }
+                                    onPressed: {
+                                        //                                        tileImage.anchors.centerIn = undefined
+                                        parent.originXAxis = parent.x
+                                        parent.originYAxis = parent.y
                                     }
+
+                                    //                                    onUpdated: {
+                                    //                                        var moveX = point1.x - startX
+                                    //                                        var moveY = point1.y - startY
+                                    //                                        parent.x = parent.x + moveX
+                                    //                                        parent.y = parent.y + moveY
+                                    //                                    }
+
+                                    onReleased: {
+                                        //                                        if (pressedOnce) {
+                                        //                                            pressedOnce = false
+                                        //                                            item.selected = false
+                                        //                                            var coord = backgroundContainer.mapFromItem(tileImage.parent, parent.x, parent.y)
+                                        //                                            if(coord.x > 0 && (backgroundContainer.width - coord.x > tileImage.fullWidth))
+                                        //                                                Activity.createComponent(coord.x, coord.y, index)
+                                        //                                            tileImage.anchors.centerIn = tile
+                                        //                                            tileImage.toSmall()
+                                        //                                            toolTip.show("")
+                                        //                                        }
+                                        parent.x = parent.originXAxis
+                                        parent.y = parent.originYAxis
+                                    }
+
+
                                 }
                                 states: State {
                                     name: "carHover"
