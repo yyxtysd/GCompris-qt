@@ -48,7 +48,6 @@ function stop() {
 function initLevel() {
     var index = 0;
     memoryMode = false;
-    items.displayFlow.rotation = 0;
     items.railCollection.visible = false;
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
@@ -124,8 +123,8 @@ function isAnswer() {
     /* Checks if the top level setup equals the solutions */
     if (items.listModel.count === solutionArray.length) {
         var flag = true;
-        for (var index = items.listModel.count - 1; index > 0; index--) {
-            if (items.listModel.get(index).id != solutionArray[items.listModel.count - 1 - index]) {
+        for (var index = 0; index < items.listModel.count; index++) {
+            if (items.listModel.get(index).id != solutionArray[index]) {
                 flag = false;
                 break;
             }
@@ -144,8 +143,23 @@ function sum(index) {
     return total;
 }
 
-function addWagon(index) {
+function addWagon(index, dropIndex) {
     /* Appends wagons to the display area */
-    items.listModel.append({"id" : index});
-    (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
+    items.listModel.insert(dropIndex, {"id" : index});
+    (items.displayList.itemAt(dropIndex)).source = resourceURL + "loco" + (index) + ".svg";
+}
+
+function getDropIndex(x) {
+    var count = items.listModel.count;
+    for (var index = 0; index < count; index++) {
+        var xVal = items.displayList.itemAt(index).x;
+        var itemWidth = items.displayList.itemAt(index).width;
+        if (x < xVal && index == 0) {
+            return 0;
+        } else if ((xVal + itemWidth + items.displayFlow.spacing) <= x && index == (count - 1)) {
+            return count;
+        } else if (xVal <= x && x < (xVal + itemWidth + items.displayFlow.spacing)) {
+            return index + 1;
+         }
+    }
 }

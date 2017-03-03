@@ -71,33 +71,45 @@ ActivityBase {
 
         // Top Display Area
         Rectangle {
+            width: background.width
+            height: background.height
+            color: 'transparent'
+            x: 2
+            y : background.height / 12.5
+
+            MouseArea {
+                id: topMouseArea
+                enabled: true
+                hoverEnabled: true
+                anchors.fill: parent
+            }
             Flickable {
                 id: flickTop
-                width: background.width
-                height: background.height
+                width: parent.width
+                height: parent.height
                 contentWidth: displayFlow.width
                 contentHeight: width
                 flickableDirection: Flickable.HorizontalFlick
-                x: 2
-                y : background.height / 12.5
+                anchors.fill: parent
+
+
                 Row {
                     id: displayFlow
                     x: flickTop.x
                     y: 0
                     width: childrenRect.width
                     spacing: background.width * 0.0025
-                    rotation: 0
 
                     Repeater {
                         id: displayList
                         model: listModel
-                        Image {
+
+                        delegate : Image {
                             id: wagon
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
                             width: ((background.width > background.height) ? background.width : background.height) / 4.66
                             visible: true
-                            rotation: displayFlow.rotation
 
                             MouseArea {
                                 id: displayWagonMouseArea
@@ -114,7 +126,6 @@ ActivityBase {
                                         displayFlow.x = 2;
                                         listModel.clear();
                                         Activity.memoryMode = true;
-                                        Activity.items.displayFlow.rotation = 180;
                                         Activity.items.railCollection.visible = true
                                     }
                                 }
@@ -135,7 +146,6 @@ ActivityBase {
                             displayFlow.x = 2;
                             listModel.clear();
                             Activity.memoryMode = true;
-                            displayFlow.rotation = 180;
                             items.railCollection.visible = true;
                         }
                     }
@@ -150,6 +160,7 @@ ActivityBase {
                         loops: 1
                     }
                 }
+
                 ListModel {
                     id: listModel
                 }
@@ -184,55 +195,62 @@ ActivityBase {
                         Repeater {
                             id: eachRow
                             model: Activity.noOfCarriages[parent.rowNo]
+
                             Image {
                                 id: loco
                                 readonly property int uniqueID: Activity.sum(parent.rowNo) + index
-                                property real originXAxis
-                                property real originYAxis
+                                property real originX
+                                property real originY
+                                property real minY: (background.height / 4.7) + (parent.rowNo * (background.height / 6.5))
+                                property real maxY: minY + background.height / 7.5
                                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
                                 height: background.height / 7.5
                                 width: ((background.width > background.height) ? background.width : background.height) / 4.66
                                 visible: true
+
+                                function initDrag() {
+                                    originX = x
+                                    originY = y
+                                }
+
+                                function replace() {
+                                    x = originX
+                                    y = originY
+                                }
+
+                                function checkDrop() {
+                                    // Checks the drop location of this wagon
+                                    var globalCoordinates = loco.mapToItem(background, 0, 0)
+                                    if(globalCoordinates.y <= ((background.height / 8.0) + (background.height / 12.5))) {
+                                        if(listModel.count == 0) {
+                                            Activity.addWagon(uniqueID + 1, 0);
+                                        } else {
+                                            var dropIndex = Activity.getDropIndex(globalCoordinates.x)
+                                            Activity.addWagon(uniqueID + 1, dropIndex);
+                                        }
+                                    }
+                                    Activity.isAnswer()
+                                }
+
                                 MouseArea {
                                     id: mouseArea
                                     hoverEnabled: true
-                                    enabled: true
                                     anchors.fill: parent
                                     drag.target: parent
-                                    //                                    onClicked: {
-                                    //                                        Activity.addWagon(parent.uniqueID + 1);
-                                    //                                        Activity.isAnswer();
-                                    //                                    }
+                                    drag.axis: (parent.y  >= 0  &&  parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
+                                    enabled: true
                                     onPressed: {
-                                        //                                        tileImage.anchors.centerIn = undefined
-                                        parent.originXAxis = parent.x
-                                        parent.originYAxis = parent.y
+                                        parent.initDrag()
                                     }
-
-                                    //                                    onUpdated: {
-                                    //                                        var moveX = point1.x - startX
-                                    //                                        var moveY = point1.y - startY
-                                    //                                        parent.x = parent.x + moveX
-                                    //                                        parent.y = parent.y + moveY
-                                    //                                    }
-
                                     onReleased: {
-                                        //                                        if (pressedOnce) {
-                                        //                                            pressedOnce = false
-                                        //                                            item.selected = false
-                                        //                                            var coord = backgroundContainer.mapFromItem(tileImage.parent, parent.x, parent.y)
-                                        //                                            if(coord.x > 0 && (backgroundContainer.width - coord.x > tileImage.fullWidth))
-                                        //                                                Activity.createComponent(coord.x, coord.y, index)
-                                        //                                            tileImage.anchors.centerIn = tile
-                                        //                                            tileImage.toSmall()
-                                        //                                            toolTip.show("")
-                                        //                                        }
-                                        parent.x = parent.originXAxis
-                                        parent.y = parent.originYAxis
+                                        parent.Drag.cancel()
+                                        parent.checkDrop()
+                                        parent.replace()
                                     }
-
-
                                 }
+
+                                Component.onCompleted: initDrag();
+
                                 states: State {
                                     name: "carHover"
                                     when: mouseArea.containsMouse
