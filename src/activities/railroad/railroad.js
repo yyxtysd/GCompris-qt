@@ -49,6 +49,7 @@ function initLevel() {
     var index = 0;
     memoryMode = false;
     items.railCollection.visible = false;
+    items.timer.stop();
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
     items.displayList.model = items.listModel;
@@ -82,7 +83,7 @@ function initLevel() {
         isReset = false;
     }
     if (items.introMessage.visible === false) {
-        items.animateFlow.start()
+        items.timer.start()
     }
     items.bar.level = currentLevel + 1;
 }
@@ -156,9 +157,9 @@ function getDropIndex(x) {
         var itemWidth = items.displayList.itemAt(index).width;
         if (x < xVal && index == 0) {
             return 0;
-        } else if ((xVal + itemWidth + items.displayFlow.spacing) <= x && index == (count - 1)) {
+        } else if ((xVal + itemWidth + items.displayRow.spacing) <= x && index == (count - 1)) {
             return count;
-        } else if (xVal <= x && x < (xVal + itemWidth + items.displayFlow.spacing)) {
+        } else if (xVal <= x && x < (xVal + itemWidth + items.displayRow.spacing)) {
             return index + 1;
          }
     }
