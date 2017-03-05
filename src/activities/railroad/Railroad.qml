@@ -20,6 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.1
+import QtQuick.Controls 2.0
 import GCompris 1.0
 import "../../core"
 import "railroad.js" as Activity
@@ -55,11 +56,12 @@ ActivityBase {
             property alias bar: bar
             property alias bonus: bonus
             property alias score: score
+            property alias timer: timer
             property alias sampleList: sampleList
             property alias listModel: listModel
             property alias displayList: displayList
             property alias animateFlow: animateFlow
-            property alias displayFlow: displayFlow
+            property alias displayRow: displayRow
             property alias railCollection: railCollection
             property alias introMessage: introMessage
         }
@@ -69,47 +71,110 @@ ActivityBase {
         }
         onStop: { Activity.stop() }
 
+        // Swipe message
+        GCText {
+            id: swipe
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
+            text: "<<== Swipe here ==>>"
+            fontSize: smallSize
+            font.weight: Font.DemiBold
+            color: "black"
+        }
+
+        // Countdown timer
+        Countdown {
+            id: timer
+            anchors {
+                left: background.left
+                top: background.top
+            }
+            onTriggert: items.animateFlow.start();
+        }
+
+        // Intro message
+        IntroMessage {
+            id: introMessage
+            y: (background.height / 4.7)
+            anchors {
+                right: parent.right
+                rightMargin: 5
+                left: parent.left
+                leftMargin: 5
+            }
+            z: 100
+            onIntroDone: {
+                timer.start()
+            }
+            intro: [
+                qsTr("Swap left-right to view all the carriages outside display area. Memorize them before the timer ends!")
+            ]
+        }
+
         // Top Display Area
         Rectangle {
             width: background.width
-            height: background.height
+            height: background.height / 5
             color: 'transparent'
             x: 2
-            y : background.height / 12.5
+            y : 0
+            z: 1
 
-            MouseArea {
-                id: topMouseArea
-                enabled: true
-                hoverEnabled: true
-                anchors.fill: parent
-            }
             Flickable {
                 id: flickTop
                 width: parent.width
                 height: parent.height
-                contentWidth: displayFlow.width
-                contentHeight: width
+                contentWidth: displayRow.width
+                contentHeight: displayRow.height
                 flickableDirection: Flickable.HorizontalFlick
                 anchors.fill: parent
 
-
                 Row {
-                    id: displayFlow
-                    x: flickTop.x
-                    y: 0
+                    id: displayRow
+                    x: parent.x
+                    y: background.height / 12.7
                     width: childrenRect.width
+                    height: childrenRect.height
                     spacing: background.width * 0.0025
 
                     Repeater {
                         id: displayList
                         model: listModel
-
                         delegate : Image {
                             id: wagon
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
-                            width: ((background.width > background.height) ? background.width : background.height) / 4.66
+                            width: ((background.width > background.height) ? background.width : background.height) / 5.66
                             visible: true
+
+                            function checkDrop(dragItem) {
+                                // Checks the drop location of this wagon
+                                var globalCoordinates = dragItem.mapToItem(background, 0, 0)
+                                if(globalCoordinates.y <= ((background.height / 12.5) + (background.height / 8))) {
+                                    var dropIndex = Activity.getDropIndex(globalCoordinates.x)
+
+                                    if (dropIndex > (listModel.count - 1)) {
+                                        // Handles index overflow
+                                        dropIndex = listModel.count - 1
+                                    }
+                                    listModel.move(listModel.count - 1, dropIndex, 1)
+                                    opacity = 1
+                                }
+                                if (globalCoordinates.y > ((background.height / 12.5) + (background.height / 8))){
+                                    // Remove it if dropped in the lower section
+                                    listModel.remove(listModel.count - 1)
+                                }
+                            }
+
+                            function createNewItem() {
+                                var component = Qt.createComponent("Loco.qml");
+                                if (component.status === Component.Ready) {
+                                    var newItem = component.createObject(parent, {"x":x, "y":y, "z": 10 ,"imageIndex": listModel.get(index).id});
+                                }
+                                return newItem
+                            }
 
                             MouseArea {
                                 id: displayWagonMouseArea
@@ -117,13 +182,29 @@ ActivityBase {
                                 enabled: introMessage.visible ? false : true
                                 anchors.fill: parent
 
-                                onClicked: {
+                                onPressed: {
                                     if (Activity.memoryMode == true) {
-                                        listModel.remove(index);
-                                        Activity.isAnswer();
-                                    } else {
+                                        drag.target = parent.createNewItem();
+                                        parent.opacity = 0
+                                        listModel.move(index, listModel.count - 1, 1)
+                                    }
+                                }
+                                onReleased: {
+                                    if (Activity.memoryMode == true) {
+                                        var dragItem = drag.target
+                                        parent.checkDrop(dragItem)
+
+                                        dragItem.destroy();
+                                        parent.Drag.cancel()
+                                        Activity.isAnswer()
+                                    }
+                                }
+
+                                onClicked: {
+                                    if (Activity.memoryMode == false) {
+                                        timer.stop()
                                         animateFlow.stop();
-                                        displayFlow.x = 2;
+                                        displayRow.x = 2;
                                         listModel.clear();
                                         Activity.memoryMode = true;
                                         Activity.items.railCollection.visible = true
@@ -141,9 +222,10 @@ ActivityBase {
                         }
                     }
                     onXChanged: {
-                        if (displayFlow.x >= background.width) {
+                        if (displayRow.x >= background.width) {
+                            timer.stop()
                             animateFlow.stop();
-                            displayFlow.x = 2;
+                            displayRow.x = 2;
                             listModel.clear();
                             Activity.memoryMode = true;
                             items.railCollection.visible = true;
@@ -151,19 +233,19 @@ ActivityBase {
                     }
                     PropertyAnimation {
                         id: animateFlow
-                        target: displayFlow
+                        target: displayRow
                         properties: "x"
                         from: 2
                         to: background.width
-                        duration: 14000
+                        duration: 4000
                         easing.type: Easing.InExpo
                         loops: 1
                     }
                 }
+            }
 
-                ListModel {
-                    id: listModel
-                }
+            ListModel {
+                id: listModel
             }
         }
 
@@ -201,11 +283,9 @@ ActivityBase {
                                 readonly property int uniqueID: Activity.sum(parent.rowNo) + index
                                 property real originX
                                 property real originY
-                                property real minY: (background.height / 4.7) + (parent.rowNo * (background.height / 6.5))
-                                property real maxY: minY + background.height / 7.5
                                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
                                 height: background.height / 7.5
-                                width: ((background.width > background.height) ? background.width : background.height) / 4.66
+                                width: ((background.width > background.height) ? background.width : background.height) / 5.66
                                 visible: true
 
                                 function initDrag() {
@@ -279,24 +359,6 @@ ActivityBase {
                 color: "transparent"
                 border.width: 5
             }
-        }
-
-        IntroMessage {
-            id: introMessage
-            y: (background.height / 4.7)
-            anchors {
-                right: parent.right
-                rightMargin: 5
-                left: parent.left
-                leftMargin: 5
-            }
-            z: 100
-            onIntroDone: {
-                items.animateFlow.start();
-            }
-            intro: [
-                qsTr("Swap left-right to view all the carriages outside display area!")
-            ]
         }
 
         DialogHelp {
