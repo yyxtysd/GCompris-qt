@@ -64,6 +64,7 @@ ActivityBase {
             property alias displayRow: displayRow
             property alias railCollection: railCollection
             property alias introMessage: introMessage
+            property bool mouseEnabled: true
         }
 
         onStart: {
@@ -152,7 +153,7 @@ ActivityBase {
 
                             function checkDrop(dragItem) {
                                 // Checks the drop location of this wagon
-                                var globalCoordinates = dragItem.mapToItem(background, 0, 0)
+                                var globalCoordinates = dragItem.mapToItem(displayList, 0, 0)
                                 if(globalCoordinates.y <= ((background.height / 12.5) + (background.height / 8))) {
                                     var dropIndex = Activity.getDropIndex(globalCoordinates.x)
 
@@ -180,7 +181,7 @@ ActivityBase {
                             MouseArea {
                                 id: displayWagonMouseArea
                                 hoverEnabled: true
-                                enabled: introMessage.visible ? false : true
+                                enabled: (introMessage.visible ? false : true) && items.mouseEnabled
                                 anchors.fill: parent
 
                                 onPressed: {
@@ -262,6 +263,7 @@ ActivityBase {
                     x: 2
                     y: (background.height / 4.7) + (index * (background.height / 6.5))
                     height: background.height / 7.5
+                    z: 1
                     width: background.width
                     contentWidth:  railCarriages.childrenRect.width
                     contentHeight: height
@@ -301,7 +303,7 @@ ActivityBase {
 
                                 function checkDrop() {
                                     // Checks the drop location of this wagon
-                                    var globalCoordinates = loco.mapToItem(background, 0, 0)
+                                    var globalCoordinates = loco.mapToItem(displayList, 0, 0)
                                     if(globalCoordinates.y <= ((background.height / 8.0) + (background.height / 12.5))) {
                                         if(listModel.count == 0) {
                                             Activity.addWagon(uniqueID + 1, 0);
@@ -319,7 +321,7 @@ ActivityBase {
                                     anchors.fill: parent
                                     drag.target: parent
                                     drag.axis: (parent.y  >= 0  &&  parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
-                                    enabled: true
+                                    enabled: items.mouseEnabled
                                     onPressed: {
                                         parent.initDrag()
                                     }
@@ -375,6 +377,7 @@ ActivityBase {
             anchors.leftMargin: 10 * ApplicationInfo.ratio
             anchors.bottom: undefined
             anchors.left: undefined
+            visible: true
         }
 
         Bar {

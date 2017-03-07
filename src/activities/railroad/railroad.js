@@ -47,6 +47,7 @@ function stop() {
 
 function initLevel() {
     var index = 0;
+    items.mouseEnabled = true;
     memoryMode = false;
     items.railCollection.visible = false;
     items.timer.stop();
@@ -131,6 +132,7 @@ function isAnswer() {
             }
         }
         if (flag == true) {
+            items.mouseEnabled = false; // Disables the touch
             items.bonus.good("flower");
         }
     }
