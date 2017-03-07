@@ -126,10 +126,11 @@ ActivityBase {
                 id: flickTop
                 width: parent.width
                 height: parent.height
-                contentWidth: displayRow.width
+                contentWidth: displayRow.width * 1.2
                 contentHeight: displayRow.height
                 flickableDirection: Flickable.HorizontalFlick
                 anchors.fill: parent
+                interactive: !animateFlow.running
 
                 Row {
                     id: displayRow
