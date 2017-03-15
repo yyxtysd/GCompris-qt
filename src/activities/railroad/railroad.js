@@ -29,6 +29,7 @@ var noOfCarriages = [5, 6, 5, 6]
 var rowWidth = [0.95, 0.1, 0.1, 0.1]
 var memoryMode = false
 var solutionArray = []
+var backupListModel = []
 var isReset = false
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var maxSubLevel = 3
@@ -53,12 +54,12 @@ function initLevel() {
     items.timer.stop();
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
-    items.displayList.model = items.listModel;
-    if (isReset == false) {
+    if(isReset == false) {
         // Initiates a new level
+        backupListModel = [];
         solutionArray = [];
         for (var i = 0; i < currentLevel + 2; i++) {
-            if (i == (currentLevel + 1)) {
+            if(i == (currentLevel + 1)) {
                 // Selects the last carriage
                 do {
                     index = Math.floor(Math.random() * 9) + 1;
@@ -73,7 +74,6 @@ function initLevel() {
             solutionArray.push(index);
             items.listModel.append({"id" : index});
             (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
-
         }
     } else {
         // Re-setup the same level
@@ -81,16 +81,15 @@ function initLevel() {
             items.listModel.append({"id" : solutionArray[i]});
             (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (solutionArray[i]) + ".svg";
         }
-        isReset = false;
     }
-    if (items.introMessage.visible === false) {
+    if(items.introMessage.visible === false) {
         items.timer.start()
     }
     items.bar.level = currentLevel + 1;
 }
 
 function nextLevel() {
-    if(numberOfLevel <= ++currentLevel ) {
+    if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
     items.score.currentSubLevel = 1;
@@ -106,6 +105,13 @@ function previousLevel() {
 }
 
 function reset() {
+    if(!isReset) {
+    // If reset was not pressed twice
+    backupListModel = [];
+        for (var index = 0; index < items.listModel.count; index++) {
+            backupListModel.push(items.listModel.get(index).id);
+        }
+    }
     isReset = true;
     initLevel();
 }
@@ -113,7 +119,7 @@ function reset() {
 function advanceSubLevel() {
     /* Sets up the next sublevel */
     items.score.currentSubLevel++;
-    if (items.score.currentSubLevel > maxSubLevel) {
+    if(items.score.currentSubLevel > maxSubLevel) {
         nextLevel();
         items.score.currentSubLevel = 1;
     } else {
@@ -123,15 +129,15 @@ function advanceSubLevel() {
 
 function isAnswer() {
     /* Checks if the top level setup equals the solutions */
-    if (items.listModel.count === solutionArray.length) {
+    if(items.listModel.count === solutionArray.length) {
         var flag = true;
         for (var index = 0; index < items.listModel.count; index++) {
-            if (items.listModel.get(index).id != solutionArray[index]) {
+            if(items.listModel.get(index).id != solutionArray[index]) {
                 flag = false;
                 break;
             }
         }
-        if (flag == true) {
+        if(flag == true) {
             items.mouseEnabled = false; // Disables the touch
             items.bonus.good("flower");
         }
@@ -157,11 +163,11 @@ function getDropIndex(x) {
     for (var index = 0; index < count; index++) {
         var xVal = items.displayList.itemAt(index).x;
         var itemWidth = items.displayList.itemAt(index).width;
-        if (x < xVal && index == 0) {
+        if(x < xVal && index == 0) {
             return 0;
-        } else if ((xVal + itemWidth + items.displayRow.spacing) <= x && index == (count - 1)) {
+        } else if((xVal + itemWidth + items.displayRow.spacing) <= x && index == (count - 1)) {
             return count;
-        } else if (xVal <= x && x < (xVal + itemWidth + items.displayRow.spacing)) {
+        } else if(xVal <= x && x < (xVal + itemWidth + items.displayRow.spacing)) {
             return index + 1;
          }
     }
