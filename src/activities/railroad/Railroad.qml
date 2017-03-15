@@ -86,13 +86,11 @@ ActivityBase {
         }
 
         // Countdown timer
-        Countdown {
+        Timer {
             id: timer
-            anchors {
-                left: background.left
-                top: background.top
-            }
-            onTriggert: items.animateFlow.start();
+            repeat: false
+            interval: 4000
+            onTriggered: items.animateFlow.start();
         }
 
         // Intro message
@@ -157,14 +155,14 @@ ActivityBase {
                                 if(globalCoordinates.y <= ((background.height / 12.5) + (background.height / 8))) {
                                     var dropIndex = Activity.getDropIndex(globalCoordinates.x)
 
-                                    if (dropIndex > (listModel.count - 1)) {
+                                    if(dropIndex > (listModel.count - 1)) {
                                         // Handles index overflow
                                         dropIndex = listModel.count - 1
                                     }
                                     listModel.move(listModel.count - 1, dropIndex, 1)
                                     opacity = 1
                                 }
-                                if (globalCoordinates.y > ((background.height / 12.5) + (background.height / 8))){
+                                if(globalCoordinates.y > ((background.height / 12.5) + (background.height / 8))){
                                     // Remove it if dropped in the lower section
                                     listModel.remove(listModel.count - 1)
                                 }
@@ -172,7 +170,7 @@ ActivityBase {
 
                             function createNewItem() {
                                 var component = Qt.createComponent("Loco.qml");
-                                if (component.status === Component.Ready) {
+                                if(component.status === Component.Ready) {
                                     var newItem = component.createObject(parent, {"x":x, "y":y, "z": 10 ,"imageIndex": listModel.get(index).id});
                                 }
                                 return newItem
@@ -185,17 +183,16 @@ ActivityBase {
                                 anchors.fill: parent
 
                                 onPressed: {
-                                    if (Activity.memoryMode == true) {
+                                    if(Activity.memoryMode == true) {
                                         drag.target = parent.createNewItem();
                                         parent.opacity = 0
                                         listModel.move(index, listModel.count - 1, 1)
                                     }
                                 }
                                 onReleased: {
-                                    if (Activity.memoryMode == true) {
+                                    if(Activity.memoryMode == true) {
                                         var dragItem = drag.target
                                         parent.checkDrop(dragItem)
-
                                         dragItem.destroy();
                                         parent.Drag.cancel()
                                         Activity.isAnswer()
@@ -203,11 +200,16 @@ ActivityBase {
                                 }
 
                                 onClicked: {
-                                    if (Activity.memoryMode == false) {
+                                    if(Activity.memoryMode == false) {
                                         timer.stop()
                                         animateFlow.stop();
                                         displayRow.x = 2;
                                         listModel.clear();
+                                        Activity.isReset = false;
+                                        for (var index = 0; index < Activity.backupListModel.length; index++) {
+                                            Activity.items.listModel.append({"id" : Activity.backupListModel[index]});
+                                            (Activity.items.displayList.itemAt(Activity.items.listModel.count - 1)).source = Activity.resourceURL + "loco" + (Activity.backupListModel[index]) + ".svg";
+                                        }
                                         Activity.memoryMode = true;
                                         Activity.items.railCollection.visible = true
                                     }
@@ -224,7 +226,7 @@ ActivityBase {
                         }
                     }
                     onXChanged: {
-                        if (displayRow.x >= background.width) {
+                        if(displayRow.x >= background.width) {
                             timer.stop()
                             animateFlow.stop();
                             displayRow.x = 2;
