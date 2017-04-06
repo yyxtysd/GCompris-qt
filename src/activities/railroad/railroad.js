@@ -93,6 +93,7 @@ function nextLevel() {
         currentLevel = 0
     }
     items.score.currentSubLevel = 1;
+    isReset = false;
     initLevel();
 }
 
@@ -101,19 +102,20 @@ function previousLevel() {
         currentLevel = numberOfLevel - 1
     }
     items.score.currentSubLevel = 1;
+    isReset = false;
     initLevel();
 }
 
 function reset() {
     if(!isReset) {
-    // If reset was not pressed twice
-    backupListModel = [];
+        // If reset was not pressed twice
+        backupListModel = [];
         for (var index = 0; index < items.listModel.count; index++) {
             backupListModel.push(items.listModel.get(index).id);
         }
+        isReset = true;
+        initLevel();
     }
-    isReset = true;
-    initLevel();
 }
 
 function advanceSubLevel() {
@@ -130,14 +132,14 @@ function advanceSubLevel() {
 function isAnswer() {
     /* Checks if the top level setup equals the solutions */
     if(items.listModel.count === solutionArray.length) {
-        var flag = true;
+        var isSolution = true;
         for (var index = 0; index < items.listModel.count; index++) {
             if(items.listModel.get(index).id != solutionArray[index]) {
-                flag = false;
+                isSolution = false;
                 break;
             }
         }
-        if(flag == true) {
+        if(isSolution == true) {
             items.mouseEnabled = false; // Disables the touch
             items.bonus.good("flower");
         }
@@ -169,6 +171,6 @@ function getDropIndex(x) {
             return count;
         } else if(xVal <= x && x < (xVal + itemWidth + items.displayRow.spacing)) {
             return index + 1;
-         }
+        }
     }
 }
