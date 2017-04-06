@@ -20,7 +20,6 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.1
-import QtQuick.Controls 2.0
 import GCompris 1.0
 import "../../core"
 import "railroad.js" as Activity
@@ -79,7 +78,7 @@ ActivityBase {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
             }
-            text: "<<== Swipe here ==>>"
+            text: qsTr("<<== Swipe here ==>>")
             fontSize: smallSize
             font.weight: Font.DemiBold
             color: "black"
@@ -384,15 +383,31 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level | reload}
+            content: BarEnumContent { value: help | home | level | hint }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
-            onReloadClicked: {
-                Activity.reset()
+            onHintClicked: {
+                if (!introMessage.visible && items.mouseEnabled) {
+                    if(Activity.memoryMode == false) {
+                        timer.stop()
+                        animateFlow.stop();
+                        displayRow.x = 2;
+                        listModel.clear();
+                        Activity.isReset = false;
+                        for (var index = 0; index < Activity.backupListModel.length; index++) {
+                            Activity.items.listModel.append({"id" : Activity.backupListModel[index]});
+                            (Activity.items.displayList.itemAt(Activity.items.listModel.count - 1)).source = Activity.resourceURL + "loco" + (Activity.backupListModel[index]) + ".svg";
+                        }
+                        Activity.memoryMode = true;
+                        Activity.items.railCollection.visible = true
+                    } else {
+                        Activity.reset();
+                    }
+                }
             }
         }
 
