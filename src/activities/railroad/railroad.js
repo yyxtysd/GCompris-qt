@@ -82,7 +82,7 @@ function initLevel() {
             (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (solutionArray[i]) + ".svg";
         }
     }
-    if(items.introMessage.visible === false) {
+    if(items.introMessage.visible === false && !isReset) {
         items.timer.start()
     }
     items.bar.level = currentLevel + 1;
