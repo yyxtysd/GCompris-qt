@@ -60,7 +60,11 @@ ActivityBase {
             property var whaleCategory: Fixture.Category3
             property var upperGatefixerCategory: Fixture.Category4
             property var lowerGatefixerCategory: Fixture.Category5
+            property var dataset: datasets.dataset
+        }
 
+        Dataset {
+            id: datasets
         }
 
         IntroMessage {
@@ -202,6 +206,15 @@ ActivityBase {
                     friction: 0
                     restitution: 0
                 }
+            }
+
+            NumberAnimation {
+                id: gateOpenAnimation
+                target: upperGate
+                properties: "height"
+                from: upperGate.height
+                to: upperGate.height / 2
+                duration: 1000
             }
         }
 

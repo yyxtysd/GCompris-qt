@@ -54,6 +54,38 @@ function initLevel() {
             }
         }
     }
+    setUpLevelElements()
+}
+
+function setUpLevelElements() {
+    for (var i = 0;i < items.dataset.length;i++) {
+        items.dataset[i].component.visible = items.dataset[i].levels[currentLevel].visible;
+
+        if (items.dataset[i].component.visible == false) {
+            /*
+             * If this component is not required in this current level,
+             * Do not apply the other changes
+             */
+            continue;
+        }
+
+        // Apply the component values, if it is defined in the dataset
+        if (items.dataset[i].levels[currentLevel].x) {
+            items.dataset[i].component.x = items.dataset[i].levels[currentLevel].x
+        }
+
+        if (items.dataset[i].levels[currentLevel].y) {
+            items.dataset[i].component.y = items.dataset[i].levels[currentLevel].y
+        }
+
+        if (items.dataset[i].levels[currentLevel].width) {
+            items.dataset[i].component.width = items.dataset[i].levels[currentLevel].width
+        }
+
+        if (items.dataset[i].levels[currentLevel].height) {
+            items.dataset[i].component.height = items.dataset[i].levels[currentLevel].height
+        }
+    }
 }
 
 function nextLevel() {
