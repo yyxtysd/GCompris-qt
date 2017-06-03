@@ -3,7 +3,7 @@
  * Copyright (C) 2017 Divyam Madaan <divyam3897@gmail.com>
  *
  * Authors:
- *   <THE GTK VERSION AUTHOR> (GTK+ version)
+ *   Frederic Mazzarol (GTK+ version)
  *   Divyam Madaan <divyam3897@gmail.com> (Qt Quick port)
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -51,10 +51,11 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property alias message: message
-            property alias hintDialog: hintDialog
             property alias repeater: repeater
-            property bool playerOne: true
+            property bool playerOneTurn: true
+            property bool isTutorial: true
+            property alias tutorialTxt: tutorialTxt.text
+            property alias tutNum: tutorialTxt.tutNum
             property var playerOneScore: 0
             property var playerOneSeeds: 0
             property var playerTwoScore: 0
@@ -66,28 +67,11 @@ ActivityBase {
 
         Image {
             id: board
-            source: Activity.url + "/awele_board.png"
+            source: Activity.url + "/owareBoard.png"
             anchors.centerIn: parent
             width: parent.width * 0.7
             height: width * 0.4
-        }
-
-        IntroMessage {
-            id: message
-            anchors {
-                top: parent.top
-                topMargin: 10
-                right: parent.right
-                rightMargin: 5
-                left: parent.left
-                leftMargin: 5
-            }
-            z: 100
-            intro: [
-                qsTr("An oware board has two rows of 6 houses. Each player controls six houses. The game begins with 4 seeds in each house."),
-                qsTr("Players take turns moving the seeds. On a turn, a player chooses one of the six houses under their control. The player removes all seeds from that house, and distributes them, dropping one in each house clockwise or counter clockwise from this house, in a process called <b>sowing</b>.") ,
-                qsTr("When the dropped seeds make the number of seeds two or three in opponent's houses then they are <b>captured</b>. The players can capture seeds only from opponent's holes and never from their own holes.The player who captures the maximum seeds wins the game.")
-            ]
+            visible: !items.isTutorial
         }
 
         Grid {
@@ -96,6 +80,7 @@ ActivityBase {
             rows: 2
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.top
+            visible: !items.isTutorial
 
             Repeater {
                 id:repeater
@@ -113,14 +98,26 @@ ActivityBase {
                         anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
+                    
                     Repeater {
                         model: value
                         Image {
-                            source: Activity.url + "graine2.png"
+                            id: grain
+                            source: Activity.url + "grain2.png"
                             height: circleRadius * 0.2
                             width: circleRadius * 0.2
                             x: circleRadius/2 + Activity.getX(circleRadius/6,index,value)
                             y: circleRadius/2 + Activity.getY(circleRadius/5,index,value)
+
+                            //To move the seeds from one hole to other on button click. Not working :(
+                            states: State {
+                                name: "move"
+                                when: buttonClick.containsPress
+                                PropertyChanges {
+                                    target: grain
+                                    scale: 1.1
+                                }
+                            }
                         }
                     }
                 }
@@ -136,6 +133,7 @@ ActivityBase {
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.bottom
             interactive: false
+            visible: !items.isTutorial
 
             delegate: Item {
                 height: parent.height
@@ -143,28 +141,29 @@ ActivityBase {
 
                 Image {
                     id: valueImage
-                    source: Activity.url + "bouton" + (index + 1) + ".png"
+                    source: Activity.url + "button" + (index + 1) + ".png"
                     anchors.fill: parent
                     MouseArea {
+                        id: buttonClick
                         anchors.fill:parent
                         hoverEnabled: true
                             onClicked: {
-                                Activity.sowSeeds(index);
-                                items.playerOne = (items.playerOne == true) ? false : true
+//                                 Activity.sowSeeds(index);
+                                items.playerOneTurn = (!items.playerOneTurn == true) ? false : true
                             }
                         onPressed: {
-                            valueImage.source = Activity.url + "bouton" + (index + 1) + "_clic.png";
+                            valueImage.source = Activity.url + "button" + (index + 1) + "Click.png";
                         }
                         onReleased: {
-                            valueImage.source = Activity.url + "bouton" + (index + 1) + ".png";
+                            valueImage.source = Activity.url + "button" + (index + 1) + ".png";
                         }
                         onEntered: {
-                            valueImage.source = Activity.url + "bouton" + (index + 1) + "_notify.png";
+                            valueImage.source = Activity.url + "button" + (index + 1) + "Notify.png";
                         }
                         onExited: {
-                            valueImage.source = Activity.url + "bouton" + (index + 1) + ".png";
+                            valueImage.source = Activity.url + "button" + (index + 1) + ".png";
                         }
-                    }
+                   }
                 }
             }
         }
@@ -173,7 +172,8 @@ ActivityBase {
             id: playerOneLevelScore
             player: 1
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
-            width: height*11/8
+            width: height * 11/8
+            visible: !items.isTutorial
             anchors {
                 top: background.top
                 topMargin: 5
@@ -189,6 +189,7 @@ ActivityBase {
             player: 2
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height*11/8
+            visible: !items.isTutorial
             anchors {
                 top: background.top
                 topMargin: 5
@@ -206,11 +207,11 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: board.left
+            visible: !items.isTutorial
 
             GCText {
                 id: playerOneScoreText
                 color: "white"
-                property var textSource:Activity.playerTwoPoints
                 anchors.centerIn: parent
                 fontSize: smallSize
                 text: items.playerOneScore
@@ -226,11 +227,11 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: board.right
+            visible: !items.isTutorial
 
             GCText {
                 id: playerTwoScoreText
                 color: "white"
-                property var textSource:Activity.playerTwoPoints
                 anchors.centerIn: parent
                 fontSize: smallSize
                 text: items.playerTwoScore
@@ -239,13 +240,148 @@ ActivityBase {
             }
         }
 
-        DialogBackground {
-            id: hintDialog
-            visible: false
-            title: qsTr("Rules")
-            textBody:  qsTr("An oware board has two rows of 6 houses. Each player controls six houses. The game begins with 4 seeds in each house. Players take turns moving the seeds. On a turn, a player chooses one of the six houses under their control. The player removes all seeds from that house, and distributes them, dropping one in each house clockwise or counter clockwise from this house, in a process called <b>sowing</b>. When the dropped seeds make the number of seeds two or three in opponent's houses then they are <b>captured</b>. The players can capture seeds only from opponent's holes and never from their own holes.The player who captures the maximum seeds wins the game.")
-            onClose: home()
+        Image {
+            id: previousTutorial
+            source: "qrc:/gcompris/src/core/resource/bar_previous.svg"
+            sourceSize.height: skipTutorial.height * 1.1
+            visible: items.isTutorial && tutorialTxt.tutNum != 1
+            anchors {
+                top: parent.top
+                topMargin: 5
+                right: skipTutorialContainer.left
+                rightMargin: 5
+            }
+
+            MouseArea {
+                id: previousArea
+                width: parent.width
+                height: parent.height
+                onClicked: {Activity.tutorialPrevious()}
+            }
         }
+
+        Image {
+            id: nextTutorial
+            source: "qrc:/gcompris/src/core/resource/bar_next.svg"
+            sourceSize.height: skipTutorial.height * 1.1
+            visible: items.isTutorial && tutorialTxt.tutNum != 3
+            anchors {
+                top: parent.top
+                topMargin: 5
+                left: skipTutorialContainer.right
+                leftMargin: 5
+            }
+
+            MouseArea {
+                id: nextArea
+                width: parent.width
+                height: parent.height
+                onClicked: {Activity.tutorialNext()}
+            }
+        }
+
+        GCText {
+            id: skipTutorial
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: 5
+            }
+            fontSizeMode: Text.Fit
+            minimumPixelSize: 10
+            color: "white"
+            style: Text.Outline
+            styleColor: "black"
+            horizontalAlignment: Text.AlignHCenter
+            width: Math.min(implicitWidth, 0.8 * parent.width )
+            height: implicitHeight
+            visible: items.isTutorial
+            text: qsTr("Skip tutorial")
+            z: 2
+        }
+
+        Rectangle {
+            id: skipTutorialContainer
+            anchors.top: skipTutorial.top
+            anchors.horizontalCenter: skipTutorial.horizontalCenter
+            width: skipTutorial.width + 10
+            height: skipTutorial.height + 2
+            opacity: 0.8
+            radius: 10
+            border.width: 2
+            border.color: "black"
+            visible: items.isTutorial
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#000" }
+                GradientStop { position: 0.9; color: "#666" }
+                GradientStop { position: 1.0; color: "#AAA" }
+            }
+            MouseArea {
+                id: skipArea
+                hoverEnabled: true
+                width: parent.width
+                height: parent.height
+                onEntered: {skipTutorialContainer.border.color = "#62db53"}
+                onExited: {skipTutorialContainer.border.color = "black"}
+                onClicked: {Activity.tutorialSkip()}
+            }
+        }
+
+        GCText {
+            id: tutorialTxt
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: skipTutorial.bottom
+                topMargin: skipTutorial.height * 0.5
+            }
+            fontSizeMode: Text.Fit
+            minimumPixelSize: 10
+            color: "black"
+            horizontalAlignment: Text.AlignHLeft
+            width: Math.min(implicitWidth, 0.8 * parent.width )
+            height: Math.min(implicitHeight, 0.25 * parent.height )
+            wrapMode: TextEdit.WordWrap
+            visible: items.isTutorial
+            z: 2
+            property int tutNum: 1
+        }
+
+        Rectangle {
+            id: tutorialTxtContainer
+            anchors.top: tutorialTxt.top
+            anchors.horizontalCenter: tutorialTxt.horizontalCenter
+            width: tutorialTxt.width + 20
+            height: tutorialTxt.height + 2
+            opacity: 0.8
+            radius: 10
+            border.width: 6
+            color: "white"
+            border.color: "#87A6DD"
+            visible: items.isTutorial
+            /*
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#000" }
+                GradientStop { position: 0.9; color: "#666" }
+                GradientStop { position: 1.0; color: "#AAA" }
+            }*/
+        }
+
+        Image {
+            id: tutorialImage
+            source: "qrc:/gcompris/src/activities/oware/resource/" + "tutorial" + tutorialTxt.tutNum + ".png"
+            property int heightNeed: background.height - tutorialTxtContainer.height - bar.height -
+                                     2 * skipTutorialContainer.height
+            width: (sourceSize.width/sourceSize.height) > (0.9 * background.width / heightNeed) ?
+                   0.9 * background.width : (sourceSize.width * heightNeed) / sourceSize.height
+            fillMode: Image.PreserveAspectFit
+            visible: items.isTutorial
+            anchors {
+                top: tutorialTxt.bottom
+                topMargin: 10
+                horizontalCenter: parent.horizontalCenter
+            }
+        }
+        // Tutorial section ends
 
         DialogHelp {
             id: dialogHelp
@@ -254,19 +390,17 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level | hint}
+            content: BarEnumContent { value: help | home | level }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
-            onHintClicked: displayDialog(hintDialog)
         }
 
         Bonus {
             id: bonus
-            Component.onCompleted: win.connect(Activity.nextLevel)
         }
     }
 }
