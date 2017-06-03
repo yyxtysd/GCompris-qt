@@ -32,6 +32,9 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
+    onWidthChanged: Activity.resizeElements()
+    onHeightChanged: Activity.resizeElements()
+
     property string url: "qrc:/gcompris/src/activities/submarine/resource/"
 
     pageComponent: Image {
@@ -55,6 +58,8 @@ ActivityBase {
             property alias bar: bar
             property alias bonus: bonus
             property var tutorials: [engineTutorial, ballastTutorial, ruddersTutorial]
+            property alias crown: crown
+            property alias gateOpenAnimation: gateOpenAnimation
             property var submarineCategory: Fixture.Category1
             property var crownCategory: Fixture.Category2
             property var whaleCategory: Fixture.Category3
@@ -263,7 +268,11 @@ ActivityBase {
         Image {
             id: crown
             source: url + "crown.png"
+
+            x: background.width / 2
+            y: background.height - (subSchemaImage.height * 2)
             z: 1
+
             Body {
                 id: crownbody
                 target: crown

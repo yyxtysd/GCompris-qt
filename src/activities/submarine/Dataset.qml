@@ -27,64 +27,43 @@ QtObject {
         component: upperGate,
         levels: [
                 {
-                    visible: false,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    visible: false
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 },
                 {
                     visible: true,
-                    y: -2,
-                    width: background.width / 18,
-                    height: background.height * (5 / 12),
+                    height: background.height * (5 / 12)
                 }
             ]
         },
@@ -94,62 +73,87 @@ QtObject {
                 {
                     visible: false,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3 ,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
                 },
                 {
                     visible: true,
                     y: upperGate.height + 3,
-                    width: background.width / 18,
-                    height: upperGate.height- subSchemaImage.height / 1.4,
+                    height: upperGate.height- subSchemaImage.height / 1.4
+                },
+                {
+                    visible: true,
+                    y: upperGate.height + 3,
+                    height: upperGate.height- subSchemaImage.height / 1.4
+                }
+            ]
+        },
+        {
+        component: crown,
+        levels: [
+                {
+                    visible: false
+                },
+                {
+                    visible: false
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
+                },
+                {
+                    visible: true
                 }
             ]
         }

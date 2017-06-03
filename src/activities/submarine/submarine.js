@@ -28,6 +28,14 @@ var numberOfLevel = 10
 var items
 var barAtStart
 
+/*
+ * To check if the level elements are already initialised or not
+ * = -1 = levels are not yet initialised
+ * = 1 = levels are currently being initialised
+ * = 0 = levels are fully initialised
+ */
+var levelsBeingInitialised = -1
+
 function start(items_) {
     items = items_
     currentLevel = 0
@@ -54,12 +62,17 @@ function initLevel() {
             }
         }
     }
+    levelsBeingInitialised = 1
     setUpLevelElements()
 }
 
 function setUpLevelElements() {
     for (var i = 0;i < items.dataset.length;i++) {
-        items.dataset[i].component.visible = items.dataset[i].levels[currentLevel].visible;
+
+        /* Do not reinitialise visibility on screen change (useful for crowns) */
+        if (levelsBeingInitialised == 1) {
+            items.dataset[i].component.visible = items.dataset[i].levels[currentLevel].visible;
+        }
 
         if (items.dataset[i].component.visible == false) {
             /*
@@ -86,6 +99,19 @@ function setUpLevelElements() {
             items.dataset[i].component.height = items.dataset[i].levels[currentLevel].height
         }
     }
+
+    if ( !items.crown.visible && items.dataset[0].component.visible) {
+        items.gateOpenAnimation.start()
+    }
+}
+
+function resizeElements() {
+    /* Do not call the first time when the level is created */
+    if (levelsBeingInitialised == -1 ) {
+        return
+    }
+    levelsBeingInitialised = 0
+    setUpLevelElements()
 }
 
 function nextLevel() {
