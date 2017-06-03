@@ -45,6 +45,7 @@ function start(items_) {
 }
 
 function stop() {
+    levelsBeingInitialised = -1
     GCompris.ApplicationSettings.isBarHidden = barAtStart;
 }
 

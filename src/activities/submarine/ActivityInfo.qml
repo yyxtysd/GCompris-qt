@@ -30,6 +30,6 @@ ActivityInfo {
   prerequisite: qsTr("Move and click using the mouse")
   manual: qsTr("Control the various parts of the submarine (the engine, rudders and ballast tanks) to reach the end point")
   credit: ""
-  section: "fun"
+  section: "experimental"
   createdInVersion: 8000
 }
