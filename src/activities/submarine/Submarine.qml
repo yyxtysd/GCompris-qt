@@ -20,6 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
+import QtQuick.Particles 2.0
 import Box2D 2.0
 import QtGraphicalEffects 1.0
 
@@ -249,6 +250,95 @@ ActivityBase {
             function hit() {
                 whale.source = url + "whale_hit.png"
             }
+
+            property var targetX
+
+            Component.onCompleted: {
+                targetX = background.width - whale.width - (upperGate.visible ? upperGate.width : 0)
+                x = targetX
+            }
+
+            transform: Rotation {
+                id: rotate;
+                origin.x: whale.width / 2;
+                origin.y: 0;
+                axis { x: 0; y: 1; z: 0 } angle: 0
+            }
+
+            SequentialAnimation {
+                id: rotateLeftAnimation
+                loops: 1
+                PropertyAnimation {
+                    target: rotate
+                    properties: "angle"
+                    from: 0
+                    to: 180
+                    duration: 500
+                }
+            }
+
+            Loader {
+                id: bubbleEffect
+                anchors.fill: parent
+                active: ApplicationInfo.hasShader
+                sourceComponent: ParticleSystem {
+                    anchors.fill: parent
+                    Emitter {
+                        x: parent.x
+                        y: parent.y + parent.height / 2
+                        width: 1
+                        height: 1
+                        emitRate: 0.5
+                        lifeSpan: 1000
+                        lifeSpanVariation: 2500
+                        acceleration: PointDirection {
+                            x: -10
+                            xVariation: 10
+                            y: -20
+                            yVariation: 10
+                        }
+                        velocity: PointDirection {
+                            x: 20
+                            xVariation: 10
+                            y: -20
+                            yVariation: 10
+                        }
+                        size: 12
+                        sizeVariation: 8
+                    }
+
+                    ImageParticle {
+                        source: "qrc:/gcompris/src/activities/clickgame/resource/bubble.png"
+                    }
+                }
+            }
+
+            SequentialAnimation {
+                id: rotateRightAnimation
+                loops: 1
+                PropertyAnimation {
+                    target: rotate
+                    properties: "angle"
+                    from: 180
+                    to: 0
+                    duration: 500
+                }
+            }
+
+            onXChanged: {
+                if (x <= 0) {
+                    rotateLeftAnimation.start()
+                    targetX = background.width - whale.width  - (upperGate.visible ? upperGate.width : 0)
+                    x = targetX
+                } else if (x >= background.width - whale.width - (upperGate.visible ? upperGate.width : 0)) {
+                    rotateRightAnimation.start()
+                    targetX = 0
+                    x = targetX
+                }
+            }
+
+            /* Keep the speed constant irrespective of the screen width */
+            Behavior on x { PropertyAnimation { duration: (830 * 10000)/background.width } }
 
             Body {
                 id: whalebody

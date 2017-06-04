@@ -31,7 +31,8 @@ QtObject {
             items: [
                 {component: upperGate, visible: false},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: false}
+                {component: crown, visible: false},
+                {component: whale, visible: false}
             ]
         },
         {
@@ -42,7 +43,8 @@ QtObject {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: false}
+                {component: crown, visible: false},
+                {component: whale, visible: false}
             ]
         },
         {
@@ -53,56 +55,64 @@ QtObject {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: false}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: false}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: false}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2}
             ]
         },
         {
             items: [
                 {component: upperGate, visible: true, height: background.height * (5 / 12)},
                 {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true}
+                {component: crown, visible: true},
+                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2}
             ]
         }
     ]
