@@ -26,11 +26,13 @@ var currentLevel = 0
 var numberOfLevel = 4
 var items
 var url = "qrc:/gcompris/src/activities/oware/resource/"
+var tutorialInstructions = [ "At the beginning of the game four seeds are placed in each house. Players take turns by moving the seeds","In each turn, a player chooses one of the six houses under his or her control. The player removes all seeds from this house, and distributes them, dropping one in each house counter-clockwise from the original house, in a process called sowing.","After a turn, if the last seed was placed into an opponent's house and brought its total to two or three, all the seeds in that house are captured and placed in the player's scoring house (or set aside if the board has no scoring houses). If the previous-to-last seed also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."]
+
 function start(items_) {
     items = items_
     currentLevel = 0
     initLevel()
-    tutorial()
+    items.tutorialSection.tutorial()
 }
 
 function stop() {
@@ -62,37 +64,6 @@ function getX(radius,index,value){
 function getY(radius,index,value){
     var step = (2 * Math.PI) * index/value;
     return radius * Math.sin(step);
-}
-
-function tutorial() {
-    items.isTutorial = true
-    setTutorial(1)
-}
-
-function setTutorial(tutNum) {
-
-    if(tutNum == 1) {
-        items.tutorialTxt = qsTr("At the beginning of the game four seeds are placed in each house. Players take turns by moving the seeds")
-    }
-    else if(tutNum == 2) {
-        items.tutorialTxt = qsTr("In each turn, a player chooses one of the six houses under his or her control. The player removes all seeds from this house, and distributes them, dropping one in each house counter-clockwise from the original house, in a process called sowing.")
-    }
-    else if(tutNum == 3) {
-        items.tutorialTxt = qsTr("After a turn, if the last seed was placed into an opponent's house and brought its total to two or three, all the seeds in that house are captured and placed in the player's scoring house (or set aside if the board has no scoring houses). If the previous-to-last seed also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on.")
-    }
-}
-
-function tutorialSkip() {
-    items.isTutorial = false
-    initLevel()
-}
-
-function tutorialNext() {
-    setTutorial(++items.tutNum)
-}
-
-function tutorialPrevious() {
-    setTutorial(--items.tutNum)
 }
 
 function sowSeeds(index) {

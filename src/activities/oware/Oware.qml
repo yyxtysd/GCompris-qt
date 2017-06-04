@@ -54,8 +54,9 @@ ActivityBase {
             property alias repeater: repeater
             property bool playerOneTurn: true
             property bool isTutorial: true
-            property alias tutorialTxt: tutorialTxt.text
-            property alias tutNum: tutorialTxt.tutNum
+            property alias tutorialText: tutorialSection.tutorialText
+            property alias tutorialNumber: tutorialSection.tutorialText
+            property alias tutorialSection: tutorialSection
             property var playerOneScore: 0
             property var playerOneSeeds: 0
             property var playerTwoScore: 0
@@ -98,7 +99,7 @@ ActivityBase {
                         anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
-                    
+
                     Repeater {
                         model: value
                         Image {
@@ -147,27 +148,21 @@ ActivityBase {
                         id: buttonClick
                         anchors.fill:parent
                         hoverEnabled: true
-                            onClicked: {
-//                                 Activity.sowSeeds(index);
-                                items.playerOneTurn = (!items.playerOneTurn == true) ? false : true
-                            }
+                        onClicked: {
+                            //                                 Activity.sowSeeds(index);
+                            items.playerOneTurn = (!items.playerOneTurn == true) ? false : true
+                        }
                         onPressed: {
                             valueImage.source = Activity.url + "button" + (index + 1) + "Click.png";
                         }
-                        onReleased: {
-                            valueImage.source = Activity.url + "button" + (index + 1) + ".png";
-                        }
-                        onEntered: {
-                            valueImage.source = Activity.url + "button" + (index + 1) + "Notify.png";
-                        }
-                        onExited: {
-                            valueImage.source = Activity.url + "button" + (index + 1) + ".png";
-                        }
-                   }
+                    }
                 }
             }
         }
 
+        Tutorial {
+            id:tutorialSection
+        }
         ScoreItem {
             id: playerOneLevelScore
             player: 1
@@ -180,8 +175,8 @@ ActivityBase {
                 left: background.left
                 leftMargin: 5
             }
-            playerImageSource: Activity.url + "stone_1.svg"
-            backgroundImageSource: Activity.url + "score_1.svg"
+            playerImageSource: "qrc:/gcompris/src/activities/align4-2players/resource/player_1.svg"
+            backgroundImageSource: "qrc:/gcompris/src/activities/align4-2players/resource/score_1.svg"
         }
 
         ScoreItem {
@@ -196,8 +191,8 @@ ActivityBase {
                 right: background.right
                 rightMargin: 5
             }
-            playerImageSource: Activity.url + "stone_2.svg"
-            backgroundImageSource: Activity.url + "score_2.svg"
+            playerImageSource: "qrc:/gcompris/src/activities/align4-2players/resource/player_2.svg"
+            backgroundImageSource: "qrc:/gcompris/src/activities/align4-2players/resource/score_2.svg"
         }
 
         Image {
@@ -240,149 +235,6 @@ ActivityBase {
             }
         }
 
-        Image {
-            id: previousTutorial
-            source: "qrc:/gcompris/src/core/resource/bar_previous.svg"
-            sourceSize.height: skipTutorial.height * 1.1
-            visible: items.isTutorial && tutorialTxt.tutNum != 1
-            anchors {
-                top: parent.top
-                topMargin: 5
-                right: skipTutorialContainer.left
-                rightMargin: 5
-            }
-
-            MouseArea {
-                id: previousArea
-                width: parent.width
-                height: parent.height
-                onClicked: {Activity.tutorialPrevious()}
-            }
-        }
-
-        Image {
-            id: nextTutorial
-            source: "qrc:/gcompris/src/core/resource/bar_next.svg"
-            sourceSize.height: skipTutorial.height * 1.1
-            visible: items.isTutorial && tutorialTxt.tutNum != 3
-            anchors {
-                top: parent.top
-                topMargin: 5
-                left: skipTutorialContainer.right
-                leftMargin: 5
-            }
-
-            MouseArea {
-                id: nextArea
-                width: parent.width
-                height: parent.height
-                onClicked: {Activity.tutorialNext()}
-            }
-        }
-
-        GCText {
-            id: skipTutorial
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: parent.top
-                topMargin: 5
-            }
-            fontSizeMode: Text.Fit
-            minimumPixelSize: 10
-            color: "white"
-            style: Text.Outline
-            styleColor: "black"
-            horizontalAlignment: Text.AlignHCenter
-            width: Math.min(implicitWidth, 0.8 * parent.width )
-            height: implicitHeight
-            visible: items.isTutorial
-            text: qsTr("Skip tutorial")
-            z: 2
-        }
-
-        Rectangle {
-            id: skipTutorialContainer
-            anchors.top: skipTutorial.top
-            anchors.horizontalCenter: skipTutorial.horizontalCenter
-            width: skipTutorial.width + 10
-            height: skipTutorial.height + 2
-            opacity: 0.8
-            radius: 10
-            border.width: 2
-            border.color: "black"
-            visible: items.isTutorial
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#000" }
-                GradientStop { position: 0.9; color: "#666" }
-                GradientStop { position: 1.0; color: "#AAA" }
-            }
-            MouseArea {
-                id: skipArea
-                hoverEnabled: true
-                width: parent.width
-                height: parent.height
-                onEntered: {skipTutorialContainer.border.color = "#62db53"}
-                onExited: {skipTutorialContainer.border.color = "black"}
-                onClicked: {Activity.tutorialSkip()}
-            }
-        }
-
-        GCText {
-            id: tutorialTxt
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: skipTutorial.bottom
-                topMargin: skipTutorial.height * 0.5
-            }
-            fontSizeMode: Text.Fit
-            minimumPixelSize: 10
-            color: "black"
-            horizontalAlignment: Text.AlignHLeft
-            width: Math.min(implicitWidth, 0.8 * parent.width )
-            height: Math.min(implicitHeight, 0.25 * parent.height )
-            wrapMode: TextEdit.WordWrap
-            visible: items.isTutorial
-            z: 2
-            property int tutNum: 1
-        }
-
-        Rectangle {
-            id: tutorialTxtContainer
-            anchors.top: tutorialTxt.top
-            anchors.horizontalCenter: tutorialTxt.horizontalCenter
-            width: tutorialTxt.width + 20
-            height: tutorialTxt.height + 2
-            opacity: 0.8
-            radius: 10
-            border.width: 6
-            color: "white"
-            border.color: "#87A6DD"
-            visible: items.isTutorial
-            /*
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#000" }
-                GradientStop { position: 0.9; color: "#666" }
-                GradientStop { position: 1.0; color: "#AAA" }
-            }*/
-        }
-
-        Image {
-            id: tutorialImage
-            source: "qrc:/gcompris/src/activities/oware/resource/" + "tutorial" + tutorialTxt.tutNum + ".png"
-            property int heightNeed: background.height - tutorialTxtContainer.height - bar.height -
-                                     2 * skipTutorialContainer.height
-            width: (sourceSize.width/sourceSize.height) > (0.9 * background.width / heightNeed) ?
-                   0.9 * background.width : (sourceSize.width * heightNeed) / sourceSize.height
-            fillMode: Image.PreserveAspectFit
-            visible: items.isTutorial
-            anchors {
-                top: tutorialTxt.bottom
-                topMargin: 10
-                horizontalCenter: parent.horizontalCenter
-            }
-        }
-        // Tutorial section ends
-
         DialogHelp {
             id: dialogHelp
             onClose: home()
@@ -390,13 +242,15 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level }
+            content: BarEnumContent { value: items.isTutorial ? (help | home) : (help | home | level | reload)}
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
+            onReloadClicked:
+                Activity.initLevel()
         }
 
         Bonus {
