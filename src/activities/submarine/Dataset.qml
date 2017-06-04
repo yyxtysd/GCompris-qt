@@ -22,139 +22,87 @@
 import QtQuick 2.6
 
 QtObject {
-    property var dataset: [
+    property var levels: [
         {
-        component: upperGate,
-        levels: [
-                {
-                    visible: false
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                },
-                {
-                    visible: true,
-                    height: background.height * (5 / 12)
-                }
+            intro: [
+                qsTr("Move the submarine to the other side of the screen"),
+                qsTr("Increase or decrease the velocity of the submarine using the engine"),
+                qsTr("Press the + button to increase the velocity, or the - button to decrease the velocity"),],
+            items: [
+                {component: upperGate, visible: false},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: false}
             ]
         },
         {
-        component: lowerGate,
-        levels: [
-                {
-                    visible: false,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                },
-                {
-                    visible: true,
-                    y: upperGate.height + 3,
-                    height: upperGate.height- subSchemaImage.height / 1.4
-                }
+            intro: [
+                qsTr("The Ballast tanks are used to sink or dive under water"),
+                qsTr("If the ballast tanks are empty, the submarine will sink. If the ballast tanks are full of water, the submarine will dive underwater"),
+                qsTr("Press the ___ button "),],
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: false}
             ]
         },
         {
-        component: crown,
-        levels: [
-                {
-                    visible: false
-                },
-                {
-                    visible: false
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                },
-                {
-                    visible: true
-                }
+            intro: [
+                qsTr("The Rudders are used to rotate the submarine"),
+                qsTr("Press the + and the - buttons to rotate the submarine accordingly"),
+            ],
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
+            ]
+        },
+        {
+            items: [
+                {component: upperGate, visible: true, height: background.height * (5 / 12)},
+                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
+                {component: crown, visible: true}
             ]
         }
     ]

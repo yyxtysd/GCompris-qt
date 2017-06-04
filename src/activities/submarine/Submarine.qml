@@ -57,7 +57,6 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property var tutorials: [engineTutorial, ballastTutorial, ruddersTutorial]
             property alias crown: crown
             property alias gateOpenAnimation: gateOpenAnimation
             property var submarineCategory: Fixture.Category1
@@ -65,7 +64,9 @@ ActivityBase {
             property var whaleCategory: Fixture.Category3
             property var upperGatefixerCategory: Fixture.Category4
             property var lowerGatefixerCategory: Fixture.Category5
-            property var dataset: datasets.dataset
+            property var datasetLevels: datasets.levels
+            property alias tutorial: tutorial
+            property alias upperGate: upperGate
         }
 
         Dataset {
@@ -73,8 +74,7 @@ ActivityBase {
         }
 
         IntroMessage {
-            id: engineTutorial
-            visible: false
+            id: tutorial
             anchors {
                 top: parent.top
                 topMargin: 10
@@ -86,58 +86,8 @@ ActivityBase {
             z: 100
             onIntroDone: {
                 physicalWorld.running = true
-                engineTutorial.visible = false
+                tutorial.visible = false
             }
-            intro: [
-                qsTr("Move the submarine to the other side of the screen"),
-                qsTr("Increase of decrease the velocity of the submarine using the engine"),
-                qsTr("Press the + button to increase the velocity, or the - button to decrease the velocity"),
-            ]
-        }
-
-        IntroMessage {
-            id: ballastTutorial
-            visible: false
-            anchors {
-                top: parent.top
-                topMargin: 10
-                right: parent.right
-                rightMargin: 5
-                left: parent.left
-                leftMargin: 5
-            }
-            z: 100
-            onIntroDone: {
-                physicalWorld.running = true
-                ballastTutorial.visible = false
-            }
-            intro: [
-                qsTr("The Ballast tanks are used to sink or dive under water"),
-                qsTr("If the ballast tanks are empty, the submarine will sink. If the ballast tanks are full of water, the submarine will dive underwater"),
-                qsTr("Press the ___ button "),
-            ]
-        }
-
-        IntroMessage {
-            id: ruddersTutorial
-            visible: false
-            anchors {
-                top: parent.top
-                topMargin: 10
-                right: parent.right
-                rightMargin: 5
-                left: parent.left
-                leftMargin: 5
-            }
-            z: 100
-            onIntroDone: {
-                physicalWorld.running = true
-                ruddersTutorial.visible = false
-            }
-            intro: [
-                qsTr("The Rudders are used to rotate the submarine"),
-                qsTr("Press the + and the - buttons to rotate the submarine accordingly"),
-            ]
         }
 
         onStart: { Activity.start(items) }

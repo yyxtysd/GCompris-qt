@@ -53,55 +53,76 @@ function initLevel() {
     items.bar.level = currentLevel + 1
 
     /* Tutorial Levels, display tutorials */
-    if (currentLevel < 3) {
-        for (var i = 0;i < 3;i++) {
-            if (currentLevel == i) {
-                items.tutorials[i].visible = true
-                items.tutorials[i].index = 0
-            } else {
-                items.tutorials[i].visible = false
-            }
-        }
+    if (items.datasetLevels[currentLevel].intro) {
+        items.tutorial.visible = true
+        items.tutorial.index = 0
+        items.tutorial.intro = items.datasetLevels[currentLevel].intro
+    } else {
+        items.tutorial.visible = false
     }
     levelsBeingInitialised = 1
     setUpLevelElements()
 }
 
 function setUpLevelElements() {
-    for (var i = 0;i < items.dataset.length;i++) {
+    /*
+      // NOT Working
+    var levelComponents = items.datasetLevels[currentLevel].items
+    for (var i = 0; i < (levelComponents).length;i++) {
+        var object = levelComponents[i].component
+        var objectProperty = levelComponents[i]
+
+        if (levelsBeingInitialised == 1) {
+            object.visible = objectProperty.visible
+        }
+
+        if (object.visible == false) {
+            continue
+        }
+
+        if (objectProperty.width) {
+            object.width = objectProperty.width
+        }
+
+        if (objectProperty.height) {
+            object.height = objectProperty.height
+        }
+
+        if (objectProperty.x) {
+            object.x = objectProperty.x
+        }
+
+        if (objectProperty.y) {
+            object.y = objectProperty.y
+        }
+    }
+    */
+    for (var i = 0;i < (items.datasetLevels[currentLevel]).items.length;i++) {
+        (items.datasetLevels[currentLevel]).items[i].component.visible = (items.datasetLevels[currentLevel]).items[i].visible
 
         /* Do not reinitialise visibility on screen change (useful for crowns) */
-        if (levelsBeingInitialised == 1) {
-            items.dataset[i].component.visible = items.dataset[i].levels[currentLevel].visible;
+        if ((items.datasetLevels[currentLevel]).items[i].visible == false && levelsBeingInitialised == 1) {
+            continue
         }
 
-        if (items.dataset[i].component.visible == false) {
-            /*
-             * If this component is not required in this current level,
-             * Do not apply the other changes
-             */
-            continue;
+        if ((items.datasetLevels[currentLevel]).items[i].x) {
+            (items.datasetLevels[currentLevel]).items[i].component.x = (items.datasetLevels[currentLevel]).items[i].x
         }
 
-        // Apply the component values, if it is defined in the dataset
-        if (items.dataset[i].levels[currentLevel].x) {
-            items.dataset[i].component.x = items.dataset[i].levels[currentLevel].x
+        if ((items.datasetLevels[currentLevel]).items[i].y) {
+            (items.datasetLevels[currentLevel]).items[i].component.y = (items.datasetLevels[currentLevel]).items[i].y
         }
 
-        if (items.dataset[i].levels[currentLevel].y) {
-            items.dataset[i].component.y = items.dataset[i].levels[currentLevel].y
+        if ((items.datasetLevels[currentLevel]).items[i].width) {
+            (items.datasetLevels[currentLevel]).items[i].component.width = (items.datasetLevels[currentLevel]).items[i].width
         }
 
-        if (items.dataset[i].levels[currentLevel].width) {
-            items.dataset[i].component.width = items.dataset[i].levels[currentLevel].width
-        }
-
-        if (items.dataset[i].levels[currentLevel].height) {
-            items.dataset[i].component.height = items.dataset[i].levels[currentLevel].height
+        if ((items.datasetLevels[currentLevel]).items[i].height) {
+            (items.datasetLevels[currentLevel]).items[i].component.height = (items.datasetLevels[currentLevel]).items[i].height
         }
     }
 
-    if ( !items.crown.visible && items.dataset[0].component.visible) {
+    if ( !items.crown.visible && items.upperGate.visible) {
         items.gateOpenAnimation.start()
     }
 }
