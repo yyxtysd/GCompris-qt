@@ -277,6 +277,33 @@ ActivityBase {
                 }
             }
 
+            SequentialAnimation {
+                id: rotateRightAnimation
+                loops: 1
+                PropertyAnimation {
+                    target: rotate
+                    properties: "angle"
+                    from: 180
+                    to: 0
+                    duration: 500
+                }
+            }
+
+            onXChanged: {
+                if (x <= 0) {
+                    rotateLeftAnimation.start()
+                    targetX = background.width - whale.width  - (upperGate.visible ? upperGate.width : 0)
+                    x = targetX
+                } else if (x >= background.width - whale.width - (upperGate.visible ? upperGate.width : 0)) {
+                    rotateRightAnimation.start()
+                    targetX = 0
+                    x = targetX
+                }
+            }
+
+            /* Keep the speed constant irrespective of the screen width */
+            Behavior on x { PropertyAnimation { duration: (830 * 10000)/background.width } }
+
             Loader {
                 id: bubbleEffect
                 anchors.fill: parent
@@ -312,33 +339,6 @@ ActivityBase {
                     }
                 }
             }
-
-            SequentialAnimation {
-                id: rotateRightAnimation
-                loops: 1
-                PropertyAnimation {
-                    target: rotate
-                    properties: "angle"
-                    from: 180
-                    to: 0
-                    duration: 500
-                }
-            }
-
-            onXChanged: {
-                if (x <= 0) {
-                    rotateLeftAnimation.start()
-                    targetX = background.width - whale.width  - (upperGate.visible ? upperGate.width : 0)
-                    x = targetX
-                } else if (x >= background.width - whale.width - (upperGate.visible ? upperGate.width : 0)) {
-                    rotateRightAnimation.start()
-                    targetX = 0
-                    x = targetX
-                }
-            }
-
-            /* Keep the speed constant irrespective of the screen width */
-            Behavior on x { PropertyAnimation { duration: (830 * 10000)/background.width } }
 
             Body {
                 id: whalebody
