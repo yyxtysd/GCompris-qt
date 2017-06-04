@@ -302,12 +302,12 @@ ActivityBase {
             }
 
             /* Keep the speed constant irrespective of the screen width */
-            Behavior on x { PropertyAnimation { duration: (830 * 10000)/background.width } }
+            Behavior on x { PropertyAnimation { duration: (background.width > 0) ? (background.width * 10000)/830 : 10000 } }
 
             Loader {
                 id: bubbleEffect
                 anchors.fill: parent
-                active: ApplicationInfo.hasShader
+                active: true
                 sourceComponent: ParticleSystem {
                     anchors.fill: parent
                     Emitter {
