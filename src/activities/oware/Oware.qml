@@ -51,11 +51,8 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property alias repeater: repeater
+            property alias cellGridRepeater: cellGridRepeater
             property bool playerOneTurn: true
-            property bool isTutorial: true
-            property alias tutorialText: tutorialSection.tutorialText
-            property alias tutorialNumber: tutorialSection.tutorialText
             property alias tutorialSection: tutorialSection
             property var playerOneScore: 0
             property var playerOneSeeds: 0
@@ -72,19 +69,19 @@ ActivityBase {
             anchors.centerIn: parent
             width: parent.width * 0.7
             height: width * 0.4
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
         }
 
         Grid {
-            id:boardGrid
+            id: boardGrid
             columns: 6
             rows: 2
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.top
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
 
             Repeater {
-                id:repeater
+                id: cellGridRepeater
                 model: 12
 
                 Rectangle {
@@ -101,14 +98,15 @@ ActivityBase {
                     }
 
                     Repeater {
+                        id: grainRepeater
                         model: value
                         Image {
                             id: grain
                             source: Activity.url + "grain2.png"
                             height: circleRadius * 0.2
                             width: circleRadius * 0.2
-                            x: circleRadius/2 + Activity.getX(circleRadius/6,index,value)
-                            y: circleRadius/2 + Activity.getY(circleRadius/5,index,value)
+                            x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
+                            y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
                             //To move the seeds from one hole to other on button click. Not working :(
                             states: State {
@@ -134,7 +132,7 @@ ActivityBase {
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.bottom
             interactive: false
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
 
             delegate: Item {
                 height: parent.height
@@ -149,8 +147,8 @@ ActivityBase {
                         anchors.fill:parent
                         hoverEnabled: true
                         onClicked: {
-                            //                                 Activity.sowSeeds(index);
-                            items.playerOneTurn = (!items.playerOneTurn == true) ? false : true
+                            //Activity.sowSeeds(index);
+                            items.playerOneTurn = !items.playerOneTurn
                         }
                         onPressed: {
                             valueImage.source = Activity.url + "button" + (index + 1) + "Click.png";
@@ -168,7 +166,7 @@ ActivityBase {
             player: 1
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height * 11/8
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
             anchors {
                 top: background.top
                 topMargin: 5
@@ -184,7 +182,7 @@ ActivityBase {
             player: 2
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height*11/8
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
             anchors {
                 top: background.top
                 topMargin: 5
@@ -202,7 +200,7 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: board.left
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
 
             GCText {
                 id: playerOneScoreText
@@ -222,7 +220,7 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: board.right
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
 
             GCText {
                 id: playerTwoScoreText
@@ -242,7 +240,7 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: items.isTutorial ? (help | home) : (help | home | level | reload)}
+            content: BarEnumContent { value: items.tutorialSection.visible ? (help | home) : (help | home | level | reload)}
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }

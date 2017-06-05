@@ -26,13 +26,26 @@ var currentLevel = 0
 var numberOfLevel = 4
 var items
 var url = "qrc:/gcompris/src/activities/oware/resource/"
-var tutorialInstructions = [ "At the beginning of the game four seeds are placed in each house. Players take turns by moving the seeds","In each turn, a player chooses one of the six houses under his or her control. The player removes all seeds from this house, and distributes them, dropping one in each house counter-clockwise from the original house, in a process called sowing.","After a turn, if the last seed was placed into an opponent's house and brought its total to two or three, all the seeds in that house are captured and placed in the player's scoring house (or set aside if the board has no scoring houses). If the previous-to-last seed also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."]
+var tutorialInstructions = [
+            {
+               "instruction": "At the beginning of the game four seeds are placed in each house. Players take turns by moving the seeds",
+               "instructionImage" : "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
+            },
+            {
+                "instruction": "In each turn, a player chooses one of the six houses under his or her control. The player removes all seeds from this house, and distributes them, dropping one in each house counter-clockwise from the original house, in a process called sowing.",
+                 "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
+            },
+            {   "instruction": "After a turn, if the last seed was placed into an opponent's house and brought its total to two or three, all the seeds in that house are captured and placed in the player's scoring house (or set aside if the board has no scoring houses). If the previous-to-last seed also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on.",
+                "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial3.png"
+            }
+       ]
 
 function start(items_) {
     items = items_
     currentLevel = 0
     initLevel()
-    items.tutorialSection.tutorial()
+    items.tutorialSection.tutorialDetails = tutorialInstructions
+    items.tutorialSection.showTutorial()
 }
 
 function stop() {

@@ -28,9 +28,10 @@ Image {
     id: tutorialSection
     anchors.fill: parent
     source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
-    visible: items.isTutorial
-    property alias tutorialText: tutorialText.text
-    property alias tutorialNumber: tutorialText.tutorialNumber
+    visible: true
+    property alias tutorialImage: tutorialImage
+    property int tutorialNumber: 1
+    property var tutorialDetails
 
     GCText {
         id: tutorialText
@@ -43,12 +44,10 @@ Image {
         minimumPixelSize: 10
         color: "black"
         horizontalAlignment: Text.AlignHLeft
-        width: Math.min(implicitWidth, 0.8 * parent.width )
-        height: Math.min(implicitHeight, 0.25 * parent.height )
+        width: Math.min(implicitWidth, 0.8 * parent.width)
+        height: Math.min(implicitHeight, 0.25 * parent.height)
         wrapMode: TextEdit.WordWrap
-        visible: items.isTutorial
         z: 2
-        property int tutorialNumber: 1
     }
 
     Rectangle {
@@ -62,7 +61,6 @@ Image {
         border.width: 6
         color: "white"
         border.color: "#87A6DD"
-        visible: items.isTutorial
     }
 
     Rectangle {
@@ -76,12 +74,12 @@ Image {
         z: 5
         anchors.right: nextButton.left
         anchors.bottom: parent.bottom
-        visible: items.isTutorial && tutorialText.tutorialNumber != 1
+        visible: tutorialSection.visible && tutorialNumber != 1
 
         GCText {
             id: previousButtonText
             anchors.centerIn: parent
-            text: "Previous"
+            text: qsTr("Previous")
             wrapMode: Text.WordWrap
         }
 
@@ -89,7 +87,7 @@ Image {
             id: previousButtonArea
             anchors.fill: parent
             onClicked: {
-                tutorialPrevious()
+                previousTutorial()
             }
         }
     states: [
@@ -131,12 +129,12 @@ Image {
         z: 5
         anchors.right: skipButton.left
         anchors.bottom: parent.bottom
-        visible: items.isTutorial && tutorialText.tutorialNumber != 3
+        visible: tutorialSection.visible && tutorialNumber != tutorialDetails.length
 
         GCText {
             id: nextButtonText
             anchors.centerIn: parent
-            text: "Next"
+            text: qsTr("Next")
             wrapMode: Text.WordWrap
         }
 
@@ -144,7 +142,7 @@ Image {
             id: nextButtonArea
             anchors.fill: parent
             onClicked: {
-                tutorialNext()
+                nextTutorial()
             }
         }
     states: [
@@ -188,9 +186,9 @@ Image {
         anchors.bottom: parent.bottom
 
         GCText {
-            id: skipTutorial
+            id: skipButtonText
             anchors.centerIn: parent
-            text: "Skip"
+            text: qsTr("Skip")
             wrapMode: Text.WordWrap
         }
 
@@ -198,7 +196,7 @@ Image {
             id: skipButtonArea
             anchors.fill: parent
             onClicked: {
-                tutorialSkip()
+                skipTutorial()
             }
         }
     states: [
@@ -231,10 +229,8 @@ Image {
 
     Image {
         id: tutorialImage
-        source: "qrc:/gcompris/src/activities/oware/resource/" + "tutorial" + tutorialText.tutorialNumber + ".png"
         width: parent.width * 0.8
         fillMode: Image.PreserveAspectFit
-        visible: items.isTutorial
         anchors {
             top: tutorialText.bottom
             topMargin: 10
@@ -242,33 +238,26 @@ Image {
         }
     }
 
-    function tutorial() {
-        items.isTutorial = true
+    function showTutorial() {
+        tutorialSection.visible = true
         setTutorial(1)
     }
 
-    function tutorialSkip() {
-        items.isTutorial = false
+    function skipTutorial() {
+        tutorialSection.visible = false
         Activity.initLevel()
     }
 
-    function tutorialNext() {
+    function nextTutorial() {
         setTutorial(++tutorialNumber)
     }
 
-    function tutorialPrevious() {
+    function previousTutorial() {
         setTutorial(--tutorialNumber)
     }
 
     function setTutorial(tutorialNumber) {
-        if(tutorialNumber == 1) {
-            items.tutorialText = Activity.tutorialInstructions[0]
-        }
-        else if(tutorialNumber == 2) {
-            items.tutorialText = Activity.tutorialInstructions[1]
-        }
-        else if(tutorialNumber == 3) {
-            items.tutorialText = Activity.tutorialInstructions[2]
-        }
+        tutorialText.text = tutorialDetails[tutorialNumber - 1].instruction
+        tutorialImage.source = tutorialDetails[tutorialNumber - 1].instructionImage
     }
 }
