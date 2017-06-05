@@ -68,6 +68,7 @@ ActivityBase {
             property var datasetLevels: datasets.levels
             property alias tutorial: tutorial
             property alias upperGate: upperGate
+            property alias physicalWorld: physicalWorld
         }
 
         Dataset {
@@ -170,6 +171,15 @@ ActivityBase {
                 properties: "height"
                 from: upperGate.height
                 to: upperGate.height / 2
+                duration: 1000
+            }
+
+            NumberAnimation {
+                id: gateCloseAnimation
+                target: upperGate
+                properties: "height"
+                from: upperGate.height / 2
+                to: upperGate.height
                 duration: 1000
             }
         }
@@ -351,6 +361,123 @@ ActivityBase {
                 fixtures: Box {
                     id: whalefixer
                     categories: items.whaleCategory
+                    collidesWith: items.submarineCategory
+                    density: 1
+                    friction: 0
+                    restitution: 0
+                }
+            }
+        }
+
+        Image {
+            id: ship
+            source: url + "asw_frigate.png"
+            y: background.height * 0.05
+            z: 1
+
+            property bool movingLeft: true
+
+            transform: Rotation {
+                id: rotateShip;
+                origin.x: ship.width / 2;
+                origin.y: 0;
+                axis { x: 0; y: 1; z: 0 } angle: 0
+            }
+
+            SequentialAnimation {
+                id: rotateShipLeft
+                loops: 1
+                PropertyAnimation {
+                    target: rotateShip
+                    properties: "angle"
+                    from: 0
+                    to: 180
+                    duration: 500
+                }
+            }
+
+            SequentialAnimation {
+                id: rotateShipRight
+                loops: 1
+                PropertyAnimation {
+                    target: rotateShip
+                    properties: "angle"
+                    from: 180
+                    to: 0
+                    duration: 500
+                }
+            }
+
+            onXChanged: {
+                if (x <= 0) {
+                    rotateShipLeft.start()
+                    movingLeft = false
+                } else if (x >= background.width - ship.width - (upperGate.visible ? upperGate.width : 0)) {
+                    rotateShipRight.start()
+                    movingLeft = true
+                }
+            }
+
+            Body {
+                id: shipbody
+                target: ship
+                bodyType: Body.Dynamic
+                sleepingAllowed: true
+                fixedRotation: true
+                linearDamping: 0
+                linearVelocity: Qt.point(( (ship.movingLeft ? -1 : 1) * background.width) / 830, 0)
+
+                fixtures: Box {
+                    id: shipfixer
+//                    categories: items.shipCategory
+                    collidesWith: items.submarineCategory
+                    density: 1
+                    friction: 0
+                    restitution: 0
+                }
+            }
+        }
+
+        Image {
+            id: rock2
+            anchors.bottom: crown.bottom
+            anchors.left: crown.right
+            source: "qrc:/gcompris/src/activities/mining/resource/stone2.svg"
+
+            Body {
+                id: rock2Body
+                target: rock2
+                bodyType: Body.Static
+                sleepingAllowed: true
+                linearDamping: 0
+
+                fixtures: Box {
+                    id: rock2Fixer
+//                    categories: items.rock2Category
+                    collidesWith: items.submarineCategory
+                    density: 1
+                    friction: 0
+                    restitution: 0
+                }
+            }
+        }
+
+        Image {
+            id: rock1
+            anchors.bottom: crown.bottom
+            anchors.right: crown.left
+            source: "qrc:/gcompris/src/activities/mining/resource/stone1.svg"
+
+            Body {
+                id: rock1Body
+                target: rock1
+                bodyType: Body.Static
+                sleepingAllowed: true
+                linearDamping: 0
+
+                fixtures: Box {
+                    id: rock1Fixer
+//                    categories: items.rock2Category
                     collidesWith: items.submarineCategory
                     density: 1
                     friction: 0

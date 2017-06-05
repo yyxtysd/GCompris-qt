@@ -59,6 +59,7 @@ function initLevel() {
         items.tutorial.intro = items.datasetLevels[currentLevel].intro
     } else {
         items.tutorial.visible = false
+        items.physicalWorld.running = true
     }
     levelsBeingInitialised = 1
     setUpLevelElements()
