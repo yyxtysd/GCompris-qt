@@ -53,7 +53,6 @@ ActivityBase {
             property alias bonus: bonus
             property alias cellGridRepeater: cellGridRepeater
             property bool playerOneTurn: true
-            property alias tutorialSection: tutorialSection
             property var playerOneScore: 0
             property var playerOneSeeds: 0
             property var playerTwoScore: 0
@@ -69,7 +68,7 @@ ActivityBase {
             anchors.centerIn: parent
             width: parent.width * 0.7
             height: width * 0.4
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
         }
 
         Grid {
@@ -78,7 +77,7 @@ ActivityBase {
             rows: 2
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.top
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
 
             Repeater {
                 id: cellGridRepeater
@@ -132,7 +131,7 @@ ActivityBase {
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.bottom
             interactive: false
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
 
             delegate: Item {
                 height: parent.height
@@ -160,13 +159,18 @@ ActivityBase {
 
         Tutorial {
             id:tutorialSection
+            tutorialDetails: Activity.tutorialInstructions
+            onSkipPressed: {
+	            Activity.initLevel()
+	        }
         }
+
         ScoreItem {
             id: playerOneLevelScore
             player: 1
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height * 11/8
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
             anchors {
                 top: background.top
                 topMargin: 5
@@ -182,7 +186,7 @@ ActivityBase {
             player: 2
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height*11/8
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
             anchors {
                 top: background.top
                 topMargin: 5
@@ -200,7 +204,7 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: board.left
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
 
             GCText {
                 id: playerOneScoreText
@@ -220,7 +224,7 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: board.right
-            visible: !items.tutorialSection.visible
+            visible: !tutorialSection.visible
 
             GCText {
                 id: playerTwoScoreText
@@ -240,7 +244,7 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: items.tutorialSection.visible ? (help | home) : (help | home | level | reload)}
+            content: BarEnumContent { value: tutorialSection.visible ? (help | home) : (help | home | level | reload)}
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }

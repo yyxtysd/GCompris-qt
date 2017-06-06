@@ -22,16 +22,15 @@ import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
-import "oware.js" as Activity
 
-Image {
+Item {
     id: tutorialSection
     anchors.fill: parent
-    source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
-    visible: true
-    property alias tutorialImage: tutorialImage
-    property int tutorialNumber: 1
+    property int tutorialNumber: 0
     property var tutorialDetails
+    signal skipPressed
+    signal nextPressed
+    signal previousPressed
 
     GCText {
         id: tutorialText
@@ -40,6 +39,7 @@ Image {
             top: parent.top
             topMargin: 10
         }
+        text: tutorialDetails ? tutorialDetails[tutorialNumber].instruction : ""
         fontSizeMode: Text.Fit
         minimumPixelSize: 10
         color: "black"
@@ -74,7 +74,7 @@ Image {
         z: 5
         anchors.right: nextButton.left
         anchors.bottom: parent.bottom
-        visible: tutorialSection.visible && tutorialNumber != 1
+        visible: tutorialNumber != 0
 
         GCText {
             id: previousButtonText
@@ -87,7 +87,8 @@ Image {
             id: previousButtonArea
             anchors.fill: parent
             onClicked: {
-                previousTutorial()
+                --tutorialNumber
+                previousPressed()
             }
         }
     states: [
@@ -129,7 +130,7 @@ Image {
         z: 5
         anchors.right: skipButton.left
         anchors.bottom: parent.bottom
-        visible: tutorialSection.visible && tutorialNumber != tutorialDetails.length
+        visible: tutorialNumber != (tutorialDetails.length - 1)
 
         GCText {
             id: nextButtonText
@@ -142,7 +143,8 @@ Image {
             id: nextButtonArea
             anchors.fill: parent
             onClicked: {
-                nextTutorial()
+	            ++tutorialNumber
+                nextPressed()
             }
         }
     states: [
@@ -196,10 +198,11 @@ Image {
             id: skipButtonArea
             anchors.fill: parent
             onClicked: {
-                skipTutorial()
-            }
+                tutorialSection.visible = false
+	            skipPressed()
+	        }
         }
-    states: [
+        states: [
         State {
             name: "notclicked"
             PropertyChanges {
@@ -231,33 +234,11 @@ Image {
         id: tutorialImage
         width: parent.width * 0.8
         fillMode: Image.PreserveAspectFit
+        source: tutorialDetails ? tutorialDetails[tutorialNumber].instructionImage : ""
         anchors {
             top: tutorialText.bottom
             topMargin: 10
             horizontalCenter: parent.horizontalCenter
         }
-    }
-
-    function showTutorial() {
-        tutorialSection.visible = true
-        setTutorial(1)
-    }
-
-    function skipTutorial() {
-        tutorialSection.visible = false
-        Activity.initLevel()
-    }
-
-    function nextTutorial() {
-        setTutorial(++tutorialNumber)
-    }
-
-    function previousTutorial() {
-        setTutorial(--tutorialNumber)
-    }
-
-    function setTutorial(tutorialNumber) {
-        tutorialText.text = tutorialDetails[tutorialNumber - 1].instruction
-        tutorialImage.source = tutorialDetails[tutorialNumber - 1].instructionImage
     }
 }
