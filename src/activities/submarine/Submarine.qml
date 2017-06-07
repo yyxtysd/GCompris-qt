@@ -49,6 +49,16 @@ ActivityBase {
             activity.stop.connect(stop)
         }
 
+        /* Testing purposes, A => Reduces velocity, D => Increases velocity */
+        Keys.onPressed: {
+            if (event.key == Qt.Key_D && submarine.velocity.x < submarine.maximumXVelocity) {
+                submarine.velocity.x += 1
+            }
+            if (event.key == Qt.Key_A && submarine.velocity.x > 0) {
+                submarine.velocity.x -= 1
+            }
+        }
+
         // Add here the QML items you need to access in javascript
         QtObject {
             id: items
@@ -57,22 +67,15 @@ ActivityBase {
             property alias bar: bar
             property alias bonus: bonus
             property alias crown: crown
-            property alias gateOpenAnimation: gateOpenAnimation
-            property alias gateCloseAnimation: gateCloseAnimation
             property var submarineCategory: Fixture.Category1
             property var crownCategory: Fixture.Category2
             property var whaleCategory: Fixture.Category3
             property var upperGatefixerCategory: Fixture.Category4
             property var lowerGatefixerCategory: Fixture.Category5
-            property var datasetLevels: datasets.levels
             property alias tutorial: tutorial
             property alias upperGate: upperGate
             property alias ship: ship
             property alias physicalWorld: physicalWorld
-        }
-
-        Dataset {
-            id: datasets
         }
 
         IntroMessage {
@@ -105,6 +108,10 @@ ActivityBase {
         Item {
             id: submarine
 
+            z: 1
+
+            property point velocity
+            property int maximumXVelocity: 5
             Image {
                 id: submarineImage
                 source: url + "submarine.png"
@@ -126,6 +133,8 @@ ActivityBase {
                 bodyType: Body.Dynamic
                 fixedRotation: true
                 linearDamping: 0
+                linearVelocity: submarine.velocity
+
                 fixtures: Box {
                     id: submarineFixer
                     categories: items.submarineCategory
@@ -143,10 +152,27 @@ ActivityBase {
             width: background.width / 18
             height: background.height * (5 / 12)
             y: -2
+            z: 1
             color: "#848484"
             border.color: "black"
             border.width: 3
             anchors.right: background.right
+
+            property bool isGateOpen: false
+
+            function openGate() {
+                if (!isGateOpen) {
+                    isGateOpen = true
+                    gateOpenAnimation.start()
+                }
+            }
+
+            function closeGate() {
+                if (isGateOpen) {
+                    isGateOpen = false
+                    gateCloseAnimation.start()
+                }
+            }
 
             Body {
                 id: upperGateBody

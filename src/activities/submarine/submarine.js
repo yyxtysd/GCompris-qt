@@ -28,6 +28,24 @@ var numberOfLevel = 10
 var items
 var barAtStart
 
+var tutorials = [
+            [
+                qsTr("Move the submarine to the other side of the screen."),
+                qsTr("Increase or decrease the velocity of the submarine using the engine."),
+                qsTr("Press the + button to increase the velocity, or the - button to decrease the velocity."),
+            ],
+            [
+                qsTr("The Ballast tanks are used to sink or dive under water."),
+                qsTr("If the ballast tanks are empty, the submarine will float. If the ballast tanks are full of water, the submarine will dive underwater."),
+                qsTr("Press the ___ button to fill the tanks with water and ___ to empty the tanks."),
+            ],
+            [
+                qsTr("The Rudders are used to rotate the submarine."),
+                qsTr("Press the + and the - buttons to rotate the submarine accordingly."),
+                qsTr("Grab the crown to open the gate."),
+            ]
+]
+
 function start(items_) {
     items = items_
     currentLevel = 0
@@ -44,14 +62,15 @@ function initLevel() {
     items.bar.level = currentLevel + 1
 
     /* Tutorial Levels, display tutorials */
-    if (items.datasetLevels[currentLevel].intro) {
+    if (currentLevel < tutorials.length) {
         items.tutorial.visible = true
         items.tutorial.index = 0
-        items.tutorial.intro = items.datasetLevels[currentLevel].intro
+        items.tutorial.intro = tutorials[currentLevel]
     } else {
         items.tutorial.visible = false
         items.physicalWorld.running = true
     }
+
     setUpLevelElements()
 }
 
@@ -61,18 +80,19 @@ function setUpLevelElements() {
     }
 
     if ( !items.crown.visible && items.upperGate.visible) {
-        items.gateOpenAnimation.start()
+        items.upperGate.openGate()
     }
 }
 
 function closeGate() {
     if (items.upperGate.visible) {
-        items.gateCloseAnimation.start()
+        items.upperGate.closeGate()
     }
 }
 
 function nextLevel() {
     closeGate()
+
     if(numberOfLevel <= ++currentLevel ) {
         currentLevel = 0
     }
@@ -80,6 +100,8 @@ function nextLevel() {
 }
 
 function previousLevel() {
+    closeGate()
+
     if(--currentLevel < 0) {
         currentLevel = numberOfLevel - 1
     }
