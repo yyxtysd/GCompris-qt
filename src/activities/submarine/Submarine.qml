@@ -23,6 +23,7 @@ import QtQuick 2.6
 import QtQuick.Particles 2.0
 import Box2D 2.0
 import QtGraphicalEffects 1.0
+import GCompris 1.0
 
 import "../../core"
 import "submarine.js" as Activity
@@ -32,9 +33,6 @@ ActivityBase {
 
     onStart: focus = true
     onStop: {}
-
-    onWidthChanged: Activity.resizeElements()
-    onHeightChanged: Activity.resizeElements()
 
     property string url: "qrc:/gcompris/src/activities/submarine/resource/"
 
@@ -60,6 +58,7 @@ ActivityBase {
             property alias bonus: bonus
             property alias crown: crown
             property alias gateOpenAnimation: gateOpenAnimation
+            property alias gateCloseAnimation: gateCloseAnimation
             property var submarineCategory: Fixture.Category1
             property var crownCategory: Fixture.Category2
             property var whaleCategory: Fixture.Category3
@@ -68,6 +67,7 @@ ActivityBase {
             property var datasetLevels: datasets.levels
             property alias tutorial: tutorial
             property alias upperGate: upperGate
+            property alias ship: ship
             property alias physicalWorld: physicalWorld
         }
 
@@ -139,6 +139,7 @@ ActivityBase {
 
         Rectangle {
             id: upperGate
+            visible: (bar.level > 1) ? true : false
             width: background.width / 18
             height: background.height * (5 / 12)
             y: -2
@@ -170,7 +171,7 @@ ActivityBase {
                 target: upperGate
                 properties: "height"
                 from: upperGate.height
-                to: upperGate.height / 2
+                to: upperGate.height *  1 / 3
                 duration: 1000
             }
 
@@ -178,17 +179,18 @@ ActivityBase {
                 id: gateCloseAnimation
                 target: upperGate
                 properties: "height"
-                from: upperGate.height / 2
-                to: upperGate.height
+                from: upperGate.height
+                to: background.height * (5 / 12)
                 duration: 1000
             }
         }
 
         Rectangle {
             id: lowerGate
+            visible: upperGate.visible
             width: background.width / 18
-            height: upperGate.height- subSchemaImage.height / 1.4
-            y: upperGate.height + 3
+            height: background.height * (5 / 12) - subSchemaImage.height / 1.4
+            y: background.height * (5 / 12)
             color: "#848484"
             border.color: "black"
             border.width: 3
@@ -228,6 +230,7 @@ ActivityBase {
 
         Image {
             id: crown
+            visible: (bar.level) > 2 ? true : false
             source: url + "crown.png"
 
             x: background.width / 2
@@ -255,18 +258,16 @@ ActivityBase {
 
         Image {
             id: whale
+            visible: (bar.level > 5) ? true : false
             source: url + "whale.png"
+
+            y: (background.height - subSchemaImage.height)/2
             z: 1
             function hit() {
                 whale.source = url + "whale_hit.png"
             }
 
-            property var targetX
-
-            Component.onCompleted: {
-                targetX = background.width - whale.width - (upperGate.visible ? upperGate.width : 0)
-                x = targetX
-            }
+            property bool movingLeft: true
 
             transform: Rotation {
                 id: rotate;
@@ -302,22 +303,17 @@ ActivityBase {
             onXChanged: {
                 if (x <= 0) {
                     rotateLeftAnimation.start()
-                    targetX = background.width - whale.width  - (upperGate.visible ? upperGate.width : 0)
-                    x = targetX
+                    whale.movingLeft = false
                 } else if (x >= background.width - whale.width - (upperGate.visible ? upperGate.width : 0)) {
                     rotateRightAnimation.start()
-                    targetX = 0
-                    x = targetX
+                    whale.movingLeft = true
                 }
             }
-
-            /* Keep the speed constant irrespective of the screen width */
-            Behavior on x { PropertyAnimation { duration: (background.width > 0) ? (background.width * 10000)/830 : 10000 } }
 
             Loader {
                 id: bubbleEffect
                 anchors.fill: parent
-                active: true
+                active: ApplicationInfo.hasShader
                 sourceComponent: ParticleSystem {
                     anchors.fill: parent
                     Emitter {
@@ -353,10 +349,11 @@ ActivityBase {
             Body {
                 id: whalebody
                 target: whale
-                bodyType: Body.Static
+                bodyType: Body.Dynamic
                 sleepingAllowed: true
                 fixedRotation: true
                 linearDamping: 0
+                linearVelocity: Qt.point( (whale.movingLeft ? -1 : 1) , 0)
 
                 fixtures: Box {
                     id: whalefixer
@@ -371,11 +368,13 @@ ActivityBase {
 
         Image {
             id: ship
+            visible: (bar.level > 3) ? true : false
             source: url + "asw_frigate.png"
             y: background.height * 0.05
             z: 1
 
             property bool movingLeft: true
+            property real initialXPosition: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)
 
             transform: Rotation {
                 id: rotateShip;
@@ -425,7 +424,7 @@ ActivityBase {
                 sleepingAllowed: true
                 fixedRotation: true
                 linearDamping: 0
-                linearVelocity: Qt.point(( (ship.movingLeft ? -1 : 1) * background.width) / 830, 0)
+                linearVelocity: Qt.point((ship.movingLeft ? -1 : 1), 0)
 
                 fixtures: Box {
                     id: shipfixer
@@ -440,6 +439,7 @@ ActivityBase {
 
         Image {
             id: rock2
+            visible: (bar.level > 4) ? true : false
             anchors.bottom: crown.bottom
             anchors.left: crown.right
             source: "qrc:/gcompris/src/activities/mining/resource/stone2.svg"
@@ -464,6 +464,7 @@ ActivityBase {
 
         Image {
             id: rock1
+            visible: (bar.level > 6) ? true : false
             anchors.bottom: crown.bottom
             anchors.right: crown.left
             source: "qrc:/gcompris/src/activities/mining/resource/stone1.svg"

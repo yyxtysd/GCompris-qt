@@ -27,124 +27,28 @@ QtObject {
             intro: [
                 qsTr("Move the submarine to the other side of the screen."),
                 qsTr("Increase or decrease the velocity of the submarine using the engine."),
-                qsTr("Press the + button to increase the velocity, or the - button to decrease the velocity."),],
-            items: [
-                {component: upperGate, visible: false},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: false},
-                {component: whale, visible: false},
-                {component: ship, visible: false},
-                {component: rock2, visible: false},
-                {component: rock1, visible: false}
+                qsTr("Press the + button to increase the velocity, or the - button to decrease the velocity."),
             ]
         },
         {
             intro: [
                 qsTr("The Ballast tanks are used to sink or dive under water."),
                 qsTr("If the ballast tanks are empty, the submarine will float. If the ballast tanks are full of water, the submarine will dive underwater."),
-                qsTr("Press the ___ button to fill the tanks with water and ___ to empty the tanks."),],
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: false},
-                {component: whale, visible: false},
-                {component: ship, visible: false},
-                {component: rock2, visible: false},
-                {component: rock1, visible: false}
-            ]
+                qsTr("Press the ___ button to fill the tanks with water and ___ to empty the tanks."),]
         },
         {
             intro: [
                 qsTr("The Rudders are used to rotate the submarine."),
                 qsTr("Press the + and the - buttons to rotate the submarine accordingly."),
                 qsTr("Grab the crown to open the gate."),
-            ],
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: false},
-                {component: ship, visible: false},
-                {component: rock2, visible: false},
-                {component: rock1, visible: false}
             ]
         },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: false},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: false},
-                {component: rock1, visible: false}
-            ]
-        },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: false},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: true},
-                {component: rock1, visible: false}
-            ]
-        },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: true},
-                {component: rock1, visible: false}
-            ]
-        },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: true},
-                {component: rock1, visible: true}
-            ]
-        },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: true},
-                {component: rock1, visible: true}
-            ]
-        },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: true},
-                {component: rock1, visible: true}
-            ]
-        },
-        {
-            items: [
-                {component: upperGate, visible: true, height: background.height * (5 / 12)},
-                {component: lowerGate, visible: upperGate.visible, y: upperGate.height + 3,height: upperGate.height- subSchemaImage.height / 1.4},
-                {component: crown, visible: true},
-                {component: whale, visible: true, y: (background.height - subSchemaImage.height)/2},
-                {component: ship, visible: true, x: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)},
-                {component: rock2, visible: true},
-                {component: rock1, visible: true}
-            ]
-        }
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
     ]
 }

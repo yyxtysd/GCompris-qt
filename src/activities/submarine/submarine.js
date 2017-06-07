@@ -28,14 +28,6 @@ var numberOfLevel = 10
 var items
 var barAtStart
 
-/*
- * To check if the level elements are already initialised or not
- * = -1 = levels are not yet initialised
- * = 1 = levels are currently being initialised
- * = 0 = levels are fully initialised
- */
-var levelsBeingInitialised = -1
-
 function start(items_) {
     items = items_
     currentLevel = 0
@@ -45,7 +37,6 @@ function start(items_) {
 }
 
 function stop() {
-    levelsBeingInitialised = -1
     GCompris.ApplicationSettings.isBarHidden = barAtStart;
 }
 
@@ -61,66 +52,12 @@ function initLevel() {
         items.tutorial.visible = false
         items.physicalWorld.running = true
     }
-    levelsBeingInitialised = 1
     setUpLevelElements()
 }
 
 function setUpLevelElements() {
-    /*
-      // NOT Working
-    var levelComponents = items.datasetLevels[currentLevel].items
-    for (var i = 0; i < (levelComponents).length;i++) {
-        var object = levelComponents[i].component
-        var objectProperty = levelComponents[i]
-
-        if (levelsBeingInitialised == 1) {
-            object.visible = objectProperty.visible
-        }
-
-        if (object.visible == false) {
-            continue
-        }
-
-        if (objectProperty.width) {
-            object.width = objectProperty.width
-        }
-
-        if (objectProperty.height) {
-            object.height = objectProperty.height
-        }
-
-        if (objectProperty.x) {
-            object.x = objectProperty.x
-        }
-
-        if (objectProperty.y) {
-            object.y = objectProperty.y
-        }
-    }
-    */
-    for (var i = 0;i < (items.datasetLevels[currentLevel]).items.length;i++) {
-        (items.datasetLevels[currentLevel]).items[i].component.visible = (items.datasetLevels[currentLevel]).items[i].visible
-
-        /* Do not reinitialise visibility on screen change (useful for crowns) */
-        if ((items.datasetLevels[currentLevel]).items[i].visible == false && levelsBeingInitialised == 1) {
-            continue
-        }
-
-        if ((items.datasetLevels[currentLevel]).items[i].x) {
-            (items.datasetLevels[currentLevel]).items[i].component.x = (items.datasetLevels[currentLevel]).items[i].x
-        }
-
-        if ((items.datasetLevels[currentLevel]).items[i].y) {
-            (items.datasetLevels[currentLevel]).items[i].component.y = (items.datasetLevels[currentLevel]).items[i].y
-        }
-
-        if ((items.datasetLevels[currentLevel]).items[i].width) {
-            (items.datasetLevels[currentLevel]).items[i].component.width = (items.datasetLevels[currentLevel]).items[i].width
-        }
-
-        if ((items.datasetLevels[currentLevel]).items[i].height) {
-            (items.datasetLevels[currentLevel]).items[i].component.height = (items.datasetLevels[currentLevel]).items[i].height
-        }
+    if(items.ship.visible) {
+        items.ship.x = items.ship.initialXPosition
     }
 
     if ( !items.crown.visible && items.upperGate.visible) {
@@ -128,16 +65,14 @@ function setUpLevelElements() {
     }
 }
 
-function resizeElements() {
-    /* Do not call the first time when the level is created */
-    if (levelsBeingInitialised == -1 ) {
-        return
+function closeGate() {
+    if (items.upperGate.visible) {
+        items.gateCloseAnimation.start()
     }
-    levelsBeingInitialised = 0
-    setUpLevelElements()
 }
 
 function nextLevel() {
+    closeGate()
     if(numberOfLevel <= ++currentLevel ) {
         currentLevel = 0
     }
