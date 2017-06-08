@@ -51,12 +51,6 @@ ActivityBase {
             property Item main: activity.main
             property alias dragPointsModel: dragPointsModel
             property alias dragPoints: dragPoints
-
-            property alias tutorialImage: tutorialImage.source
-            property alias tutorialTxt: tutorialTxt.text
-            property alias tutNum: tutorialTxt.tutNum
-            property bool isTutorial
-
             property alias player1: player1
             property alias firstInitial: firstInitial
             property alias firstPlayerPieces: firstPlayerPieces
@@ -92,6 +86,7 @@ ActivityBase {
             property alias bar: bar
             property alias bonus: bonus
             property alias instructionTxt: instruction.text
+            property alias tutorialSection: tutorialSection
         }
 
         onStart: Activity.start(items, twoPlayer)
@@ -102,7 +97,7 @@ ActivityBase {
             source: Activity.url + "board.svg"
             sourceSize.width: Math.min(background.height - 1.4 * player1.height - 1.2 * bar.height,
                                        background.width - 2.2 * firstInitial.width)
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
@@ -140,7 +135,7 @@ ActivityBase {
             }
             width: player1.width * 1.2
             height: player1.height * 1.2
-            visible: !items.isTutorial && items.firstPhase
+            visible: !items.tutorialSection.visible && items.firstPhase
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -202,7 +197,7 @@ ActivityBase {
             }
             width: firstInitial.width
             height: firstInitial.height
-            visible: !items.isTutorial && items.firstPhase
+            visible: !items.tutorialSection.visible && items.firstPhase
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -270,7 +265,7 @@ ActivityBase {
             horizontalAlignment: Text.AlignHLeft
             width: implicitWidth
             height: implicitHeight
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
             z: 2
         }
 
@@ -284,7 +279,7 @@ ActivityBase {
             radius: 10
             border.width: 2
             border.color: "black"
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#000" }
                 GradientStop { position: 0.9; color: "#666" }
@@ -306,7 +301,7 @@ ActivityBase {
             }
             radius: 5
             state: "second"
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
 
             Image {
                 id: player2background
@@ -389,7 +384,7 @@ ActivityBase {
             }
             radius: 5
             state: "second"
-            visible: !items.isTutorial
+            visible: !items.tutorialSection.visible
 
             Image {
                 id: player1background
@@ -553,150 +548,13 @@ ActivityBase {
         }
         // Animation section ends
 
-        // Tutorial section starts
-        Image {
-            id: previousTutorial
-            source: "qrc:/gcompris/src/core/resource/bar_previous.svg"
-            sourceSize.height: skipTutorial.height * 1.1
-            visible: items.isTutorial && tutorialTxt.tutNum != 1
-            anchors {
-                top: parent.top
-                topMargin: 5
-                right: skipTutorialContainer.left
-                rightMargin: 5
-            }
-
-            MouseArea {
-                id: previousArea
-                width: parent.width
-                height: parent.height
-                onClicked: {Activity.tutorialPrevious()}
-            }
-        }
-
-        Image {
-            id: nextTutorial
-            source: "qrc:/gcompris/src/core/resource/bar_next.svg"
-            sourceSize.height: skipTutorial.height * 1.1
-            visible: items.isTutorial && tutorialTxt.tutNum != 5
-            anchors {
-                top: parent.top
-                topMargin: 5
-                left: skipTutorialContainer.right
-                leftMargin: 5
-            }
-
-            MouseArea {
-                id: nextArea
-                width: parent.width
-                height: parent.height
-                onClicked: {Activity.tutorialNext()}
-            }
-        }
-
-        GCText {
-            id: skipTutorial
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: parent.top
-                topMargin: 5
-            }
-            fontSizeMode: Text.Fit
-            minimumPixelSize: 10
-            color: "white"
-            style: Text.Outline
-            styleColor: "black"
-            horizontalAlignment: Text.AlignHCenter
-            width: Math.min(implicitWidth, 0.8 * parent.width )
-            height: implicitHeight
-            visible: items.isTutorial
-            text: qsTr("Skip tutorial")
-            z: 2
-        }
-
-        Rectangle {
-            id: skipTutorialContainer
-            anchors.top: skipTutorial.top
-            anchors.horizontalCenter: skipTutorial.horizontalCenter
-            width: skipTutorial.width + 10
-            height: skipTutorial.height + 2
-            opacity: 0.8
-            radius: 10
-            border.width: 2
-            border.color: "black"
-            visible: items.isTutorial
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#000" }
-                GradientStop { position: 0.9; color: "#666" }
-                GradientStop { position: 1.0; color: "#AAA" }
-            }
-            MouseArea {
-                id: skipArea
-                hoverEnabled: true
-                width: parent.width
-                height: parent.height
-                onEntered: {skipTutorialContainer.border.color = "#62db53"}
-                onExited: {skipTutorialContainer.border.color = "black"}
-                onClicked: {Activity.tutorialSkip()}
-            }
-        }
-
-        GCText {
-            id: tutorialTxt
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: skipTutorial.bottom
-                topMargin: skipTutorial.height * 0.5
-            }
-            fontSizeMode: Text.Fit
-            minimumPixelSize: 10
-            color: "white"
-            style: Text.Outline
-            styleColor: "black"
-            horizontalAlignment: Text.AlignHLeft
-            width: Math.min(implicitWidth, 0.8 * parent.width )
-            height: Math.min(implicitHeight, 0.25 * parent.height )
-            wrapMode: TextEdit.WordWrap
-            visible: items.isTutorial
-            z: 2
-            property int tutNum: 1
-        }
-
-        Rectangle {
-            id: tutorialTxtContainer
-            anchors.top: tutorialTxt.top
-            anchors.horizontalCenter: tutorialTxt.horizontalCenter
-            width: tutorialTxt.width + 20
-            height: tutorialTxt.height + 2
-            opacity: 0.8
-            radius: 10
-            border.width: 2
-            border.color: "black"
-            visible: items.isTutorial
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#000" }
-                GradientStop { position: 0.9; color: "#666" }
-                GradientStop { position: 1.0; color: "#AAA" }
-            }
-        }
-
-        Image {
-            id: tutorialImage
-            source: Activity.url + "tutorial" + tutorialTxt.tutNum + ".svg"
-            property int heightNeed: background.height - tutorialTxtContainer.height - bar.height -
-                                     2 * skipTutorialContainer.height
-            width: (sourceSize.width/sourceSize.height) > (0.9 * background.width / heightNeed) ?
-                   0.9 * background.width : (sourceSize.width * heightNeed) / sourceSize.height
-            fillMode: Image.PreserveAspectFit
-            visible: items.isTutorial
-            anchors {
-                top: tutorialTxt.bottom
-                topMargin: 10
-                horizontalCenter: parent.horizontalCenter
-            }
-        }
-        // Tutorial section ends
-
+	Tutorial {
+	  id: tutorialSection
+	  tutorialDetails: Activity.tutorialInstructions
+	  onSkipPressed: {
+	            Activity.initLevel()
+	   }
+	}
         DialogHelp {
             id: dialogHelp
             onClose: home()
@@ -704,7 +562,7 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: twoPlayer ? (help | home | reload) : items.isTutorial ?
+            content: BarEnumContent { value: twoPlayer ? (help | home | reload) : items.tutorialSection.visible ?
                                              (help | home) : (help | home | level | reload)}
             onHelpClicked: {
                 displayDialog(dialogHelp)

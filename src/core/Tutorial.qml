@@ -18,20 +18,42 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+
+/*
+ * A QML component for tutorial in activity in GCompris.
+ *
+ * Use Tutorial when you want to add a tutorial section which contains tutorial instructions and images.
+ *
+ * Contains the following basic layout elements: Tutorial Text(instructions), a
+ * Skip, a Next and a Previous button to leave the tutorial or navigate through it.
+ * The skipPressed, nextPressed, previousPressed signals are emitted when user clicks on skip, next and previous button respectively.
+ *
+ */
+
 import QtQuick 2.6
 import GCompris 1.0
-
-import "../../core"
 
 Item {
     id: tutorialSection
     anchors.fill: parent
+    /* type: int
+     * Counter for tutorial instructions
+     */
     property int tutorialNumber: 0
+
+    /* Container for all the tutorial instructions */
     property var tutorialDetails
+
+    // Emitted when skipButton is clicked
     signal skipPressed
+
+    // Emitted when nextButton is clicked
     signal nextPressed
+
+    // Emitted when previousButton is clicked
     signal previousPressed
 
+    // Tutorial instructions
     GCText {
         id: tutorialText
         anchors {
@@ -63,17 +85,20 @@ Item {
         border.color: "#87A6DD"
     }
 
+    // previousButton: It emits skipPressed and navigates to previous tutorial when clicked
     Rectangle {
         id: previousButton
-        width: 120
-        height: 120
+        width: 180
+        height: 90
         color: "#d8ffffff"
         border.color: "#2a2a2a"
         border.width: 3
         radius: 8
         z: 5
         anchors.right: nextButton.left
-        anchors.bottom: parent.bottom
+        anchors.topMargin: 15
+        anchors.rightMargin: 15
+	anchors.top: tutorialTextContainer.bottom
         visible: tutorialNumber != 0
 
         GCText {
@@ -119,17 +144,20 @@ Item {
         Behavior on scale { NumberAnimation { duration: 70 } }
     }
 
+    // nextButton: It emits nextPressed which navigates to next tutorial when clicked
     Rectangle {
         id: nextButton
-        width: 120
-        height: 120
+        width: 150
+        height: 90
         color: "#d8ffffff"
         border.color: "#2a2a2a"
         border.width: 3
         radius: 8
         z: 5
         anchors.right: skipButton.left
-        anchors.bottom: parent.bottom
+        anchors.topMargin: 15
+        anchors.rightMargin: 15
+	anchors.top: tutorialTextContainer.bottom
         visible: tutorialNumber != (tutorialDetails.length - 1)
 
         GCText {
@@ -174,10 +202,12 @@ Item {
         ]
         Behavior on scale { NumberAnimation { duration: 70 } }
     }
+
+    // skipButton: It emits the skipPressed signal which calls the initLevel to close the tutorial when clicked.
     Rectangle {
         id: skipButton
-        width: 120
-        height: 120
+        width: 150
+        height: 90
         color: "#d8ffffff"
         border.color: "#2a2a2a"
         border.width: 3
@@ -185,7 +215,8 @@ Item {
         z: 5
         anchors.right: parent.right
         anchors.rightMargin: 15
-        anchors.bottom: parent.bottom
+        anchors.topMargin: 15
+	anchors.top: tutorialTextContainer.bottom
 
         GCText {
             id: skipButtonText
@@ -230,13 +261,14 @@ Item {
         Behavior on scale { NumberAnimation { duration: 70 } }
     }
 
+    // Image component for tutorial instructions
     Image {
         id: tutorialImage
         width: parent.width * 0.8
         fillMode: Image.PreserveAspectFit
         source: tutorialDetails ? tutorialDetails[tutorialNumber].instructionImage : ""
         anchors {
-            top: tutorialText.bottom
+            top: previousButton.bottom
             topMargin: 10
             horizontalCenter: parent.horizontalCenter
         }
