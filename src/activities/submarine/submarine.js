@@ -27,6 +27,7 @@ var currentLevel = 0
 var numberOfLevel = 10
 var items
 var barAtStart
+var processingAnswer
 
 var tutorials = [
             [
@@ -60,6 +61,7 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
+    processingAnswer = false
 
     /* Tutorial Levels, display tutorials */
     if (currentLevel < tutorials.length) {
@@ -75,6 +77,10 @@ function initLevel() {
 }
 
 function setUpLevelElements() {
+    /* Set up initial position of the submarine */
+    items.submarine.x = items.submarine.initialPosition.x
+    items.submarine.y = items.submarine.initialPosition.y
+
     if(items.ship.visible) {
         items.ship.x = items.ship.initialXPosition
     }
@@ -87,6 +93,14 @@ function setUpLevelElements() {
 function closeGate() {
     if (items.upperGate.visible) {
         items.upperGate.closeGate()
+    }
+}
+
+function checkWin() {
+    if (!processingAnswer && items.submarine.x >= items.background.width) {
+        processingAnswer = true
+        items.submarine.velocity = Qt.point(0,0)
+        items.bonus.good("flower")
     }
 }
 

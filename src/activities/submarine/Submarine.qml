@@ -72,6 +72,7 @@ ActivityBase {
             property var whaleCategory: Fixture.Category3
             property var upperGatefixerCategory: Fixture.Category4
             property var lowerGatefixerCategory: Fixture.Category5
+            property alias submarine: submarine
             property alias tutorial: tutorial
             property alias upperGate: upperGate
             property alias ship: ship
@@ -110,8 +111,11 @@ ActivityBase {
 
             z: 1
 
+            property point initialPosition: Qt.point(0,0)
             property point velocity
             property int maximumXVelocity: 5
+
+            onXChanged: Activity.checkWin()
             Image {
                 id: submarineImage
                 source: url + "submarine.png"
