@@ -23,7 +23,6 @@ import QtQuick 2.6
 import QtQuick.Particles 2.0
 import Box2D 2.0
 import QtGraphicalEffects 1.0
-import GCompris 1.0
 
 import "../../core"
 import "submarine.js" as Activity
@@ -142,10 +141,11 @@ ActivityBase {
                 fixtures: Box {
                     id: submarineFixer
                     categories: items.submarineCategory
-                    collidesWith: items.crowCategory | items.whaleCategory
+                    collidesWith: items.crowCategory | items.whaleCategory | items.upperGatefixerCategory
                     density: 1
                     friction: 0
                     restitution: 0
+                    onBeginContact: console.log("Contact")
                 }
             }
         }
@@ -286,114 +286,16 @@ ActivityBase {
             }
         }
 
-        Image {
+        Whale {
             id: whale
-            visible: (bar.level > 5) ? true : false
-            source: url + "whale.png"
+            visible: true
+//            visible: (bar.level > 5) ? true : false
 
-            y: (background.height - subSchemaImage.height)/2
+//            y: (background.height - subSchemaImage.height)/2
             z: 1
-            function hit() {
-                whale.source = url + "whale_hit.png"
-            }
 
-            property bool movingLeft: true
-
-            transform: Rotation {
-                id: rotate;
-                origin.x: whale.width / 2;
-                origin.y: 0;
-                axis { x: 0; y: 1; z: 0 } angle: 0
-            }
-
-            SequentialAnimation {
-                id: rotateLeftAnimation
-                loops: 1
-                PropertyAnimation {
-                    target: rotate
-                    properties: "angle"
-                    from: 0
-                    to: 180
-                    duration: 500
-                }
-            }
-
-            SequentialAnimation {
-                id: rotateRightAnimation
-                loops: 1
-                PropertyAnimation {
-                    target: rotate
-                    properties: "angle"
-                    from: 180
-                    to: 0
-                    duration: 500
-                }
-            }
-
-            onXChanged: {
-                if (x <= 0) {
-                    rotateLeftAnimation.start()
-                    whale.movingLeft = false
-                } else if (x >= background.width - whale.width - (upperGate.visible ? upperGate.width : 0)) {
-                    rotateRightAnimation.start()
-                    whale.movingLeft = true
-                }
-            }
-
-            Loader {
-                id: bubbleEffect
-                anchors.fill: parent
-                active: ApplicationInfo.hasShader
-                sourceComponent: ParticleSystem {
-                    anchors.fill: parent
-                    Emitter {
-                        x: parent.x
-                        y: parent.y + parent.height / 2
-                        width: 1
-                        height: 1
-                        emitRate: 0.5
-                        lifeSpan: 1000
-                        lifeSpanVariation: 2500
-                        acceleration: PointDirection {
-                            x: -10
-                            xVariation: 10
-                            y: -20
-                            yVariation: 10
-                        }
-                        velocity: PointDirection {
-                            x: 20
-                            xVariation: 10
-                            y: -20
-                            yVariation: 10
-                        }
-                        size: 12
-                        sizeVariation: 8
-                    }
-
-                    ImageParticle {
-                        source: "qrc:/gcompris/src/activities/clickgame/resource/bubble.png"
-                    }
-                }
-            }
-
-            Body {
-                id: whalebody
-                target: whale
-                bodyType: Body.Dynamic
-                sleepingAllowed: true
-                fixedRotation: true
-                linearDamping: 0
-                linearVelocity: Qt.point( (whale.movingLeft ? -1 : 1) , 0)
-
-                fixtures: Box {
-                    id: whalefixer
-                    categories: items.whaleCategory
-                    collidesWith: items.submarineCategory
-                    density: 1
-                    friction: 0
-                    restitution: 0
-                }
-            }
+            leftLimit: 0
+            rightLimit: background.width - whale.width - (upperGate.visible ? upperGate.width : 0)
         }
 
         Image {
