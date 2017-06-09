@@ -71,6 +71,7 @@ ActivityBase {
             property var whaleCategory: Fixture.Category3
             property var upperGatefixerCategory: Fixture.Category4
             property var lowerGatefixerCategory: Fixture.Category5
+            property var shipCategory: Fixture.Category6
             property alias submarine: submarine
             property alias tutorial: tutorial
             property alias upperGate: upperGate
@@ -114,7 +115,11 @@ ActivityBase {
             property point velocity
             property int maximumXVelocity: 5
 
-            onXChanged: Activity.checkWin()
+            onXChanged: {
+                if (submarine.x >= background.width) {
+                    Activity.finishLevel(true)
+                }
+            }
             Image {
                 id: submarineImage
                 source: url + "submarine.png"
@@ -140,12 +145,17 @@ ActivityBase {
 
                 fixtures: Box {
                     id: submarineFixer
+                    width: submarineImage.width
+                    height: submarineImage.height
                     categories: items.submarineCategory
-                    collidesWith: items.crowCategory | items.whaleCategory | items.upperGatefixerCategory
+                    collidesWith: items.crowCategory | items.whaleCategory | items.upperGatefixerCategory | items.shipCategory
                     density: 1
                     friction: 0
                     restitution: 0
-                    onBeginContact: console.log("Contact")
+                    onBeginContact: {
+                        console.log("Contact "+other.getBody().target)
+                        Activity.finishLevel(false)
+                    }
                 }
             }
         }
@@ -188,6 +198,8 @@ ActivityBase {
 
                 fixtures: Box {
                     id: upperGatefixer
+                    width: upperGate.visible ? upperGate.width : 0
+                    height: upperGate.visible ? upperGate.height : 0
                     categories: items.upperGatefixerCategory
                     collidesWith: items.submarineCategory
                     density: 1
@@ -288,10 +300,9 @@ ActivityBase {
 
         Whale {
             id: whale
-            visible: true
-//            visible: (bar.level > 5) ? true : false
+            visible: (bar.level > 5) ? true : false
 
-//            y: (background.height - subSchemaImage.height)/2
+            y: (background.height - subSchemaImage.height)/2
             z: 1
 
             leftLimit: 0
@@ -360,7 +371,9 @@ ActivityBase {
 
                 fixtures: Box {
                     id: shipfixer
-//                    categories: items.shipCategory
+                    width: ship.width
+                    height: ship.height
+                    categories: items.shipCategory
                     collidesWith: items.submarineCategory
                     density: 1
                     friction: 0

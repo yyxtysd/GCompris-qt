@@ -96,11 +96,17 @@ function closeGate() {
     }
 }
 
-function checkWin() {
-    if (!processingAnswer && items.submarine.x >= items.background.width) {
+function finishLevel(win) {
+    if (!processingAnswer)
+        return
+    if (win) {
         processingAnswer = true
         items.submarine.velocity = Qt.point(0,0)
         items.bonus.good("flower")
+    } else {
+        processingAnswer = true
+        items.submarine.velocity = Qt.point(0,0)
+        items.bonus.bad("flower")
     }
 }
 

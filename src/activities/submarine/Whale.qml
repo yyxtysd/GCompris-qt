@@ -125,6 +125,8 @@ Image {
 
         fixtures: Box {
             id: whalefixer
+            width: whale.width
+            height: whale.height
             categories: items.whaleCategory
             collidesWith: items.submarineCategory
             density: 1
