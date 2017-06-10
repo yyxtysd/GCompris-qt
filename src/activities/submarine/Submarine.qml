@@ -3,7 +3,7 @@
  * Copyright (C) 2017 RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com>
  *
  * Authors:
- *   Bruno Coudoin (bruno.coudoin@gcompris.net) (GTK+ version)
+ *   Pascal Georges <pascal.georges1@free.fr> (GTK+ version)
  *   Rudra Nil Basu <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -222,7 +222,7 @@ ActivityBase {
                     width: upperGate.width
                     height: upperGate.height
                     categories: items.upperGatefixerCategory
-                    collidesWith: upperGate.visible ? items.submarineCategory : 0x0000
+                    collidesWith: upperGate.visible ? items.submarineCategory : Fixture.None
                     density: 1
                     friction: 0
                     restitution: 0
@@ -318,7 +318,7 @@ ActivityBase {
                     width: crown.width
                     height: crown.height
                     categories: items.crownCategory
-                    collidesWith: crown.visible ? items.submarineCategory : 0x0000
+                    collidesWith: crown.visible ? items.submarineCategory : Fixture.None
                     density: 0.1
                     friction: 0
                     restitution: 0
@@ -341,11 +341,24 @@ ActivityBase {
             id: ship
             visible: (bar.level > 3) ? true : false
             source: url + "asw_frigate.png"
+            x: initialXPosition
             y: background.height * 0.05
             z: 1
 
             property bool movingLeft: true
+            property bool collided: false
             property real initialXPosition: background.width - ship.width - (upperGate.visible ? upperGate.width : 0)
+            property real horizontalSpeed: 1
+
+            function reset() {
+                ship.collided = false
+                ship.x = initialXPosition
+            }
+
+            function collide() {
+                /* Add few visual effects */
+                collided = true
+            }
 
             transform: Rotation {
                 id: rotateShip;
@@ -395,17 +408,19 @@ ActivityBase {
                 sleepingAllowed: true
                 fixedRotation: true
                 linearDamping: 0
-                linearVelocity: Qt.point((ship.movingLeft ? -1 : 1), 0)
+                linearVelocity: Qt.point( (ship.collided ? 0 : ((ship.movingLeft ? -1 : 1) * ship.horizontalSpeed)), 0)
 
                 fixtures: Box {
                     id: shipfixer
                     width: ship.width
                     height: ship.height
                     categories: items.shipCategory
-                    collidesWith: ship.visible ? items.submarineCategory : 0x0000
+                    collidesWith: ship.visible ? items.submarineCategory : Fixture.None
                     density: 1
                     friction: 0
                     restitution: 0
+
+                    onBeginContact: ship.collide()
                 }
             }
         }

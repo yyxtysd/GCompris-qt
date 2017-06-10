@@ -3,7 +3,7 @@
  * Copyright (C) 2017 RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com>
  *
  * Authors:
- *   Bruno Coudoin (bruno.coudoin@gcompris.net) (GTK+ version)
+ *   Pascal Georges <pascal.georges1@free.fr> (GTK+ version)
  *   Rudra Nil Basu <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
  *
  *   This program is free software; you can redistribute it and/or modify

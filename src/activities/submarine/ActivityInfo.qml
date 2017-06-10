@@ -19,15 +19,15 @@ import GCompris 1.0
 
 ActivityInfo {
   name: "submarine/Submarine.qml"
-  difficulty: 1
+  difficulty: 5
   icon: "submarine/submarine.svg"
   author: "Rudra Nil Basu &lt;rudra.nil.basu.1996@gmail.com&gt;"
   demo: true
-  title: qsTr("Submarine activity")
+  title: qsTr("Pilot a Submarine")
   description: qsTr("Drive the submarine to the end point")
-  //intro: "put here in comment the text for the intro voice"
+  //intro: "Drive the submarine to the right end of the screen without colliding with any objects"
   goal: qsTr("Learn how to control a submarine")
-  prerequisite: qsTr("Move and click using the mouse")
+  prerequisite: qsTr("Move and click using the mouse, physics basics")
   manual: qsTr("Control the various parts of the submarine (the engine, rudders and ballast tanks) to reach the end point")
   credit: ""
   section: "experimental"
