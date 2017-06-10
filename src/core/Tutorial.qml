@@ -30,12 +30,24 @@
  *
  */
 
+/* To use the component add:
+ * Tutorial {
+ * id: tutorialSection
+ * source: "sourceForTutorialBackgroundImage"
+ * tutorialDetails: Activity.tutoralInstructions
+ * onSkipPressed: {
+ *      Activity.initLevel()
+ *   }
+ * }
+ */
+
 import QtQuick 2.6
 import GCompris 1.0
 
-Item {
+Image {
     id: tutorialSection
     anchors.fill: parent
+    z: 5
     /* type: int
      * Counter for tutorial instructions
      */
@@ -70,6 +82,10 @@ Item {
         height: Math.min(implicitHeight, 0.25 * parent.height)
         wrapMode: TextEdit.WordWrap
         z: 2
+    }
+
+    MouseArea {
+        anchors.fill: parent
     }
 
     Rectangle {

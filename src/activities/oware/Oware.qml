@@ -68,7 +68,6 @@ ActivityBase {
             anchors.centerIn: parent
             width: parent.width * 0.7
             height: width * 0.4
-            visible: !tutorialSection.visible
         }
 
         Grid {
@@ -77,7 +76,6 @@ ActivityBase {
             rows: 2
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.top
-            visible: !tutorialSection.visible
 
             Repeater {
                 id: cellGridRepeater
@@ -90,7 +88,7 @@ ActivityBase {
                     property var circleRadius: width
                     property var value: 4
                     GCText {
-                        text: value
+                        text: "4"
                         color: "white"
                         anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -131,7 +129,6 @@ ActivityBase {
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.bottom
             interactive: false
-            visible: !tutorialSection.visible
 
             delegate: Item {
                 height: parent.height
@@ -146,11 +143,8 @@ ActivityBase {
                         anchors.fill:parent
                         hoverEnabled: true
                         onClicked: {
-                            //Activity.sowSeeds(index);
+                            Activity.sowSeeds(index);
                             items.playerOneTurn = !items.playerOneTurn
-                        }
-                        onPressed: {
-                            valueImage.source = Activity.url + "button" + (index + 1) + "Click.png";
                         }
                     }
                 }
@@ -159,6 +153,7 @@ ActivityBase {
 
         Tutorial {
             id:tutorialSection
+            source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
             tutorialDetails: Activity.tutorialInstructions
             onSkipPressed: {
 	            Activity.initLevel()
@@ -170,7 +165,6 @@ ActivityBase {
             player: 1
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height * 11/8
-            visible: !tutorialSection.visible
             anchors {
                 top: background.top
                 topMargin: 5
@@ -185,8 +179,7 @@ ActivityBase {
             id: playerTwoLevelScore
             player: 2
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
-            width: height*11/8
-            visible: !tutorialSection.visible
+            width: height * 11/8
             anchors {
                 top: background.top
                 topMargin: 5
@@ -204,7 +197,6 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: board.left
-            visible: !tutorialSection.visible
 
             GCText {
                 id: playerOneScoreText
@@ -224,7 +216,6 @@ ActivityBase {
             source:Activity.url+"/score.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: board.right
-            visible: !tutorialSection.visible
 
             GCText {
                 id: playerTwoScoreText
