@@ -77,7 +77,8 @@ function initLevel() {
 }
 
 function setUpLevelElements() {
-    /* Set up initial position of the submarine */
+    /* Set up initial position and state of the submarine */
+    items.submarine.resetSubmarine()
     items.submarine.x = items.submarine.initialPosition.x
     items.submarine.y = items.submarine.initialPosition.y
 
@@ -97,7 +98,7 @@ function closeGate() {
 }
 
 function finishLevel(win) {
-    if (!processingAnswer)
+    if (processingAnswer)
         return
     if (win) {
         processingAnswer = true
@@ -106,6 +107,7 @@ function finishLevel(win) {
     } else {
         processingAnswer = true
         items.submarine.velocity = Qt.point(0,0)
+        items.submarine.destroySubmarine()
         items.bonus.bad("flower")
     }
 }

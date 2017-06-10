@@ -48,13 +48,13 @@ ActivityBase {
             activity.stop.connect(stop)
         }
 
-        /* Testing purposes, A => Reduces velocity, D => Increases velocity */
+        /* Testing purposes, A / Left Key => Reduces velocity, D / Right Key => Increases velocity */
         Keys.onPressed: {
-            if (event.key == Qt.Key_D && submarine.velocity.x < submarine.maximumXVelocity) {
-                submarine.velocity.x += 1
+            if ((event.key == Qt.Key_D || event.key == Qt.Key_Right) && submarine.velocity.x < submarine.maximumXVelocity) {
+                submarine.increaseHorizontalVelocity(1)
             }
-            if (event.key == Qt.Key_A && submarine.velocity.x > 0) {
-                submarine.velocity.x -= 1
+            if ((event.key == Qt.Key_A || event.key == Qt.Key_Left) && submarine.velocity.x > 0) {
+                submarine.decreaseHorizontalVelocity(1)
             }
         }
 
@@ -115,6 +115,22 @@ ActivityBase {
             property point velocity
             property int maximumXVelocity: 5
 
+            function destroySubmarine() {
+                submarineImage.broken()
+            }
+
+            function resetSubmarine() {
+                submarineImage.reset()
+            }
+
+            function increaseHorizontalVelocity(amt) {
+                submarine.velocity.x += amt
+            }
+
+            function decreaseHorizontalVelocity(amt) {
+                submarine.velocity.x -= amt
+            }
+
             onXChanged: {
                 if (submarine.x >= background.width) {
                     Activity.finishLevel(true)
@@ -148,13 +164,18 @@ ActivityBase {
                     width: submarineImage.width
                     height: submarineImage.height
                     categories: items.submarineCategory
-                    collidesWith: items.crowCategory | items.whaleCategory | items.upperGatefixerCategory | items.shipCategory
+                    collidesWith: items.crownCategory | items.whaleCategory | items.upperGatefixerCategory | items.shipCategory
                     density: 1
                     friction: 0
                     restitution: 0
                     onBeginContact: {
-                        console.log("Contact "+other.getBody().target)
-                        Activity.finishLevel(false)
+                        var collidedObject = other.getBody().target
+
+                        if (collidedObject == crown) {
+                            crown.captureCrown()
+                        } else {
+                            Activity.finishLevel(false)
+                        }
                     }
                 }
             }
@@ -198,10 +219,10 @@ ActivityBase {
 
                 fixtures: Box {
                     id: upperGatefixer
-                    width: upperGate.visible ? upperGate.width : 0
-                    height: upperGate.visible ? upperGate.height : 0
+                    width: upperGate.width
+                    height: upperGate.height
                     categories: items.upperGatefixerCategory
-                    collidesWith: items.submarineCategory
+                    collidesWith: upperGate.visible ? items.submarineCategory : 0x0000
                     density: 1
                     friction: 0
                     restitution: 0
@@ -275,6 +296,11 @@ ActivityBase {
             visible: (bar.level) > 2 ? true : false
             source: url + "crown.png"
 
+            function captureCrown() {
+                upperGate.openGate()
+                crown.visible = false
+            }
+
             x: background.width / 2
             y: background.height - (subSchemaImage.height * 2)
             z: 1
@@ -282,16 +308,18 @@ ActivityBase {
             Body {
                 id: crownbody
                 target: crown
-                bodyType: Body.Static
+                bodyType: Body.Dynamic
                 sleepingAllowed: true
                 fixedRotation: true
                 linearDamping: 0
 
                 fixtures: Box {
                     id: crownfixer
+                    width: crown.width
+                    height: crown.height
                     categories: items.crownCategory
-                    collidesWith: items.submarineCategory
-                    density: 1
+                    collidesWith: crown.visible ? items.submarineCategory : 0x0000
+                    density: 0.1
                     friction: 0
                     restitution: 0
                 }
@@ -374,7 +402,7 @@ ActivityBase {
                     width: ship.width
                     height: ship.height
                     categories: items.shipCategory
-                    collidesWith: items.submarineCategory
+                    collidesWith: ship.visible ? items.submarineCategory : 0x0000
                     density: 1
                     friction: 0
                     restitution: 0
@@ -450,6 +478,7 @@ ActivityBase {
 
         Bonus {
             id: bonus
+            onLoose: Activity.initLevel()
             Component.onCompleted: win.connect(Activity.nextLevel)
         }
     }

@@ -128,7 +128,7 @@ Image {
             width: whale.width
             height: whale.height
             categories: items.whaleCategory
-            collidesWith: items.submarineCategory
+            collidesWith: whale.visible ? items.submarineCategory : 0x0000
             density: 1
             friction: 0
             restitution: 0
