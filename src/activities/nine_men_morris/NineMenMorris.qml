@@ -97,7 +97,6 @@ ActivityBase {
             source: Activity.url + "board.svg"
             sourceSize.width: Math.min(background.height - 1.4 * player1.height - 1.2 * bar.height,
                                        background.width - 2.2 * firstInitial.width)
-            visible: !items.tutorialSection.visible
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
@@ -135,7 +134,7 @@ ActivityBase {
             }
             width: player1.width * 1.2
             height: player1.height * 1.2
-            visible: !items.tutorialSection.visible && items.firstPhase
+            visible: items.firstPhase
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -197,7 +196,7 @@ ActivityBase {
             }
             width: firstInitial.width
             height: firstInitial.height
-            visible: !items.tutorialSection.visible && items.firstPhase
+            visible: items.firstPhase
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -265,7 +264,6 @@ ActivityBase {
             horizontalAlignment: Text.AlignHLeft
             width: implicitWidth
             height: implicitHeight
-            visible: !items.tutorialSection.visible
             z: 2
         }
 
@@ -279,7 +277,6 @@ ActivityBase {
             radius: 10
             border.width: 2
             border.color: "black"
-            visible: !items.tutorialSection.visible
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#000" }
                 GradientStop { position: 0.9; color: "#666" }
@@ -301,7 +298,6 @@ ActivityBase {
             }
             radius: 5
             state: "second"
-            visible: !items.tutorialSection.visible
 
             Image {
                 id: player2background
@@ -384,7 +380,6 @@ ActivityBase {
             }
             radius: 5
             state: "second"
-            visible: !items.tutorialSection.visible
 
             Image {
                 id: player1background
@@ -550,6 +545,7 @@ ActivityBase {
 
 	Tutorial {
 	  id: tutorialSection
+	  source: Activity.url + "background.svg"
 	  tutorialDetails: Activity.tutorialInstructions
 	  onSkipPressed: {
 	            Activity.initLevel()
