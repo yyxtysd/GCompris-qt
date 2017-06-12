@@ -54,9 +54,10 @@ function stop() {
 }
 
 function initLevel() {
-    items.bar.level = currentLevel + 1
-    for(var i = 0; i < 12; i++)
+    for(var i = 11; i >= 0; i--)
         house[i] = 4
+    setValues()
+    items.bar.level = currentLevel + 1
 }
 
 function nextLevel() {
@@ -83,6 +84,17 @@ function getY(radius,index,value){
     return radius * Math.sin(step);
 }
 
+function setValues() {
+    print("after..")
+	for(var i = 0; i < house.length; i++) {
+        print(house[i])
+    }
+    for(var i = 6, j = 0; i < 12, j < 6; j++, i++)
+        items.cellGridRepeater.itemAt(i).value = house[j]
+    for(var i = 0, j = 11; i < 6, j > 5; j--, i++)
+        items.cellGridRepeater.itemAt(i).value = house[j]
+}
+
 function sowSeeds(index) {
     print("Before...")
     for(var i = 0; i < house.length; i++)
@@ -103,11 +115,7 @@ function sowSeeds(index) {
         house[nextIndex]++;
     }
 
-    print("after..")
-	for(var i = 0; i < house.length; i++) {
-        print(house[i])
-    }
-    // The nextIndex now contains the seeds in the last pit sown.
+  //  The nextIndex now contains the seeds in the last pit sown.
     var capture = [];
 
     // The oponent's seeds are captured if they are equal to 2 or 3
@@ -152,6 +160,5 @@ function sowSeeds(index) {
 	}
 
 	nextPlayer = player
-
-//     items.cellGridRepeater.model = house
+	setValues()
 }

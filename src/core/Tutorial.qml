@@ -44,10 +44,10 @@
 import QtQuick 2.6
 import GCompris 1.0
 
-Image {
+Item {
     id: tutorialSection
     anchors.fill: parent
-    z: 5
+
     /* type: int
      * Counter for tutorial instructions
      */

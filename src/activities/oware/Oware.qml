@@ -66,6 +66,7 @@ ActivityBase {
             id: board
             source: Activity.url + "/owareBoard.png"
             anchors.centerIn: parent
+            z: 2
             width: parent.width * 0.7
             height: width * 0.4
         }
@@ -76,6 +77,7 @@ ActivityBase {
             rows: 2
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.top
+            z: 2
 
             Repeater {
                 id: cellGridRepeater
@@ -86,9 +88,9 @@ ActivityBase {
                     height: board.height/2
                     width: board.width * (1/6.25)
                     property var circleRadius: width
-                    property var value: 4
+                    property var value
                     GCText {
-                        text: "4"
+                        text: index
                         color: "white"
                         anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -129,6 +131,7 @@ ActivityBase {
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: board.bottom
             interactive: false
+            z: 2
 
             delegate: Item {
                 height: parent.height
@@ -143,7 +146,10 @@ ActivityBase {
                         anchors.fill:parent
                         hoverEnabled: true
                         onClicked: {
-                            Activity.sowSeeds(index);
+                            if(items.playerOneTurn)
+                                Activity.sowSeeds(index)
+                            else
+                                Activity.sowSeeds(11 - index)
                             items.playerOneTurn = !items.playerOneTurn
                         }
                     }
@@ -151,13 +157,19 @@ ActivityBase {
             }
         }
 
-        Tutorial {
-            id:tutorialSection
+        Image {
+            id: tutorialImage
             source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
-            tutorialDetails: Activity.tutorialInstructions
-            onSkipPressed: {
-	            Activity.initLevel()
-	        }
+            anchors.fill: parent
+            z: 5
+            Tutorial {
+                id:tutorialSection
+                tutorialDetails: Activity.tutorialInstructions
+                onSkipPressed: {
+                    Activity.initLevel()
+                    tutorialImage.z = 0
+                }
+            }
         }
 
         ScoreItem {
