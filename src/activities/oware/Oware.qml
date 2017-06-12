@@ -53,10 +53,10 @@ ActivityBase {
             property alias bonus: bonus
             property alias cellGridRepeater: cellGridRepeater
             property bool playerOneTurn: true
-            property var playerOneScore: 0
-            property var playerOneSeeds: 0
-            property var playerTwoScore: 0
-            property var playerTwoSeeds: 0
+            property int playerOneScore: 0
+            property int playerOneSeeds: 0
+            property int playerTwoScore: 0
+            property int playerTwoSeeds: 0
         }
 
         onStart: { Activity.start(items) }
@@ -88,7 +88,7 @@ ActivityBase {
                     height: board.height/2
                     width: board.width * (1/6.25)
                     property var circleRadius: width
-                    property var value
+                    property int value
                     GCText {
                         text: index
                         color: "white"

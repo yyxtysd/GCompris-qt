@@ -100,7 +100,7 @@ function sowSeeds(index) {
     for(var i = 0; i < house.length; i++)
         print(house[i])
     // player is the current player
-    var player = items.playerOneTurn ? 1 : 2
+    var currentPlayer = items.playerOneTurn ? 1 : 2
     var nextIndex = index
 
     // The seeds are sown until the picked seeds are equal to zero
@@ -118,8 +118,8 @@ function sowSeeds(index) {
   //  The nextIndex now contains the seeds in the last pit sown.
     var capture = [];
 
-    // The oponent's seeds are captured if they are equal to 2 or 3
-    if (((house[nextIndex] == 2 || house[nextIndex] == 3) ) && ((player * 6 <= nextIndex) && (j < (player * 6 + 6))))
+    // The opponent's seeds are captured if they are equal to 2 or 3
+    if (((house[nextIndex] == 2 || house[nextIndex] == 3) ) && ((currentPlayer * 6 <= nextIndex) && (j < (currentPlayer * 6 + 6))))
 		capture[j%6] = true;
 
     /* The seeds previous to the captured seeds are checked. If they are equal to 2 or 3 then they are captured until a
@@ -131,17 +131,17 @@ function sowSeeds(index) {
 	}
 
     var allSeedsCaptured = true;
-	/* Now we check if all the seeds in oponents houses are captured or not. If any of the house is left with seeds we
+	/* Now we check if all the seeds in opponents houses are captured or not. If any of the house is left with seeds we
         allSeedsCaptured as false */
-    for (var j = player * 6; j < (player * 6 + 6); j++) {
+    for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
 		if (!capture[j % 6] && house[j])
 			allSeedsCaptured = false;
 	}
 
     // Now capture the seeds for the houses for which capture[houseIndex] = true if all seeds are not captured
 	if (!allSeedsCaptured) {
-		for (var j = player*6; j < (player * 6 + 6); j++) {
-			/* If oponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the oponent. */
+		for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
+			/* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
             if (capture[j%6]) {
 				scoreHouse[nextPlayer] += house[j];
 				house[j] = 0;
@@ -159,6 +159,6 @@ function sowSeeds(index) {
 		}
 	}
 
-	nextPlayer = player
+	nextPlayer = currentPlayer
 	setValues()
 }
