@@ -79,12 +79,13 @@ function initLevel() {
 function setUpLevelElements() {
     /* Set up initial position and state of the submarine */
     items.submarine.resetSubmarine()
-    items.submarine.x = items.submarine.initialPosition.x
-    items.submarine.y = items.submarine.initialPosition.y
 
     if(items.ship.visible) {
         items.ship.reset()
     }
+
+    items.crown.reset()
+    items.whale.reset()
 
     if ( !items.crown.visible && items.upperGate.visible) {
         items.upperGate.openGate()

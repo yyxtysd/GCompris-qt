@@ -29,8 +29,16 @@ Image {
     id: whale
     source: url + "whale.png"
 
+    property bool isHit: false
+
     function hit() {
+        isHit = true
         whale.source = url + "whale_hit.png"
+    }
+
+    function reset() {
+        isHit = false
+        whale.source = url + "whale.png"
     }
 
     property bool movingLeft: true
@@ -121,7 +129,7 @@ Image {
         sleepingAllowed: true
         fixedRotation: true
         linearDamping: 0
-        linearVelocity: Qt.point( (whale.movingLeft ? -1 : 1) , 0)
+        linearVelocity: isHit ? Qt.point(0,0) : Qt.point( (whale.movingLeft ? -1 : 1) , 0)
 
         fixtures: Box {
             id: whalefixer

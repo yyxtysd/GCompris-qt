@@ -72,12 +72,14 @@ ActivityBase {
             property alias bar: bar
             property alias bonus: bonus
             property alias crown: crown
+            property alias whale: whale
             property var submarineCategory: Fixture.Category1
             property var crownCategory: Fixture.Category2
             property var whaleCategory: Fixture.Category3
             property var upperGatefixerCategory: Fixture.Category4
             property var lowerGatefixerCategory: Fixture.Category5
             property var shipCategory: Fixture.Category6
+            property var rockCategory: Fixture.Category7
             property alias submarine: submarine
             property alias tutorial: tutorial
             property alias upperGate: upperGate
@@ -138,6 +140,9 @@ ActivityBase {
             function resetSubmarine() {
                 submarineImage.reset()
                 resetBallastTanks()
+
+                x = initialPosition.x
+                y = initialPosition.y
             }
 
             function increaseHorizontalVelocity(amt) {
@@ -200,12 +205,6 @@ ActivityBase {
                 flushBallastTanks.stop()
             }
 
-            onXChanged: {
-                if (submarine.x >= background.width) {
-                    Activity.finishLevel(true)
-                }
-            }
-
             Image {
                 id: submarineImage
                 source: url + "submarine.png"
@@ -221,6 +220,7 @@ ActivityBase {
 
                 function reset() {
                     source = url + "submarine.png"
+                    x = submarine.initialPosition.x
                 }
 
                 Behavior on y {
@@ -228,11 +228,17 @@ ActivityBase {
                         duration: 500
                     }
                 }
+
+                onXChanged: {
+                    if (submarineImage.x >= background.width) {
+                        Activity.finishLevel(true)
+                    }
+                }
             }
 
             Body {
                 id: submarineBody
-                target: submarine
+                target: submarineImage
                 bodyType: Body.Dynamic
                 fixedRotation: true
                 linearDamping: 0
@@ -243,13 +249,16 @@ ActivityBase {
                     width: submarineImage.width
                     height: submarineImage.height
                     categories: items.submarineCategory
-                    collidesWith: items.crownCategory | items.whaleCategory | items.upperGatefixerCategory | items.shipCategory
+                    collidesWith: items.crownCategory | items.whaleCategory | items.upperGatefixerCategory | items.shipCategory | items.lowerGatefixerCategory | items.rockCategory
                     density: 1
                     friction: 0
                     restitution: 0
                     onBeginContact: {
                         var collidedObject = other.getBody().target
 
+                        if (collidedObject == whale) {
+                            whale.hit()
+                        }
                         if (collidedObject == crown) {
                             crown.captureCrown()
                         } else {
@@ -330,8 +339,8 @@ ActivityBase {
                 id: gateOpenAnimation
                 target: upperGate
                 properties: "height"
-                from: upperGate.height
-                to: upperGate.height *  1 / 3
+                from: background.height * (5 / 12)
+                to: background.height * (5 / 36)
                 duration: 1000
             }
 
@@ -339,7 +348,7 @@ ActivityBase {
                 id: gateCloseAnimation
                 target: upperGate
                 properties: "height"
-                from: upperGate.height
+                from: background.height * (5 / 36)
                 to: background.height * (5 / 12)
                 duration: 1000
             }
@@ -347,6 +356,7 @@ ActivityBase {
 
         Rectangle {
             id: lowerGate
+            z: 1
             visible: upperGate.visible
             width: background.width / 18
             height: background.height * (5 / 12) - subSchemaImage.height / 1.4
@@ -366,8 +376,10 @@ ActivityBase {
 
                 fixtures: Box {
                     id: lowerGatefixer
+                    width: lowerGate.width
+                    height: lowerGate.height
                     categories: items.lowerGatefixerCategory
-                    collidesWith: items.submarineCategory
+                    collidesWith: lowerGate.visible ? items.submarineCategory : Fixture.None
                     density: 1
                     friction: 0
                     restitution: 0
@@ -393,9 +405,19 @@ ActivityBase {
             visible: (bar.level) > 2 ? true : false
             source: url + "crown.png"
 
+            property point originalPosition: Qt.point(background.width / 2, background.height - (subSchemaImage.height * 2))
+
             function captureCrown() {
                 upperGate.openGate()
                 crown.visible = false
+            }
+
+            function reset() {
+                crown.x = originalPosition.x
+                crown.y = originalPosition.y
+                crownbody.linearVelocity = Qt.point(0,0)
+                crown.visible = (bar.level) > 2 ? true : false
+                upperGate.closeGate()
             }
 
             x: background.width / 2
@@ -538,8 +560,8 @@ ActivityBase {
 
                 fixtures: Box {
                     id: rock2Fixer
-//                    categories: items.rock2Category
-                    collidesWith: items.submarineCategory
+                    categories: items.rockCategory
+                    collidesWith: rock2.visible ? items.submarineCategory : Fixture.None
                     density: 1
                     friction: 0
                     restitution: 0
@@ -563,8 +585,8 @@ ActivityBase {
 
                 fixtures: Box {
                     id: rock1Fixer
-//                    categories: items.rock2Category
-                    collidesWith: items.submarineCategory
+                    categories: items.rockCategory
+                    collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
                     density: 1
                     friction: 0
                     restitution: 0
@@ -592,6 +614,19 @@ ActivityBase {
             id: bonus
             onLoose: Activity.initLevel()
             Component.onCompleted: win.connect(Activity.nextLevel)
+        }
+        DebugDraw {
+            id: debugDraw
+            world: physicalWorld
+            anchors.fill: parent
+            opacity: 0.75
+            visible: false
+        }
+
+        MouseArea {
+            id: debugMouseArea
+            anchors.fill: parent
+            onPressed: debugDraw.visible = !debugDraw.visible
         }
     }
 
