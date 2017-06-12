@@ -56,6 +56,12 @@ ActivityBase {
             if ((event.key == Qt.Key_A || event.key == Qt.Key_Left) && submarine.velocity.x > 0) {
                 submarine.decreaseHorizontalVelocity(1)
             }
+            if ((event.key == Qt.Key_W || event.key == Qt.Key_Up)) {
+                submarine.fillBallastTanks()
+            }
+            if ((event.key == Qt.Key_S || event.key == Qt.Key_Down)) {
+                submarine.flushBallastTanks()
+            }
         }
 
         // Add here the QML items you need to access in javascript
@@ -112,8 +118,18 @@ ActivityBase {
             z: 1
 
             property point initialPosition: Qt.point(0,0)
+
+            /* Engine properties */
             property point velocity
             property int maximumXVelocity: 5
+
+            /* Ballast Tank properties */
+            property int initialWaterLevel: 0
+            property int waterLevel: 0
+            property int maxWaterLevel: 500
+            property int waterRate: 10
+            property bool waterFilling: false
+            property bool waterFlushing: false
 
             function destroySubmarine() {
                 submarineImage.broken()
@@ -121,6 +137,7 @@ ActivityBase {
 
             function resetSubmarine() {
                 submarineImage.reset()
+                resetBallastTanks()
             }
 
             function increaseHorizontalVelocity(amt) {
@@ -131,14 +148,70 @@ ActivityBase {
                 submarine.velocity.x -= amt
             }
 
+            function fillBallastTanks() {
+                waterFilling = !waterFilling
+
+                if (waterFilling) {
+                    fillBallastTanks.start()
+                } else {
+                    fillBallastTanks.stop()
+                }
+            }
+
+            function flushBallastTanks() {
+                waterFlushing = !waterFlushing
+
+                if (waterFlushing) {
+                    flushBallastTanks.start()
+                } else {
+                    flushBallastTanks.stop()
+                }
+            }
+
+            function updateWaterLevel(isInflow) {
+                if (isInflow) {
+                    if (waterLevel < maxWaterLevel) {
+                        waterLevel += waterRate
+
+                    }
+                } else {
+                    if (waterLevel > 0) {
+                        waterLevel -= waterRate
+                    }
+                }
+
+                if (waterLevel > maxWaterLevel) {
+                    waterLevel = maxWaterLevel
+                }
+
+                if (waterLevel < 0) {
+                    waterLevel = 0
+                }
+                console.log("Current water level: "+waterLevel)
+            }
+
+            function resetBallastTanks() {
+                waterFilling = false
+                waterFlushing = false
+
+                waterLevel = initialWaterLevel
+
+                fillBallastTanks.stop()
+                flushBallastTanks.stop()
+            }
+
             onXChanged: {
                 if (submarine.x >= background.width) {
                     Activity.finishLevel(true)
                 }
             }
+
             Image {
                 id: submarineImage
                 source: url + "submarine.png"
+
+                y: (submarine.waterLevel/submarine.maxWaterLevel) * (background.height * 0.6)
+
                 width: background.width / 9
                 height: background.height / 9
 
@@ -148,6 +221,12 @@ ActivityBase {
 
                 function reset() {
                     source = url + "submarine.png"
+                }
+
+                Behavior on y {
+                    NumberAnimation {
+                        duration: 500
+                    }
                 }
             }
 
@@ -178,6 +257,24 @@ ActivityBase {
                         }
                     }
                 }
+            }
+
+            Timer {
+                id: fillBallastTanks
+                interval: 500
+                running: false
+                repeat: true
+
+                onTriggered: submarine.updateWaterLevel(true)
+            }
+
+            Timer {
+                id: flushBallastTanks
+                interval: 500
+                running: false
+                repeat: true
+
+                onTriggered: submarine.updateWaterLevel(false)
             }
         }
 
