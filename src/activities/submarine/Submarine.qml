@@ -249,7 +249,7 @@ ActivityBase {
                     width: submarineImage.width
                     height: submarineImage.height
                     categories: items.submarineCategory
-                    collidesWith: items.crownCategory | items.whaleCategory | items.upperGatefixerCategory | items.shipCategory | items.lowerGatefixerCategory | items.rockCategory
+                    collidesWith: Fixture.All
                     density: 1
                     friction: 0
                     restitution: 0
@@ -427,7 +427,7 @@ ActivityBase {
             Body {
                 id: crownbody
                 target: crown
-                bodyType: Body.Dynamic
+                bodyType: Body.Static
                 sleepingAllowed: true
                 fixedRotation: true
                 linearDamping: 0
@@ -436,6 +436,7 @@ ActivityBase {
                     id: crownfixer
                     width: crown.width
                     height: crown.height
+                    sensor: true
                     categories: items.crownCategory
                     collidesWith: crown.visible ? items.submarineCategory : Fixture.None
                     density: 0.1
