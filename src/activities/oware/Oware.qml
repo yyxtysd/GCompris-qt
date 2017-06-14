@@ -54,9 +54,9 @@ ActivityBase {
             property alias cellGridRepeater: cellGridRepeater
             property bool playerOneTurn: true
             property int playerOneScore: 0
-            property int playerOneSeeds: 0
             property int playerTwoScore: 0
-            property int playerTwoSeeds: 0
+            property alias playerOneLevelScore: playerOneLevelScore
+            property alias playerTwoLevelScore: playerTwoLevelScore
         }
 
         onStart: { Activity.start(items) }
@@ -90,7 +90,7 @@ ActivityBase {
                     property var circleRadius: width
                     property int value
                     GCText {
-                        text: index
+                        text: value
                         color: "white"
                         anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -143,13 +143,19 @@ ActivityBase {
                     anchors.fill: parent
                     MouseArea {
                         id: buttonClick
-                        anchors.fill:parent
+                        anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            if(items.playerOneTurn)
+                            if(items.playerOneTurn && (Activity.house[index] != 0)) {
                                 Activity.sowSeeds(index)
-                            else
+                                items.playerOneLevelScore.endTurn()
+                                items.playerTwoLevelScore.beginTurn()
+                            }
+                            else if(Activity.house[11-index] != 0) {
                                 Activity.sowSeeds(11 - index)
+                                items.playerTwoLevelScore.endTurn()
+                                items.playerOneLevelScore.beginTurn()
+                            }
                             items.playerOneTurn = !items.playerOneTurn
                         }
                     }
@@ -168,6 +174,7 @@ ActivityBase {
                 onSkipPressed: {
                     Activity.initLevel()
                     tutorialImage.z = 0
+                    playerOneLevelScore.beginTurn()
                 }
             }
         }
@@ -200,6 +207,7 @@ ActivityBase {
             }
             playerImageSource: "qrc:/gcompris/src/activities/align4-2players/resource/player_2.svg"
             backgroundImageSource: "qrc:/gcompris/src/activities/align4-2players/resource/score_2.svg"
+            playerScaleOriginX: playerTwoLevelScore.width
         }
 
         Image {

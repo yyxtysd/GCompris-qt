@@ -97,6 +97,7 @@ ActivityBase {
             source: Activity.url + "board.svg"
             sourceSize.width: Math.min(background.height - 1.4 * player1.height - 1.2 * bar.height,
                                        background.width - 2.2 * firstInitial.width)
+            z: 2
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
@@ -135,6 +136,7 @@ ActivityBase {
             width: player1.width * 1.2
             height: player1.height * 1.2
             visible: items.firstPhase
+            z: 2
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -173,6 +175,7 @@ ActivityBase {
                     right: parent.right
                     rightMargin: parent.width * 0.1
                 }
+                z: 2
                 fontSize: mediumSize
                 color: "white"
                 style: Text.Outline
@@ -196,6 +199,7 @@ ActivityBase {
             }
             width: firstInitial.width
             height: firstInitial.height
+            z: 2
             visible: items.firstPhase
             opacity: 0.8
             radius: 10
@@ -234,6 +238,7 @@ ActivityBase {
                     right: parent.right
                     rightMargin: parent.width * 0.1
                 }
+                z: 2
                 fontSize: mediumSize
                 color: "white"
                 style: Text.Outline
@@ -264,7 +269,7 @@ ActivityBase {
             horizontalAlignment: Text.AlignHLeft
             width: implicitWidth
             height: implicitHeight
-            z: 2
+            z: 3
         }
 
         Rectangle {
@@ -273,6 +278,7 @@ ActivityBase {
             anchors.horizontalCenter: parent.horizontalCenter
             width: instruction.width + 20
             height: instruction.height + 2
+            z: 2
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -297,6 +303,7 @@ ActivityBase {
                 rightMargin: 5
             }
             radius: 5
+            z: 2
             state: "second"
 
             Image {
@@ -379,6 +386,7 @@ ActivityBase {
                 leftMargin: 5
             }
             radius: 5
+            z: 2
             state: "second"
 
             Image {
@@ -543,14 +551,20 @@ ActivityBase {
         }
         // Animation section ends
 
-	Tutorial {
-	  id: tutorialSection
-	  source: Activity.url + "background.svg"
-	  tutorialDetails: Activity.tutorialInstructions
-	  onSkipPressed: {
+    Image {
+        id: tutorialImage
+        source: Activity.url + "background.svg"
+        anchors.fill: parent
+        z: 5
+        Tutorial {
+            id: tutorialSection
+            tutorialDetails: Activity.tutorialInstructions
+            onSkipPressed: {
 	            Activity.initLevel()
-	   }
-	}
+                tutorialImage.z = 0
+            }
+        }
+    }
         DialogHelp {
             id: dialogHelp
             onClose: home()

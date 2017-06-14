@@ -28,7 +28,7 @@ var items
 var url = "qrc:/gcompris/src/activities/oware/resource/"
 // house variable is used for storing the count of all the seeds as we play.
 var house = []
-var scoreHouse = []
+var scoreHouse = [0,0]
 var nextPlayer
 var tutorialInstructions = [
             {
@@ -84,11 +84,11 @@ function getY(radius,index,value){
     return radius * Math.sin(step);
 }
 
-function setValues() {
+function setValues() {/*
     print("after..")
 	for(var i = 0; i < house.length; i++) {
         print(house[i])
-    }
+    }*/
     for(var i = 6, j = 0; i < 12, j < 6; j++, i++)
         items.cellGridRepeater.itemAt(i).value = house[j]
     for(var i = 0, j = 11; i < 6, j > 5; j--, i++)
@@ -96,11 +96,7 @@ function setValues() {
 }
 
 function sowSeeds(index) {
-    print("Before...")
-    for(var i = 0; i < house.length; i++)
-        print(house[i])
-    // player is the current player
-    var currentPlayer = items.playerOneTurn ? 1 : 2
+    var currentPlayer = items.playerOneTurn ? 1 : 0
     var nextIndex = index
 
     // The seeds are sown until the picked seeds are equal to zero
@@ -117,17 +113,19 @@ function sowSeeds(index) {
 
   //  The nextIndex now contains the seeds in the last pit sown.
     var capture = [];
-
     // The opponent's seeds are captured if they are equal to 2 or 3
-    if (((house[nextIndex] == 2 || house[nextIndex] == 3) ) && ((currentPlayer * 6 <= nextIndex) && (j < (currentPlayer * 6 + 6))))
-		capture[j%6] = true;
-
+    print(currentPlayer)
+    print("index",nextIndex)
+    if (((house[nextIndex] == 2 || house[nextIndex] == 3) ) && ((currentPlayer == 1 && nextIndex > 5 && nextIndex < 12) || (currentPlayer == 0 && nextIndex >= 0 && nextIndex < 6))) {
+		capture[nextIndex%6] = true;
+    }
     /* The seeds previous to the captured seeds are checked. If they are equal to 2 or 3 then they are captured until a
         pit arrives which has more than 3 seeds or 1 seed. */
     while (capture[nextIndex % 6] && nextIndex % 6) {
 		nextIndex--;
-		if (house[nextIndex] == 2 || house[nextIndex] == 3)
+		if (house[nextIndex] == 2 || house[nextIndex] == 3) {
 			capture[nextIndex % 6] = true;
+        }
 	}
 
     var allSeedsCaptured = true;
@@ -143,22 +141,24 @@ function sowSeeds(index) {
 		for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
 			/* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
             if (capture[j%6]) {
-				scoreHouse[nextPlayer] += house[j];
+				scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + house[j];
 				house[j] = 0;
 			}
 		}
 	}
-
-	// Now we check if the player has any more seeds or not
-    var playerSideEmpty = true;
-	for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
-        // If any of the pits in house is not empty we set playerSideEmpty as false
-		if (house[j]) {
-			playerSideEmpty = false;
-			break;
-		}
-	}
-
+    items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
+    items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
+//
+// 	// Now we check if the player has any more seeds or not
+//     var playerSideEmpty = true;
+// 	for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
+//         // If any of the pits in house is not empty we set playerSideEmpty as false
+// 		if (house[j]) {
+// 			playerSideEmpty = false;
+// 			break;
+// 		}
+// 	}
+// 	print(scoreHouse[nextPlayer])
 	nextPlayer = currentPlayer
 	setValues()
 }
