@@ -132,6 +132,7 @@ ActivityBase {
             z: 1
 
             property point initialPosition: Qt.point(0,0)
+            property bool isHit: false
 
             /* Engine properties */
             property point velocity
@@ -146,10 +147,12 @@ ActivityBase {
             property bool waterFlushing: false
 
             function destroySubmarine() {
+                isHit = true
                 submarineImage.broken()
             }
 
             function resetSubmarine() {
+                isHit = false
                 submarineImage.reset()
                 resetBallastTanks()
 
@@ -254,7 +257,7 @@ ActivityBase {
                 bodyType: Body.Dynamic
                 fixedRotation: true
                 linearDamping: 0
-                linearVelocity: submarine.velocity
+                linearVelocity: submarine.isHit ? Qt.point(0,0) : submarine.velocity
 
                 fixtures: Box {
                     id: submarineFixer
