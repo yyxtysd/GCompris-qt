@@ -39,6 +39,7 @@ Image {
     function reset() {
         isHit = false
         whale.source = url + "whale.png"
+        x = rightLimit
     }
 
     property bool movingLeft: true

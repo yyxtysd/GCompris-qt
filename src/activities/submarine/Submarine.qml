@@ -99,7 +99,7 @@ ActivityBase {
             }
             z: 100
             onIntroDone: {
-                physicalWorld.running = true
+                physicalWorld.turnOn()
                 tutorial.visible = false
             }
         }
@@ -112,6 +112,18 @@ ActivityBase {
             running: false
             gravity: Qt.point(0,0)
             autoClearForces: false
+
+            function turnOff() {
+                physicalWorld.running = false
+            }
+
+            function turnOn() {
+                physicalWorld.running = true
+            }
+
+            function status() {
+                return physicalWorld.running
+            }
         }
 
         Item {

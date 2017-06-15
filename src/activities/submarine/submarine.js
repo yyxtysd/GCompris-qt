@@ -70,7 +70,7 @@ function initLevel() {
         items.tutorial.intro = tutorials[currentLevel]
     } else {
         items.tutorial.visible = false
-        items.physicalWorld.running = true
+        items.physicalWorld.turnOn()
     }
 
     setUpLevelElements()
@@ -101,6 +101,7 @@ function closeGate() {
 function finishLevel(win) {
     if (processingAnswer)
         return
+    items.physicalWorld.turnOff()
     if (win) {
         processingAnswer = true
         items.submarine.velocity = Qt.point(0,0)
