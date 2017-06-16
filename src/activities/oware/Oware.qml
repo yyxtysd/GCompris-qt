@@ -87,7 +87,7 @@ ActivityBase {
                     color: "transparent"
                     height: board.height/2
                     width: board.width * (1/6.25)
-                    property var circleRadius: width
+                    property real circleRadius: width
                     property int value
                     GCText {
                         text: value
@@ -147,16 +147,17 @@ ActivityBase {
                         hoverEnabled: true
                         onClicked: {
                             if(items.playerOneTurn && (Activity.house[index] != 0)) {
+                                items.playerOneTurn = !items.playerOneTurn
                                 Activity.sowSeeds(index)
                                 items.playerOneLevelScore.endTurn()
                                 items.playerTwoLevelScore.beginTurn()
                             }
-                            else if(Activity.house[11-index] != 0) {
+                            else if(!items.playerOneTurn && Activity.house[11-index] != 0) {
+                                items.playerOneTurn = !items.playerOneTurn
                                 Activity.sowSeeds(11 - index)
                                 items.playerTwoLevelScore.endTurn()
                                 items.playerOneLevelScore.beginTurn()
                             }
-                            items.playerOneTurn = !items.playerOneTurn
                         }
                     }
                 }

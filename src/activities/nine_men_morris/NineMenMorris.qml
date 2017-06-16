@@ -135,8 +135,7 @@ ActivityBase {
             }
             width: player1.width * 1.2
             height: player1.height * 1.2
-            visible: items.firstPhase
-            z: 2
+                visible: items.firstPhase
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -175,7 +174,6 @@ ActivityBase {
                     right: parent.right
                     rightMargin: parent.width * 0.1
                 }
-                z: 2
                 fontSize: mediumSize
                 color: "white"
                 style: Text.Outline
@@ -199,7 +197,6 @@ ActivityBase {
             }
             width: firstInitial.width
             height: firstInitial.height
-            z: 2
             visible: items.firstPhase
             opacity: 0.8
             radius: 10
@@ -238,7 +235,6 @@ ActivityBase {
                     right: parent.right
                     rightMargin: parent.width * 0.1
                 }
-                z: 2
                 fontSize: mediumSize
                 color: "white"
                 style: Text.Outline
@@ -266,10 +262,10 @@ ActivityBase {
             color: "white"
             style: Text.Outline
             styleColor: "black"
+            z: 2
             horizontalAlignment: Text.AlignHLeft
             width: implicitWidth
             height: implicitHeight
-            z: 3
         }
 
         Rectangle {
@@ -278,7 +274,6 @@ ActivityBase {
             anchors.horizontalCenter: parent.horizontalCenter
             width: instruction.width + 20
             height: instruction.height + 2
-            z: 2
             opacity: 0.8
             radius: 10
             border.width: 2
@@ -303,7 +298,6 @@ ActivityBase {
                 rightMargin: 5
             }
             radius: 5
-            z: 2
             state: "second"
 
             Image {
@@ -386,7 +380,6 @@ ActivityBase {
                 leftMargin: 5
             }
             radius: 5
-            z: 2
             state: "second"
 
             Image {
@@ -561,7 +554,7 @@ ActivityBase {
             tutorialDetails: Activity.tutorialInstructions
             onSkipPressed: {
 	            Activity.initLevel()
-                tutorialImage.z = 0
+                tutorialImage.visible = false
             }
         }
     }

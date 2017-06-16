@@ -29,7 +29,7 @@ var url = "qrc:/gcompris/src/activities/oware/resource/"
 // house variable is used for storing the count of all the seeds as we play.
 var house = []
 var scoreHouse = [0,0]
-var nextPlayer
+var nextPlayer = 0
 var tutorialInstructions = [
             {
                "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Players take turns by moving the seeds"),
@@ -54,8 +54,9 @@ function stop() {
 }
 
 function initLevel() {
+    var singleHouseSeeds = 4
     for(var i = 11; i >= 0; i--)
-        house[i] = 4
+        house[i] = singleHouseSeeds
     setValues()
     items.bar.level = currentLevel + 1
 }
@@ -84,11 +85,7 @@ function getY(radius,index,value){
     return radius * Math.sin(step);
 }
 
-function setValues() {/*
-    print("after..")
-	for(var i = 0; i < house.length; i++) {
-        print(house[i])
-    }*/
+function setValues() {
     for(var i = 6, j = 0; i < 12, j < 6; j++, i++)
         items.cellGridRepeater.itemAt(i).value = house[j]
     for(var i = 0, j = 11; i < 6, j > 5; j--, i++)
@@ -96,7 +93,7 @@ function setValues() {/*
 }
 
 function sowSeeds(index) {
-    var currentPlayer = items.playerOneTurn ? 1 : 0
+    var currentPlayer = items.playerOneTurn ? 0 : 1
     var nextIndex = index
 
     // The seeds are sown until the picked seeds are equal to zero
@@ -114,8 +111,6 @@ function sowSeeds(index) {
   //  The nextIndex now contains the seeds in the last pit sown.
     var capture = [];
     // The opponent's seeds are captured if they are equal to 2 or 3
-    print(currentPlayer)
-    print("index",nextIndex)
     if (((house[nextIndex] == 2 || house[nextIndex] == 3) ) && ((currentPlayer == 1 && nextIndex > 5 && nextIndex < 12) || (currentPlayer == 0 && nextIndex >= 0 && nextIndex < 6))) {
 		capture[nextIndex%6] = true;
     }
@@ -129,13 +124,11 @@ function sowSeeds(index) {
 	}
 
     var allSeedsCaptured = true;
-	/* Now we check if all the seeds in opponents houses are captured or not. If any of the house is left with seeds we
-        allSeedsCaptured as false */
+	/* Now we check if all the seeds in opponents houses which were to be captured are captured or not. If any of the house is not yet captured we set allSeedsCaptured as false */
     for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
 		if (!capture[j % 6] && house[j])
 			allSeedsCaptured = false;
 	}
-
     // Now capture the seeds for the houses for which capture[houseIndex] = true if all seeds are not captured
 	if (!allSeedsCaptured) {
 		for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
@@ -146,19 +139,37 @@ function sowSeeds(index) {
 			}
 		}
 	}
+
+	// Now we check if the player has any more seeds or not
+    var playerSideEmpty = true;
+	for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
+        // If any of the pits in house is not empty we set playerSideEmpty as false
+		if (house[j]) {
+			playerSideEmpty = false;
+			break;
+		}
+	}
+    /* If all the seeds of player are empty we check if oponent can give some seeds. The player has to sow seeds such that the other player doesn't remain hungry */
+	if (playerSideEmpty) {
+		/* If the oponent cannot doesn't take any such move even after knowing that oponent is hungry. The player loses
+		   the game */
+        if((nextPlayer == 0 && house[index]%12 >= 6 && house[index]%12 < 12) || (nextPlayer == 1 && house[index]%12 >= 0 && house[index]%12 < 6)) {
+            for(var j = nextPlayer; j < (nextPlayer * 6 + 6); j++)
+                scoreHouse[nextPlayer] += house[j]
+                items.bonus.bad("flower")
+        }
+        // If no such move is possible it takes all the seeds of his/her territory
+		else {
+			for (j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
+				scoreHouse[currentPlayer] += house[j];
+				house[j] = 0;
+                items.bonus.good("flower")
+			}
+		}
+	}
+
     items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
     items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
-//
-// 	// Now we check if the player has any more seeds or not
-//     var playerSideEmpty = true;
-// 	for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
-//         // If any of the pits in house is not empty we set playerSideEmpty as false
-// 		if (house[j]) {
-// 			playerSideEmpty = false;
-// 			break;
-// 		}
-// 	}
-// 	print(scoreHouse[nextPlayer])
 	nextPlayer = currentPlayer
 	setValues()
 }
