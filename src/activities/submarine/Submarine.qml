@@ -57,10 +57,10 @@ ActivityBase {
                 submarine.decreaseHorizontalVelocity(1)
             }
             if ((event.key == Qt.Key_W || event.key == Qt.Key_Up)) {
-                submarine.fillBallastTanks()
+                centralBallastTank.fillBallastTanks()
             }
             if ((event.key == Qt.Key_S || event.key == Qt.Key_Down)) {
-                submarine.flushBallastTanks()
+                centralBallastTank.flushBallastTanks()
             }
         }
 
@@ -138,14 +138,6 @@ ActivityBase {
             property point velocity
             property int maximumXVelocity: 5
 
-            /* Ballast Tank properties */
-            property int initialWaterLevel: 0
-            property int waterLevel: 0
-            property int maxWaterLevel: 500
-            property int waterRate: 10
-            property bool waterFilling: false
-            property bool waterFlushing: false
-
             function destroySubmarine() {
                 isHit = true
                 submarineImage.broken()
@@ -154,7 +146,10 @@ ActivityBase {
             function resetSubmarine() {
                 isHit = false
                 submarineImage.reset()
-                resetBallastTanks()
+
+                leftBallastTank.resetBallastTanks()
+                rightBallastTank.resetBallastTanks()
+                centralBallastTank.resetBallastTanks()
 
                 x = initialPosition.x
                 y = initialPosition.y
@@ -168,63 +163,35 @@ ActivityBase {
                 submarine.velocity.x -= amt
             }
 
-            function fillBallastTanks() {
-                waterFilling = !waterFilling
+            BallastTank {
+                id: leftBallastTank
 
-                if (waterFilling) {
-                    fillBallastTanks.start()
-                } else {
-                    fillBallastTanks.stop()
-                }
+                initialWaterLevel: 0
+                maxWaterLevel: 500
             }
 
-            function flushBallastTanks() {
-                waterFlushing = !waterFlushing
+            BallastTank {
+                id: rightBallastTank
 
-                if (waterFlushing) {
-                    flushBallastTanks.start()
-                } else {
-                    flushBallastTanks.stop()
-                }
+                initialWaterLevel: 0
+                maxWaterLevel: 500
             }
 
-            function updateWaterLevel(isInflow) {
-                if (isInflow) {
-                    if (waterLevel < maxWaterLevel) {
-                        waterLevel += waterRate
+            BallastTank {
+                id: centralBallastTank
 
-                    }
-                } else {
-                    if (waterLevel > 0) {
-                        waterLevel -= waterRate
-                    }
-                }
-
-                if (waterLevel > maxWaterLevel) {
-                    waterLevel = maxWaterLevel
-                }
-
-                if (waterLevel < 0) {
-                    waterLevel = 0
-                }
-                console.log("Current water level: "+waterLevel)
-            }
-
-            function resetBallastTanks() {
-                waterFilling = false
-                waterFlushing = false
-
-                waterLevel = initialWaterLevel
-
-                fillBallastTanks.stop()
-                flushBallastTanks.stop()
+                initialWaterLevel: 0
+                maxWaterLevel: 500
             }
 
             Image {
                 id: submarineImage
                 source: url + "submarine.png"
 
-                y: (submarine.waterLevel/submarine.maxWaterLevel) * (background.height * 0.6)
+                property int currentWaterLevel: bar.level < 7 ? centralBallastTank.getCurrentWaterLevel() : leftBallastTank.getCurrentWaterLevel() + centralBallastTank.getCurrentWaterLevel() + rightBallastTank.getCurrentWaterLevel()
+                property int totalWaterLevel: bar.level < 7 ? centralBallastTank.getMaximumWaterLevel() : leftBallastTank.getMaximumWaterLevel() + centralBallastTank.getMaximumWaterLevel() + rightBallastTank.getMaximumWaterLevel()
+
+                y: (currentWaterLevel / totalWaterLevel) * (background.height * 0.6)
 
                 width: background.width / 9
                 height: background.height / 9
@@ -281,24 +248,6 @@ ActivityBase {
                         }
                     }
                 }
-            }
-
-            Timer {
-                id: fillBallastTanks
-                interval: 500
-                running: false
-                repeat: true
-
-                onTriggered: submarine.updateWaterLevel(true)
-            }
-
-            Timer {
-                id: flushBallastTanks
-                interval: 500
-                running: false
-                repeat: true
-
-                onTriggered: submarine.updateWaterLevel(false)
             }
         }
 
