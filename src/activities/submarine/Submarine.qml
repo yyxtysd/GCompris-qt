@@ -153,6 +153,8 @@ ActivityBase {
 
                 x = initialPosition.x
                 y = initialPosition.y
+
+                velocity = Qt.point(0,0)
             }
 
             function increaseHorizontalVelocity(amt) {
@@ -188,8 +190,8 @@ ActivityBase {
                 id: submarineImage
                 source: url + "submarine.png"
 
-                property int currentWaterLevel: bar.level < 7 ? centralBallastTank.getCurrentWaterLevel() : leftBallastTank.getCurrentWaterLevel() + centralBallastTank.getCurrentWaterLevel() + rightBallastTank.getCurrentWaterLevel()
-                property int totalWaterLevel: bar.level < 7 ? centralBallastTank.getMaximumWaterLevel() : leftBallastTank.getMaximumWaterLevel() + centralBallastTank.getMaximumWaterLevel() + rightBallastTank.getMaximumWaterLevel()
+                property int currentWaterLevel: bar.level < 7 ? centralBallastTank.waterLevel : leftBallastTank.waterLevel + centralBallastTank.waterLevel + rightBallastTank.waterLevel
+                property int totalWaterLevel: bar.level < 7 ? centralBallastTank.maxWaterLevel : leftBallastTank.maxWaterLevel + centralBallastTank.maxWaterLevel + rightBallastTank.maxWaterLevel
 
                 y: (currentWaterLevel / totalWaterLevel) * (background.height * 0.6)
 

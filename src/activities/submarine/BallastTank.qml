@@ -30,14 +30,6 @@ Item {
     property bool waterFilling: false
     property bool waterFlushing: false
 
-    function getCurrentWaterLevel() {
-        return waterLevel
-    }
-
-    function getMaximumWaterLevel() {
-        return maxWaterLevel
-    }
-
     function fillBallastTanks() {
         waterFilling = !waterFilling
 

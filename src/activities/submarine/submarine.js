@@ -104,11 +104,9 @@ function finishLevel(win) {
     items.physicalWorld.turnOff()
     if (win) {
         processingAnswer = true
-        items.submarine.velocity = Qt.point(0,0)
         items.bonus.good("flower")
     } else {
         processingAnswer = true
-        items.submarine.velocity = Qt.point(0,0)
         items.submarine.destroySubmarine()
         items.bonus.bad("flower")
     }
