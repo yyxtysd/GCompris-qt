@@ -1,3 +1,4 @@
+
 /* GCompris - Oware.qml
  *
  * Copyright (C) 2017 Divyam Madaan <divyam3897@gmail.com>
@@ -62,104 +63,123 @@ ActivityBase {
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
-        Image {
-            id: board
-            source: Activity.url + "/owareBoard.png"
-            anchors.centerIn: parent
-            z: 2
+        Item {
+            id: boxModel
             width: parent.width * 0.7
             height: width * 0.4
-        }
-
-        Grid {
-            id: boardGrid
-            columns: 6
-            rows: 2
-            anchors.horizontalCenter: board.horizontalCenter
-            anchors.top: board.top
             z: 2
+            anchors.centerIn: parent
+            rotation:  (background.width > background.height) ? 0 : 90
+            transformOrigin: boxModel.width
 
-            Repeater {
-                id: cellGridRepeater
-                model: 12
+            Image {
+                id: board
+                source: Activity.url + "/owareBoard.png"
+                anchors.fill: parent
+            }
 
-                Rectangle {
-                    color: "transparent"
-                    height: board.height/2
-                    width: board.width * (1/6.25)
-                    property real circleRadius: width
-                    property int value
-                    GCText {
-                        text: value
-                        color: "white"
-                        anchors.top: parent.top
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
+            Grid {
+                id: boardGrid
+                columns: 6
+                rows: 2
+                anchors.horizontalCenter: board.horizontalCenter
+                anchors.top: board.top
+                z: 2
 
-                    Repeater {
-                        id: grainRepeater
-                        model: value
-                        Image {
-                            id: grain
-                            source: Activity.url + "grain2.png"
-                            height: circleRadius * 0.2
-                            width: circleRadius * 0.2
-                            x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
-                            y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
+                Repeater {
+                    id: cellGridRepeater
+                    model: 12
 
-                            //To move the seeds from one hole to other on button click. Not working :(
-                            states: State {
-                                name: "move"
-                                when: buttonClick.containsPress
-                                PropertyChanges {
-                                    target: grain
-                                    scale: 1.1
+                    Rectangle {
+                        color: "transparent"
+                        height: board.height/2
+                        width: board.width * (1/6.25)
+                        property real circleRadius: width
+                        property int value
+
+                        GCText {
+                            text: value
+                            color: "white"
+                            anchors.top: parent.top
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                        MouseArea {
+                            id: buttonClick
+                            anchors.fill: parent
+                            onClicked: {
+                                if(items.playerOneTurn && Activity.house[index - 6] != 0 && (index - 6) >= 0 && (index - 6) <= 5) {
+                                    items.playerOneTurn = !items.playerOneTurn
+                                    Activity.sowSeeds(index - 6)
+                                    items.playerOneLevelScore.endTurn()
+                                    items.playerTwoLevelScore.beginTurn()
+                                }
+                                else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
+                                    items.playerOneTurn = !items.playerOneTurn
+                                    Activity.sowSeeds(11 - index)
+                                    items.playerTwoLevelScore.endTurn()
+                                    items.playerOneLevelScore.beginTurn()
+                                }
+                            }
+                        }
+
+                        Repeater {
+                            id: grainRepeater
+                            model: value
+                            Image {
+                                id: grain
+                                source: Activity.url + "grain2.png"
+                                height: circleRadius * 0.2
+                                width: circleRadius * 0.2
+                                x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
+                                y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
+
+                                NumberAnimation on x {
+                                    running: buttonClick.pressed
+                                    from: 0; to: grain.x
+                                    easing.type: Easing.InOutQuad
+                                    duration: 110
                                 }
                             }
                         }
                     }
                 }
             }
-        }
 
-        ListView {
-            id: rowButton
-            width: boardGrid.width
-            height: boardGrid.height * 0.25
-            orientation: ListView.Horizontal
-            model: 6
-            anchors.horizontalCenter: board.horizontalCenter
-            anchors.top: board.bottom
-            interactive: false
-            z: 2
+            Image {
+                id: playerOneScoreBox
+                height: board.height * 0.4
+                width: height
+                source:Activity.url+"/score.png"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: boxModel.left
 
-            delegate: Item {
-                height: parent.height
-                width: boardGrid.width/6
+                GCText {
+                    id: playerOneScoreText
+                    color: "white"
+                    anchors.centerIn: parent
+                    fontSize: smallSize
+                    text: items.playerOneScore
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: TextEdit.WordWrap
+                }
+            }
 
-                Image {
-                    id: valueImage
-                    source: Activity.url + "button" + (index + 1) + ".png"
-                    anchors.fill: parent
-                    MouseArea {
-                        id: buttonClick
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            if(items.playerOneTurn && (Activity.house[index] != 0)) {
-                                items.playerOneTurn = !items.playerOneTurn
-                                Activity.sowSeeds(index)
-                                items.playerOneLevelScore.endTurn()
-                                items.playerTwoLevelScore.beginTurn()
-                            }
-                            else if(!items.playerOneTurn && Activity.house[11-index] != 0) {
-                                items.playerOneTurn = !items.playerOneTurn
-                                Activity.sowSeeds(11 - index)
-                                items.playerTwoLevelScore.endTurn()
-                                items.playerOneLevelScore.beginTurn()
-                            }
-                        }
-                    }
+            Image {
+                id: playerTwoScore
+                height: board.height * 0.4
+                width: height
+                source:Activity.url+"/score.png"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: boxModel.right
+
+                GCText {
+                    id: playerTwoScoreText
+                    color: "white"
+                    anchors.centerIn: parent
+                    fontSize: smallSize
+                    text: items.playerTwoScore
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: TextEdit.WordWrap
                 }
             }
         }
@@ -211,44 +231,6 @@ ActivityBase {
             playerScaleOriginX: playerTwoLevelScore.width
         }
 
-        Image {
-            id: playerOneScoreBox
-            height: board.height * 0.4
-            width: height
-            source:Activity.url+"/score.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: board.left
-
-            GCText {
-                id: playerOneScoreText
-                color: "white"
-                anchors.centerIn: parent
-                fontSize: smallSize
-                text: items.playerOneScore
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: TextEdit.WordWrap
-            }
-        }
-
-        Image {
-            id: playerTwoScore
-            height: board.height * 0.4
-            width: height
-            source:Activity.url+"/score.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: board.right
-
-            GCText {
-                id: playerTwoScoreText
-                color: "white"
-                anchors.centerIn: parent
-                fontSize: smallSize
-                text: items.playerTwoScore
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: TextEdit.WordWrap
-            }
-        }
-
         DialogHelp {
             id: dialogHelp
             onClose: home()
@@ -256,15 +238,14 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: tutorialSection.visible ? (help | home) : (help | home | level | reload)}
+            content: BarEnumContent { value: tutorialSection.visible ? (help | home) : (help | home | reload)}
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
-            onReloadClicked:
-                Activity.initLevel()
+            onReloadClicked: Activity.initLevel()
         }
 
         Bonus {

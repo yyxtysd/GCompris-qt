@@ -57,8 +57,10 @@ function initLevel() {
     var singleHouseSeeds = 4
     for(var i = 11; i >= 0; i--)
         house[i] = singleHouseSeeds
+    items.playerOneScore = 0
+    items.playerTwoScore = 0
+    scoreHouse = [0,0]
     setValues()
-    items.bar.level = currentLevel + 1
 }
 
 function nextLevel() {

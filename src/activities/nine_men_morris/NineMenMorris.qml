@@ -549,6 +549,7 @@ ActivityBase {
         source: Activity.url + "background.svg"
         anchors.fill: parent
         z: 5
+        visible: twoPlayer ? false : true
         Tutorial {
             id: tutorialSection
             tutorialDetails: Activity.tutorialInstructions
