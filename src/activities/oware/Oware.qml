@@ -103,21 +103,30 @@ ActivityBase {
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
+
                         MouseArea {
                             id: buttonClick
                             anchors.fill: parent
                             onClicked: {
                                 if(items.playerOneTurn && Activity.house[index - 6] != 0 && (index - 6) >= 0 && (index - 6) <= 5) {
                                     items.playerOneTurn = !items.playerOneTurn
-                                    Activity.sowSeeds(index - 6)
-                                    items.playerOneLevelScore.endTurn()
-                                    items.playerTwoLevelScore.beginTurn()
+                                    if(Activity.playerSideEmpty)
+                                        Activity.checkHunger(index - 6)
+                                    else {
+                                        Activity.sowSeeds(index - 6)
+                                        items.playerOneLevelScore.endTurn()
+                                        items.playerTwoLevelScore.beginTurn()
+                                    }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
                                     items.playerOneTurn = !items.playerOneTurn
-                                    Activity.sowSeeds(11 - index)
-                                    items.playerTwoLevelScore.endTurn()
-                                    items.playerOneLevelScore.beginTurn()
+                                    if(Activity.playerSideEmpty)
+                                        Activity.checkHunger(11 - index)
+                                    else {
+                                        Activity.sowSeeds(11 - index)
+                                        items.playerTwoLevelScore.endTurn()
+                                        items.playerOneLevelScore.beginTurn()
+                                    }
                                 }
                             }
                         }
@@ -133,12 +142,10 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
-                                NumberAnimation on x {
-                                    running: buttonClick.pressed
-                                    from: 0; to: grain.x
-                                    easing.type: Easing.InOutQuad
-                                    duration: 110
-                                }
+//                                 NumberAnimation on x {
+//                                     running: buttonClick.pressed
+//                                     from: 0; to: grain.x
+//                                 }
                             }
                         }
                     }
