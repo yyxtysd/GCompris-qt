@@ -62,6 +62,12 @@ ActivityBase {
             if ((event.key == Qt.Key_S || event.key == Qt.Key_Down)) {
                 centralBallastTank.flushBallastTanks()
             }
+            if ((event.key == Qt.Key_X)) {
+                submarine.increaseWingsAngle(1)
+            }
+            if ((event.key == Qt.Key_Z)) {
+                submarine.decreaseWingsAngle(1)
+            }
         }
 
         // Add here the QML items you need to access in javascript
@@ -134,9 +140,18 @@ ActivityBase {
             property point initialPosition: Qt.point(0,0)
             property bool isHit: false
 
+            /* Maximum depth the submarine can dive when ballast tank is full */
+            property real maximumDepthOnFullTanks: (background.height * 0.6) / 2
+
             /* Engine properties */
             property point velocity
             property int maximumXVelocity: 5
+
+            /* Wings property */
+            property int wingsAngle
+            property int initialWingsAngle: 0
+            property int maxWingsAngle: 2
+            property int minWingsAngle: -2
 
             function destroySubmarine() {
                 isHit = true
@@ -155,6 +170,7 @@ ActivityBase {
                 y = initialPosition.y
 
                 velocity = Qt.point(0,0)
+                wingsAngle = initialWingsAngle
             }
 
             function increaseHorizontalVelocity(amt) {
@@ -163,6 +179,54 @@ ActivityBase {
 
             function decreaseHorizontalVelocity(amt) {
                 submarine.velocity.x -= amt
+            }
+
+            function increaseWingsAngle(amt) {
+                if (wingsAngle + amt <= maxWingsAngle) {
+                    wingsAngle += amt
+                } else {
+                    wingsAngle = maxWingsAngle
+                }
+                console.log("Wings angle is: "+wingsAngle)
+            }
+
+            function decreaseWingsAngle(amt) {
+                if (wingsAngle - amt >= minWingsAngle) {
+                    wingsAngle -= amt
+                } else {
+                    wingsAngle = minWingsAngle
+                }
+                console.log("Wings angle is: "+wingsAngle)
+            }
+
+            function changeVerticalVelocity() {
+                /*
+                 * Movement due to planes
+                 * Movement is affected only when the submarine is moving forward
+                 * When the submarine is on the surface, the planes cannot be used
+                 */
+                if (submarineImage.y > 0) {
+                    submarine.velocity.y = (submarine.velocity.x) > 0 ? wingsAngle : 0
+                } else {
+                    submarine.velocity.y = 0
+                }
+                /* Movement due to Ballast tanks */
+                if (wingsAngle == 0 || submarine.velocity.x == 0) {
+                    var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
+                    submarineImage.y = yPosition
+                    /*
+                    if (submarineImage.y > yPosition) {
+                        // move up
+                        submarine.velocity.y = -0.5
+                    } else if (submarineImage.y < yPosition) {
+                        // move down
+                        submarine.velocity.y = 0.5
+                    } else {
+                        // do not move
+                        submarine.velocity.y = 0
+                    }
+                    */
+                }
             }
 
             BallastTank {
@@ -193,8 +257,6 @@ ActivityBase {
                 property int currentWaterLevel: bar.level < 7 ? centralBallastTank.waterLevel : leftBallastTank.waterLevel + centralBallastTank.waterLevel + rightBallastTank.waterLevel
                 property int totalWaterLevel: bar.level < 7 ? centralBallastTank.maxWaterLevel : leftBallastTank.maxWaterLevel + centralBallastTank.maxWaterLevel + rightBallastTank.maxWaterLevel
 
-                y: (currentWaterLevel / totalWaterLevel) * (background.height * 0.6)
-
                 width: background.width / 9
                 height: background.height / 9
 
@@ -205,6 +267,7 @@ ActivityBase {
                 function reset() {
                     source = url + "submarine.png"
                     x = submarine.initialPosition.x
+                    y = submarine.initialPosition.y
                 }
 
                 Behavior on y {
@@ -250,6 +313,14 @@ ActivityBase {
                         }
                     }
                 }
+            }
+            Timer {
+                id: updateVerticalVelocity
+                interval: 50
+                running: true
+                repeat: true
+
+                onTriggered: submarine.changeVerticalVelocity()
             }
         }
 
