@@ -139,6 +139,8 @@ ActivityBase {
 
             property point initialPosition: Qt.point(0,0)
             property bool isHit: false
+            property int terminalVelocityIndex: 100
+            property int resetVerticalSpeed: 500
 
             /* Maximum depth the submarine can dive when ballast tank is full */
             property real maximumDepthOnFullTanks: (background.height * 0.6) / 2
@@ -213,6 +215,8 @@ ActivityBase {
                 /* Movement due to Ballast tanks */
                 if (wingsAngle == 0 || submarine.velocity.x == 0) {
                     var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
+
+                    speed.duration = submarine.terminalVelocityIndex * Math.abs(submarineImage.y - yPosition) // terminal velocity
                     submarineImage.y = yPosition
                     /*
                     if (submarineImage.y > yPosition) {
@@ -266,12 +270,14 @@ ActivityBase {
 
                 function reset() {
                     source = url + "submarine.png"
+                    speed.duration = submarine.resetVerticalSpeed
                     x = submarine.initialPosition.x
                     y = submarine.initialPosition.y
                 }
 
                 Behavior on y {
                     NumberAnimation {
+                        id: speed
                         duration: 500
                     }
                 }
