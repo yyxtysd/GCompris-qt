@@ -41,7 +41,8 @@ var tutorials = [
                 qsTr("Press the ___ button to fill the tanks with water and ___ to empty the tanks."),
             ],
             [
-                qsTr("The Rudders are used to rotate the submarine."),
+                qsTr("The Diving Planes in a submarine is used to control the depth of the submarine accurately once it is underwater."),
+                qsTr("Once the submarine is moving underwater, increasing or decreasing the angle of the planes will increase and decrease the depth of the submarine"),
                 qsTr("Press the + and the - buttons to rotate the submarine accordingly."),
                 qsTr("Grab the crown to open the gate."),
             ]
@@ -61,7 +62,6 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
-    processingAnswer = false
 
     /* Tutorial Levels, display tutorials */
     if (currentLevel < tutorials.length) {
@@ -86,6 +86,8 @@ function setUpLevelElements() {
 
     items.crown.reset()
     items.whale.reset()
+
+    processingAnswer = false
 
     if ( !items.crown.visible && items.upperGate.visible) {
         items.upperGate.openGate()
