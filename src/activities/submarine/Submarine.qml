@@ -23,6 +23,7 @@ import QtQuick 2.6
 import QtQuick.Particles 2.0
 import Box2D 2.0
 import QtGraphicalEffects 1.0
+import GCompris 1.0
 
 import "../../core"
 import "submarine.js" as Activity
@@ -50,10 +51,10 @@ ActivityBase {
 
         /* Testing purposes, A / Left Key => Reduces velocity, D / Right Key => Increases velocity */
         Keys.onPressed: {
-            if ((event.key == Qt.Key_D || event.key == Qt.Key_Right) && submarine.velocity.x < submarine.maximumXVelocity) {
+            if ((event.key == Qt.Key_D || event.key == Qt.Key_Right)) {
                 submarine.increaseHorizontalVelocity(1)
             }
-            if ((event.key == Qt.Key_A || event.key == Qt.Key_Left) && submarine.velocity.x > 0) {
+            if ((event.key == Qt.Key_A || event.key == Qt.Key_Left)) {
                 submarine.decreaseHorizontalVelocity(1)
             }
             if ((event.key == Qt.Key_W || event.key == Qt.Key_Up)) {
@@ -67,6 +68,20 @@ ActivityBase {
             }
             if ((event.key == Qt.Key_Z)) {
                 submarine.decreaseWingsAngle(1)
+            }
+
+            if ((event.key == Qt.Key_R)) {
+                leftBallastTank.fillBallastTanks()
+            }
+            if ((event.key == Qt.Key_F)) {
+                leftBallastTank.flushBallastTanks()
+            }
+
+            if ((event.key == Qt.Key_T)) {
+                rightBallastTank.fillBallastTanks()
+            }
+            if ((event.key == Qt.Key_G)) {
+                rightBallastTank.flushBallastTanks()
             }
         }
 
@@ -139,8 +154,9 @@ ActivityBase {
 
             property point initialPosition: Qt.point(0,0)
             property bool isHit: false
-            property int terminalVelocityIndex: 100
+            property int terminalVelocityIndex: 75
             property int resetVerticalSpeed: 500
+            property int maxAbsoluteRotationAngle: 30
 
             /* Maximum depth the submarine can dive when ballast tank is full */
             property real maximumDepthOnFullTanks: (background.height * 0.6) / 2
@@ -176,11 +192,15 @@ ActivityBase {
             }
 
             function increaseHorizontalVelocity(amt) {
-                submarine.velocity.x += amt
+                if (submarine.velocity.x + amt <= submarine.maximumXVelocity) {
+                    submarine.velocity.x += amt
+                }
             }
 
             function decreaseHorizontalVelocity(amt) {
-                submarine.velocity.x -= amt
+                if (submarine.velocity.x - amt >= 0) {
+                    submarine.velocity.x -= amt
+                }
             }
 
             function increaseWingsAngle(amt) {
@@ -218,6 +238,11 @@ ActivityBase {
 
                     speed.duration = submarine.terminalVelocityIndex * Math.abs(submarineImage.y - yPosition) // terminal velocity
                     submarineImage.y = yPosition
+
+                    if (bar.level >= 7) {
+                        var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
+                        submarineRotation.angle = finalAngle
+                    }
                     /*
                     if (submarineImage.y > yPosition) {
                         // move up
@@ -258,8 +283,8 @@ ActivityBase {
                 id: submarineImage
                 source: url + "submarine.png"
 
-                property int currentWaterLevel: bar.level < 7 ? centralBallastTank.waterLevel : leftBallastTank.waterLevel + centralBallastTank.waterLevel + rightBallastTank.waterLevel
-                property int totalWaterLevel: bar.level < 7 ? centralBallastTank.maxWaterLevel : leftBallastTank.maxWaterLevel + centralBallastTank.maxWaterLevel + rightBallastTank.maxWaterLevel
+                property int currentWaterLevel: bar.level < 7 ? centralBallastTank.waterLevel : leftBallastTank.waterLevel + rightBallastTank.waterLevel
+                property int totalWaterLevel: bar.level < 7 ? centralBallastTank.maxWaterLevel : leftBallastTank.maxWaterLevel + rightBallastTank.maxWaterLevel
 
                 width: background.width / 9
                 height: background.height / 9
@@ -286,6 +311,13 @@ ActivityBase {
                     if (submarineImage.x >= background.width) {
                         Activity.finishLevel(true)
                     }
+                }
+
+                transform: Rotation {
+                    id: submarineRotation;
+                    origin.x: submarineImage.width / 2;
+                    origin.y: 0;
+                    angle: 0;
                 }
             }
 
@@ -320,6 +352,7 @@ ActivityBase {
                     }
                 }
             }
+
             Timer {
                 id: updateVerticalVelocity
                 interval: 50
@@ -445,6 +478,12 @@ ActivityBase {
 
         Image {
             id: crown
+
+            width: 58 * ApplicationInfo.ratio
+            height: 32 * ApplicationInfo.ratio
+//            width: background.width / 7
+//            height: background.height / 14
+
             visible: (bar.level) > 2 ? true : false
             source: url + "crown.png"
 
@@ -502,6 +541,12 @@ ActivityBase {
 
         Image {
             id: ship
+
+            width: 60 * ApplicationInfo.ratio
+            height: 17 * ApplicationInfo.ratio
+//            width: background.width / 9
+//            height: background.height / 30
+
             visible: (bar.level > 3) ? true : false
             source: url + "asw_frigate.png"
             x: initialXPosition
@@ -590,6 +635,10 @@ ActivityBase {
 
         Image {
             id: rock2
+            width: 107 * ApplicationInfo.ratio
+            height: 52 * ApplicationInfo.ratio
+//            width: background.width / 4
+//            height: background.height / 9
             visible: (bar.level > 4) ? true : false
             anchors.bottom: crown.bottom
             anchors.left: crown.right
@@ -615,6 +664,10 @@ ActivityBase {
 
         Image {
             id: rock1
+            width: 128 * ApplicationInfo.ratio
+            height: 59 * ApplicationInfo.ratio
+//            width: background.width / 3
+//            height: background.height / 8
             visible: (bar.level > 6) ? true : false
             anchors.bottom: crown.bottom
             anchors.right: crown.left
