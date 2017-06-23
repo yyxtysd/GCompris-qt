@@ -146,6 +146,11 @@ ActivityBase {
                 return physicalWorld.running
             }
         }
+        Item {
+            id: waterLevel
+            x: 0
+            y: background.height / 15
+        }
 
         Item {
             id: submarine
@@ -155,7 +160,6 @@ ActivityBase {
             property point initialPosition: Qt.point(0,0)
             property bool isHit: false
             property int terminalVelocityIndex: 75
-            property int resetVerticalSpeed: 500
             property int maxAbsoluteRotationAngle: 30
 
             /* Maximum depth the submarine can dive when ballast tank is full */
@@ -233,28 +237,14 @@ ActivityBase {
                     submarine.velocity.y = 0
                 }
                 /* Movement due to Ballast tanks */
-                if (wingsAngle == 0 || submarine.velocity.x == 0) {
+                if (submarineImage.y == 0 || wingsAngle == 0 || submarine.velocity.x == 0) {
                     var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
-
-                    speed.duration = submarine.terminalVelocityIndex * Math.abs(submarineImage.y - yPosition) // terminal velocity
                     submarineImage.y = yPosition
 
                     if (bar.level >= 7) {
                         var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
                         submarineRotation.angle = finalAngle
                     }
-                    /*
-                    if (submarineImage.y > yPosition) {
-                        // move up
-                        submarine.velocity.y = -0.5
-                    } else if (submarineImage.y < yPosition) {
-                        // move down
-                        submarine.velocity.y = 0.5
-                    } else {
-                        // do not move
-                        submarine.velocity.y = 0
-                    }
-                    */
                 }
             }
 
@@ -295,15 +285,18 @@ ActivityBase {
 
                 function reset() {
                     source = url + "submarine.png"
-                    speed.duration = submarine.resetVerticalSpeed
+                    verticalMovementAnimation.enabled = false
                     x = submarine.initialPosition.x
                     y = submarine.initialPosition.y
+                    verticalMovementAnimation.enabled = true
                 }
 
                 Behavior on y {
-                    NumberAnimation {
+                    id: verticalMovementAnimation
+                    SmoothedAnimation {
                         id: speed
-                        duration: 500
+                        velocity: 10
+                        reversingMode: SmoothedAnimation.Immediate
                     }
                 }
 
@@ -479,15 +472,11 @@ ActivityBase {
         Image {
             id: crown
 
-            width: 58 * ApplicationInfo.ratio
-            height: 32 * ApplicationInfo.ratio
-//            width: background.width / 7
-//            height: background.height / 14
+            width: submarineImage.width * 0.85
+            height: width * 0.55
 
             visible: (bar.level) > 2 ? true : false
             source: url + "crown.png"
-
-            property point originalPosition: Qt.point(background.width / 2, background.height - (subSchemaImage.height * 2))
 
             function captureCrown() {
                 upperGate.openGate()
@@ -495,9 +484,6 @@ ActivityBase {
             }
 
             function reset() {
-                crown.x = originalPosition.x
-                crown.y = originalPosition.y
-                crownbody.linearVelocity = Qt.point(0,0)
                 crown.visible = (bar.level) > 2 ? true : false
                 upperGate.closeGate()
             }
@@ -532,7 +518,7 @@ ActivityBase {
             id: whale
             visible: (bar.level > 5) ? true : false
 
-            y: (background.height - subSchemaImage.height)/2
+            y: rock2.y - (rock2.height * 1.15)
             z: 1
 
             leftLimit: 0
@@ -542,16 +528,15 @@ ActivityBase {
         Image {
             id: ship
 
-            width: 60 * ApplicationInfo.ratio
-            height: 17 * ApplicationInfo.ratio
-//            width: background.width / 9
-//            height: background.height / 30
+            width: background.width / 9
+            height: width * 0.3
 
             visible: (bar.level > 3) ? true : false
             source: url + "asw_frigate.png"
             x: initialXPosition
-            y: background.height * 0.05
             z: 1
+
+            anchors.bottom: waterLevel.top
 
             property bool movingLeft: true
             property bool collided: false
@@ -635,10 +620,9 @@ ActivityBase {
 
         Image {
             id: rock2
-            width: 107 * ApplicationInfo.ratio
-            height: 52 * ApplicationInfo.ratio
-//            width: background.width / 4
-//            height: background.height / 9
+            width: background.width / 6
+            height: width * 0.48
+
             visible: (bar.level > 4) ? true : false
             anchors.bottom: crown.bottom
             anchors.left: crown.right
@@ -664,10 +648,8 @@ ActivityBase {
 
         Image {
             id: rock1
-            width: 128 * ApplicationInfo.ratio
-            height: 59 * ApplicationInfo.ratio
-//            width: background.width / 3
-//            height: background.height / 8
+            width: rock2.width
+            height: width * 0.46
             visible: (bar.level > 6) ? true : false
             anchors.bottom: crown.bottom
             anchors.right: crown.left

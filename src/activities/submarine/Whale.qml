@@ -29,10 +29,8 @@ Image {
     id: whale
     source: url + "whale.png"
 
-    width: 50 * ApplicationInfo.ratio
-    height: 34 * ApplicationInfo.ratio
-//    width: background.width / 9
-//    height: background.height / 13
+    width: submarineImage.width
+    height: width * 0.69
 
     property bool isHit: false
 
