@@ -132,6 +132,12 @@ function checkHunger(index) {
             items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
             setValues()
             items.bonus.good("flower")
+            if(items.playerTwoScore > items.playerOneScore) {
+                items.playerTwoLevelScore.win()
+            }
+            else if(items.playerOneScore > items.playerTwoScore) {
+                items.playerOneLevelScore.win()
+            }
         }
     }
 }
@@ -140,6 +146,15 @@ function sowSeeds(index) {
     var currentPlayer = items.playerOneTurn ? 0 : 1
     var nextIndex = index
     playerSideEmpty = false;
+
+    if(!currentPlayer) {
+        items.playerTwoLevelScore.endTurn()
+        items.playerOneLevelScore.beginTurn()
+    }
+    else {
+        items.playerOneLevelScore.endTurn()
+        items.playerTwoLevelScore.beginTurn()
+    }
 
     if (!playerSideEmpty) {
         // The seeds are sown until the picked seeds are equal to zero

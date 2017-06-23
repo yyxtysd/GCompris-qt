@@ -70,7 +70,6 @@ ActivityBase {
             z: 2
             anchors.centerIn: parent
             rotation:  (background.width > background.height) ? 0 : 90
-            transformOrigin: boxModel.width
 
             Image {
                 id: board
@@ -102,6 +101,9 @@ ActivityBase {
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
+                            z: 2
+                            rotation:  (background.width > background.height) ? 0 : 270
+                            fontSize: smallSize
                         }
 
                         MouseArea {
@@ -114,8 +116,6 @@ ActivityBase {
                                         Activity.checkHunger(index - 6)
                                     else {
                                         Activity.sowSeeds(index - 6)
-                                        items.playerOneLevelScore.endTurn()
-                                        items.playerTwoLevelScore.beginTurn()
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
@@ -124,8 +124,6 @@ ActivityBase {
                                         Activity.checkHunger(11 - index)
                                     else {
                                         Activity.sowSeeds(11 - index)
-                                        items.playerTwoLevelScore.endTurn()
-                                        items.playerOneLevelScore.beginTurn()
                                     }
                                 }
                             }
@@ -167,6 +165,7 @@ ActivityBase {
                     fontSize: smallSize
                     text: items.playerOneScore
                     horizontalAlignment: Text.AlignHCenter
+                    rotation:  (background.width > background.height) ? 0 : 270
                     wrapMode: TextEdit.WordWrap
                 }
             }
@@ -186,6 +185,7 @@ ActivityBase {
                     fontSize: smallSize
                     text: items.playerTwoScore
                     horizontalAlignment: Text.AlignHCenter
+                    rotation:  (background.width > background.height) ? 0 : 270
                     wrapMode: TextEdit.WordWrap
                 }
             }
@@ -212,6 +212,7 @@ ActivityBase {
             player: 1
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height * 11/8
+            playerScore: 0
             anchors {
                 top: background.top
                 topMargin: 5
@@ -227,6 +228,7 @@ ActivityBase {
             player: 2
             height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
             width: height * 11/8
+            playerScore: 0
             anchors {
                 top: background.top
                 topMargin: 5
