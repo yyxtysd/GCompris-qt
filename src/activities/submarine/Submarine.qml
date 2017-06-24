@@ -312,6 +312,41 @@ ActivityBase {
                     origin.y: 0;
                     angle: 0;
                 }
+
+                Loader {
+                    anchors.fill: parent
+                    active: ApplicationInfo.hasShader && submarine.velocity.x > 0 && submarineImage.y > 0 && !submarine.isHit
+                    sourceComponent: ParticleSystem {
+                        anchors.fill: parent
+                        Emitter {
+                            x: parent.x
+                            y: parent.y + parent.height / 1.75
+                            width: 1
+                            height: 1
+                            emitRate: 0.8
+                            lifeSpan: 800
+                            lifeSpanVariation: 2500
+                            acceleration: PointDirection {
+                                x: -20
+                                xVariation: 5
+                                y: 0
+                                yVariation: 0
+                            }
+                            velocity: PointDirection {
+                                x: -20
+                                xVariation: 10
+                                y: 0
+                                yVariation: 0
+                            }
+                            size: 12
+                            sizeVariation: 8
+                        }
+
+                        ImageParticle {
+                            source: "qrc:/gcompris/src/activities/clickgame/resource/bubble.png"
+                        }
+                    }
+                }
             }
 
             Body {
@@ -353,6 +388,46 @@ ActivityBase {
                 repeat: true
 
                 onTriggered: submarine.changeVerticalVelocity()
+            }
+        }
+        Image {
+            id: sparkle
+            source: "qrc:/gcompris/src/activities/mining/resource/sparkle.svg"
+
+            x: crown.x
+            y: crown.y
+            z: 1
+
+            width: crown.width
+            height: width * 0.7
+
+            property bool isCaptured: false
+
+            scale: isCaptured ? 1 : 0
+
+            function createSparkle() {
+                isCaptured = true
+
+                removeSparkleTimer.start()
+            }
+
+            function removeSparkle() {
+                isCaptured = false
+            }
+
+            Behavior on scale {
+                NumberAnimation {
+                    duration: 100
+                }
+            }
+
+            Timer {
+                id: removeSparkleTimer
+                interval: 3000
+                repeat: false
+                running: false
+
+                onTriggered: sparkle.removeSparkle()
             }
         }
 
@@ -480,6 +555,7 @@ ActivityBase {
 
             function captureCrown() {
                 upperGate.openGate()
+                sparkle.createSparkle()
                 crown.visible = false
             }
 
