@@ -390,6 +390,7 @@ ActivityBase {
                 onTriggered: submarine.changeVerticalVelocity()
             }
         }
+
         Image {
             id: sparkle
             source: "qrc:/gcompris/src/activities/mining/resource/sparkle.svg"
@@ -749,6 +750,33 @@ ActivityBase {
             }
         }
 
+        Controls {
+            id: controls
+            enginePositon.x: background.width * 0.2
+            enginePositon.y: background.height - bar.height - (engineHeight * 1.25)
+            engineWidth: background.width / 8
+            engineHeight: 100
+            submarineHorizontalSpeed: submarine.velocity.x * 1000
+
+            leftTankVisible: bar.level >= 7 ? true : false
+            leftBallastTankPosition.x: background.width * 0.4
+            leftBallastTankPosition.y: background.height - bar.height - (engineHeight * 1.25)
+            leftBallastTankWidth: background.width / 8
+            leftBallastTankHeight: 100
+
+            centralTankVisible:  bar.level < 7 ? true : false
+            centralBallastTankPosition.x: background.width * 0.5
+            centralBallastTankPosition.y: background.height - bar.height - (engineHeight * 1.25)
+            centralBallastTankWidth: background.width / 8
+            centralBallastTankHeight: 100
+
+            rightTankVisible:  bar.level >= 7 ? true : false
+            rightBallastTankPosition.x: background.width * 0.6
+            rightBallastTankPosition.y: background.height - bar.height - (engineHeight * 1.25)
+            rightBallastTankWidth: background.width / 8
+            rightBallastTankHeight: 100
+        }
+
         DialogHelp {
             id: dialogHelp
             onClose: home()
@@ -770,6 +798,7 @@ ActivityBase {
             onLoose: Activity.initLevel()
             Component.onCompleted: win.connect(Activity.nextLevel)
         }
+        /*
         DebugDraw {
             id: debugDraw
             world: physicalWorld
@@ -783,6 +812,7 @@ ActivityBase {
             anchors.fill: parent
             onPressed: debugDraw.visible = !debugDraw.visible
         }
+        */
     }
 
 }
