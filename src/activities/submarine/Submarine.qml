@@ -193,6 +193,8 @@ ActivityBase {
 
                 velocity = Qt.point(0,0)
                 wingsAngle = initialWingsAngle
+
+                controls.reset()
             }
 
             function increaseHorizontalVelocity(amt) {
@@ -775,6 +777,12 @@ ActivityBase {
             rightBallastTankPosition.y: background.height - bar.height - (engineHeight * 1.25)
             rightBallastTankWidth: background.width / 8
             rightBallastTankHeight: 100
+
+            divingPlaneVisible: bar.level >= 3 ? true : false
+            divingPlanePosition.x: background.width * 0.8
+            divingPlanePosition.y: background.height - bar.height - engineHeight
+            divingPlaneWidth: background.width / 8
+            divingPlaneHeight: divingPlaneWidth * 0.2
         }
 
         DialogHelp {

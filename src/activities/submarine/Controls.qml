@@ -26,13 +26,13 @@ import "../../core"
 Item {
     id: controls
 
-    /* Engine Control Properties */
+    /* Engine Controller Properties */
     property point enginePositon
     property int engineWidth
     property int engineHeight
     property int submarineHorizontalSpeed
 
-    /* Ballast tanks Control Properties */
+    /* Ballast tanks Controller Properties */
     property bool leftTankVisible
     property point leftBallastTankPosition
     property int leftBallastTankWidth
@@ -47,6 +47,22 @@ Item {
     property point rightBallastTankPosition
     property int rightBallastTankWidth
     property int rightBallastTankHeight
+
+    /* Diving Plane Controller properties */
+    property bool divingPlaneVisible
+    property point divingPlanePosition
+    property int divingPlaneWidth
+    property int divingPlaneHeight
+
+    function reset() {
+        leftBallastFill.resetVanne()
+        centralBallastFill.resetVanne()
+        rightBallastFill.resetVanne()
+
+        leftBallastFlush.resetVanne()
+        centralBallastFlush.resetVanne()
+        rightBallastFlush.resetVanne()
+    }
 
     Rectangle {
         id: controlBackground
@@ -170,6 +186,10 @@ Item {
                 leftBallastTank.fillBallastTanks()
             }
 
+            function resetVanne() {
+                rotateLeftTank.angle = 0
+            }
+
             MouseArea {
                 anchors.fill: parent
 
@@ -199,6 +219,10 @@ Item {
                 }
 
                 leftBallastTank.flushBallastTanks()
+            }
+
+            function resetVanne() {
+                rotateLeftTank.angle = 0
             }
 
             MouseArea {
@@ -265,6 +289,10 @@ Item {
                 centralBallastTank.fillBallastTanks()
             }
 
+            function resetVanne() {
+                rotateCentralTank.angle = 0
+            }
+
             MouseArea {
                 anchors.fill: parent
 
@@ -294,6 +322,10 @@ Item {
                 }
 
                 centralBallastTank.flushBallastTanks()
+            }
+
+            function resetVanne() {
+                rotateCentralTank.angle = 0
             }
 
             MouseArea {
@@ -359,6 +391,10 @@ Item {
                 rightBallastTank.fillBallastTanks()
             }
 
+            function resetVanne() {
+                rotateRightTank.angle = 0
+            }
+
             MouseArea {
                 anchors.fill: parent
 
@@ -390,10 +426,67 @@ Item {
                 rightBallastTank.flushBallastTanks()
             }
 
+            function resetVanne() {
+                rotateRightTank.angle = 0
+            }
+
             MouseArea {
                 anchors.fill: parent
 
                 onClicked: rightBallastFlush.pushVanne()
+            }
+        }
+    }
+
+    Item {
+        id: divingPlaneController
+        visible: divingPlaneVisible
+
+        property int maxRotationAngle: 30
+
+        Image {
+            id: divingPlanesImage
+            source: url + "rudder.png"
+
+            width: divingPlaneWidth
+            height: divingPlaneHeight
+
+            x: divingPlanePosition.x
+            y: divingPlanePosition.y
+
+            transform: Rotation {
+                id: rotateDivingPlanes;
+                origin.x: divingPlanesImage.width;
+                origin.y: divingPlanesImage.height / 2
+                axis { x: 0; y: 0; z: 1 } angle: (submarine.wingsAngle / submarine.maxWingsAngle) * divingPlaneController.maxRotationAngle
+            }
+        }
+
+        Image {
+            id: divingPlanesRotateUp
+            source: url + "up.png"
+
+            x: divingPlanePosition.x + divingPlaneWidth - divingPlanesRotateUp.width / 2
+            y: divingPlanePosition.y - divingPlanesImage.height * 1.1
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: submarine.increaseWingsAngle(1)
+            }
+        }
+
+        Image {
+            id: divingPlanesRotateDown
+            source: url + "down.png"
+
+            x: divingPlanePosition.x + divingPlaneWidth - divingPlanesRotateUp.width / 2
+            y: divingPlanePosition.y + divingPlanesImage.height * 1.1
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: submarine.decreaseWingsAngle(1)
             }
         }
     }
