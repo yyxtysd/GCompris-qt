@@ -737,6 +737,12 @@ ActivityBase {
             anchors.left: crown.right
             source: "qrc:/gcompris/src/activities/mining/resource/stone2.svg"
 
+            transform: Rotation {
+                origin.x: rock2.width / 2;
+                origin.y: rock2.height / 2
+                axis { x: 0; y: 0; z: 1 } angle: 180
+            }
+
             Body {
                 id: rock2Body
                 target: rock2
@@ -748,6 +754,8 @@ ActivityBase {
                     id: rock2Fixer
                     categories: items.rockCategory
                     collidesWith: rock2.visible ? items.submarineCategory : Fixture.None
+                    width: rock2.width
+                    height: rock2.height
                     density: 1
                     friction: 0
                     restitution: 0
@@ -775,6 +783,8 @@ ActivityBase {
                     id: rock1Fixer
                     categories: items.rockCategory
                     collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
+                    width: rock1.width
+                    height: rock1.height
                     density: 1
                     friction: 0
                     restitution: 0

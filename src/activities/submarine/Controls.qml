@@ -222,7 +222,7 @@ Item {
             }
 
             function resetVanne() {
-                rotateLeftTank.angle = 0
+                rotateLeftTankFlush.angle = 0
             }
 
             MouseArea {
@@ -325,7 +325,7 @@ Item {
             }
 
             function resetVanne() {
-                rotateCentralTank.angle = 0
+                rotateCentralTankFlush.angle = 0
             }
 
             MouseArea {
@@ -427,7 +427,7 @@ Item {
             }
 
             function resetVanne() {
-                rotateRightTank.angle = 0
+                rotateRightTankFlush.angle = 0
             }
 
             MouseArea {
