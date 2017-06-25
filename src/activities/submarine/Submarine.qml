@@ -101,6 +101,7 @@ ActivityBase {
             property var lowerGatefixerCategory: Fixture.Category5
             property var shipCategory: Fixture.Category6
             property var rockCategory: Fixture.Category7
+            property var maxDepthCategory: Fixture.Category8
             property alias submarine: submarine
             property alias tutorial: tutorial
             property alias upperGate: upperGate
@@ -146,10 +147,39 @@ ActivityBase {
                 return physicalWorld.running
             }
         }
+
         Item {
             id: waterLevel
             x: 0
             y: background.height / 15
+        }
+
+        Rectangle {
+            id: maximumWaterDepth
+
+            width: background.width
+            height: 10
+            color: "transparent"
+
+            y: background.height * ( 1 - 0.35 )
+
+            Body {
+                id: maxDepthBody
+                target: maximumWaterDepth
+                bodyType: Body.Static
+                sleepingAllowed: true
+                linearDamping: 0
+
+                fixtures: Box {
+                    categories: items.maxDepthCategory
+                    collidesWith: items.submarineCategory
+                    width: maximumWaterDepth.width
+                    height: maximumWaterDepth.height
+                    density: 1
+                    friction: 0
+                    restitution: 0
+                }
+            }
         }
 
         Item {
