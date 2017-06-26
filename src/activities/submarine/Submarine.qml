@@ -63,10 +63,10 @@ ActivityBase {
             if ((event.key == Qt.Key_S || event.key == Qt.Key_Down)) {
                 centralBallastTank.flushBallastTanks()
             }
-            if ((event.key == Qt.Key_X)) {
+            if ((event.key == Qt.Key_Plus)) {
                 submarine.increaseWingsAngle(1)
             }
-            if ((event.key == Qt.Key_Z)) {
+            if ((event.key == Qt.Key_Minus)) {
                 submarine.decreaseWingsAngle(1)
             }
 
@@ -82,6 +82,9 @@ ActivityBase {
             }
             if ((event.key == Qt.Key_G)) {
                 rightBallastTank.flushBallastTanks()
+            }
+            if (event.key == Qt.Key_Plus) {
+                console.log("plplpl")
             }
         }
 
@@ -161,7 +164,7 @@ ActivityBase {
             height: 10
             color: "transparent"
 
-            y: background.height * ( 1 - 0.35 )
+            y: background.height * 0.65
 
             Body {
                 id: maxDepthBody
@@ -223,8 +226,6 @@ ActivityBase {
 
                 velocity = Qt.point(0,0)
                 wingsAngle = initialWingsAngle
-
-                controls.reset()
             }
 
             function increaseHorizontalVelocity(amt) {

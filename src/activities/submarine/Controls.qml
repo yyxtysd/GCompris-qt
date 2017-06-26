@@ -54,16 +54,6 @@ Item {
     property int divingPlaneWidth
     property int divingPlaneHeight
 
-    function reset() {
-        leftBallastFill.resetVanne()
-        centralBallastFill.resetVanne()
-        rightBallastFill.resetVanne()
-
-        leftBallastFlush.resetVanne()
-        centralBallastFlush.resetVanne()
-        rightBallastFlush.resetVanne()
-    }
-
     Rectangle {
         id: controlBackground
         width: background.width
@@ -173,27 +163,13 @@ Item {
                 id: rotateLeftTank;
                 origin.x: leftBallastFill.width / 2;
                 origin.y: leftBallastFill.height / 2
-                axis { x: 0; y: 0; z: 1 } angle: 0
-            }
-
-            function pushVanne() {
-                if (rotateLeftTank.angle == 0) {
-                    rotateLeftTank.angle = 90
-                } else {
-                    rotateLeftTank.angle = 0
-                }
-
-                leftBallastTank.fillBallastTanks()
-            }
-
-            function resetVanne() {
-                rotateLeftTank.angle = 0
+                axis { x: 0; y: 0; z: 1 } angle: leftBallastTank.waterFilling ? 90 : 0
             }
 
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: leftBallastFill.pushVanne()
+                onClicked: leftBallastTank.fillBallastTanks()
             }
         }
 
@@ -208,27 +184,13 @@ Item {
                 id: rotateLeftTankFlush;
                 origin.x: leftBallastFill.width / 2;
                 origin.y: leftBallastFill.height / 2
-                axis { x: 0; y: 0; z: 1 } angle: 0
-            }
-
-            function pushVanne() {
-                if (rotateLeftTankFlush.angle == 0) {
-                    rotateLeftTankFlush.angle = 90
-                } else {
-                    rotateLeftTankFlush.angle = 0
-                }
-
-                leftBallastTank.flushBallastTanks()
-            }
-
-            function resetVanne() {
-                rotateLeftTankFlush.angle = 0
+                axis { x: 0; y: 0; z: 1 } angle: leftBallastTank.waterFlushing ? 90 : 0
             }
 
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: leftBallastFlush.pushVanne()
+                onClicked: leftBallastTank.flushBallastTanks()
             }
         }
     }
@@ -276,27 +238,13 @@ Item {
                 id: rotateCentralTank;
                 origin.x: centralBallastFill.width / 2;
                 origin.y: centralBallastFill.height / 2
-                axis { x: 0; y: 0; z: 1 } angle: 0
-            }
-
-            function pushVanne() {
-                if (rotateCentralTank.angle == 0) {
-                    rotateCentralTank.angle = 90
-                } else {
-                    rotateCentralTank.angle = 0
-                }
-
-                centralBallastTank.fillBallastTanks()
-            }
-
-            function resetVanne() {
-                rotateCentralTank.angle = 0
+                axis { x: 0; y: 0; z: 1 } angle: centralBallastTank.waterFilling ? 90 : 0
             }
 
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: centralBallastFill.pushVanne()
+                onClicked: centralBallastTank.fillBallastTanks()
             }
         }
 
@@ -311,27 +259,13 @@ Item {
                 id: rotateCentralTankFlush;
                 origin.x: centralBallastFill.width / 2;
                 origin.y: centralBallastFill.height / 2
-                axis { x: 0; y: 0; z: 1 } angle: 0
-            }
-
-            function pushVanne() {
-                if (rotateCentralTankFlush.angle == 0) {
-                    rotateCentralTankFlush.angle = 90
-                } else {
-                    rotateCentralTankFlush.angle = 0
-                }
-
-                centralBallastTank.flushBallastTanks()
-            }
-
-            function resetVanne() {
-                rotateCentralTankFlush.angle = 0
+                axis { x: 0; y: 0; z: 1 } angle:centralBallastTank.waterFlushing ? 90 : 0
             }
 
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: centralBallastFlush.pushVanne()
+                onClicked: centralBallastTank.flushBallastTanks()
             }
         }
     }
@@ -378,27 +312,13 @@ Item {
                 id: rotateRightTank;
                 origin.x: rightBallastFill.width / 2;
                 origin.y: rightBallastFill.height / 2
-                axis { x: 0; y: 0; z: 1 } angle: 0
-            }
-
-            function pushVanne() {
-                if (rotateRightTank.angle == 0) {
-                    rotateRightTank.angle = 90
-                } else {
-                    rotateRightTank.angle = 0
-                }
-
-                rightBallastTank.fillBallastTanks()
-            }
-
-            function resetVanne() {
-                rotateRightTank.angle = 0
+                axis { x: 0; y: 0; z: 1 } angle: rightBallastTank.waterFilling ? 90 : 0
             }
 
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: rightBallastFill.pushVanne()
+                onClicked: rightBallastTank.fillBallastTanks()
             }
         }
 
@@ -413,27 +333,13 @@ Item {
                 id: rotateRightTankFlush;
                 origin.x: rightBallastFill.width / 2;
                 origin.y: rightBallastFill.height / 2
-                axis { x: 0; y: 0; z: 1 } angle: 0
-            }
-
-            function pushVanne() {
-                if (rotateRightTankFlush.angle == 0) {
-                    rotateRightTankFlush.angle = 90
-                } else {
-                    rotateRightTankFlush.angle = 0
-                }
-
-                rightBallastTank.flushBallastTanks()
-            }
-
-            function resetVanne() {
-                rotateRightTankFlush.angle = 0
+                axis { x: 0; y: 0; z: 1 } angle: rightBallastTank.waterFlushing ? 90 : 0
             }
 
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: rightBallastFlush.pushVanne()
+                onClicked: rightBallastTank.flushBallastTanks()
             }
         }
     }
