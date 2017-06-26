@@ -37,7 +37,7 @@ var tutorialInstructions = [
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
             },
     {
-        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. The player then removes all seeds from that house, and distributes them, dropping one in each house counter-clockwise from the house they chose, in a process called sowing. However if the number of seeds in the house chosen is equal or more than 12 than seed is not dropped in the house from which it was sown."),
+        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. The player then removes all seeds from that house, and distributes them, dropping one in each house counter-clockwise from the house they chose, in a process called sowing. However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
             },
     {
@@ -49,7 +49,7 @@ var tutorialInstructions = [
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial4.png"
             },
     {
-        "instruction": qsTr("However, if the player is unable to give any seeds to the oponent. Then the player keeps all the seeds in the houses of his side and the game ends."),
+        "instruction": qsTr("However, if the player is unable to give any seed to the oponent, then the player keeps all the seeds in the houses of his side and the game ends."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial5.png"
             }
        ]

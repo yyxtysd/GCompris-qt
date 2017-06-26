@@ -90,6 +90,7 @@ ActivityBase {
                     model: 12
 
                     Rectangle {
+                        id: house
                         color: "transparent"
                         height: board.height/2
                         width: board.width * (1/6.25)
@@ -115,7 +116,7 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(index - 6)
                                     else {
-                                        Activity.sowSeeds(index - 6)
+//                                         Activity.sowSeeds(index - 6)
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
@@ -128,7 +129,6 @@ ActivityBase {
                                 }
                             }
                         }
-
                         Repeater {
                             id: grainRepeater
                             model: value
@@ -140,10 +140,23 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
-//                                 NumberAnimation on x {
-//                                     running: buttonClick.pressed
-//                                     from: 0; to: grain.x
-//                                 }
+                                SequentialAnimation {
+                                    id: seedsAnimation
+                                    running: buttonClick.pressed
+                                    NumberAnimation {
+                                        target: grain
+                                        to: 500
+                                        property: "x"
+                                        easing.type: Easing.OutInQuad
+                                        duration: 500
+                                    }
+                                    NumberAnimation {
+                                        target: grain
+                                        to: 500
+                                        property: "y"
+                                        duration: 500
+                                    }
+                                }
                             }
                         }
                     }
