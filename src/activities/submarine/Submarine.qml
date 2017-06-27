@@ -755,8 +755,10 @@ ActivityBase {
                     id: rock2Fixer
                     categories: items.rockCategory
                     collidesWith: rock2.visible ? items.submarineCategory : Fixture.None
-                    width: rock2.width
-                    height: rock2.height
+                    x: rock2.width / 8
+                    y: rock2.height / 12
+                    width: rock2.width / 1.2
+                    height: rock2.height / 1.5
                     density: 1
                     friction: 0
                     restitution: 0
@@ -780,16 +782,28 @@ ActivityBase {
                 sleepingAllowed: true
                 linearDamping: 0
 
-                fixtures: Box {
-                    id: rock1Fixer
-                    categories: items.rockCategory
-                    collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
-                    width: rock1.width
-                    height: rock1.height
-                    density: 1
-                    friction: 0
-                    restitution: 0
-                }
+                fixtures: [
+                    Circle {
+                        id: rock1Fixer
+                        categories: items.rockCategory
+                        collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
+                        x: rock1.width / 10
+                        radius: rock1.width / 4
+                        density: 1
+                        friction: 0
+                        restitution: 0
+                    },Circle {
+                        id: rock1Fixer_1
+                        categories: items.rockCategory
+                        collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
+                        x: rock1.width / 1.6
+                        y: rock1.height / 4
+                        radius: rock1.width / 6
+                        density: 1
+                        friction: 0
+                        restitution: 0
+                    }
+                ]
             }
         }
 
