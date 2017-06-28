@@ -372,8 +372,10 @@ Item {
             id: divingPlanesRotateUp
             source: url + "up.png"
 
-            x: divingPlanePosition.x + divingPlaneWidth - divingPlanesRotateUp.width / 2
-            y: divingPlanePosition.y - divingPlanesImage.height * 1.1
+            anchors {
+                left: divingPlanesImage.right
+                bottom: divingPlanesImage.top
+            }
 
             MouseArea {
                 anchors.fill: parent
@@ -386,8 +388,10 @@ Item {
             id: divingPlanesRotateDown
             source: url + "down.png"
 
-            x: divingPlanePosition.x + divingPlaneWidth - divingPlanesRotateUp.width / 2
-            y: divingPlanePosition.y + divingPlanesImage.height * 1.1
+            anchors {
+                left: divingPlanesImage.right
+                top: divingPlanesImage.bottom
+            }
 
             MouseArea {
                 anchors.fill: parent

@@ -42,6 +42,7 @@ ActivityBase {
         anchors.fill: parent
 
         onWidthChanged: updateOnWidthReset.start()
+        onHeightChanged: Activity.resetUpperGate()
 
         signal start
         signal stop
@@ -84,9 +85,6 @@ ActivityBase {
             }
             if ((event.key == Qt.Key_G)) {
                 rightBallastTank.flushBallastTanks()
-            }
-            if (event.key == Qt.Key_Plus) {
-                console.log("plplpl")
             }
         }
 
@@ -497,7 +495,7 @@ ActivityBase {
             id: upperGate
             visible: (bar.level > 1) ? true : false
             width: background.width / 18
-            height: background.height * (5 / 12)
+            height: isGateOpen ? background.height * (5 / 36) : background.height * (5 / 12)
             y: -2
             z: 1
             color: "#848484"
@@ -510,14 +508,12 @@ ActivityBase {
             function openGate() {
                 if (!isGateOpen) {
                     isGateOpen = true
-                    gateOpenAnimation.start()
                 }
             }
 
             function closeGate() {
                 if (isGateOpen) {
                     isGateOpen = false
-                    gateCloseAnimation.start()
                 }
             }
 
@@ -541,22 +537,10 @@ ActivityBase {
                 }
             }
 
-            NumberAnimation {
-                id: gateOpenAnimation
-                target: upperGate
-                properties: "height"
-                from: background.height * (5 / 12)
-                to: background.height * (5 / 36)
-                duration: 1000
-            }
-
-            NumberAnimation {
-                id: gateCloseAnimation
-                target: upperGate
-                properties: "height"
-                from: background.height * (5 / 36)
-                to: background.height * (5 / 12)
-                duration: 1000
+            Behavior on height {
+                NumberAnimation {
+                    duration: 1000
+                }
             }
         }
 
@@ -794,13 +778,26 @@ ActivityBase {
             }
         }
 
+        /* Just a space */
+        Rectangle {
+            id: space
+            width: rock1.width
+            height: rock1.height
+
+            color: "transparent"
+            anchors {
+                right: crown.left
+                bottom: crown.bottom
+            }
+        }
+
         Image {
             id: rock1
             width: rock2.width
             height: width * 0.46
             visible: (bar.level > 6) ? true : false
             anchors.bottom: crown.bottom
-            anchors.right: crown.left
+            anchors.right: space.left
             source: "qrc:/gcompris/src/activities/mining/resource/stone1.svg"
 
             Body {
@@ -836,6 +833,11 @@ ActivityBase {
         }
 
         Timer {
+            /*
+             * A delay is used since on setting fullscreen on/off
+             * first the onWidthChanged is executed, followed by
+             * the width change
+             */
             id: updateOnWidthReset
             repeat: false
             interval: 100

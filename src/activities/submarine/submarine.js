@@ -93,6 +93,10 @@ function setUpLevelElements() {
 
     processingAnswer = false
 
+    resetUpperGate()
+}
+
+function resetUpperGate() {
     if ( !items.crown.visible && items.upperGate.visible) {
         items.upperGate.openGate()
     }
