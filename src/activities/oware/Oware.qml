@@ -96,6 +96,7 @@ ActivityBase {
                         width: board.width * (1/6.25)
                         property real circleRadius: width
                         property int value
+                        property int indexValue
 
                         GCText {
                             text: value
@@ -106,7 +107,7 @@ ActivityBase {
                             rotation:  (background.width > background.height) ? 0 : 270
                             fontSize: smallSize
                         }
-
+//                         property alias seedsAnimation: grainRepeater.seedsAnimation
                         MouseArea {
                             id: buttonClick
                             anchors.fill: parent
@@ -116,7 +117,7 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(index - 6)
                                     else {
-//                                         Activity.sowSeeds(index - 6)
+                                        Activity.sowSeeds(index - 6)
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
@@ -129,9 +130,34 @@ ActivityBase {
                                 }
                             }
                         }
+
+                            function startAnim(index) {
+                                    indexValue = index
+                                    print(indexValue)
+                                    seedsAnimation.start()
+                                }
+
+                                SequentialAnimation {
+                                    id: seedsAnimation
+                                    NumberAnimation {
+                                        target: grainRepeater.itemAt(indexValue)
+                                        to: 500
+                                        property: "x"
+                                        easing.type: Easing.OutInQuad
+                                        duration: 500
+                                    }
+                                    NumberAnimation {
+                                        target: grainRepeater.itemAt(indexValue)
+                                        to: 500
+                                        property: "y"
+                                        duration: 500
+                                    }
+                                }
+
                         Repeater {
                             id: grainRepeater
                             model: value
+
                             Image {
                                 id: grain
                                 source: Activity.url + "grain2.png"
@@ -140,23 +166,6 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
-                                SequentialAnimation {
-                                    id: seedsAnimation
-                                    running: buttonClick.pressed
-                                    NumberAnimation {
-                                        target: grain
-                                        to: 500
-                                        property: "x"
-                                        easing.type: Easing.OutInQuad
-                                        duration: 500
-                                    }
-                                    NumberAnimation {
-                                        target: grain
-                                        to: 500
-                                        property: "y"
-                                        duration: 500
-                                    }
-                                }
                             }
                         }
                     }

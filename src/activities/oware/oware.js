@@ -125,20 +125,17 @@ function checkHunger(index) {
     // If the player cannot satisfy the hunger all the seeds in the territory are captured and game ends.
     else if (!canGive) {
         for (j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
-            print(currentPlayer)
             scoreHouse[currentPlayer] += house[j];
             house[j] = 0;
             items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
             items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
             setValues()
-            items.bonus.good("flower")
-            if(items.playerTwoScore > items.playerOneScore) {
-                items.playerTwoLevelScore.win()
-            }
-            else if(items.playerOneScore > items.playerTwoScore) {
-                items.playerOneLevelScore.win()
-            }
         }
+            items.bonus.good("flower")
+            if(items.playerTwoScore > items.playerOneScore)
+                items.playerTwoLevelScore.win()
+            else if(items.playerOneScore > items.playerTwoScore)
+                items.playerOneLevelScore.win()
     }
 }
 
@@ -212,6 +209,8 @@ function sowSeeds(index) {
     }
     items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
     items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
+    items.cellGridRepeater.itemAt(index).startAnim(index)
     nextPlayer = currentPlayer
+
     setValues()
 }
