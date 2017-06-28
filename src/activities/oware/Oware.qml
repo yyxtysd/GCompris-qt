@@ -96,10 +96,10 @@ ActivityBase {
                         width: board.width * (1/6.25)
                         property real circleRadius: width
                         property int value
-                        property int indexValue
+                        property int indexValue: index
 
                         GCText {
-                            text: value
+                            text: index
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -117,7 +117,7 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(index - 6)
                                     else {
-                                        Activity.sowSeeds(index - 6)
+                                        Activity.sowSeeds(index,index - 6)
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
@@ -125,15 +125,14 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(11 - index)
                                     else {
-                                        Activity.sowSeeds(11 - index)
+                                        Activity.sowSeeds(index,11 - index)
                                     }
                                 }
                             }
                         }
 
-                            function startAnim(index) {
-                                    indexValue = index
-                                    print(indexValue)
+                            function startAnim() {
+                                    print("val",indexValue)
                                     seedsAnimation.start()
                                 }
 

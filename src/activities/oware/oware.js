@@ -139,7 +139,7 @@ function checkHunger(index) {
     }
 }
 
-function sowSeeds(index) {
+function sowSeeds(actualIndex,index) {
     var currentPlayer = items.playerOneTurn ? 0 : 1
     var nextIndex = index
     playerSideEmpty = false;
@@ -209,7 +209,8 @@ function sowSeeds(index) {
     }
     items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
     items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
-    items.cellGridRepeater.itemAt(index).startAnim(index)
+    items.cellGridRepeater.itemAt(actualIndex).startAnim()
+    print(items.cellGridRepeater.itemAt(actualIndex))
     nextPlayer = currentPlayer
 
     setValues()
