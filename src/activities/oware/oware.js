@@ -37,19 +37,19 @@ var tutorialInstructions = [
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
             },
     {
-        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. The player then removes all seeds from that house, and distributes them, dropping one in each house counter-clockwise from the house they chose, in a process called sowing. However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds."),
+        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. All seeds from that house are picked and dropped one in each house counter-clockwise from the house they chose, in a process called sowing. However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
             },
     {
-        "instruction": qsTr("After a turn, if the last seed was placed into the opponent's house and brought the total number of seeds in that house to two or three, all the seeds in that house are captured and added to player's scoring house. If the previous-to-last seed also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."),
+        "instruction": qsTr("After a turn, if the last seed was placed into the opponent's house and brought the total number of seeds in that house to two or three, all the seeds in that house are captured and added to player's scoring house. If the previous-to-last seed dropped also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial3.png"
             },
     {
-        "instruction": qsTr("If of all the houses of one player are empty. Then other player has to take such a move that it gives some seeds to the other player and continue the game."),
+        "instruction": qsTr("If all the houses of one player are empty, the other player has to take such a move that it gives one or more seeds to the other player to continue the game."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial4.png"
             },
     {
-        "instruction": qsTr("However, if the player is unable to give any seed to the oponent, then the player keeps all the seeds in the houses of his side and the game ends."),
+        "instruction": qsTr("However, if the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial5.png"
             }
        ]
