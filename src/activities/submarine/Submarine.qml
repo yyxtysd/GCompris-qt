@@ -41,6 +41,8 @@ ActivityBase {
         source: url + "background.svg"
         anchors.fill: parent
 
+        onWidthChanged: updateOnWidthReset.start()
+
         signal start
         signal stop
 
@@ -415,7 +417,7 @@ ActivityBase {
                         }
                     },
                     Box {
-                        id: submarine_antena_Fixer
+                        id: submarine_periscope_Fixer
                         x: submarineImage.width * 0.55
                         width: submarineImage.width / 15
                         height: submarineImage.height * 0.25
@@ -830,6 +832,17 @@ ActivityBase {
                         restitution: 0
                     }
                 ]
+            }
+        }
+
+        Timer {
+            id: updateOnWidthReset
+            repeat: false
+            interval: 100
+            running: false
+            onTriggered: {
+                whale.reset()
+                ship.reset()
             }
         }
 
