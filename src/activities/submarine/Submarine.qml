@@ -390,28 +390,54 @@ ActivityBase {
                 linearDamping: 0
                 linearVelocity: submarine.isHit ? Qt.point(0,0) : submarine.velocity
 
-                fixtures: Box {
-                    id: submarineFixer
-                    width: submarineImage.width
-                    height: submarineImage.height
-                    categories: items.submarineCategory
-                    collidesWith: Fixture.All
-                    density: 1
-                    friction: 0
-                    restitution: 0
-                    onBeginContact: {
-                        var collidedObject = other.getBody().target
+                fixtures: [
+                    Box {
+                        id: submarineFixer
+                        y: submarineImage.height * 0.25
+                        width: submarineImage.width
+                        height: submarineImage.height * 0.75
+                        categories: items.submarineCategory
+                        collidesWith: Fixture.All
+                        density: 1
+                        friction: 0
+                        restitution: 0
+                        onBeginContact: {
+                            var collidedObject = other.getBody().target
 
-                        if (collidedObject == whale) {
-                            whale.hit()
+                            if (collidedObject == whale) {
+                                whale.hit()
+                            }
+                            if (collidedObject == crown) {
+                                crown.captureCrown()
+                            } else {
+                                Activity.finishLevel(false)
+                            }
                         }
-                        if (collidedObject == crown) {
-                            crown.captureCrown()
-                        } else {
-                            Activity.finishLevel(false)
+                    },
+                    Box {
+                        id: submarine_antena_Fixer
+                        x: submarineImage.width * 0.55
+                        width: submarineImage.width / 15
+                        height: submarineImage.height * 0.25
+                        categories: items.submarineCategory
+                        collidesWith: Fixture.All
+                        density: 1
+                        friction: 0
+                        restitution: 0
+                        onBeginContact: {
+                            var collidedObject = other.getBody().target
+
+                            if (collidedObject == whale) {
+                                whale.hit()
+                            }
+                            if (collidedObject == crown) {
+                                crown.captureCrown()
+                            } else {
+                                Activity.finishLevel(false)
+                            }
                         }
                     }
-                }
+                ]
             }
 
             Timer {
