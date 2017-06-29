@@ -26,7 +26,6 @@
 var currentLevel = 0
 var numberOfLevel = 10
 var items
-var barAtStart
 var processingAnswer
 
 var tutorials = [
@@ -55,13 +54,10 @@ var tutorials = [
 function start(items_) {
     items = items_
     currentLevel = 0
-    barAtStart = GCompris.ApplicationSettings.isBarHidden;
-    GCompris.ApplicationSettings.isBarHidden = true;
     initLevel()
 }
 
 function stop() {
-    GCompris.ApplicationSettings.isBarHidden = barAtStart;
 }
 
 function initLevel() {
@@ -97,7 +93,7 @@ function setUpLevelElements() {
 }
 
 function resetUpperGate() {
-    if ( !items.crown.visible && items.upperGate.visible) {
+    if ( items && !items.crown.visible && items.upperGate.visible) {
         items.upperGate.openGate()
     }
 }

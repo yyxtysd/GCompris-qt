@@ -201,6 +201,7 @@ ActivityBase {
             /* Engine properties */
             property point velocity
             property int maximumXVelocity: 5
+            property int currentFinalVelocity: 0
 
             /* Wings property */
             property int wingsAngle
@@ -224,19 +225,29 @@ ActivityBase {
                 x = initialPosition.x
                 y = initialPosition.y
 
+                currentFinalVelocity = 0
                 velocity = Qt.point(0,0)
                 wingsAngle = initialWingsAngle
             }
 
+            /* While increasing or decreasing, we can't use submarine.velocity.x since it is interpolating */
             function increaseHorizontalVelocity(amt) {
-                if (submarine.velocity.x + amt <= submarine.maximumXVelocity) {
-                    submarine.velocity.x += amt
+                if (submarine.currentFinalVelocity + amt <= submarine.maximumXVelocity) {
+                    submarine.currentFinalVelocity += amt
+                    smoothHorizontalVelocity.stop()
+                    smoothHorizontalVelocity.setFinalVelocity(submarine.currentFinalVelocity)
+                    smoothHorizontalVelocity.setIncreaseVelocity(true)
+                    smoothHorizontalVelocity.start()
                 }
             }
 
             function decreaseHorizontalVelocity(amt) {
-                if (submarine.velocity.x - amt >= 0) {
-                    submarine.velocity.x -= amt
+                if (submarine.currentFinalVelocity - amt >= 0) {
+                    submarine.currentFinalVelocity -= amt
+                    smoothHorizontalVelocity.stop()
+                    smoothHorizontalVelocity.setFinalVelocity(submarine.currentFinalVelocity)
+                    smoothHorizontalVelocity.setIncreaseVelocity(false)
+                    smoothHorizontalVelocity.start()
                 }
             }
 
@@ -277,6 +288,51 @@ ActivityBase {
                     if (bar.level >= 7) {
                         var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
                         submarineRotation.angle = finalAngle
+                    }
+                }
+            }
+
+            Timer {
+                id: smoothHorizontalVelocity
+                running: false
+                repeat: true
+                interval: 100
+
+                property real finalVelocity
+                property real smoothRate: 0.1
+                property bool increaseVelocity
+
+                function increaseVelocitySmoothly() {
+                    if (submarine.velocity.x + smoothRate > finalVelocity) {
+                        submarine.velocity.x = finalVelocity
+                        smoothHorizontalVelocity.stop()
+                    } else {
+                        submarine.velocity.x += smoothRate
+                    }
+                }
+
+                function decreaseVelocitySmoothly() {
+                    if (submarine.velocity.x - smoothRate <= finalVelocity) {
+                        submarine.velocity.x = finalVelocity
+                        smoothHorizontalVelocity.stop()
+                    } else {
+                        submarine.velocity.x -= smoothRate
+                    }
+                }
+
+                function setFinalVelocity(_finalVelocity) {
+                    finalVelocity = _finalVelocity
+                }
+
+                function setIncreaseVelocity(value) {
+                    increaseVelocity = value
+                }
+
+                onTriggered: {
+                    if (increaseVelocity) {
+                        increaseVelocitySmoothly()
+                    } else {
+                        decreaseVelocitySmoothly()
                     }
                 }
             }
@@ -415,7 +471,7 @@ ActivityBase {
                         }
                     },
                     Box {
-                        id: submarine_periscope_Fixer
+                        id: submarinePeriscopeFixer
                         x: submarineImage.width * 0.55
                         width: submarineImage.width / 15
                         height: submarineImage.height * 0.25
@@ -809,7 +865,7 @@ ActivityBase {
 
                 fixtures: [
                     Circle {
-                        id: rock1Fixer
+                        id: rock1FixerLeft
                         categories: items.rockCategory
                         collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
                         x: rock1.width / 10
@@ -818,7 +874,7 @@ ActivityBase {
                         friction: 0
                         restitution: 0
                     },Circle {
-                        id: rock1Fixer_1
+                        id: rock1FixerRight
                         categories: items.rockCategory
                         collidesWith: rock1.visible ? items.submarineCategory : Fixture.None
                         x: rock1.width / 1.6
@@ -854,7 +910,7 @@ ActivityBase {
             enginePositon.y: background.height - bar.height - (engineHeight * 1.25)
             engineWidth: background.width / 8
             engineHeight: 100
-            submarineHorizontalSpeed: submarine.velocity.x * 1000
+            submarineHorizontalSpeed: submarine.currentFinalVelocity * 1000
 
             leftTankVisible: bar.level >= 7 ? true : false
             leftBallastTankPosition.x: background.width * 0.4
