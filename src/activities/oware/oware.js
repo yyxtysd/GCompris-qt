@@ -62,6 +62,14 @@ function start(items_) {
 
 function stop() {}
 
+function reset() {
+    items.parentMouseArea.z = 0
+    items.playerOneLevelScore.endTurn()
+    items.playerTwoLevelScore.endTurn()
+    items.playerOneLevelScore.beginTurn()
+    items.playerOneTurn = true
+    initLevel()
+}
 function initLevel() {
     var singleHouseSeeds = 4
     for (var i = 11; i >= 0; i--)
@@ -209,9 +217,18 @@ function sowSeeds(actualIndex,index) {
     }
     items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
     items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
-    items.cellGridRepeater.itemAt(actualIndex).startAnim()
-    print(items.cellGridRepeater.itemAt(actualIndex))
-    nextPlayer = currentPlayer
+//     items.cellGridRepeater.itemAt(actualIndex).startAnim()
 
+    if(items.playerTwoScore >= 25) {
+        items.playerTwoLevelScore.win()
+        items.playerOneLevelScore.endTurn()
+        items.parentMouseArea.z = 3
+    }
+    else if(items.playerOneScore >= 25) {
+        items.playerOneLevelScore.win()
+        items.playerTwoLevelScore.endTurn()
+        items.parentMouseArea.z = 3
+    }
+    nextPlayer = currentPlayer
     setValues()
 }

@@ -58,11 +58,16 @@ ActivityBase {
             property int playerTwoScore: 0
             property alias playerOneLevelScore: playerOneLevelScore
             property alias playerTwoLevelScore: playerTwoLevelScore
+            property alias parentMouseArea: parentMouseArea
         }
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
+        MouseArea {
+            id: parentMouseArea
+            anchors.fill: parent
+        }
         Item {
             id: boxModel
             width: parent.width * 0.7
@@ -132,21 +137,20 @@ ActivityBase {
                         }
 
                             function startAnim() {
-                                    print("val",indexValue)
                                     seedsAnimation.start()
                                 }
 
                                 SequentialAnimation {
                                     id: seedsAnimation
                                     NumberAnimation {
-                                        target: grainRepeater.itemAt(indexValue)
+                                        target: grainRepeater.itemAt(0)
                                         to: 500
                                         property: "x"
                                         easing.type: Easing.OutInQuad
                                         duration: 500
                                     }
                                     NumberAnimation {
-                                        target: grainRepeater.itemAt(indexValue)
+                                        target: grainRepeater.itemAt(0)
                                         to: 500
                                         property: "y"
                                         duration: 500
@@ -275,7 +279,7 @@ ActivityBase {
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
-            onReloadClicked: Activity.initLevel()
+            onReloadClicked: Activity.reset()
         }
 
         Bonus {
