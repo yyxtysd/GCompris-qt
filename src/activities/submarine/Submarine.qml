@@ -276,12 +276,16 @@ ActivityBase {
                  * When the submarine is on the surface, the planes cannot be used
                  */
                 if (submarineImage.y > 0) {
+                    if (wingsAngle != 0 && submarine.velocity.x > 0) {
+                        speed.velocity = 0
+                    }
                     submarine.velocity.y = (submarine.velocity.x) > 0 ? wingsAngle : 0
                 } else {
                     submarine.velocity.y = 0
                 }
                 /* Movement due to Ballast tanks */
                 if (submarineImage.y == 0 || wingsAngle == 0 || submarine.velocity.x == 0) {
+                    speed.velocity = 10
                     var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
                     submarineImage.y = yPosition
 
