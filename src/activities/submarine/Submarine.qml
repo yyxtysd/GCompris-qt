@@ -197,6 +197,7 @@ ActivityBase {
 
             /* Maximum depth the submarine can dive when ballast tank is full */
             property real maximumDepthOnFullTanks: (background.height * 0.6) / 2
+            property real ballastTankDiveSpeed: 0.4
 
             /* Engine properties */
             property point velocity
@@ -270,24 +271,34 @@ ActivityBase {
             }
 
             function changeVerticalVelocity() {
-                /*
-                 * Movement due to planes
-                 * Movement is affected only when the submarine is moving forward
-                 * When the submarine is on the surface, the planes cannot be used
-                 */
-                if (submarineImage.y > 0) {
-                    if (wingsAngle != 0 && submarine.velocity.x > 0) {
-                        speed.velocity = 0
-                    }
-                    submarine.velocity.y = (submarine.velocity.x) > 0 ? wingsAngle : 0
+                /* Check if we are currently using diving planes or ballast tanks */
+                var isDivingPlanesActive
+                if (submarineImage.y > 0 && submarine.velocity.x > 0 && wingsAngle != 0) {
+                    /*
+                     * Movement due to planes
+                     * Movement is affected only when the submarine is moving forward
+                     * When the submarine is on the surface, the planes cannot be used
+                     */
+                    isDivingPlanesActive = true
                 } else {
-                    submarine.velocity.y = 0
+                    isDivingPlanesActive = false
                 }
-                /* Movement due to Ballast tanks */
-                if (submarineImage.y == 0 || wingsAngle == 0 || submarine.velocity.x == 0) {
-                    speed.velocity = 10
+
+                if (isDivingPlanesActive) {
+                    /* Currently using diving planes */
+                    submarine.velocity.y = wingsAngle
+                } else {
+                    /* Currently under the influence of Ballast Tanks */
                     var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
-                    submarineImage.y = yPosition
+
+                    var depthToMove = submarineImage.y - yPosition
+                    if (Math.abs(depthToMove) < 1.5) {
+                        submarine.velocity.y = 0
+                    } else if (depthToMove > 0) {
+                        submarine.velocity.y = -1 * ballastTankDiveSpeed
+                    } else {
+                        submarine.velocity.y = ballastTankDiveSpeed
+                    }
 
                     if (bar.level >= 7) {
                         var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
@@ -378,19 +389,8 @@ ActivityBase {
 
                 function reset() {
                     source = url + "submarine.png"
-                    verticalMovementAnimation.enabled = false
                     x = submarine.initialPosition.x
                     y = submarine.initialPosition.y
-                    verticalMovementAnimation.enabled = true
-                }
-
-                Behavior on y {
-                    id: verticalMovementAnimation
-                    SmoothedAnimation {
-                        id: speed
-                        velocity: 10
-                        reversingMode: SmoothedAnimation.Immediate
-                    }
                 }
 
                 onXChanged: {
