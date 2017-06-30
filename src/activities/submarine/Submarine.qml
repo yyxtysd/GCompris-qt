@@ -196,7 +196,7 @@ ActivityBase {
             property int maxAbsoluteRotationAngle: 15
 
             /* Maximum depth the submarine can dive when ballast tank is full */
-            property real maximumDepthOnFullTanks: (background.height * 0.6) / 2
+            property real maximumDepthOnFullTanks: maximumWaterDepth.y * 0.45
             property real ballastTankDiveSpeed: 10
 
             /* Engine properties */
@@ -284,31 +284,31 @@ ActivityBase {
                     isDivingPlanesActive = false
                 }
 
+                var yPosition
                 if (isDivingPlanesActive) {
                     /* Currently using diving planes */
-                    submarine.velocity.y = wingsAngle
+                    var multiplier
+                    if (wingsAngle == 1) {
+                        multiplier = 0.6
+                    } else if (wingsAngle == 2) {
+                        multiplier = 0.8
+                    } else if (wingsAngle == -1) {
+                        multiplier = 0.2
+                    } else if (wingsAngle == -2) {
+                        multiplier = 0.1
+                    }
+                    yPosition = multiplier * maximumWaterDepth.y
                 } else {
                     /* Currently under the influence of Ballast Tanks */
-                    var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
-
-                    var depthToMove = yPosition - submarineImage.y
-                    submarine.velocity.y = ballastTankDiveSpeed * (depthToMove / background.width)
-                    /*
-                      // if using this, do depthToMove *= -1
-                    if (Math.abs(depthToMove) < 1.5) {
-                        submarine.velocity.y = 0
-                    } else if (depthToMove > 0) {
-                        submarine.velocity.y = -1 * ballastTankDiveSpeed
-                    } else {
-                        submarine.velocity.y = ballastTankDiveSpeed
-                    }
-                    */
+                    yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
 
                     if (bar.level >= 7) {
                         var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
                         submarineRotation.angle = finalAngle
                     }
                 }
+                var depthToMove = yPosition - submarineImage.y
+                submarine.velocity.y = ballastTankDiveSpeed * (depthToMove / background.width)
             }
 
             Timer {
@@ -938,7 +938,7 @@ ActivityBase {
             rightBallastTankWidth: background.width / 8
             rightBallastTankHeight: 100
 
-            divingPlaneVisible: bar.level >= 3 ? true : false
+            divingPlaneVisible: true
             divingPlanePosition.x: background.width * 0.8
             divingPlanePosition.y: background.height - bar.height - engineHeight
             divingPlaneWidth: background.width / 8
