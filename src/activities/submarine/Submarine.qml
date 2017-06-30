@@ -193,11 +193,11 @@ ActivityBase {
             property point initialPosition: Qt.point(0,0)
             property bool isHit: false
             property int terminalVelocityIndex: 75
-            property int maxAbsoluteRotationAngle: 30
+            property int maxAbsoluteRotationAngle: 15
 
             /* Maximum depth the submarine can dive when ballast tank is full */
             property real maximumDepthOnFullTanks: (background.height * 0.6) / 2
-            property real ballastTankDiveSpeed: 0.4
+            property real ballastTankDiveSpeed: 10
 
             /* Engine properties */
             property point velocity
@@ -291,7 +291,10 @@ ActivityBase {
                     /* Currently under the influence of Ballast Tanks */
                     var yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
 
-                    var depthToMove = submarineImage.y - yPosition
+                    var depthToMove = yPosition - submarineImage.y
+                    submarine.velocity.y = ballastTankDiveSpeed * (depthToMove / background.width)
+                    /*
+                      // if using this, do depthToMove *= -1
                     if (Math.abs(depthToMove) < 1.5) {
                         submarine.velocity.y = 0
                     } else if (depthToMove > 0) {
@@ -299,6 +302,7 @@ ActivityBase {
                     } else {
                         submarine.velocity.y = ballastTankDiveSpeed
                     }
+                    */
 
                     if (bar.level >= 7) {
                         var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle

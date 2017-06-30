@@ -26,7 +26,7 @@ Item {
     property int initialWaterLevel
     property int waterLevel: 0
     property int maxWaterLevel
-    property int waterRate: 10
+    property int waterRate: 100
     property bool waterFilling: false
     property bool waterFlushing: false
 

@@ -146,7 +146,7 @@ Item {
 
                 Behavior on height {
                     NumberAnimation {
-                        duration: 100
+                        duration: 1000
                     }
                 }
             }
@@ -222,7 +222,7 @@ Item {
 
                 Behavior on height {
                     NumberAnimation {
-                        duration: 100
+                        duration: 1000
                     }
                 }
             }
@@ -296,7 +296,7 @@ Item {
 
                 Behavior on height {
                     NumberAnimation {
-                        duration: 100
+                        duration: 1000
                     }
                 }
             }
