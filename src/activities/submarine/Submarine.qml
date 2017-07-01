@@ -303,7 +303,7 @@ ActivityBase {
                     yPosition = submarineImage.currentWaterLevel / submarineImage.totalWaterLevel * submarine.maximumDepthOnFullTanks
 
                     if (bar.level >= 7) {
-                        var finalAngle = ((leftBallastTank.waterLevel - rightBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
+                        var finalAngle = ((rightBallastTank.waterLevel - leftBallastTank.waterLevel) / leftBallastTank.maxWaterLevel) * submarine.maxAbsoluteRotationAngle
                         submarineRotation.angle = finalAngle
                     }
                 }
@@ -408,6 +408,11 @@ ActivityBase {
                     origin.x: submarineImage.width / 2;
                     origin.y: 0;
                     angle: 0;
+                    Behavior on angle {
+                        NumberAnimation {
+                            duration: 1000
+                        }
+                    }
                 }
 
                 Loader {
