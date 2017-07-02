@@ -103,6 +103,24 @@ function getY(radius, index, value) {
     var step = (2 * Math.PI) * index / value;
     return radius * Math.sin(step);
 }
+function randomMove() {
+    var index = Math.floor(Math.random() * (12 - 6) + 6);
+    if(house[index] && isValidMove(index))
+        sowSeeds(index)
+    else
+        randomMove()
+}
+
+function isValidMove(index) {
+    var nextPlayer = 0
+    var sum = 0;
+    for(var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++)
+        sum += house[j];
+    if (sum == 0 && (house[index] % 12 < 11 - index))
+        return false
+    else
+        return true
+}
 
 function setValues() {
     for (var i = 6, j = 0; i < 12, j < 6; j++, i++)
@@ -147,11 +165,10 @@ function checkHunger(index) {
     }
 }
 
-function sowSeeds(actualIndex,index) {
+function sowSeeds(index) {
     var currentPlayer = items.playerOneTurn ? 0 : 1
     var nextIndex = index
     playerSideEmpty = false;
-
     if(!currentPlayer) {
         items.playerTwoLevelScore.endTurn()
         items.playerOneLevelScore.beginTurn()

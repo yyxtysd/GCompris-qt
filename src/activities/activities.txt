@@ -111,6 +111,7 @@ nine_men_morris_2players
 number_sequence
 numbers-odd-even
 oware
+oware_2players
 paintings
 penalty
 photo_hunter

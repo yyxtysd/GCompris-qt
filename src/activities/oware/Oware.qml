@@ -30,6 +30,7 @@ import "."
 ActivityBase {
     id: activity
 
+    property bool twoPlayer: false
     onStart: focus = true
     onStop: {}
 
@@ -64,10 +65,18 @@ ActivityBase {
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
+        Timer {
+            id: trigComputerMove
+            repeat: false
+            interval: 400
+            onTriggered: Activity.randomMove()
+        }
+
         MouseArea {
             id: parentMouseArea
             anchors.fill: parent
         }
+
         Item {
             id: boxModel
             width: parent.width * 0.7
@@ -80,6 +89,26 @@ ActivityBase {
                 id: board
                 source: Activity.url + "/owareBoard.png"
                 anchors.fill: parent
+            }
+
+             Rectangle {
+                id: playerOneBorder
+                height: 5
+                width: parent.width/4
+                color: "orange"
+                anchors.top: board.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.topMargin: 6
+            }
+
+             Rectangle {
+                id: playerTwoBorder
+                height: 5
+                width: parent.width/4
+                color: "blue"
+                anchors.bottom: board.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottomMargin: 5
             }
 
             Grid {
@@ -112,17 +141,17 @@ ActivityBase {
                             rotation:  (background.width > background.height) ? 0 : 270
                             fontSize: smallSize
                         }
-//                         property alias seedsAnimation: grainRepeater.seedsAnimation
+                        //                         property alias seedsAnimation: grainRepeater.seedsAnimation
                         MouseArea {
                             id: buttonClick
                             anchors.fill: parent
-                            onClicked: {
+                            onPressed: {
                                 if(items.playerOneTurn && Activity.house[index - 6] != 0 && (index - 6) >= 0 && (index - 6) <= 5) {
                                     items.playerOneTurn = !items.playerOneTurn
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(index - 6)
                                     else {
-                                        Activity.sowSeeds(index,index - 6)
+                                        Activity.sowSeeds(index - 6)
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
@@ -130,32 +159,38 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(11 - index)
                                     else {
-                                        Activity.sowSeeds(index,11 - index)
+                                        Activity.sowSeeds(11 - index)
                                     }
+                                }
+                            }
+                            onReleased: {
+                                if(!twoPlayer && !items.playerOneTurn) {
+                                    items.playerOneTurn = !items.playerOneTurn
+                                    trigComputerMove.start()
                                 }
                             }
                         }
 
-                            function startAnim() {
-                                    seedsAnimation.start()
-                                }
+                        function startAnim() {
+                            seedsAnimation.start()
+                        }
 
-                                SequentialAnimation {
-                                    id: seedsAnimation
-                                    NumberAnimation {
-                                        target: grainRepeater.itemAt(0)
-                                        to: 500
-                                        property: "x"
-                                        easing.type: Easing.OutInQuad
-                                        duration: 500
-                                    }
-                                    NumberAnimation {
-                                        target: grainRepeater.itemAt(0)
-                                        to: 500
-                                        property: "y"
-                                        duration: 500
-                                    }
-                                }
+                        SequentialAnimation {
+                            id: seedsAnimation
+                            NumberAnimation {
+                                target: grainRepeater.itemAt(0)
+                                to: 500
+                                property: "x"
+                                easing.type: Easing.OutInQuad
+                                duration: 500
+                            }
+                            NumberAnimation {
+                                target: grainRepeater.itemAt(0)
+                                to: 500
+                                property: "y"
+                                duration: 500
+                            }
+                        }
 
                         Repeater {
                             id: grainRepeater
@@ -168,7 +203,6 @@ ActivityBase {
                                 width: circleRadius * 0.2
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
-
                             }
                         }
                     }
@@ -177,16 +211,37 @@ ActivityBase {
 
             Image {
                 id: playerOneScoreBox
-                height: board.height * 0.4
+                height: board.height * 0.5
                 width: height
                 source:Activity.url+"/score.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: boxModel.left
 
+                Flow {
+                    width: board.width * (1/7.25)
+                    height: parent.height
+                    anchors.centerIn: parent
+
+                    Repeater {
+                        id: playerOneScoreRepeater
+                        model: items.playerOneScore
+
+                        Image {
+                            id: playerOneSeedsImage
+                            source: Activity.url + "grain2.png"
+                            height: board.width * (1 / 7.25) * 0.2
+                            width: board.width * (1 / 7.25) * 0.2
+                            x: parent.width/2 + Activity.getX(parent.width/6, index,items.playerOneScore)
+                            y: parent.width/2 + Activity.getY(parent.width/5, index,items.playerOneScore)
+                        }
+                    }
+                }
+
                 GCText {
                     id: playerOneScoreText
                     color: "white"
-                    anchors.centerIn: parent
+                    anchors.bottom: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
                     fontSize: smallSize
                     text: items.playerOneScore
                     horizontalAlignment: Text.AlignHCenter
@@ -197,19 +252,38 @@ ActivityBase {
 
             Image {
                 id: playerTwoScore
-                height: board.height * 0.4
+                height: board.height * 0.5
                 width: height
                 source:Activity.url+"/score.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: boxModel.right
 
+                Flow {
+                    width: board.width * (1/7.25)
+                    height: parent.height
+                    anchors.centerIn: parent
+
+                    Repeater {
+                        id: playerTwoScoreRepeater
+                        model: items.playerTwoScore
+                        Image {
+                            id: playerTwoSeedsImage
+                            source: Activity.url + "grain2.png"
+                            height: board.width * (1 / 7.25) * 0.2
+                            width: board.width * (1 / 7.25) * 0.2
+                            x: parent.width/2 + Activity.getX(parent.width/6, index,items.playerTwoScore)
+                            y: parent.width/2 + Activity.getY(parent.width/5, index,items.playerTwoScore)
+                        }
+                    }
+                }
+
                 GCText {
                     id: playerTwoScoreText
                     color: "white"
-                    anchors.centerIn: parent
                     fontSize: smallSize
                     text: items.playerTwoScore
-                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.top
                     rotation:  (background.width > background.height) ? 0 : 270
                     wrapMode: TextEdit.WordWrap
                 }
@@ -221,6 +295,7 @@ ActivityBase {
             source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
             anchors.fill: parent
             z: 5
+            visible: twoPlayer ? false : true
             Tutorial {
                 id:tutorialSection
                 tutorialDetails: Activity.tutorialInstructions
@@ -272,7 +347,8 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: tutorialSection.visible ? (help | home) : (help | home | reload)}
+            content: BarEnumContent { value: twoPlayer ? (help | home | reload) : tutorialSection.visible ?
+                                                             (help | home) : (help | home | level | reload) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
