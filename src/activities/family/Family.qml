@@ -149,15 +149,26 @@ ActivityBase {
                         }
                     }
 
-                   GCText {
-                        id: me
-                        text: qsTr("Me")
-                        visible: Activity.treeStructure[bar.level-1].captions[0] !== undefined
-                        x: Activity.treeStructure[bar.level-1].captions[0][0]*tree.width
-                        y: Activity.treeStructure[bar.level-1].captions[0][1]*tree.height
-                        width: tree.width/12
-                        height: tree.height/14
-                    }
+                   Rectangle {
+                       id: me
+                       visible: Activity.treeStructure[bar.level-1].captions[0] !== undefined
+                       x: Activity.treeStructure[bar.level-1].captions[0][0]*tree.width
+                       y: Activity.treeStructure[bar.level-1].captions[0][1]*tree.height
+
+                       width: tree.width/12
+                       height: tree.height/14
+
+                       radius: 5
+                       border.color: "black"
+                       GCText {
+                           id: meLabel
+                           text: qsTr("Me")
+                           anchors {
+                               horizontalCenter: parent.horizontalCenter
+                               verticalCenter: parent.verticalCenter
+                           }
+                       }
+                   }
 
                     Image {
                         id: questionmark
