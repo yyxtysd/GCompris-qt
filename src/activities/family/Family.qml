@@ -59,10 +59,15 @@ ActivityBase {
             property alias answersChoice: answersChoice
             property alias edgeCreator: edgeCreator
             property alias wringcreator: wringcreator
+            property alias dataset: dataset
         }
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
+
+        Dataset {
+            id: dataset
+        }
 
         Item {
             id: partition
@@ -151,9 +156,9 @@ ActivityBase {
 
                    Rectangle {
                        id: me
-                       visible: Activity.treeStructure[bar.level-1].captions[0] !== undefined
-                       x: Activity.treeStructure[bar.level-1].captions[0][0]*tree.width
-                       y: Activity.treeStructure[bar.level-1].captions[0][1]*tree.height
+                       visible: dataset.levelElements[bar.level-1].captions[0] !== undefined
+                       x: dataset.levelElements[bar.level-1].captions[0][0]*tree.width
+                       y: dataset.levelElements[bar.level-1].captions[0][1]*tree.height
 
                        width: tree.width/12
                        height: tree.height/14
@@ -173,9 +178,9 @@ ActivityBase {
                     Image {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
-                        visible: Activity.treeStructure[bar.level-1].captions[1] !== undefined
-                        x: Activity.treeStructure[bar.level-1].captions[1][0]*tree.width
-                        y: Activity.treeStructure[bar.level-1].captions[1][1]*tree.height
+                        visible: dataset.levelElements[bar.level-1].captions[1] !== undefined
+                        x: dataset.levelElements[bar.level-1].captions[1][0]*tree.width
+                        y: dataset.levelElements[bar.level-1].captions[1][1]*tree.height
                     }
 
                     Repeater {
