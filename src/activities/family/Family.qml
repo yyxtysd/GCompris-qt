@@ -31,6 +31,10 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
+    property real nodeWidth: 0.8 * (0.8 * background.horizontalLayout ? background.width*0.65 / 5 : background.width / 5)
+    property real nodeHeight: 0.8 * (background.horizontalLayout ? background.width*0.65 : background.width) / 5
+
+
     pageComponent: Image {
         id: background
         anchors.fill: parent

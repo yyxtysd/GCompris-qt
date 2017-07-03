@@ -1,6 +1,29 @@
+/* GCompris - Tree.qml
+ *
+ * Copyright (C) RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
+ *
+ * Authors:
+ *   Holger Kaelberer <holger.k@elberer.de>
+ *   RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
 import QtQuick 2.6
 
 QtObject {
+    property real nodeWidth: (activity.nodeWidth / background.width)
+    property real nodeHeight: (activity.nodeWidth / background.width)
     property var levelElements: [
                     // level 1
                     {  edgeList: [
@@ -201,23 +224,17 @@ QtObject {
                    },
                    // level 9
                    {  edgeList: [
-                                   [(0.425), 0.25, (0.425), 0.45],
+                                   [(0.425 + nodeWidth / 2), (0.05 + nodeHeight), (0.425 + nodeWidth / 2), 0.45],
                                    [0.41, 0.45, 0.60, 0.45],
-                                   [0.22, 0.45, 0.254, 0.45],
-                                   [0.22, 0.45, 0.22, 0.72],
-                                   [0.22, 0.71, 0.25, 0.71],
-                                   [0.78, 0.45, 0.83, 0.45],
-                                   [0.83, 0.45, 0.83, 0.72],
-                                   [0.83, 0.72, 0.78, 0.72]
-
-
+                                   [(0.41 - nodeWidth / 2), (0.4 + nodeHeight ), (0.41 - nodeWidth / 2), (0.70 )],
+                                   [(0.45 - nodeWidth / 2), (0.4 + nodeHeight ), (0.45 - nodeWidth / 2), (0.70 )]
                         ],
                       nodePositions: [
                                    [0.425, 0.05],
                                    [0.251, 0.40],
                                    [0.588, 0.40],
-                                   [0.22, 0.70],
-                                   [0.610, 0.70]
+                                   [0.251, 0.70],
+                                   [0.588, 0.70]
 
 
                         ],
