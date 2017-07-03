@@ -227,7 +227,7 @@ QtObject {
                                    [(0.425 + nodeWidth / 2), (0.05 + nodeHeight), (0.425 + nodeWidth / 2), 0.45],
                                    [0.41, 0.45, 0.60, 0.45],
                                    [(0.41 - nodeWidth / 2), (0.4 + nodeHeight ), (0.41 - nodeWidth / 2), (0.70 )],
-                                   [(0.45 - nodeWidth / 2), (0.4 + nodeHeight ), (0.45 - nodeWidth / 2), (0.70 )]
+                                   [(0.588 + nodeWidth / 2), (0.4 + nodeHeight ), (0.588 + nodeWidth / 2), (0.70 )]
                         ],
                       nodePositions: [
                                    [0.425, 0.05],
