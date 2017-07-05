@@ -31,6 +31,8 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
+//    property real nodeWidth: (((background.horizontalLayout ? background.width * 0.65 : background.width) / 5) * 0.8) / ((background.horizontalLayout ? background.width * 0.65 : background.width))//0.8 * (0.8 * background.horizontalLayout ? background.width*0.65 / 5 : background.width / 5)
+//    property real nodeHeight: (((background.horizontalLayout ? background.width * 0.65 : background.width) / 5) * 0.8) / ((background.horizontalLayout ? background.height : background.height * 0.65))//0.8 * (background.horizontalLayout ? background.width*0.65 : background.width) / 5
     property real nodeWidth: 0.8 * (0.8 * background.horizontalLayout ? background.width*0.65 / 5 : background.width / 5)
     property real nodeHeight: 0.8 * (background.horizontalLayout ? background.width*0.65 : background.width) / 5
 
@@ -78,10 +80,10 @@ ActivityBase {
             width: background.width
             height: background.height
             Rectangle {
-                id: tree
+                id: treeArea
                 color: "transparent"
-                width: background.horizontalLayout ? background.width*0.65 : background.width
-                height: background.horizontalLayout ? background.height : background.height*0.65
+                width: background.horizontalLayout ? background.width * 0.65 : background.width
+                height: background.horizontalLayout ? background.height : background.height * 0.65
                 border.color: "black"
                 border.width: 5
                 Item {
@@ -90,20 +92,20 @@ ActivityBase {
                         id: nodeCreator
                         model: ListModel{}
                         delegate:
-                            Tree {
+                            Node {
                             id: currentPointer
-                            x: xx*tree.width
-                            y: yy*tree.height
-                            width: tree.width/5
-                            height: tree.width/5
-                            recWidth: currentPointer.width
-                            recHeight: currentPointer.height
-                            nodeImageSource: Activity.url+nodee
+                            x: xPosition * treeArea.width
+                            y: yPosition * treeArea.height
+                            width: treeArea.width / 5
+                            height: treeArea.width / 5
+                            nodeWidth: currentPointer.width
+                            nodeHeight: currentPointer.height
+                            nodeImageSource: Activity.url + nodeValue
                             borderColor: "black"
                             borderWidth: 4
                             color: "transparent"
-                            radius: recWidth/2
-                            state: currentstate
+                            radius: nodeWidth / 2
+                            state: currentState
 
                             states: [
                                State {
@@ -120,7 +122,7 @@ ActivityBase {
                                       }
                                },
                                State {
-                                    name: "activeto"
+                                    name: "activeTo"
                                     PropertyChanges {
                                         target: currentPointer
                                         borderColor: "red"
@@ -130,7 +132,7 @@ ActivityBase {
 
                             SequentialAnimation {
                                 id: anim
-                                running: currentPointer.state === "active" || currentPointer.state === "activeto"
+                                running: currentPointer.state === "active" || currentPointer.state === "activeTo"
                                 loops: Animation.Infinite
                                 alwaysRunToEnd: true
                                 NumberAnimation {
@@ -161,11 +163,11 @@ ActivityBase {
                    Rectangle {
                        id: me
                        visible: dataset.levelElements[bar.level-1].captions[0] !== undefined
-                       x: dataset.levelElements[bar.level-1].captions[0][0]*tree.width
-                       y: dataset.levelElements[bar.level-1].captions[0][1]*tree.height
+                       x: dataset.levelElements[bar.level-1].captions[0][0]*treeArea.width
+                       y: dataset.levelElements[bar.level-1].captions[0][1]*treeArea.height
 
-                       width: tree.width/12
-                       height: tree.height/14
+                       width: treeArea.width/12
+                       height: treeArea.height/14
 
                        radius: 5
                        border.color: "black"
@@ -183,8 +185,8 @@ ActivityBase {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
                         visible: dataset.levelElements[bar.level-1].captions[1] !== undefined
-                        x: dataset.levelElements[bar.level-1].captions[1][0]*tree.width
-                        y: dataset.levelElements[bar.level-1].captions[1][1]*tree.height
+                        x: dataset.levelElements[bar.level-1].captions[1][0]*treeArea.width
+                        y: dataset.levelElements[bar.level-1].captions[1][1]*treeArea.height
                     }
 
                     Repeater {
@@ -195,10 +197,10 @@ ActivityBase {
                             opacity: 1
                             antialiasing: true
                             transformOrigin: Item.TopLeft
-                            x: x1*tree.width
-                            y: y1*tree.height
-                            property var x2: x22*tree.width
-                            property var y2: y22*tree.height
+                            x: x1*treeArea.width
+                            y: y1*treeArea.height
+                            property var x2: x22*treeArea.width
+                            property var y2: y22*treeArea.height
                             width: Math.sqrt(Math.pow(x - x2, 2) + Math.pow(y- y2, 2))
                             height: 4 * ApplicationInfo.ratio
                             rotation: (Math.atan((y2 - y)/(x2-x)) * 180 / Math.PI) + (((y2-y) < 0 && (x2-x) < 0) * 180) + (((y2-y) >= 0 && (x2-x) < 0) * 180)
@@ -225,10 +227,10 @@ ActivityBase {
                         delegate: Image {
                             id: wring
                             source: Activity.url + "rings.svg"
-                            width: tree.width*0.04
-                            height: tree.width*0.04
-                            x:ringx*tree.width
-                            y:ringy*tree.height
+                            width: treeArea.width*0.04
+                            height: treeArea.width*0.04
+                            x:ringx*treeArea.width
+                            y:ringy*treeArea.height
                         }
                     }
                 }
@@ -239,8 +241,8 @@ ActivityBase {
                 color: "transparent"
                 width: background.horizontalLayout ? background.width*0.35 : background.width
                 height: background.horizontalLayout ? background.height : background.height*0.35
-                anchors.left: background.horizontalLayout ? tree.right : partition.left
-                anchors.top: background.horizontalLayout ? partition.top: tree.bottom
+                anchors.left: background.horizontalLayout ? treeArea.right : partition.left
+                anchors.top: background.horizontalLayout ? partition.top: treeArea.bottom
                 border.color: "black"
                 border.width: 5
                 Rectangle {

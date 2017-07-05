@@ -1,4 +1,4 @@
-/* GCompris - Tree.qml
+/* GCompris - Dataset.qml
  *
  * Copyright (C) RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
  *
@@ -23,7 +23,7 @@ import QtQuick 2.6
 
 QtObject {
     property real nodeWidth: (activity.nodeWidth / background.width)
-    property real nodeHeight: (activity.nodeWidth / background.width)
+    property real nodeHeight: 1.15 * (activity.nodeWidth / background.width)
     property var levelElements: [
                     // level 1
                     {  edgeList: [
@@ -249,18 +249,16 @@ QtObject {
                      optionss: [qsTr("Brother"), qsTr("Sister"), qsTr("Cousin")]
                    },
                    // level 10
-                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
-                              [0.525, 0.17, 0.525, 0.45],
-                              [0.41, 0.45, 0.60, 0.45],
-                              [0.22, 0.45, 0.254, 0.45],
-                              [0.22, 0.45, 0.22, 0.72],
-                              [0.22, 0.71, 0.25, 0.71]
+                   {  edgeList: [
+                                    [(0.425 + nodeWidth / 2), (0.05 + nodeHeight), (0.425 + nodeWidth / 2), 0.45],
+                                    [0.41, 0.45, 0.60, 0.45],
+                                    [(0.41 - nodeWidth / 2), (0.4 + nodeHeight ), (0.41 - nodeWidth / 2), (0.70 )]
                            ],
                   nodePositions: [
-                              [0.311, 0.10],
+                              [0.425, 0.05],
                               [0.251, 0.40],
                               [0.588, 0.40],
-                              [0.22, 0.70]
+                              [0.251, 0.70]
 
                   ],
 

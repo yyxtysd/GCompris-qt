@@ -53,10 +53,10 @@ function initLevel() {
     items.wringcreator.model.clear();
     for(var i = 0 ; i < levelTree.nodePositions.length ; i++) {
         items.nodeCreator.model.append({
-                       "xx": levelTree.nodePositions[i][0],
-                       "yy": levelTree.nodePositions[i][1],
-                       "nodee": levelTree.nodeleave[i],
-                       "currentstate": levelTree.currentstate[i]
+                       "xPosition": levelTree.nodePositions[i][0],
+                       "yPosition": levelTree.nodePositions[i][1],
+                       "nodeValue": levelTree.nodeleave[i],
+                       "currentState": levelTree.currentstate[i]
                      });
     }
 

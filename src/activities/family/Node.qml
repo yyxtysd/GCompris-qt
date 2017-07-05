@@ -1,4 +1,4 @@
-/* GCompris - Tree.qml
+/* GCompris - Node.qml
  *
  * Copyright (C) RAJDEEP KAUR <rajdeep.kaur@kde.org> (Qt Quick port)
  *
@@ -21,13 +21,14 @@
  */
 import QtQuick 2.0
 import GCompris 1.0
+
 import "../../core"
 import "family.js" as Activity
 
 Item {
-    id: tree
-    property int recWidth
-    property int recHeight
+    id: node
+    property int nodeWidth
+    property int nodeHeight
     property string nodeImageSource
     property string borderColor
     property real borderWidth
@@ -36,19 +37,19 @@ Item {
 
     Rectangle {
         id: content
-        color: tree.color
-        width: 0.8*recWidth
-        height: 0.8*recHeight
+        color: node.color
+        width: 0.8 * nodeWidth
+        height: 0.8 * nodeHeight
         border.color: borderColor
         border.width: borderWidth
-        radius: tree.radius
+        radius: node.radius
         Image {
-            id: nodeimage
+            id: nodeImage
             source: nodeImageSource
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            width: parent.width*0.6
-            height: parent.height*0.6
+            width: parent.width * 0.6
+            height: parent.height * 0.6
         }
     }
 }
