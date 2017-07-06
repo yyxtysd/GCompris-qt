@@ -59,7 +59,10 @@ ActivityBase {
             property int playerTwoScore: 0
             property alias playerOneLevelScore: playerOneLevelScore
             property alias playerTwoLevelScore: playerTwoLevelScore
-            property alias parentMouseArea: parentMouseArea
+            property alias boxModel: boxModel
+            property bool twoPlayer: twoPlayer
+//             property alias sowSeedsTimer: sowSeedsTimer
+//             property int indexValue: indexValue
         }
 
         onStart: { Activity.start(items) }
@@ -68,14 +71,16 @@ ActivityBase {
         Timer {
             id: trigComputerMove
             repeat: false
-            interval: 400
+            interval: 300
             onTriggered: Activity.randomMove()
         }
 
-        MouseArea {
-            id: parentMouseArea
-            anchors.fill: parent
-        }
+//         Timer {
+//             id: sowSeedsTimer
+//             repeat: false
+//             interval: 300
+//             onTriggered: Activity.sowSeeds(items.indexValue)
+//         }
 
         Item {
             id: boxModel
@@ -129,8 +134,7 @@ ActivityBase {
                         height: board.height/2
                         width: board.width * (1/6.25)
                         property real circleRadius: width
-                        property int value
-                        property int indexValue: index
+                            property int value
 
                         GCText {
                             text: index
@@ -151,7 +155,12 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(index - 6)
                                     else {
-                                        Activity.sowSeeds(index - 6)
+//                                         items.indexValue = index - 6
+//                                         items.cellGridRepeater.itemAt(index).startAnim()
+                                        Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
+                                        checkScores()
+                                        switchTurns()
+//                                         items.sowSeedsTimer.start()
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
@@ -159,7 +168,8 @@ ActivityBase {
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(11 - index)
                                     else {
-                                        Activity.sowSeeds(11 - index)
+                                        Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
+                                        switchTurns()
                                     }
                                 }
                             }
@@ -167,28 +177,58 @@ ActivityBase {
                                 if(!twoPlayer && !items.playerOneTurn) {
                                     items.playerOneTurn = !items.playerOneTurn
                                     trigComputerMove.start()
+                                    checkScores()
                                 }
+                            }
+
+                            function switchTurns() {
+                                    if(!Activity.currentPlayer) {
+                                        items.playerTwoLevelScore.endTurn()
+                                        items.playerOneLevelScore.beginTurn()
+                                    }
+                                    else {
+                                        items.playerOneLevelScore.endTurn()
+                                        items.playerTwoLevelScore.beginTurn()
+                                    }
+                            }
+                            function checkScores() {
+                                    items.playerTwoScore = (Activity.nextPlayer == 1) ? Activity.scoreHouse[1] : items.playerTwoScore
+                                    items.playerOneScore = (Activity.nextPlayer == 0) ? Activity.scoreHouse[0] : items.playerOneScore
+
+                                    if(items.playerTwoScore >= 25) {
+                                        items.playerTwoLevelScore.win()
+                                        items.playerOneLevelScore.endTurn()
+                                        items.boxModel.enabled = false
+                                    }
+                                    else if(items.playerOneScore >= 25) {
+                                        items.playerOneLevelScore.win()
+                                        items.playerTwoLevelScore.endTurn()
+                                        items.boxModel.enabled = false
+                                    }
                             }
                         }
 
                         function startAnim() {
-                            seedsAnimation.start()
+                            script.start()
                         }
 
-                        SequentialAnimation {
-                            id: seedsAnimation
-                            NumberAnimation {
-                                target: grainRepeater.itemAt(0)
-                                to: 500
-                                property: "x"
-                                easing.type: Easing.OutInQuad
-                                duration: 500
-                            }
-                            NumberAnimation {
-                                target: grainRepeater.itemAt(0)
-                                to: 500
-                                property: "y"
-                                duration: 500
+                            ScriptAction {
+                            id: script
+                            script: {
+                                var i = 0;
+                                for(var j = 0, seedMove = 0,currIndex = index; j < grainRepeater.count; j++, seedMove++,currIndex++) {
+                                 if(!items.playerOneTurn)
+                                    if(currIndex < 11)
+                                        grainRepeater.itemAt(j).x = 170 * (seedMove + 1)
+
+                                    else if(11 - currIndex <= 0 ) {
+                                        print("old",grainRepeater.itemAt(j).x)
+                                        grainRepeater.itemAt(j).y = -80
+                                            grainRepeater.itemAt(j).x = 170 * (11 - index)
+                                            print("new",grainRepeater.itemAt(j).x)
+//                                             grainRepeater.itemAt(j).x = -20 * 2
+                                    }
+                                }
                             }
                         }
 
@@ -203,6 +243,13 @@ ActivityBase {
                                 width: circleRadius * 0.2
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
+
+                                Behavior on x {
+                                    NumberAnimation { duration: 400 }
+                                }
+                                Behavior on y {
+                                    NumberAnimation { duration: 400 }
+                                }
                             }
                         }
                     }

@@ -23,14 +23,18 @@
 .import QtQuick 2.6 as Quick
 
 var currentLevel = 0
-var numberOfLevel = 4
+var numberOfLevel = 5
 var items
 var url = "qrc:/gcompris/src/activities/oware/resource/"
 // house variable is used for storing the count of all the seeds as we play.
 var house = []
 var scoreHouse = [0, 0]
-var nextPlayer = 0
+var nextPlayer = 1
 var playerSideEmpty = false;
+var maxDiff = [20, 15, 10, 5, 0]
+var depth
+var heuristicValue
+var lastMove
 var tutorialInstructions = [
     {
         "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses  belong to the other player."),
@@ -63,21 +67,24 @@ function start(items_) {
 function stop() {}
 
 function reset() {
-    items.parentMouseArea.z = 0
+    items.boxModel.enabled = true
     items.playerOneLevelScore.endTurn()
     items.playerTwoLevelScore.endTurn()
     items.playerOneLevelScore.beginTurn()
     items.playerOneTurn = true
     initLevel()
 }
+
 function initLevel() {
+    items.bar.level = currentLevel + 1
     var singleHouseSeeds = 4
     for (var i = 11; i >= 0; i--)
         house[i] = singleHouseSeeds
     items.playerOneScore = 0
     items.playerTwoScore = 0
     scoreHouse = [0, 0]
-    setValues()
+    depth = currentLevel
+    setValues(house)
 }
 
 function nextLevel() {
@@ -103,18 +110,93 @@ function getY(radius, index, value) {
     var step = (2 * Math.PI) * index / value;
     return radius * Math.sin(step);
 }
+
 function randomMove() {
-    var index = Math.floor(Math.random() * (12 - 6) + 6);
-    if(house[index] && isValidMove(index))
-        sowSeeds(index)
-    else
-        randomMove()
+    if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
+        print("player", nextPlayer)
+        var houseClone = house.slice()
+        var scoreClone = scoreHouse.slice()
+        var index = alphaBeta(4, -200, 200, house, scoreHouse, nextPlayer, NaN)
+        print("final", index[0])
+        house = houseClone.slice()
+        scoreHouse = scoreClone.slice()
+        print("okk", house)
+        sowSeeds(index[0], house, scoreHouse, nextPlayer)
+        items.playerTwoLevelScore.endTurn()
+        items.playerOneLevelScore.beginTurn()
+    } else {
+        var index = Math.floor(Math.random() * (12 - 6) + 6);
+        if (house[index] && isValidMove(index))
+            sowSeeds(index, house, scoreHouse, nextPlayer)
+        else
+            randomMove()
+    }
 }
 
-function isValidMove(index) {
-    var nextPlayer = 0
+function gameOver(board,score) {
+    if(score[0] > 24 || score[1] > 24)
+        return true
+    for (var i = 0; i < 12; i++) {
+        if (board[i])
+            return false
+    }
+    return true
+}
+
+function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
+    var heuristicValue
+    var childHeuristics
+    var bestMove
+    if (depth == 0 || gameOver(board, score)) {
+        heuristicValue = heuristicEvaluation(score)
+        return [-1, heuristicValue]
+    }
+    for (var move = 0; move < 12; move++) {
+        if (!isValidMove(move,nextPlayer))
+            continue
+        var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
+        print(JSON.stringify(lastMoveAI))
+        var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove);
+        childHeuristics = out[1]
+        if (nextPlayer) {
+            if (beta > childHeuristics) {
+                beta = childHeuristics
+                bestMove = lastMoveAI.lastMove
+                print("beta changed beta,bestMove",beta,bestMove,depth)
+            }
+            if (alpha >= childHeuristics)
+                break;
+        } else {
+            if (alpha < childHeuristics) {
+                alpha = childHeuristics
+                bestMove = lastMoveAI.lastMove
+                print("alpha changed beta,bestMove",alpha,bestMove,depth)
+            }
+            if (beta <= childHeuristics)
+                break;
+        }
+    }
+    heuristicValue = nextPlayer ? beta : alpha
+    return [bestMove, heuristicValue]
+}
+
+function heuristicEvaluation(score) {
+    var playerScores = [];
+    for(var i = 0; i < 2; i++) {
+        playerScores[i] = score[i]
+        if(playerScores[i] > 24)
+            playerScores[i] += 100
+    }
+    return playerScores[0] - playerScores[1]
+}
+
+function isValidMove(index,nextPlayer) {
+    if((nextPlayer * 6 > index) || (index >= (nextPlayer * 6 + 6)))
+        return false
+    if(!house[index])
+        return false
     var sum = 0;
-    for(var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++)
+    for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++)
         sum += house[j];
     if (sum == 0 && (house[index] % 12 < 11 - index))
         return false
@@ -122,11 +204,11 @@ function isValidMove(index) {
         return true
 }
 
-function setValues() {
+function setValues(board) {
     for (var i = 6, j = 0; i < 12, j < 6; j++, i++)
-        items.cellGridRepeater.itemAt(i).value = house[j]
+        items.cellGridRepeater.itemAt(i).value = board[j]
     for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
-        items.cellGridRepeater.itemAt(i).value = house[j]
+        items.cellGridRepeater.itemAt(i).value = board[j]
 }
 
 function checkHunger(index) {
@@ -157,51 +239,39 @@ function checkHunger(index) {
             items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
             setValues()
         }
-            items.bonus.good("flower")
-            if(items.playerTwoScore > items.playerOneScore)
-                items.playerTwoLevelScore.win()
-            else if(items.playerOneScore > items.playerTwoScore)
-                items.playerOneLevelScore.win()
     }
 }
 
-function sowSeeds(index) {
-    var currentPlayer = items.playerOneTurn ? 0 : 1
+function sowSeeds(index, board, scoreHouse, nextPlayer) {
+    var currentPlayer = (nextPlayer + 1) % 2
     var nextIndex = index
     playerSideEmpty = false;
-    if(!currentPlayer) {
-        items.playerTwoLevelScore.endTurn()
-        items.playerOneLevelScore.beginTurn()
-    }
-    else {
-        items.playerOneLevelScore.endTurn()
-        items.playerTwoLevelScore.beginTurn()
-    }
+    lastMove = index
 
     if (!playerSideEmpty) {
         // The seeds are sown until the picked seeds are equal to zero
-        while (house[index]) {
+        while (board[index]) {
             nextIndex = (nextIndex + 1) % 12
             // If there are more than or equal to 12 seeds than we don't sow the in the pit from where we picked the seeds.
             if (index == nextIndex) {
                 nextIndex = (nextIndex + 1) % 12
             }
             // Decrement the count of seeds and sow it in the nextIndex
-            house[index]--;
-            house[nextIndex]++;
+            board[index]--;
+            board[nextIndex]++;
         }
 
         //  The nextIndex now contains the seeds in the last pit sown.
         var capture = [];
         // The opponent's seeds are captured if they are equal to 2 or 3
-        if (((house[nextIndex] == 2 || house[nextIndex] == 3)) && ((currentPlayer == 1 && nextIndex > 5 && nextIndex < 12) || (currentPlayer == 0 && nextIndex >= 0 && nextIndex < 6))) {
+        if (((board[nextIndex] == 2 || board[nextIndex] == 3)) && ((currentPlayer == 1 && nextIndex > 5 && nextIndex < 12) || (currentPlayer == 0 && nextIndex >= 0 && nextIndex < 6))) {
             capture[nextIndex % 6] = true;
         }
         /* The seeds previous to the captured seeds are checked. If they are equal to 2 or 3 then they are captured until a
             pit arrives which has more than 3 seeds or 1 seed. */
         while (capture[nextIndex % 6] && nextIndex % 6) {
             nextIndex--;
-            if (house[nextIndex] == 2 || house[nextIndex] == 3) {
+            if (board[nextIndex] == 2 || board[nextIndex] == 3) {
                 capture[nextIndex % 6] = true;
             }
         }
@@ -209,7 +279,7 @@ function sowSeeds(index) {
         var allSeedsCaptured = true;
         /* Now we check if all the seeds in opponents houses which were to be captured are captured or not. If any of the house is not yet captured we set allSeedsCaptured as false */
         for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
-            if (!capture[j % 6] && house[j])
+            if (!capture[j % 6] && board[j])
                 allSeedsCaptured = false;
         }
         // Now capture the seeds for the houses for which capture[houseIndex] = true if all seeds are not captured
@@ -217,8 +287,8 @@ function sowSeeds(index) {
             for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
                 /* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
                 if (capture[j % 6]) {
-                    scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + house[j];
-                    house[j] = 0;
+                    scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j];
+                    board[j] = 0;
                 }
             }
         }
@@ -226,26 +296,19 @@ function sowSeeds(index) {
     // Now we check if the player has any more seeds or not
     for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
         // If any of the pits in house is not empty we set playerSideEmpty as false
-        if (house[j]) {
+        if (board[j]) {
             playerSideEmpty = false;
             break;
         } else
             playerSideEmpty = true
     }
-    items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
-    items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
-//     items.cellGridRepeater.itemAt(actualIndex).startAnim()
-
-    if(items.playerTwoScore >= 25) {
-        items.playerTwoLevelScore.win()
-        items.playerOneLevelScore.endTurn()
-        items.parentMouseArea.z = 3
-    }
-    else if(items.playerOneScore >= 25) {
-        items.playerOneLevelScore.win()
-        items.playerTwoLevelScore.endTurn()
-        items.parentMouseArea.z = 3
-    }
     nextPlayer = currentPlayer
-    setValues()
+    setValues(board)
+    var obj = {
+        board: board,
+        scoreHouse: scoreHouse,
+        nextPlayer: nextPlayer,
+        lastMove: lastMove
+    }
+    return obj
 }
