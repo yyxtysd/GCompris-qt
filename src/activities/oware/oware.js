@@ -61,7 +61,7 @@ var tutorialInstructions = [
 function start(items_) {
     items = items_
     currentLevel = 0
-    initLevel()
+    reset()
 }
 
 function stop() {}
@@ -111,25 +111,26 @@ function getY(radius, index, value) {
     return radius * Math.sin(step);
 }
 
-function randomMove() {
+function computerMove() {
     if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
-        print("player", nextPlayer)
         var houseClone = house.slice()
         var scoreClone = scoreHouse.slice()
-        var index = alphaBeta(4, -200, 200, house, scoreHouse, nextPlayer, NaN)
+        var index = alphaBeta(4, -200, 200, house, scoreHouse, 1, NaN)
         print("final", index[0])
         house = houseClone.slice()
         scoreHouse = scoreClone.slice()
-        print("okk", house)
-        sowSeeds(index[0], house, scoreHouse, nextPlayer)
+        sowSeeds(index[0], house, scoreHouse, 1)
         items.playerTwoLevelScore.endTurn()
         items.playerOneLevelScore.beginTurn()
     } else {
         var index = Math.floor(Math.random() * (12 - 6) + 6);
-        if (house[index] && isValidMove(index))
+        if (house[index] && isValidMove(index)) {
             sowSeeds(index, house, scoreHouse, nextPlayer)
+            items.playerTwoLevelScore.endTurn()
+            items.playerOneLevelScore.beginTurn()
+        }
         else
-            randomMove()
+            computerMove()
     }
 }
 
@@ -190,15 +191,15 @@ function heuristicEvaluation(score) {
     return playerScores[0] - playerScores[1]
 }
 
-function isValidMove(index,nextPlayer) {
-    if((nextPlayer * 6 > index) || (index >= (nextPlayer * 6 + 6)))
+function isValidMove(move,next) {
+    if((next * 6 > move) || (move >= (next * 6 + 6)))
         return false
-    if(!house[index])
+    if(!house[move])
         return false
     var sum = 0;
-    for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++)
+    for (var j = next * 6; j < (next * 6 + 6); j++)
         sum += house[j];
-    if (sum == 0 && (house[index] % 12 < 11 - index))
+    if (sum == 0 && (house[move] % 12 < 11 - move))
         return false
     else
         return true

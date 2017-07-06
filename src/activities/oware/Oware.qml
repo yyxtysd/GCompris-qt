@@ -72,7 +72,7 @@ ActivityBase {
             id: trigComputerMove
             repeat: false
             interval: 300
-            onTriggered: Activity.randomMove()
+            onTriggered: Activity.computerMove()
         }
 
 //         Timer {
@@ -137,7 +137,7 @@ ActivityBase {
                             property int value
 
                         GCText {
-                            text: index
+                            text: value
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -145,7 +145,7 @@ ActivityBase {
                             rotation:  (background.width > background.height) ? 0 : 270
                             fontSize: smallSize
                         }
-                        //                         property alias seedsAnimation: grainRepeater.seedsAnimation
+
                         MouseArea {
                             id: buttonClick
                             anchors.fill: parent
@@ -157,19 +157,26 @@ ActivityBase {
                                     else {
 //                                         items.indexValue = index - 6
 //                                         items.cellGridRepeater.itemAt(index).startAnim()
+                                        items.playerOneTurn = !items.playerOneTurn
+                                        Activity.nextPlayer = !items.playerOneTurn ? 1 : 0
                                         Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
                                         checkScores()
-                                        switchTurns()
+                                        items.playerOneTurn = !items.playerOneTurn
+                                        items.playerOneLevelScore.endTurn()
+                                        items.playerTwoLevelScore.beginTurn()
 //                                         items.sowSeedsTimer.start()
                                     }
                                 }
                                 else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
-                                    items.playerOneTurn = !items.playerOneTurn
                                     if(Activity.playerSideEmpty)
                                         Activity.checkHunger(11 - index)
                                     else {
+                                        items.playerOneTurn = !items.playerOneTurn
+                                        Activity.nextPlayer = items.playerOneTurn ? 1 : 0
                                         Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
-                                        switchTurns()
+                                        checkScores()
+                                        items.playerOneLevelScore.beginTurn()
+                                        items.playerTwoLevelScore.endTurn()
                                     }
                                 }
                             }
@@ -181,26 +188,18 @@ ActivityBase {
                                 }
                             }
 
-                            function switchTurns() {
-                                    if(!Activity.currentPlayer) {
-                                        items.playerTwoLevelScore.endTurn()
-                                        items.playerOneLevelScore.beginTurn()
-                                    }
-                                    else {
-                                        items.playerOneLevelScore.endTurn()
-                                        items.playerTwoLevelScore.beginTurn()
-                                    }
-                            }
                             function checkScores() {
-                                    items.playerTwoScore = (Activity.nextPlayer == 1) ? Activity.scoreHouse[1] : items.playerTwoScore
-                                    items.playerOneScore = (Activity.nextPlayer == 0) ? Activity.scoreHouse[0] : items.playerOneScore
+                                    items.playerTwoScore = Activity.scoreHouse[1]
+                                    items.playerOneScore = Activity.scoreHouse[0]
 
                                     if(items.playerTwoScore >= 25) {
+                                        print("won")
                                         items.playerTwoLevelScore.win()
                                         items.playerOneLevelScore.endTurn()
                                         items.boxModel.enabled = false
                                     }
                                     else if(items.playerOneScore >= 25) {
+                                        print("lost")
                                         items.playerOneLevelScore.win()
                                         items.playerTwoLevelScore.endTurn()
                                         items.boxModel.enabled = false
