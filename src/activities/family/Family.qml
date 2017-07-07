@@ -31,12 +31,6 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
-//    property real nodeWidth: (((background.horizontalLayout ? background.width * 0.65 : background.width) / 5) * 0.8) / ((background.horizontalLayout ? background.width * 0.65 : background.width))//0.8 * (0.8 * background.horizontalLayout ? background.width*0.65 / 5 : background.width / 5)
-//    property real nodeHeight: (((background.horizontalLayout ? background.width * 0.65 : background.width) / 5) * 0.8) / ((background.horizontalLayout ? background.height : background.height * 0.65))//0.8 * (background.horizontalLayout ? background.width*0.65 : background.width) / 5
-    property real nodeWidth: 0.8 * (0.8 * background.horizontalLayout ? background.width*0.65 / 5 : background.width / 5)
-    property real nodeHeight: 0.8 * (background.horizontalLayout ? background.width*0.65 : background.width) / 5
-
-
     pageComponent: Image {
         id: background
         anchors.fill: parent
@@ -52,6 +46,32 @@ ActivityBase {
         Component.onCompleted: {
             activity.start.connect(start)
             activity.stop.connect(stop)
+        }
+
+        property real treeAreaWidth: background.horizontalLayout ? background.width * 0.65 : background.width
+        property real treeAreaHeight: background.horizontalLayout ? background.height : background.height * 0.65
+
+        property real nodeWidth: (0.8 * treeAreaWidth) / 5
+        property real nodeHeight: (0.8 * treeAreaWidth) / 5
+
+        property real nodeWidthRatio: nodeWidth / treeAreaWidth
+        property real nodeHeightRatio: nodeHeight / treeAreaHeight
+
+        onWidthChanged: loadDatasetDelay.start()
+        onHeightChanged: if (!loadDatasetDelay.running) {
+                            loadDatasetDelay.start()
+                         }
+
+        /*
+         * Adding a delay before reloading the datasets
+         * needed for fast width / height changes
+         */
+        Timer {
+            id: loadDatasetDelay
+            running: false
+            repeat: false
+            interval: 100
+            onTriggered: Activity.loadDatasets()
         }
 
         // Add here the QML items you need to access in javascript

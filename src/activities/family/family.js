@@ -45,8 +45,17 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
+
+    loadDatasets()
+}
+
+function loadDatasets() {
+    if (!items) {
+        return
+    }
     var levelTree = items.dataset.levelElements[currentLevel]
     answerButtonRatio = 1/(levelTree.optionss.length+4);
+
     items.nodeCreator.model.clear();
     items.answersChoice.model.clear();
     items.edgeCreator.model.clear();

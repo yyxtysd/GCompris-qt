@@ -22,8 +22,8 @@
 import QtQuick 2.6
 
 QtObject {
-    property real nodeWidth: (activity.nodeWidth / background.width)
-    property real nodeHeight: 1.15 * (activity.nodeWidth / background.width)
+    property real nodeWidth: background.nodeWidthRatio
+    property real nodeHeight: background.nodeHeightRatio
     property var levelElements: [
                     // level 1
                     {  edgeList: [
@@ -39,7 +39,7 @@ QtObject {
                                   [0.101, 0.25]
                                 ],
                        nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
-                       currentstate: ["activeto", "deactive", "active"],
+                       currentstate: ["activeTo", "deactive", "active"],
                        edgeState:["married","others"],
                        answer: [qsTr("Father")],
                        optionss: [qsTr("Father"), qsTr("Grandfather"), qsTr("Uncle")]
@@ -59,7 +59,7 @@ QtObject {
                                   [0.8283, 0.24]
                                ],
                       nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
-                      currentstate: ["deactive", "activeto", "active"],
+                      currentstate: ["deactive", "activeTo", "active"],
                       edgeState:["married","others"],
                       answer: [qsTr("Mother")],
                       optionss: [qsTr("Mother"), qsTr("Grandmother"), qsTr("Aunt")]
@@ -80,7 +80,7 @@ QtObject {
                                    [0.740, 0.595]
                                 ],
                        nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "boy2.svg"],
-                       currentstate: ["deactive", "deactive", "active", "activeto"],
+                       currentstate: ["deactive", "deactive", "active", "activeTo"],
                        edgeState:["married","others","others","others"],
                        answer: [qsTr("Brother")],
                        optionss: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
@@ -102,7 +102,7 @@ QtObject {
                                   [0.49,0.74]
                                 ],
                       nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
-                      currentstate: ["deactive", "deactive", "active", "activeto", "deactive"],
+                      currentstate: ["deactive", "deactive", "active", "activeTo", "deactive"],
                       edgeState:["married","others","others","others"],
                       answer: [qsTr("Sister")],
                       optionss: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
@@ -130,7 +130,7 @@ QtObject {
                                    [0.20,0.17],
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
-                      currentstate: ["activeto", "deactive", "deactive", "deactive", "active", "deactive", "deactive"],
+                      currentstate: ["activeTo", "deactive", "deactive", "deactive", "active", "deactive", "deactive"],
                       edgeState:["married","others","married","others","others","others","others","others" ],
                       answer: [qsTr("Grandfather")],
                       optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
@@ -159,7 +159,7 @@ QtObject {
                                     [0.743,0.16]
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
-                      currentstate: ["deactive", "activeto", "deactive", "deactive", "deactive", "deactive", "active", "active"],
+                      currentstate: ["deactive", "activeTo", "deactive", "deactive", "deactive", "deactive", "active", "active"],
                       edgeState:["married","others","married","others","others","others","others","others" ],
                       answer: [qsTr("Grandmother")],
                       optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")],
@@ -188,7 +188,7 @@ QtObject {
                                    [0.85,0.76]
                                 ],
                       nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "boy2.svg","girl1.svg" ],
-                      currentstate: ["active", "deactive", "deactive", "deactive", "deactive", "deactive", "activeto"],
+                      currentstate: ["active", "deactive", "deactive", "deactive", "deactive", "deactive", "activeTo"],
                       edgeState:["married","others","married","others","others","others","others","others" ],
                       answer: [qsTr("Granddaughter")],
                       optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
@@ -217,7 +217,7 @@ QtObject {
                               [0.85,0.76]
                             ],
                   nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
-                  currentstate: ["deactive", "active", "deactive", "deactive", "deactive", "deactive", "activeto", "active"],
+                  currentstate: ["deactive", "active", "deactive", "deactive", "deactive", "deactive", "activeTo", "active"],
                   edgeState:["married","others","married","others","others","others","others","others" ],
                   answer: [qsTr("Grandson")],
                   optionss: [qsTr("Granddaughter"), qsTr("Grandson"), qsTr("Grandfather"), qsTr("Grandmother")]
@@ -243,7 +243,7 @@ QtObject {
                                   [0.118,0.76],
                         ],
                      nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg","boy2.svg"],
-                     currentstate: ["deactive", "deactive", "deactive", "active","activeto"],
+                     currentstate: ["deactive", "deactive", "deactive", "active","activeTo"],
                      edgeState:["others","others","others","others","others","others"],
                      answer: [qsTr("Cousin")],
                      optionss: [qsTr("Brother"), qsTr("Sister"), qsTr("Cousin")]
@@ -266,7 +266,7 @@ QtObject {
                                 [0.77,0.45]
                             ],
                   nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
-                  currentstate: ["deactive", "deactive", "activeto", "active"],
+                  currentstate: ["deactive", "deactive", "activeTo", "active"],
                   edgeState:["others","others","siblings","others","others","others"],
                   answer: [qsTr("Uncle")],
                   optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
@@ -291,7 +291,7 @@ QtObject {
                               [0.118,0.76],
                            ],
                  nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
-                 currentstate: ["deactive", "deactive", "active", "activeto"],
+                 currentstate: ["deactive", "deactive", "active", "activeTo"],
                  edgeState:["others","others","siblings","others","others","others"],
                  answer: [qsTr("Nephew")],
                  optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
@@ -317,7 +317,7 @@ QtObject {
                            [0.83,0.45],
                         ],
               nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
-              currentstate: ["deactive", "deactive", "deactive", "activeto", "active"],
+              currentstate: ["deactive", "deactive", "deactive", "activeTo", "active"],
               edgeState:["married","others","siblings","others","others","others"],
               answer: [qsTr("Aunt")],
               optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
@@ -342,7 +342,7 @@ QtObject {
                            [0.118,0.76]
                         ],
               nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babygirl.svg"],
-              currentstate: ["deactive", "deactive", "deactive", "active", "activeto"],
+              currentstate: ["deactive", "deactive", "deactive", "active", "activeTo"],
               edgeState:["married","others","siblings","others","others","others"],
               answer: [qsTr("Niece")],
               optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
@@ -366,7 +366,7 @@ QtObject {
                           [0.32,0.16]
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
-            currentstate: ["activeto", "deactive", "deactive", "active", "deactive"],
+            currentstate: ["activeTo", "deactive", "deactive", "active", "deactive"],
             edgeState:["married","others","others","married","others"],
             answer: [qsTr("Father-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
@@ -390,7 +390,7 @@ QtObject {
                           [0.80,0.365],
                        ],
              nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
-             currentstate: ["deactive", "activeto", "deactive", "active", "deactive"],
+             currentstate: ["deactive", "activeTo", "deactive", "active", "deactive"],
               edgeState:["married","others","others","married","others"],
              answer: [qsTr("Mother-in-law")],
              optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
@@ -414,7 +414,7 @@ QtObject {
                         [0.78,0.52]
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
-            currentstate: ["deactive", "deactive", "deactive", "active", "activeto"],
+            currentstate: ["deactive", "deactive", "deactive", "active", "activeTo"],
              edgeState:["married","others","others","married","others"],
             answer: [qsTr("Brother-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
@@ -440,7 +440,7 @@ QtObject {
                         [0.20,0.76]
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg", "lady1.svg"],
-            currentstate: ["dective", "deactive", "deactive", "active", "deactive", "activeto"],
+            currentstate: ["dective", "deactive", "deactive", "active", "deactive", "activeTo"],
             edgeState:["married","others","others","married","others","married"],
             answer: [qsTr("Sister-in-law")],
             optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
@@ -464,7 +464,7 @@ QtObject {
                          [0.05,0.50]
                        ],
              nodeleave: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
-             currentstate: ["active", "deactive", "deactive", "activeto", "deactive", "deactive"],
+             currentstate: ["active", "deactive", "deactive", "activeTo", "deactive", "deactive"],
              edgeState:["married","others","others","married","others"],
              answer: [qsTr("Son-in-law")],
              optionss: [qsTr("Son-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
