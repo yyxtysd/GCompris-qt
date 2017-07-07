@@ -112,36 +112,38 @@ function getY(radius, index, value) {
 }
 
 function computerMove() {
+    var finalMove
+    var validMove = false
     if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
         var houseClone = house.slice()
         var scoreClone = scoreHouse.slice()
-        var index = alphaBeta(4, -200, 200, house, scoreHouse, 1, NaN)
-        print("final", index[0])
+        var lastMoveClone = lastMove
+        var index = alphaBeta(4, -200, 200, house, scoreHouse, 1, lastMove)
         house = houseClone.slice()
         scoreHouse = scoreClone.slice()
-        sowSeeds(index[0], house, scoreHouse, 1)
-        items.playerTwoLevelScore.endTurn()
-        items.playerOneLevelScore.beginTurn()
-    } else {
-        var index = Math.floor(Math.random() * (12 - 6) + 6);
-        if (house[index] && isValidMove(index)) {
-            sowSeeds(index, house, scoreHouse, nextPlayer)
-            items.playerTwoLevelScore.endTurn()
-            items.playerOneLevelScore.beginTurn()
+        finalMove = index[0]
+        if(house[finalMove])
+            validMove = true
+    } else if(!validMove && items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel]){
+         var move = Math.floor(Math.random() * (12 - 6) + 6);
+        if (house[move] && isValidMove(move,1,house)) {
+            validMove = true
+            finalMove = move
         }
         else
             computerMove()
+    }
+    if(validMove) {
+        sowSeeds(finalMove, house, scoreHouse, 1)
+        items.playerTwoLevelScore.endTurn()
+        items.playerOneLevelScore.beginTurn()
     }
 }
 
 function gameOver(board,score) {
     if(score[0] > 24 || score[1] > 24)
         return true
-    for (var i = 0; i < 12; i++) {
-        if (board[i])
-            return false
-    }
-    return true
+    return false
 }
 
 function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
@@ -153,17 +155,15 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
         return [-1, heuristicValue]
     }
     for (var move = 0; move < 12; move++) {
-        if (!isValidMove(move,nextPlayer))
+        if (!isValidMove(move,nextPlayer,board))
             continue
         var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
-        print(JSON.stringify(lastMoveAI))
         var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove);
         childHeuristics = out[1]
         if (nextPlayer) {
             if (beta > childHeuristics) {
                 beta = childHeuristics
                 bestMove = lastMoveAI.lastMove
-                print("beta changed beta,bestMove",beta,bestMove,depth)
             }
             if (alpha >= childHeuristics)
                 break;
@@ -171,7 +171,6 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
             if (alpha < childHeuristics) {
                 alpha = childHeuristics
                 bestMove = lastMoveAI.lastMove
-                print("alpha changed beta,bestMove",alpha,bestMove,depth)
             }
             if (beta <= childHeuristics)
                 break;
@@ -191,15 +190,15 @@ function heuristicEvaluation(score) {
     return playerScores[0] - playerScores[1]
 }
 
-function isValidMove(move,next) {
+function isValidMove(move,next,board) {
     if((next * 6 > move) || (move >= (next * 6 + 6)))
         return false
-    if(!house[move])
+    if(!board[move])
         return false
     var sum = 0;
     for (var j = next * 6; j < (next * 6 + 6); j++)
-        sum += house[j];
-    if (sum == 0 && (house[move] % 12 < 11 - move))
+        sum += board[j];
+    if (sum == 0 && (board[move] % 12 < 11 - move))
         return false
     else
         return true

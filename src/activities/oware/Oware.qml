@@ -160,10 +160,10 @@ ActivityBase {
                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.nextPlayer = !items.playerOneTurn ? 1 : 0
                                         Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
-                                        checkScores()
                                         items.playerOneTurn = !items.playerOneTurn
                                         items.playerOneLevelScore.endTurn()
                                         items.playerTwoLevelScore.beginTurn()
+                                        checkScores()
 //                                         items.sowSeedsTimer.start()
                                     }
                                 }
@@ -174,9 +174,9 @@ ActivityBase {
                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.nextPlayer = items.playerOneTurn ? 1 : 0
                                         Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
-                                        checkScores()
                                         items.playerOneLevelScore.beginTurn()
                                         items.playerTwoLevelScore.endTurn()
+                                        checkScores()
                                     }
                                 }
                             }
@@ -193,13 +193,13 @@ ActivityBase {
                                     items.playerOneScore = Activity.scoreHouse[0]
 
                                     if(items.playerTwoScore >= 25) {
-                                        print("won")
-                                        items.playerTwoLevelScore.win()
+                                        items.bonus.good("flower")
                                         items.playerOneLevelScore.endTurn()
+                                        items.playerTwoLevelScore.endTurn()
+                                        items.playerTwoLevelScore.win()
                                         items.boxModel.enabled = false
                                     }
                                     else if(items.playerOneScore >= 25) {
-                                        print("lost")
                                         items.playerOneLevelScore.win()
                                         items.playerTwoLevelScore.endTurn()
                                         items.boxModel.enabled = false
