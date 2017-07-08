@@ -108,11 +108,10 @@ function finishLevel(win) {
     if (processingAnswer)
         return
     items.physicalWorld.turnOff()
+    processingAnswer = true
     if (win) {
-        processingAnswer = true
         items.bonus.good("flower")
     } else {
-        processingAnswer = true
         items.submarine.destroySubmarine()
         items.bonus.bad("flower")
     }

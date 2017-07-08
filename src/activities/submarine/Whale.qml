@@ -27,7 +27,7 @@ import GCompris 1.0
 
 Image {
     id: whale
-    source: url + "whale.png"
+    source: isHit ? url + "whale_hit.png" : url + "whale.png"
 
     width: submarineImage.width
     height: width * 0.69
@@ -36,12 +36,10 @@ Image {
 
     function hit() {
         isHit = true
-        whale.source = url + "whale_hit.png"
     }
 
     function reset() {
         isHit = false
-        whale.source = url + "whale.png"
         x = rightLimit
     }
 
@@ -140,7 +138,7 @@ Image {
             width: whale.width
             height: whale.height
             categories: items.whaleCategory
-            collidesWith: whale.visible ? items.submarineCategory : 0x0000
+            collidesWith: whale.visible ? items.submarineCategory : Fixture.None
             density: 1
             friction: 0
             restitution: 0

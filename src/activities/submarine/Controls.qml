@@ -27,26 +27,26 @@ Item {
     id: controls
 
     /* Engine Controller Properties */
-    property point enginePositon
-    property int engineWidth
-    property int engineHeight
-    property int submarineHorizontalSpeed
+    property point enginePosition
+    property alias engineWidth : engine.width
+    property alias engineHeight : engine.height
+    property alias submarineHorizontalSpeed : engineValues.text
 
     /* Ballast tanks Controller Properties */
-    property bool leftTankVisible
+    property alias leftTankVisible : leftBallastTankController.visible
     property point leftBallastTankPosition
-    property int leftBallastTankWidth
-    property int leftBallastTankHeight
+    property alias leftBallastTankWidth : leftBallastTankDisplay.width
+    property alias leftBallastTankHeight : leftBallastTankDisplay.height
 
-    property bool centralTankVisible
+    property alias centralTankVisible : centralBallastTankController.visible
     property point centralBallastTankPosition
-    property int centralBallastTankWidth
-    property int centralBallastTankHeight
+    property alias centralBallastTankWidth : centralBallastTankDisplay.width
+    property alias centralBallastTankHeight : centralBallastTankDisplay.height
 
-    property bool rightTankVisible
+    property alias rightTankVisible : rightBallastTankController.visible
     property point rightBallastTankPosition
-    property int rightBallastTankWidth
-    property int rightBallastTankHeight
+    property alias rightBallastTankWidth : rightBallastTankDisplay.width
+    property alias rightBallastTankHeight : rightBallastTankDisplay.height
 
     /* Diving Plane Controller properties */
     property bool divingPlaneVisible
@@ -68,11 +68,8 @@ Item {
         Rectangle {
             id: engine
 
-            x: enginePositon.x
-            y: enginePositon.y
-
-            width: engineWidth
-            height: engineHeight
+            x: enginePosition.x
+            y: enginePosition.y
 
             radius: 10
 
@@ -80,7 +77,6 @@ Item {
 
             GCText {
                 id: engineValues
-                text: submarineHorizontalSpeed
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter
@@ -122,13 +118,10 @@ Item {
 
     Item {
         id: leftBallastTankController
-        visible: leftTankVisible
         Rectangle {
             id: leftBallastTankDisplay
             x: leftBallastTankPosition.x
             y: leftBallastTankPosition.y
-            width: leftBallastTankWidth
-            height: leftBallastTankHeight
 
             radius: 10
 
@@ -149,6 +142,28 @@ Item {
                         duration: 1000
                     }
                 }
+            }
+        }
+
+        Rectangle {
+            x: leftBallastTankPosition.x
+            y: leftBallastTankPosition.y + (leftBallastTankDisplay.height * 1.1)
+            width: leftBallastTankWidth
+            height: leftBallastTankLabel.height
+            color: "black"
+            radius: 10
+
+            GCText {
+                id: leftBallastTankLabel
+                text: qsTr("Left Ballast Tank")
+
+                width: parent.width
+                wrapMode: Text.WordWrap
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+
+                fontSize: 10
+                color: "green"
             }
         }
 
@@ -198,13 +213,11 @@ Item {
 
     Item {
         id: centralBallastTankController
-        visible: centralTankVisible
+
         Rectangle {
             id: centralBallastTankDisplay
             x: centralBallastTankPosition.x
             y: centralBallastTankPosition.y
-            width: centralBallastTankWidth
-            height: centralBallastTankHeight
 
             radius: 10
 
@@ -227,6 +240,29 @@ Item {
                 }
             }
         }
+
+        Rectangle {
+            x: centralBallastTankPosition.x
+            y: centralBallastTankPosition.y + (centralBallastTankDisplay.height * 1.1)
+            width: centralBallastTankWidth
+            height: centralBallastTankLabel.height
+            color: "black"
+            radius: 10
+
+            GCText {
+                id: centralBallastTankLabel
+                text: qsTr("Central Ballast Tank")
+
+                width: parent.width
+                wrapMode: Text.WordWrap
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+
+                fontSize: 10
+                color: "green"
+            }
+        }
+
         Image {
             id: centralBallastFill
             source: url + "vanne.svg"
@@ -272,13 +308,11 @@ Item {
 
     Item {
         id: rightBallastTankController
-        visible: rightTankVisible
+
         Rectangle {
             id: rightBallastTankDisplay
             x: rightBallastTankPosition.x
             y: rightBallastTankPosition.y
-            width: rightBallastTankWidth
-            height: rightBallastTankHeight
 
             radius: 10
 
@@ -301,6 +335,29 @@ Item {
                 }
             }
         }
+
+        Rectangle {
+            x: rightBallastTankPosition.x
+            y: rightBallastTankPosition.y + (rightBallastTankDisplay.height * 1.1)
+            width: rightBallastTankWidth
+            height: rightBallastTankLabel.height
+            color: "black"
+            radius: 10
+
+            GCText {
+                id: rightBallastTankLabel
+                text: qsTr("Right Ballast Tank")
+
+                width: parent.width
+                wrapMode: Text.WordWrap
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+
+                fontSize: 10
+                color: "green"
+            }
+        }
+
         Image {
             id: rightBallastFill
             source: url + "vanne.svg"

@@ -32,22 +32,10 @@ Item {
 
     function fillBallastTanks() {
         waterFilling = !waterFilling
-
-        if (waterFilling) {
-            fillBallastTanks.start()
-        } else {
-            fillBallastTanks.stop()
-        }
     }
 
     function flushBallastTanks() {
         waterFlushing = !waterFlushing
-
-        if (waterFlushing) {
-            flushBallastTanks.start()
-        } else {
-            flushBallastTanks.stop()
-        }
     }
 
     function updateWaterLevel(isInflow) {
@@ -69,7 +57,6 @@ Item {
         if (waterLevel < 0) {
             waterLevel = 0
         }
-        console.log("Current water level: "+waterLevel)
     }
 
     function resetBallastTanks() {
@@ -77,28 +64,23 @@ Item {
         waterFlushing = false
 
         waterLevel = initialWaterLevel
-
-        fillBallastTanks.stop()
-        flushBallastTanks.stop()
     }
 
     Timer {
         id: fillBallastTanks
         interval: 500
-        running: false
+        running: waterFilling
         repeat: true
 
-//        onTriggered: submarine.updateWaterLevel(true)
         onTriggered: updateWaterLevel(true)
     }
 
     Timer {
         id: flushBallastTanks
         interval: 500
-        running: false
+        running: waterFlushing
         repeat: true
 
-//        onTriggered: submarine.updateWaterLevel(false)
         onTriggered: updateWaterLevel(false)
     }
 }

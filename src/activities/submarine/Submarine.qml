@@ -232,9 +232,9 @@ ActivityBase {
             }
 
             /* While increasing or decreasing, we can't use submarine.velocity.x since it is interpolating */
-            function increaseHorizontalVelocity(amt) {
-                if (submarine.currentFinalVelocity + amt <= submarine.maximumXVelocity) {
-                    submarine.currentFinalVelocity += amt
+            function increaseHorizontalVelocity(amount) {
+                if (submarine.currentFinalVelocity + amount <= submarine.maximumXVelocity) {
+                    submarine.currentFinalVelocity += amount
                     smoothHorizontalVelocity.stop()
                     smoothHorizontalVelocity.setFinalVelocity(submarine.currentFinalVelocity)
                     smoothHorizontalVelocity.setIncreaseVelocity(true)
@@ -242,9 +242,9 @@ ActivityBase {
                 }
             }
 
-            function decreaseHorizontalVelocity(amt) {
-                if (submarine.currentFinalVelocity - amt >= 0) {
-                    submarine.currentFinalVelocity -= amt
+            function decreaseHorizontalVelocity(amount) {
+                if (submarine.currentFinalVelocity - amount >= 0) {
+                    submarine.currentFinalVelocity -= amount
                     smoothHorizontalVelocity.stop()
                     smoothHorizontalVelocity.setFinalVelocity(submarine.currentFinalVelocity)
                     smoothHorizontalVelocity.setIncreaseVelocity(false)
@@ -252,22 +252,20 @@ ActivityBase {
                 }
             }
 
-            function increaseWingsAngle(amt) {
-                if (wingsAngle + amt <= maxWingsAngle) {
-                    wingsAngle += amt
+            function increaseWingsAngle(amount) {
+                if (wingsAngle + amount <= maxWingsAngle) {
+                    wingsAngle += amount
                 } else {
                     wingsAngle = maxWingsAngle
                 }
-                console.log("Wings angle is: "+wingsAngle)
             }
 
-            function decreaseWingsAngle(amt) {
-                if (wingsAngle - amt >= minWingsAngle) {
-                    wingsAngle -= amt
+            function decreaseWingsAngle(amount) {
+                if (wingsAngle - amount >= minWingsAngle) {
+                    wingsAngle -= amount
                 } else {
                     wingsAngle = minWingsAngle
                 }
-                console.log("Wings angle is: "+wingsAngle)
             }
 
             function changeVerticalVelocity() {
@@ -379,7 +377,7 @@ ActivityBase {
 
             Image {
                 id: submarineImage
-                source: url + "submarine.png"
+                source: submarine.isHit ? url + "submarine-broken.png" : url + "submarine.png"
 
                 property int currentWaterLevel: bar.level < 7 ? centralBallastTank.waterLevel : leftBallastTank.waterLevel + rightBallastTank.waterLevel
                 property int totalWaterLevel: bar.level < 7 ? centralBallastTank.maxWaterLevel : leftBallastTank.maxWaterLevel + rightBallastTank.maxWaterLevel
@@ -388,11 +386,11 @@ ActivityBase {
                 height: background.height / 9
 
                 function broken() {
-                    source = url + "submarine-broken.png"
+                    submarine.isHit = true
                 }
 
                 function reset() {
-                    source = url + "submarine.png"
+                    submarine.isHit = false
                     x = submarine.initialPosition.x
                     y = submarine.initialPosition.y
                 }
@@ -919,8 +917,8 @@ ActivityBase {
 
         Controls {
             id: controls
-            enginePositon.x: background.width * 0.2
-            enginePositon.y: background.height - bar.height - (engineHeight * 1.25)
+            enginePosition.x: background.width * 0.2
+            enginePosition.y: background.height - bar.height - (engineHeight * 1.25)
             engineWidth: background.width / 8
             engineHeight: 100
             submarineHorizontalSpeed: submarine.currentFinalVelocity * 1000
