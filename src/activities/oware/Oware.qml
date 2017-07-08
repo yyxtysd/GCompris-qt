@@ -161,8 +161,7 @@ ActivityBase {
                                         Activity.nextPlayer = !items.playerOneTurn ? 1 : 0
                                         Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
                                         items.playerOneTurn = !items.playerOneTurn
-                                        items.playerOneLevelScore.endTurn()
-                                        items.playerTwoLevelScore.beginTurn()
+                                        Activity.setValues(Activity.house)
                                         checkScores()
 //                                         items.sowSeedsTimer.start()
                                     }
@@ -174,8 +173,7 @@ ActivityBase {
                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.nextPlayer = items.playerOneTurn ? 1 : 0
                                         Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
-                                        items.playerOneLevelScore.beginTurn()
-                                        items.playerTwoLevelScore.endTurn()
+                                        Activity.setValues(Activity.house)
                                         checkScores()
                                     }
                                 }
@@ -189,6 +187,7 @@ ActivityBase {
                             }
 
                             function checkScores() {
+                                    var gameEnded = false
                                     items.playerTwoScore = Activity.scoreHouse[1]
                                     items.playerOneScore = Activity.scoreHouse[0]
 
@@ -198,11 +197,22 @@ ActivityBase {
                                         items.playerTwoLevelScore.endTurn()
                                         items.playerTwoLevelScore.win()
                                         items.boxModel.enabled = false
+                                        gameEnded = true
                                     }
                                     else if(items.playerOneScore >= 25) {
                                         items.playerOneLevelScore.win()
                                         items.playerTwoLevelScore.endTurn()
                                         items.boxModel.enabled = false
+                                        gameEnded = true
+                                    }
+                                    if(!items.playerOneTurn && !gameEnded) {
+                                        items.playerOneLevelScore.endTurn()
+                                        items.playerTwoLevelScore.beginTurn()
+                                    }
+                                    else if(twoPlayer && !gameEnded) {
+                                        print("noo")
+                                        items.playerTwoLevelScore.endTurn()
+                                        items.playerOneLevelScore.beginTurn()
                                     }
                             }
                         }
@@ -393,8 +403,8 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: twoPlayer ? (help | home | reload) : tutorialSection.visible ?
-                                                             (help | home) : (help | home | level | reload) }
+            content: BarEnumContent { value: twoPlayer ? (help | home | reload) : (tutorialSection.visible ?
+                                                             (help | home) : (help | home | level | reload)) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }

@@ -33,8 +33,10 @@ var nextPlayer = 1
 var playerSideEmpty = false;
 var maxDiff = [20, 15, 10, 5, 0]
 var depth
+var validMove
 var heuristicValue
 var lastMove
+var finalMove
 var tutorialInstructions = [
     {
         "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses  belong to the other player."),
@@ -112,32 +114,36 @@ function getY(radius, index, value) {
 }
 
 function computerMove() {
-    var finalMove
-    var validMove = false
-    if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
+    validMove = false
+    if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel] && !validMove) {
         var houseClone = house.slice()
         var scoreClone = scoreHouse.slice()
-        var lastMoveClone = lastMove
         var index = alphaBeta(4, -200, 200, house, scoreHouse, 1, lastMove)
         house = houseClone.slice()
         scoreHouse = scoreClone.slice()
         finalMove = index[0]
-        if(house[finalMove])
+        if(house[finalMove] != 0)
             validMove = true
-    } else if(!validMove && items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel]){
-         var move = Math.floor(Math.random() * (12 - 6) + 6);
-        if (house[move] && isValidMove(move,1,house)) {
-            validMove = true
-            finalMove = move
-        }
-        else
-            computerMove()
-    }
+    } if(!validMove || (items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel]))
+            randomMove()
     if(validMove) {
         sowSeeds(finalMove, house, scoreHouse, 1)
+        setValues(house)
+        items.playerTwoScore = scoreHouse[1]
+        items.playerOneScore = scoreHouse[0]
         items.playerTwoLevelScore.endTurn()
         items.playerOneLevelScore.beginTurn()
     }
+}
+
+function randomMove() {
+    var move = Math.floor(Math.random() * (12 - 6) + 6);
+    if (move != undefined && house[move] != 0 && isValidMove(move,1,house)) {
+        validMove = true
+        finalMove = move
+    }
+    else
+        randomMove()
 }
 
 function gameOver(board,score) {
@@ -303,7 +309,6 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
             playerSideEmpty = true
     }
     nextPlayer = currentPlayer
-    setValues(board)
     var obj = {
         board: board,
         scoreHouse: scoreHouse,
