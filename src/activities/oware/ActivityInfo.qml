@@ -23,7 +23,7 @@ ActivityInfo {
   icon: "oware/oware.svg"
   author: "Divyam Madaan &lt;divyam3897@gmail.com&gt;"
   demo: true
-  title: qsTr("Oware activity")
+  title: qsTr("Oware (against Tux)")
   description: qsTr("Play the Oware strategy game against your friend")
   //intro: "put here in comment the text for the intro voice"
   goal: qsTr("The object of the game is to capture more seeds than one's opponent. Since the game has only 48 seeds, capturing 25 is sufficient to accomplish this. Since there are an even number of seeds, it is possible for the game to end in a draw, where each player has captured 24. The game is over when one player has captured 25 or more seeds, or both players have taken 24 seeds each (draw). If both players agree that the game has been reduced to an endless cycle, each player captures the seeds on their side of the board.")

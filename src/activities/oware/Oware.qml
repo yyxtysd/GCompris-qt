@@ -60,18 +60,17 @@ ActivityBase {
             property alias playerOneLevelScore: playerOneLevelScore
             property alias playerTwoLevelScore: playerTwoLevelScore
             property alias boxModel: boxModel
-            property bool twoPlayer: twoPlayer
 //             property alias sowSeedsTimer: sowSeedsTimer
 //             property int indexValue: indexValue
         }
 
-        onStart: { Activity.start(items) }
+        onStart: { Activity.start(items,twoPlayer) }
         onStop: { Activity.stop() }
 
         Timer {
             id: trigComputerMove
             repeat: false
-            interval: 300
+            interval: 600
             onTriggered: Activity.computerMove()
         }
 
@@ -150,70 +149,26 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
-                                if(items.playerOneTurn && Activity.house[index - 6] != 0 && (index - 6) >= 0 && (index - 6) <= 5) {
-                                    items.playerOneTurn = !items.playerOneTurn
-                                    if(Activity.playerSideEmpty)
-                                        Activity.checkHunger(index - 6)
-                                    else {
-//                                         items.indexValue = index - 6
-//                                         items.cellGridRepeater.itemAt(index).startAnim()
-                                        items.playerOneTurn = !items.playerOneTurn
+                                if(items.playerOneTurn && Activity.house[index - 6] != 0 && (index - 6) >= 0 && (index - 6) <= 5 && Activity.isValidMove(index - 6,1,Activity.house)) {
                                         Activity.nextPlayer = !items.playerOneTurn ? 1 : 0
-                                        Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
+                                        Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,0)
                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.setValues(Activity.house)
-                                        checkScores()
 //                                         items.sowSeedsTimer.start()
-                                    }
+//                                     }
                                 }
-                                else if(!items.playerOneTurn && Activity.house[11-index] != 0 && (11 - index) >= 6 && (11 - index) <= 11) {
-                                    if(Activity.playerSideEmpty)
-                                        Activity.checkHunger(11 - index)
-                                    else {
-                                        items.playerOneTurn = !items.playerOneTurn
+                                else if(!items.playerOneTurn && Activity.house[11 - index] != 0 && (11 - index) >= 6 && (11 - index) <= 11 && Activity.isValidMove(11 - index,0,Activity.house)) {
                                         Activity.nextPlayer = items.playerOneTurn ? 1 : 0
-                                        Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,Activity.nextPlayer)
+                                        Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,1)
+                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.setValues(Activity.house)
-                                        checkScores()
-                                    }
                                 }
                             }
                             onReleased: {
                                 if(!twoPlayer && !items.playerOneTurn) {
                                     items.playerOneTurn = !items.playerOneTurn
                                     trigComputerMove.start()
-                                    checkScores()
                                 }
-                            }
-
-                            function checkScores() {
-                                    var gameEnded = false
-                                    items.playerTwoScore = Activity.scoreHouse[1]
-                                    items.playerOneScore = Activity.scoreHouse[0]
-
-                                    if(items.playerTwoScore >= 25) {
-                                        items.bonus.good("flower")
-                                        items.playerOneLevelScore.endTurn()
-                                        items.playerTwoLevelScore.endTurn()
-                                        items.playerTwoLevelScore.win()
-                                        items.boxModel.enabled = false
-                                        gameEnded = true
-                                    }
-                                    else if(items.playerOneScore >= 25) {
-                                        items.playerOneLevelScore.win()
-                                        items.playerTwoLevelScore.endTurn()
-                                        items.boxModel.enabled = false
-                                        gameEnded = true
-                                    }
-                                    if(!items.playerOneTurn && !gameEnded) {
-                                        items.playerOneLevelScore.endTurn()
-                                        items.playerTwoLevelScore.beginTurn()
-                                    }
-                                    else if(twoPlayer && !gameEnded) {
-                                        print("noo")
-                                        items.playerTwoLevelScore.endTurn()
-                                        items.playerOneLevelScore.beginTurn()
-                                    }
                             }
                         }
 

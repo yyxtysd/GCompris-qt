@@ -33,35 +33,37 @@ var nextPlayer = 1
 var playerSideEmpty = false;
 var maxDiff = [20, 15, 10, 5, 0]
 var depth
-var validMove
 var heuristicValue
 var lastMove
 var finalMove
-var tutorialInstructions = [
-    {
+var houseClone
+var scoreClone
+var twoPlayer
+var tutorialInstructions = [{
         "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses  belong to the other player."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
-            },
+    },
     {
         "instruction": qsTr("In each turn, a player chooses one of their 6 houses. All seeds from that house are picked and dropped one in each house counter-clockwise from the house they chose, in a process called sowing. However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
-            },
+    },
     {
         "instruction": qsTr("After a turn, if the last seed was placed into the opponent's house and brought the total number of seeds in that house to two or three, all the seeds in that house are captured and added to player's scoring house. If the previous-to-last seed dropped also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial3.png"
-            },
+    },
     {
         "instruction": qsTr("If all the houses of one player are empty, the other player has to take such a move that it gives one or more seeds to the other player to continue the game."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial4.png"
-            },
+    },
     {
         "instruction": qsTr("However, if the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial5.png"
-            }
-       ]
+    }
+]
 
-function start(items_) {
+function start(items_, twoPlayer_) {
     items = items_
+    twoPlayer = twoPlayer_
     currentLevel = 0
     reset()
 }
@@ -114,40 +116,34 @@ function getY(radius, index, value) {
 }
 
 function computerMove() {
-    validMove = false
-    if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel] && !validMove) {
-        var houseClone = house.slice()
-        var scoreClone = scoreHouse.slice()
-        var index = alphaBeta(4, -200, 200, house, scoreHouse, 1, lastMove)
+    if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
+        houseClone = house.slice()
+        scoreClone = scoreHouse.slice()
+        var index = alphaBeta(4, -200, 200, house, scoreHouse, 0, lastMove)
         house = houseClone.slice()
         scoreHouse = scoreClone.slice()
         finalMove = index[0]
-        if(house[finalMove] != 0)
-            validMove = true
-    } if(!validMove || (items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel]))
-            randomMove()
-    if(validMove) {
-        sowSeeds(finalMove, house, scoreHouse, 1)
-        setValues(house)
-        items.playerTwoScore = scoreHouse[1]
-        items.playerOneScore = scoreHouse[0]
-        items.playerTwoLevelScore.endTurn()
-        items.playerOneLevelScore.beginTurn()
     }
+    if (items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel])
+        randomMove()
+    sowSeeds(finalMove, house, scoreHouse, 1)
+    setValues(house)
+    items.playerTwoScore = scoreHouse[1]
+    items.playerOneScore = scoreHouse[0]
+    items.playerTwoLevelScore.endTurn()
+    items.playerOneLevelScore.beginTurn()
 }
 
 function randomMove() {
-    var move = Math.floor(Math.random() * (12 - 6) + 6);
-    if (move != undefined && house[move] != 0 && isValidMove(move,1,house)) {
-        validMove = true
+    var move = Math.floor(Math.random() * (12 - 6) + 6)
+    if (house[move] != 0 && isValidMove(move, 0, house)) {
         finalMove = move
-    }
-    else
+    } else
         randomMove()
 }
 
-function gameOver(board,score) {
-    if(score[0] > 24 || score[1] > 24)
+function gameOver(board, score) {
+    if (score[0] > 24 || score[1] > 24)
         return true
     return false
 }
@@ -161,10 +157,12 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
         return [-1, heuristicValue]
     }
     for (var move = 0; move < 12; move++) {
-        if (!isValidMove(move,nextPlayer,board))
+        if (!isValidMove(move, nextPlayer, board))
             continue
+        board = houseClone.slice()
+        score = scoreClone.slice()
         var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
-        var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove);
+        var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove)
         childHeuristics = out[1]
         if (nextPlayer) {
             if (beta > childHeuristics) {
@@ -188,23 +186,23 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
 
 function heuristicEvaluation(score) {
     var playerScores = [];
-    for(var i = 0; i < 2; i++) {
+    for (var i = 0; i < 2; i++) {
         playerScores[i] = score[i]
-        if(playerScores[i] > 24)
+        if (playerScores[i] > 24)
             playerScores[i] += 100
     }
-    return playerScores[0] - playerScores[1]
+    return playerScores[1] - playerScores[0]
 }
 
-function isValidMove(move,next,board) {
-    if((next * 6 > move) || (move >= (next * 6 + 6)))
+function isValidMove(move, next, board) {
+    if ((next && move > 6) || (!next && move < 6))
         return false
-    if(!board[move])
+    if (!board[move])
         return false
     var sum = 0;
     for (var j = next * 6; j < (next * 6 + 6); j++)
         sum += board[j];
-    if (sum == 0 && (board[move] % 12 < 11 - move))
+    if (sum == 0 && ((!next && board[move] % 12 < 12 - move) || (next && board[move] % 12 < 6 - move)))
         return false
     else
         return true
@@ -215,99 +213,85 @@ function setValues(board) {
         items.cellGridRepeater.itemAt(i).value = board[j]
     for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
         items.cellGridRepeater.itemAt(i).value = board[j]
-}
 
-function checkHunger(index) {
-    var currentPlayer = items.playerOneTurn ? 1 : 0
-    var canGive = false
-    // First it's checked if the current player can satisfy the hunger of opponent.
-    for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
-        if (items.playerOneTurn && house[j] % 12 > 11 - j) {
-            canGive = true
-            break;
-        } else if (!items.playerOneTurn && house[j] % 12 > 5 - j) {
-            canGive = true;
-            break;
-        }
+    var gameEnded = false
+    items.playerTwoScore = scoreHouse[1]
+    items.playerOneScore = scoreHouse[0]
+
+    if (items.playerTwoScore >= 25) {
+        if(!twoPlayer)
+            items.bonus.bad("flower")
+        else
+            items.bonus.good("flower")
+        items.playerOneLevelScore.endTurn()
+        items.playerTwoLevelScore.endTurn()
+        items.playerTwoLevelScore.win()
+        items.boxModel.enabled = false
+        gameEnded = true
+    } else if (items.playerOneScore >= 25) {
+        items.playerOneLevelScore.win()
+        items.playerTwoLevelScore.endTurn()
+        items.boxModel.enabled = false
+        gameEnded = true
     }
-    // If the player can give seeds, then the seeds are sown only when the hunger is satisfied.
-    if (canGive && (items.playerOneTurn && house[index] % 12 > 11 - index) || (!items.playerOneTurn && house[index] % 12 > 5 - index)) {
-        sowSeeds(index)
-    } else if (canGive) {
-        items.playerOneTurn = !items.playerOneTurn
-    }
-    // If the player cannot satisfy the hunger all the seeds in the territory are captured and game ends.
-    else if (!canGive) {
-        for (j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
-            scoreHouse[currentPlayer] += house[j];
-            house[j] = 0;
-            items.playerTwoScore = (nextPlayer == 1) ? scoreHouse[1] : items.playerTwoScore
-            items.playerOneScore = (nextPlayer == 0) ? scoreHouse[0] : items.playerOneScore
-            setValues()
-        }
+    if (!items.playerOneTurn && !gameEnded) {
+        items.playerOneLevelScore.endTurn()
+        items.playerTwoLevelScore.beginTurn()
+    } else if (twoPlayer && !gameEnded) {
+        items.playerTwoLevelScore.endTurn()
+        items.playerOneLevelScore.beginTurn()
     }
 }
 
 function sowSeeds(index, board, scoreHouse, nextPlayer) {
     var currentPlayer = (nextPlayer + 1) % 2
     var nextIndex = index
-    playerSideEmpty = false;
     lastMove = index
 
-    if (!playerSideEmpty) {
-        // The seeds are sown until the picked seeds are equal to zero
-        while (board[index]) {
+    // The seeds are sown until the picked seeds are equal to zero
+    while (board[index]) {
+        nextIndex = (nextIndex + 1) % 12
+        // If there are more than or equal to 12 seeds than we don't sow the in the pit from where we picked the seeds.
+        if (index == nextIndex) {
             nextIndex = (nextIndex + 1) % 12
-            // If there are more than or equal to 12 seeds than we don't sow the in the pit from where we picked the seeds.
-            if (index == nextIndex) {
-                nextIndex = (nextIndex + 1) % 12
-            }
-            // Decrement the count of seeds and sow it in the nextIndex
-            board[index]--;
-            board[nextIndex]++;
         }
+        // Decrement the count of seeds and sow it in the nextIndex
+        board[index]--;
+        board[nextIndex]++;
+    }
 
-        //  The nextIndex now contains the seeds in the last pit sown.
-        var capture = [];
-        // The opponent's seeds are captured if they are equal to 2 or 3
-        if (((board[nextIndex] == 2 || board[nextIndex] == 3)) && ((currentPlayer == 1 && nextIndex > 5 && nextIndex < 12) || (currentPlayer == 0 && nextIndex >= 0 && nextIndex < 6))) {
+    //  The nextIndex now contains the seeds in the last pit sown.
+    var capture = [];
+    // The opponent's seeds are captured if they are equal to 2 or 3
+    if (((board[nextIndex] == 2 || board[nextIndex] == 3)) && ((currentPlayer == 1 && nextIndex > 5 && nextIndex < 12) || (currentPlayer == 0 && nextIndex >= 0 && nextIndex < 6))) {
+        capture[nextIndex % 6] = true;
+    }
+    /* The seeds previous to the captured seeds are checked. If they are equal to 2 or 3 then they are captured until a
+        pit arrives which has more than 3 seeds or 1 seed. */
+    while (capture[nextIndex % 6] && nextIndex % 6) {
+        nextIndex--;
+        if (board[nextIndex] == 2 || board[nextIndex] == 3) {
             capture[nextIndex % 6] = true;
         }
-        /* The seeds previous to the captured seeds are checked. If they are equal to 2 or 3 then they are captured until a
-            pit arrives which has more than 3 seeds or 1 seed. */
-        while (capture[nextIndex % 6] && nextIndex % 6) {
-            nextIndex--;
-            if (board[nextIndex] == 2 || board[nextIndex] == 3) {
-                capture[nextIndex % 6] = true;
-            }
-        }
+    }
 
-        var allSeedsCaptured = true;
-        /* Now we check if all the seeds in opponents houses which were to be captured are captured or not. If any of the house is not yet captured we set allSeedsCaptured as false */
+    var allSeedsCaptured = true;
+    /* Now we check if all the seeds in opponents houses which were to be captured are captured or not. If any of the house is not yet captured we set allSeedsCaptured as false */
+    for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
+        if (!capture[j % 6] && board[j])
+            allSeedsCaptured = false;
+    }
+    // Now capture the seeds for the houses for which capture[houseIndex] = true if all seeds are not captured
+    if (!allSeedsCaptured) {
         for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
-            if (!capture[j % 6] && board[j])
-                allSeedsCaptured = false;
-        }
-        // Now capture the seeds for the houses for which capture[houseIndex] = true if all seeds are not captured
-        if (!allSeedsCaptured) {
-            for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
-                /* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
-                if (capture[j % 6]) {
-                    scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j];
-                    board[j] = 0;
-                }
+            /* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
+            if (capture[j % 6]) {
+                scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j];
+                board[j] = 0;
             }
         }
     }
-    // Now we check if the player has any more seeds or not
-    for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
-        // If any of the pits in house is not empty we set playerSideEmpty as false
-        if (board[j]) {
-            playerSideEmpty = false;
-            break;
-        } else
-            playerSideEmpty = true
-    }
+
     nextPlayer = currentPlayer
     var obj = {
         board: board,
