@@ -69,7 +69,7 @@ Item {
     Timer {
         id: fillBallastTanks
         interval: 500
-        running: waterFilling
+        running: waterFilling && !waterFlushing
         repeat: true
 
         onTriggered: updateWaterLevel(true)
@@ -78,7 +78,7 @@ Item {
     Timer {
         id: flushBallastTanks
         interval: 500
-        running: waterFlushing
+        running: waterFlushing && !waterFilling
         repeat: true
 
         onTriggered: updateWaterLevel(false)
