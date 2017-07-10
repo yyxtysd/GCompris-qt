@@ -60,6 +60,7 @@ ActivityBase {
             property alias playerOneLevelScore: playerOneLevelScore
             property alias playerTwoLevelScore: playerTwoLevelScore
             property alias boxModel: boxModel
+            property bool computerTurn: false
 //             property alias sowSeedsTimer: sowSeedsTimer
 //             property int indexValue: indexValue
         }
@@ -149,25 +150,21 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
-                                if(items.playerOneTurn && Activity.house[index - 6] != 0 && (index - 6) >= 0 && (index - 6) <= 5 && Activity.isValidMove(index - 6,1,Activity.house)) {
-                                        Activity.nextPlayer = !items.playerOneTurn ? 1 : 0
-                                        Activity.sowSeeds(index - 6,Activity.house,Activity.scoreHouse,0)
+                                var currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
+                                var nextPlayer = items.playerOneTurn ? 0 : 1
+                                if ((!items.computerTurn && items.playerOneTurn && (currentMove >= 0 && currentMove <= 5)) || (!items.playerOneTurn && (currentMove >= 6 && currentMove <= 11)) && Activity.isValidMove(currentMove,!nextPlayer,Activity.house) && Activity.house[currentMove] != 0) {
+                                        Activity.sowSeeds(currentMove,Activity.house,Activity.scoreHouse,nextPlayer)
                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.setValues(Activity.house)
 //                                         items.sowSeedsTimer.start()
 //                                     }
                                 }
-                                else if(!items.playerOneTurn && Activity.house[11 - index] != 0 && (11 - index) >= 6 && (11 - index) <= 11 && Activity.isValidMove(11 - index,0,Activity.house)) {
-                                        Activity.nextPlayer = items.playerOneTurn ? 1 : 0
-                                        Activity.sowSeeds(11 - index,Activity.house,Activity.scoreHouse,1)
-                                         items.playerOneTurn = !items.playerOneTurn
-                                        Activity.setValues(Activity.house)
-                                }
                             }
                             onReleased: {
                                 if(!twoPlayer && !items.playerOneTurn) {
-                                    items.playerOneTurn = !items.playerOneTurn
+                                    items.computerTurn = true
                                     trigComputerMove.start()
+                                    items.playerOneTurn = !items.playerOneTurn
                                 }
                             }
                         }

@@ -36,8 +36,6 @@ var depth
 var heuristicValue
 var lastMove
 var finalMove
-var houseClone
-var scoreClone
 var twoPlayer
 var tutorialInstructions = [{
         "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses  belong to the other player."),
@@ -117,17 +115,16 @@ function getY(radius, index, value) {
 
 function computerMove() {
     if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
-        houseClone = house.slice()
-        scoreClone = scoreHouse.slice()
-        var index = alphaBeta(4, -200, 200, house, scoreHouse, 0, lastMove)
-        house = houseClone.slice()
-        scoreHouse = scoreClone.slice()
+        var houseClone = house.slice()
+        var scoreClone = scoreHouse.slice()
+        var index = alphaBeta(4, -200, 200, houseClone, scoreClone, 0, lastMove)
         finalMove = index[0]
     }
     if (items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel])
         randomMove()
     sowSeeds(finalMove, house, scoreHouse, 1)
     setValues(house)
+    items.computerTurn = false
     items.playerTwoScore = scoreHouse[1]
     items.playerOneScore = scoreHouse[0]
     items.playerTwoLevelScore.endTurn()
@@ -159,8 +156,8 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
     for (var move = 0; move < 12; move++) {
         if (!isValidMove(move, nextPlayer, board))
             continue
-        board = houseClone.slice()
-        score = scoreClone.slice()
+        board = house.slice()
+        score = scoreHouse.slice()
         var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
         var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove)
         childHeuristics = out[1]
@@ -229,6 +226,7 @@ function setValues(board) {
         items.boxModel.enabled = false
         gameEnded = true
     } else if (items.playerOneScore >= 25) {
+        print("won")
         items.playerOneLevelScore.win()
         items.playerTwoLevelScore.endTurn()
         items.boxModel.enabled = false
