@@ -235,8 +235,6 @@ QtObject {
                                    [0.588, 0.40],
                                    [0.251, 0.70],
                                    [0.588, 0.70]
-
-
                         ],
 
                      captions: [  [0.83,0.76],
@@ -244,7 +242,7 @@ QtObject {
                         ],
                      nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg","boy2.svg"],
                      currentstate: ["deactive", "deactive", "deactive", "active","activeTo"],
-                     edgeState:["others","others","others","others","others","others"],
+                     edgeState:["others","others","others","others"],
                      answer: [qsTr("Cousin")],
                      optionss: [qsTr("Brother"), qsTr("Sister"), qsTr("Cousin")]
                    },
@@ -267,24 +265,21 @@ QtObject {
                             ],
                   nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
                   currentstate: ["deactive", "deactive", "activeTo", "active"],
-                  edgeState:["others","others","siblings","others","others","others"],
+                  edgeState:["others","others","others"],
                   answer: [qsTr("Uncle")],
                   optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                    },
                    // level 11
-                   {  edgeList: [  [0.50, 0.17, 0.53, 0.17],
-                              [0.525, 0.17, 0.525, 0.45],
-                              [0.41, 0.45, 0.60, 0.45],
-                              [0.22, 0.45, 0.254, 0.45],
-                              [0.22, 0.45, 0.22, 0.72],
-                              [0.22, 0.71, 0.25, 0.71]
+                   {  edgeList: [
+                            [(0.425 + nodeWidth / 2), (0.05 + nodeHeight), (0.425 + nodeWidth / 2), 0.45],
+                            [0.41, 0.45, 0.60, 0.45],
+                            [(0.41 - nodeWidth / 2), (0.4 + nodeHeight ), (0.41 - nodeWidth / 2), (0.70 )]
                         ],
                  nodePositions: [
-                              [0.311, 0.10],
-                              [0.251, 0.40],
-                              [0.588, 0.40],
-                              [0.22, 0.70]
-
+                            [0.425, 0.05],
+                            [0.251, 0.40],
+                            [0.588, 0.40],
+                            [0.251, 0.70]
                        ],
 
                  captions: [  [0.77,0.45],
@@ -292,7 +287,7 @@ QtObject {
                            ],
                  nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
                  currentstate: ["deactive", "deactive", "active", "activeTo"],
-                 edgeState:["others","others","siblings","others","others","others"],
+                 edgeState:["others","others","others"],
                  answer: [qsTr("Nephew")],
                  optionss: [qsTr("Uncle"), qsTr("Aunt"), qsTr("Nephew"), qsTr("Niece")]
                   },
@@ -300,17 +295,14 @@ QtObject {
                    {  edgeList: [  [0.45, 0.17, 0.56, 0.17],
                            [0.515, 0.17, 0.515, 0.45],
                            [0.41, 0.45, 0.60, 0.45],
-                           [0.22, 0.45, 0.254, 0.45],
-                           [0.22, 0.45, 0.22, 0.72],
-                           [0.22, 0.71, 0.25, 0.71]
+                           [(0.251 + nodeWidth / 2), (0.40 + nodeHeight ), (0.251 + nodeWidth / 2), 0.70]
                      ],
               nodePositions: [
                            [0.301, 0.10],
                            [0.553, 0.10],
                            [0.251, 0.40],
                            [0.588, 0.40],
-                           [0.22, 0.70]
-
+                           [0.251, 0.70]
                     ],
 
               captions: [  [0.118,0.76],
@@ -326,16 +318,14 @@ QtObject {
                    {  edgeList: [  [0.44, 0.17, 0.55, 0.17],
                            [0.505, 0.17, 0.505, 0.45],
                            [0.41, 0.45, 0.60, 0.45],
-                           [0.22, 0.45, 0.254, 0.45],
-                           [0.22, 0.45, 0.22, 0.72],
-                           [0.22, 0.71, 0.25, 0.71]
+                           [(0.251 + nodeWidth / 2), (0.40 + nodeHeight ), (0.251 + nodeWidth / 2), 0.70]
               ],
             nodePositions: [
                            [0.291, 0.10],
                            [0.543, 0.10],
                            [0.251, 0.40],
                            [0.588, 0.40],
-                           [0.22, 0.70]
+                           [0.251, 0.70]
                ],
 
               captions: [  [0.83,0.45],
