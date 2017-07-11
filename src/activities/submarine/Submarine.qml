@@ -848,7 +848,7 @@ ActivityBase {
         /* Just a space */
         Rectangle {
             id: space
-            width: rock1.width
+            width: bar.level < 8 ? rock1.width : rock1.width * ( 1 - (Math.random() * 0.5))
             height: rock1.height
 
             color: "transparent"
