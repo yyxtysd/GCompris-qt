@@ -28,7 +28,26 @@ ActivityInfo {
   //intro: "Drive the submarine to the right end of the screen without colliding with any objects"
   goal: qsTr("Learn how to control a submarine")
   prerequisite: qsTr("Move and click using the mouse, physics basics")
-  manual: qsTr("Control the various parts of the submarine (the engine, rudders and ballast tanks) to reach the end point")
+  manual: qsTr("Control the various parts of the submarine (the engine, rudders and ballast tanks) to reach the end point.
+ Controls:
+
+ Engine:
+ D / Right arrow: Increase velocity
+ A / Left arrow: Decrease velocity
+
+ Ballast tanks:
+ Switch filling of Ballast tanks:
+ W / Up arrow: Central ballast tank
+ R: Left ballast tank
+ T: Right ballast tanks
+ Switch flush ballast tanks:
+ S / Down arrow: Central ballast tank
+ F: Left ballast tank
+ G: Right ballast tanks
+
+ Diving planes:
+ + : Increase diving plane angle
+ - : Decrease diving plane angle")
   credit: ""
   section: "experimental"
   createdInVersion: 8000
