@@ -48,6 +48,7 @@ var tutorials = [
                 qsTr("Once the submarine is moving underwater, increasing or decreasing the angle of the planes will increase and decrease the depth of the submarine."),
                 qsTr("The + button will increase the depth of the submarine, while the - button will decrease the depth of the submarine."),
                 qsTr("Grab the crown to open the gate."),
+                qsTr("Check out the help menu for the keyboard controls."),
             ]
 ]
 
