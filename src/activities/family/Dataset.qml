@@ -388,16 +388,16 @@ QtObject {
                    // level 16
                    {  edgeList: [     [0.4 + nodeWidth, 0.10 + nodeHeight / 2, 0.733, 0.10 + nodeHeight / 2],
                             [(0.40 + nodeWidth + 0.733) / 2, 0.10 + nodeHeight / 2, (0.40 + nodeWidth + 0.733) / 2, 0.55 + nodeHeight / 2],
-                            [0.40 + nodeWidth, 0.55 + nodeHeight / 2, 0.68, 0.55 + nodeHeight / 2],//[0.69, 0.50, 0.555, 0.50],
-                            [0.15 + nodeWidth, 0.55 + nodeHeight / 2, 0.40, 0.55 + nodeHeight / 2],//[0.405, 0.53, 0.32, 0.53],
-                            [0.68, 0.55 + nodeHeight / 2, 0.733, 0.55 + nodeHeight / 2]//[0.68, 0.695, 0.75, 0.695]
+                            [0.40 + nodeWidth, 0.55 + nodeHeight / 2, 0.68, 0.55 + nodeHeight / 2],
+                            [0.15 + nodeWidth, 0.55 + nodeHeight / 2, 0.40, 0.55 + nodeHeight / 2],
+                            [0.68, 0.55 + nodeHeight / 2, 0.733, 0.55 + nodeHeight / 2]
                   ],
              nodePositions: [
-                            [0.400, 0.10],//0.463
+                            [0.400, 0.10],
                             [0.733, 0.10],
-                            [0.400, 0.55],//0.45
-                            [0.150, 0.55],//0.45
-                            [0.733, 0.55]//0.67
+                            [0.400, 0.55],
+                            [0.150, 0.55],
+                            [0.733, 0.55]
                  ],
 
             captions: [ [0.02, 0.55],
