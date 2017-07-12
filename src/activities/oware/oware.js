@@ -42,20 +42,24 @@ var tutorialInstructions = [{
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
     },
     {
-        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. All seeds from that house are picked and dropped one in each house counter-clockwise from the house they chose, in a process called sowing. However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds."),
+        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. All seeds from that house are picked and dropped one in each house counter-clockwise from the house they chose, in a process called sowing. As in the image below the red seeds from the second house are picked and sown in next houses."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
     },
     {
-        "instruction": qsTr("After a turn, if the last seed was placed into the opponent's house and brought the total number of seeds in that house to two or three, all the seeds in that house are captured and added to player's scoring house. If the previous-to-last seed dropped also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."),
+        "intruction": qsTr("However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds. As in the image below second house has more than 12 seeds so while sowing the seed is not dropped in that house."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial3.png"
     },
     {
-        "instruction": qsTr("If all the houses of one player are empty, the other player has to take such a move that it gives one or more seeds to the other player to continue the game."),
+        "instruction": qsTr("After a turn, if the last seed was placed into the opponent's house and brought the total number of seeds in that house to two or three, all the seeds in that house are captured and added to player's scoring house. If the previous-to-last seed dropped also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial4.png"
     },
     {
-        "instruction": qsTr("However, if the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends."),
+        "instruction": qsTr("If all the houses of one player are empty, the other player has to take such a move that it gives one or more seeds to the other player to continue the game."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial5.png"
+    },
+    {
+        "instruction": qsTr("However, if the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends."),
+        "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial6.png"
     }
 ]
 
@@ -143,6 +147,29 @@ function gameOver(board, score) {
     if (score[0] > 24 || score[1] > 24)
         return true
     return false
+}
+
+function seedsExhausted(board,next,score) {
+    var canGive = false
+    if(!next) {
+        for(var i = 6; i < 12; i++) {
+            if(board[i] % 12 > 12 - i)
+                canGive = true
+        }
+    }
+    else if(next) {
+        for(var i = 0; i < 6; i++) {
+           if( board[move] % 12 > 6 - move)
+               canGive = true
+        }
+    }
+    if(canGive)
+        return true
+    else {
+        for(var i = next * 6; i < next * 6 + 6; i++)
+            scoreHouse[next] += house[i]
+        setValues(board)
+    }
 }
 
 function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {

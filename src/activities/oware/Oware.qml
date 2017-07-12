@@ -152,10 +152,11 @@ ActivityBase {
                             onPressed: {
                                 var currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 var nextPlayer = items.playerOneTurn ? 0 : 1
-                                if ((!items.computerTurn && items.playerOneTurn && (currentMove >= 0 && currentMove <= 5)) || (!items.playerOneTurn && (currentMove >= 6 && currentMove <= 11)) && Activity.isValidMove(currentMove,!nextPlayer,Activity.house) && Activity.house[currentMove] != 0) {
+                                if ((!items.computerTurn && items.playerOneTurn && (currentMove >= 0 && currentMove <= 5) && Activity.isValidMove(currentMove,1,Activity.house)) || (!items.playerOneTurn && (currentMove >= 6 && currentMove <= 11) && Activity.isValidMove(currentMove,0,Activity.house)) && Activity.house[currentMove] != 0) {
                                         Activity.sowSeeds(currentMove,Activity.house,Activity.scoreHouse,nextPlayer)
                                         items.playerOneTurn = !items.playerOneTurn
                                         Activity.setValues(Activity.house)
+                                        Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
 //                                         items.sowSeedsTimer.start()
 //                                     }
                                 }
