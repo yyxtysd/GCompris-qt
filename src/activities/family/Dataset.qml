@@ -386,22 +386,22 @@ QtObject {
              optionss: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
                    },
                    // level 16
-                   {  edgeList: [     [0.62, 0.16, 0.745, 0.16],
-                            [0.69, 0.16, 0.69, 0.70],
-                            [0.69, 0.50, 0.555, 0.50],
-                            [0.405, 0.53, 0.32, 0.53],
-                            [0.68, 0.695, 0.75, 0.695]
+                   {  edgeList: [     [0.4 + nodeWidth, 0.10 + nodeHeight / 2, 0.733, 0.10 + nodeHeight / 2],
+                            [(0.40 + nodeWidth + 0.733) / 2, 0.10 + nodeHeight / 2, (0.40 + nodeWidth + 0.733) / 2, 0.55 + nodeHeight / 2],
+                            [0.40 + nodeWidth, 0.55 + nodeHeight / 2, 0.68, 0.55 + nodeHeight / 2],//[0.69, 0.50, 0.555, 0.50],
+                            [0.15 + nodeWidth, 0.55 + nodeHeight / 2, 0.40, 0.55 + nodeHeight / 2],//[0.405, 0.53, 0.32, 0.53],
+                            [0.68, 0.55 + nodeHeight / 2, 0.733, 0.55 + nodeHeight / 2]//[0.68, 0.695, 0.75, 0.695]
                   ],
              nodePositions: [
-                            [0.463, 0.10],
+                            [0.400, 0.10],//0.463
                             [0.733, 0.10],
-                            [0.400, 0.45],
-                            [0.150, 0.45],
-                            [0.733, 0.67]
+                            [0.400, 0.55],//0.45
+                            [0.150, 0.55],//0.45
+                            [0.733, 0.55]//0.67
                  ],
 
-            captions: [ [0.02,0.51],
-                        [0.78,0.52]
+            captions: [ [0.02, 0.55],
+                        [0.733 + nodeWidth, 0.55 + nodeHeight / 2]
                       ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
             currentstate: ["deactive", "deactive", "deactive", "active", "activeTo"],
