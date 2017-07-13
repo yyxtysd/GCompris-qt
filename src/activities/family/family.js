@@ -54,7 +54,7 @@ function loadDatasets() {
         return
     }
     var levelTree = items.dataset.levelElements[currentLevel]
-    answerButtonRatio = 1/(levelTree.optionss.length+4);
+    answerButtonRatio = 1 / (levelTree.options.length + 4);
 
     items.nodeCreator.model.clear();
     items.answersChoice.model.clear();
@@ -65,13 +65,13 @@ function loadDatasets() {
                        "xPosition": levelTree.nodePositions[i][0],
                        "yPosition": levelTree.nodePositions[i][1],
                        "nodeValue": levelTree.nodeleave[i],
-                       "currentState": levelTree.currentstate[i]
+                       "currentState": levelTree.currentState[i]
                      });
     }
 
-    for(var j = 0 ; j <levelTree.optionss.length ; j++) {
+    for(var j = 0 ; j <levelTree.options.length ; j++) {
        items.answersChoice.model.append({
-               "optionn": levelTree.optionss[j],
+               "optionn": levelTree.options[j],
                "answer": levelTree.answer[0]
        });
     }
