@@ -24,21 +24,45 @@ import QtQuick 2.6
 QtObject {
     property real nodeWidth: background.nodeWidthRatio
     property real nodeHeight: background.nodeHeightRatio
+
+    /*
+     * Vertically, the screen is divided into three parts:
+     * gen_1: stands for Generation 1
+     * gen_2: stands for Generation 2
+     * gen_3: stands for Generation 3
+     */
+    readonly property real gen_1: 0.10
+    readonly property real gen_2: 0.40
+    readonly property real gen_3: 0.70
+
+    /*
+     * Horizontally, the screen is divided into left, center
+     * and right
+     */
+    readonly property real left: 0.2
+    readonly property real center: 0.4
+    readonly property real right: 0.6
+
+    readonly property real left_1: 0.1
+    readonly property real left_2: 0.3
+    readonly property real right_1: 0.5
+    readonly property real right_2: 0.7
+
     property var levelElements: [
         // level 1
         {
             edgeList: [
-                [0.37, 0.25, 0.64, 0.25],
-                [0.51, 0.25, 0.51, 0.50]
+                [left + nodeWidth, gen_1 + nodeHeight / 2, right, gen_1 + nodeHeight / 2],
+                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, ((left + nodeWidth) + right) / 2, gen_2]
             ],
             nodePositions: [
-                [0.211, 0.20],
-                [0.633, 0.20],
-                [0.40, 0.50]
+                [left, gen_1],
+                [right, gen_1],
+                [center, gen_2]
             ],
             captions: [
-                [0.27, 0.57],
-                [0.101, 0.25]
+                [center - nodeWidth, gen_2 + nodeHeight / 2],
+                [left - nodeWidth / 2, gen_1]
             ],
             nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
             currentState: ["activeTo", "deactive", "active"],
@@ -93,21 +117,21 @@ QtObject {
         // level 4
         {
             edgeList: [
-                [0.37, 0.25, 0.64, 0.25],
-                [0.51, 0.26, 0.33, 0.50],
-                [0.51, 0.25, 0.51, 0.50],
-                [0.51, 0.25, 0.70, 0.51]
+                [left + nodeWidth, gen_1 + nodeHeight / 2, right, gen_1 + nodeHeight / 2],//[0.37, 0.25, 0.64, 0.25],
+                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, left + nodeWidth / 2, gen_2],
+                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, center + nodeWidth / 2, gen_2],
+                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, right + nodeWidth / 2, gen_2]
             ],
             nodePositions: [
-                [0.211, 0.20],
-                [0.633, 0.20],
-                [0.22, 0.50],
-                [0.43, 0.50],
-                [0.65, 0.50]
+                [left, gen_1],
+                [right, gen_1],
+                [left, gen_2],
+                [center, gen_2],
+                [right, gen_2]
             ],
             captions: [
-                [0.27,0.74],
-                [0.49,0.74]
+                [left, (gen_2 + nodeHeight) * 1.1],
+                [center + nodeWidth / 2, (gen_2 + nodeHeight) * 1.1]
             ],
             nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
             currentState: ["deactive", "deactive", "active", "activeTo", "deactive"],
@@ -118,27 +142,27 @@ QtObject {
         // level 5
         {
             edgeList: [
-                [0.445, 0.17, 0.567, 0.17],
-                [0.515, 0.17, 0.515, 0.45],
-                [0.41, 0.45, 0.60, 0.45],
-                [0.515, 0.45, 0.515, 0.65],
-                [0.33, 0.65, 0.70, 0.65],
-                [0.33, 0.65, 0.33, 0.70],
-                [0.515, 0.65, 0.515, 0.70],
-                [0.70, 0.65, 0.70, 0.725]
+                [left_1 + nodeWidth, gen_1 + nodeHeight / 2, right_1, gen_1 + nodeHeight / 2],
+                [((left_1 + nodeWidth) + right_1) / 2, gen_1 + nodeHeight / 2, ((left_1 + nodeWidth) + right_1) / 2, gen_2],
+                [left_2 + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
+                [((left_2 + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_2 + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
+                [left + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3 - nodeWidth / 4],
+                [left + nodeWidth / 2, gen_3 - nodeWidth / 4, left + nodeWidth / 2, gen_3],
+                [center + nodeWidth / 2, gen_3 - nodeWidth / 4, center + nodeWidth / 2, gen_3],
+                [right + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [0.2911, 0.10],
-                [0.553, 0.10],
-                [0.251, 0.390],
-                [0.588, 0.390],
-                [0.22, 0.70],
-                [0.43, 0.70],
-                [0.65, 0.70]
+                [left_1, gen_1],
+                [right_1, gen_1],
+                [left_2, gen_2],
+                [right, gen_2],
+                [left, gen_3],
+                [center, gen_3],
+                [right, gen_3]
             ],
             captions: [
-                [0.10,0.76],
-                [0.20,0.17],
+                [left_1, gen_3 + nodeHeight / 4],
+                [left_1, gen_1 + nodeHeight]//[0.20,0.17],
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
             currentState: ["activeTo", "deactive", "deactive", "deactive", "active", "deactive", "deactive"],
