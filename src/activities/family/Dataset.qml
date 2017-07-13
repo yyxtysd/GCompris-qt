@@ -48,6 +48,30 @@ QtObject {
     readonly property real right_1: 0.5
     readonly property real right_2: 0.7
 
+    function rightXEdge(xPosition) {
+        /*
+         * Returns the x coordinate of the
+         * right edge of a node
+         */
+        return xPosition + nodeWidth
+    }
+
+    function nodeMidPointY(yPosition) {
+        /*
+         * Returns the y coordinate of the
+         * midpoint of a node
+         */
+        return yPosition + nodeHeight / 2
+    }
+
+    function nodeMidPointX(xLeftPosition, xRightPosition) {
+        /*
+         * Returns the x coordinate of the
+         * midpoint of two nodes
+         */
+        return ((xLeftPosition + nodeWidth) + xRightPosition) / 2
+    }
+
     property var levelElements: [
         // level 1
         {
@@ -117,10 +141,12 @@ QtObject {
         // level 4
         {
             edgeList: [
-                [left + nodeWidth, gen_1 + nodeHeight / 2, right, gen_1 + nodeHeight / 2],//[0.37, 0.25, 0.64, 0.25],
-                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, left + nodeWidth / 2, gen_2],
-                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, center + nodeWidth / 2, gen_2],
-                [((left + nodeWidth) + right) / 2, gen_1 + nodeHeight / 2, right + nodeWidth / 2, gen_2]
+                [rightXEdge(left), nodeMidPointY(gen_1), right, nodeMidPointY(gen_1)],
+                [nodeMidPointX(left, right), nodeMidPointY(gen_1), nodeMidPointX(left, right), gen_2 - nodeHeight / 4],
+                [left + nodeWidth / 2, gen_2 - nodeHeight / 4, right + nodeWidth / 2, gen_2 - nodeHeight / 4],
+                [left + nodeWidth / 2, gen_2 - nodeHeight / 4, left + nodeWidth / 2, gen_2],
+                [center + nodeWidth / 2, gen_2 - nodeHeight / 4, center + nodeWidth / 2, gen_2],
+                [right + nodeWidth / 2, gen_2 - nodeHeight / 4, right + nodeWidth / 2, gen_2]
             ],
             nodePositions: [
                 [left, gen_1],
@@ -135,7 +161,7 @@ QtObject {
             ],
             nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
             currentState: ["deactive", "deactive", "active", "activeTo", "deactive"],
-            edgeState:["married","others","others","others"],
+            edgeState:["married", "others", "others", "others", "others", "others"],
             answer: [qsTr("Sister")],
             options: [qsTr("Cousin"), qsTr("Brother"), qsTr("Sister")]
         },
@@ -493,22 +519,25 @@ QtObject {
         // level 18
         {
             edgeList: [
-                [0.61, 0.16, 0.745, 0.16],
-                [0.69, 0.16, 0.69, 0.70],
-                [0.69, 0.50, 0.56, 0.50],
-                [0.41, 0.53, 0.32, 0.53],
-                [0.69, 0.695, 0.75, 0.695]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
+                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
-                [0.463, 0.10],
-                [0.733, 0.10],
-                [0.400, 0.45],
-                [0.150, 0.45],
-                [0.733, 0.67]
+                [center, gen_1],
+                [right_2, gen_1],
+                [center, gen_2],
+                [left_1, gen_2],
+                [right_2, gen_2]
             ],
             captions: [
+                [center - (nodeWidth * 3/ 4), gen_1 + nodeHeight / 4],
+                [left_1 - nodeWidth / 2, gen_2 + nodeHeight / 2]
+                /*
                 [0.32,0.15],
                 [0.05,0.50]
+                */
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
             currentState: ["active", "deactive", "deactive", "activeTo", "deactive", "deactive"],
