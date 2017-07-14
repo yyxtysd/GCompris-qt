@@ -134,10 +134,11 @@ ActivityBase {
                         height: board.height/2
                         width: board.width * (1/6.25)
                         property real circleRadius: width
-                            property int value
+                        property int value
+                        property int indexValue
 
                         GCText {
-                            text: value
+                            text: index
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -150,13 +151,14 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
+                                indexValue = index
                                 var currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 var nextPlayer = items.playerOneTurn ? 0 : 1
                                 if ((!items.computerTurn && items.playerOneTurn && (currentMove >= 0 && currentMove <= 5) && Activity.isValidMove(currentMove,1,Activity.house)) || (!items.playerOneTurn && (currentMove >= 6 && currentMove <= 11) && Activity.isValidMove(currentMove,0,Activity.house)) && Activity.house[currentMove] != 0) {
                                         Activity.sowSeeds(currentMove,Activity.house,Activity.scoreHouse,nextPlayer)
                                         items.playerOneTurn = !items.playerOneTurn
-                                        Activity.setValues(Activity.house)
-                                        Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
+//                                         Activity.setValues(Activity.house)
+//                                         Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
 //                                         items.sowSeedsTimer.start()
 //                                     }
                                 }
@@ -206,12 +208,32 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
-                                Behavior on x {
-                                    NumberAnimation { duration: 400 }
-                                }
-                                Behavior on y {
-                                    NumberAnimation { duration: 400 }
-                                }
+                                NumberAnimation on x {
+                                     running: buttonClick.pressed && indexValue > 5 && indexValue < 12
+                                     from: x; to: grainRepeater.count * parent.width
+                                     easing.type: Easing.OutInQuad
+                                    }
+                                NumberAnimation on x {
+                                     running: buttonClick.pressed && indexValue >= 0 && indexValue < 5
+                                     from: x; to: -grainRepeater.count * parent.width
+                                     easing.type: Easing.OutInQuad
+                                    }
+                                NumberAnimation on y {
+                                     running: buttonClick.pressed && indexValue == 11
+                                     from: y; to: -board.height
+                                     easing.type: Easing.OutInQuad
+                                    }
+                                NumberAnimation on y {
+                                     running: buttonClick.pressed && indexValue == 0
+                                     from: y; to: board.height
+                                     easing.type: Easing.OutInQuad
+                                    }
+//                                 Behavior on x {
+//                                     NumberAnimation { duration: 400 }
+//                                 }
+//                                 Behavior on y {
+//                                     NumberAnimation { duration: 400 }
+//                                 }
                             }
                         }
                     }
