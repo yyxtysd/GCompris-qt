@@ -50,6 +50,34 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width * 0.6
             height: parent.height * 0.6
+
+            SequentialAnimation {
+                id: activeAnimation
+                running: currentPointer.state === "active" || currentPointer.state === "activeTo"
+                loops: Animation.Infinite
+                alwaysRunToEnd: true
+                NumberAnimation {
+                    target: nodeImage
+                    property: "rotation"
+                    from: 0; to: 10
+                    duration: 200
+                    easing.type: Easing.OutQuad
+                }
+                NumberAnimation {
+                    target: nodeImage
+                    property: "rotation"
+                    from: 10; to: -10
+                    duration: 400
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: nodeImage
+                    property: "rotation"
+                    from: -10; to: 0
+                    duration: 200
+                    easing.type: Easing.InQuad
+                }
+            }
         }
     }
 }
