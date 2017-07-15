@@ -369,21 +369,21 @@ QtObject {
         // level 12
         {
             edgeList: [
-                [0.45, 0.17, 0.56, 0.17],
-                [0.515, 0.17, 0.515, 0.45],
-                [0.41, 0.45, 0.60, 0.45],
-                [(0.251 + nodeWidth / 2), (0.40 + nodeHeight ), (0.251 + nodeWidth / 2), 0.70]
+                [rightXEdge(left), gen_1 + nodeHeight / 2, right, gen_1 + nodeHeight / 2],
+                [nodeMidPointX(left, right), nodeMidPointY(gen_1), nodeMidPointX(left, right), nodeMidPointY(gen_2)],
+                [rightXEdge(left), nodeMidPointY(gen_2), right, nodeMidPointY(gen_2)],
+                [left + nodeWidth / 2, gen_2 + nodeHeight, left + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [0.301, 0.10],
-                [0.553, 0.10],
-                [0.251, 0.40],
-                [0.588, 0.40],
-                [0.251, 0.70]
+                [left, gen_1],
+                [right, gen_1],
+                [left, gen_2],
+                [right, gen_2],
+                [left, gen_3]
             ],
             captions: [
-                [0.118,0.76],
-                [0.83,0.45],
+                [left - nodeWidth * 3 / 4, gen_3 + nodeHeight / 4],
+                [right + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
             currentState: ["deactive", "deactive", "deactive", "activeTo", "active"],
@@ -394,21 +394,21 @@ QtObject {
         // level 13
         {
             edgeList: [
-                [0.44, 0.17, 0.55, 0.17],
-                [0.505, 0.17, 0.505, 0.45],
-                [0.41, 0.45, 0.60, 0.45],
-                [(0.251 + nodeWidth / 2), (0.40 + nodeHeight ), (0.251 + nodeWidth / 2), 0.70]
+                [rightXEdge(left), gen_1 + nodeHeight / 2, right, gen_1 + nodeHeight / 2],
+                [nodeMidPointX(left, right), nodeMidPointY(gen_1), nodeMidPointX(left, right), nodeMidPointY(gen_2)],
+                [rightXEdge(left), nodeMidPointY(gen_2), right, nodeMidPointY(gen_2)],
+                [left + nodeWidth / 2, gen_2 + nodeHeight, left + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [0.291, 0.10],
-                [0.543, 0.10],
-                [0.251, 0.40],
-                [0.588, 0.40],
-                [0.251, 0.70]
+                [left, gen_1],
+                [right, gen_1],
+                [left, gen_2],
+                [right, gen_2],
+                [left, gen_3]
             ],
             captions: [
-                [0.83,0.45],
-                [0.118,0.76]
+                [right + nodeWidth * 1.1, gen_2 + nodeHeight / 4],
+                [left - nodeWidth / 2, gen_3 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babygirl.svg"],
             currentState: ["deactive", "deactive", "deactive", "active", "activeTo"],
@@ -419,51 +419,49 @@ QtObject {
         // level 14
         {
             edgeList: [
-                [0.62, 0.16, 0.745, 0.16],
-                [0.69, 0.16, 0.69, 0.70],
-                [0.69, 0.52, 0.555, 0.52],
-                [0.405, 0.53, 0.32, 0.53],
-                [0.68, 0.695, 0.75, 0.695]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
+                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
-                [0.463, 0.10],
-                [0.733, 0.10],
-                [0.400, 0.45],
-                [0.150, 0.45],
-                [0.733, 0.67]
+                [center, gen_1],
+                [right_2, gen_1],
+                [center, gen_2],
+                [right_2, gen_2],
+                [left_1, gen_2]
             ],
             captions: [
-                [0.02,0.51],
-                [0.32,0.16]
+                [left_1 - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
+                [center - nodeWidth * 3 / 4, gen_1 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
-            currentState: ["activeTo", "deactive", "deactive", "active", "deactive"],
-            edgeState:["married","others","others","married","others"],
+            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
+            currentState: ["activeTo", "deactive", "deactive", "deactive", "active"],
+            edgeState:["married","others","others","married"],
             answer: [qsTr("Father-in-law")],
             options: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
         },
         // level 15
         {
             edgeList: [
-                [0.62, 0.16, 0.745, 0.16],
-                [0.69, 0.16, 0.69, 0.70],
-                [0.69, 0.50, 0.555, 0.50],
-                [0.405, 0.53, 0.32, 0.53],
-                [0.68, 0.695, 0.75, 0.695]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
+                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
-                [0.463, 0.10],
-                [0.733, 0.10],
-                [0.400, 0.45],
-                [0.150, 0.45],
-                [0.733, 0.67]
+                [center, gen_1],
+                [right_2, gen_1],
+                [center, gen_2],
+                [right_2, gen_2],
+                [left_1, gen_2]
             ],
             captions: [
-                [0.02,0.51],
-                [0.80,0.365],
+                [left_1 - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
+                [right_2 + nodeWidth * 1.1, gen_1 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
-            currentState: ["deactive", "activeTo", "deactive", "active", "deactive"],
+            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
+            currentState: ["deactive", "activeTo", "deactive", "deactive", "active"],
             edgeState:["married","others","others","married","others"],
             answer: [qsTr("Mother-in-law")],
             options: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
@@ -471,25 +469,24 @@ QtObject {
         // level 16
         {
             edgeList: [
-                [0.4 + nodeWidth, 0.10 + nodeHeight / 2, 0.733, 0.10 + nodeHeight / 2],
-                [(0.40 + nodeWidth + 0.733) / 2, 0.10 + nodeHeight / 2, (0.40 + nodeWidth + 0.733) / 2, 0.55 + nodeHeight / 2],
-                [0.40 + nodeWidth, 0.55 + nodeHeight / 2, 0.68, 0.55 + nodeHeight / 2],
-                [0.15 + nodeWidth, 0.55 + nodeHeight / 2, 0.40, 0.55 + nodeHeight / 2],
-                [0.68, 0.55 + nodeHeight / 2, 0.733, 0.55 + nodeHeight / 2]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
+                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
-                [0.400, 0.10],
-                [0.733, 0.10],
-                [0.400, 0.55],
-                [0.150, 0.55],
-                [0.733, 0.55]
+                [center, gen_1],
+                [right_2, gen_1],
+                [center, gen_2],
+                [right_2, gen_2],
+                [left_1, gen_2]
             ],
             captions: [
-                [0.02, 0.55],
-                [0.733 + nodeWidth, 0.55 + nodeHeight / 2]
+                [left_1 - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
+                [right_2 + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg"],
-            currentState: ["deactive", "deactive", "deactive", "active", "activeTo"],
+            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
+            currentState: ["deactive", "deactive", "deactive", "activeTo", "active"],
             edgeState:["married","others","others","married","others"],
             answer: [qsTr("Brother-in-law")],
             options: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
@@ -497,28 +494,27 @@ QtObject {
         // level 17
         {
             edgeList: [
-                [0.50, 0.16, 0.61, 0.16],
-                [0.56, 0.16, 0.56, 0.70],
-                [0.56, 0.50, 0.44, 0.50],
-                [0.310, 0.53, 0.21, 0.53],
-                [0.555, 0.695, 0.63, 0.695],
-                [0.615, 0.765, 0.47, 0.765]
+                [rightXEdge(left_2), nodeMidPointY(gen_1), right_1, nodeMidPointY(gen_1)],
+                [nodeMidPointX(left_2, right_1), nodeMidPointY(gen_1), nodeMidPointX(left_2, right_1), nodeMidPointY(gen_2)],
+                [rightXEdge(left_2), nodeMidPointY(gen_2), right_1, nodeMidPointY(gen_2)],
+                [rightXEdge(left_1), nodeMidPointY(gen_2), left_2, nodeMidPointY(gen_2)],
+                [rightXEdge(right_1), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
-                [0.343, 0.10],
-                [0.603, 0.10],
-                [0.300, 0.45],
-                [0.040, 0.45],
-                [0.603, 0.67],
-                [0.30, 0.70]
+                [left_2, gen_1],
+                [right_1, gen_1],
+                [left_2, gen_2],
+                [left_1, gen_2],
+                [right_1, gen_2],
+                [right_2, gen_2]
             ],
             captions: [
-                [0.10,0.34],
-                [0.20,0.76]
+                [left_1 - nodeWidth / 2, gen_2],
+                [right_2 + nodeWidth, gen_2 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg", "lady1.svg"],
             currentState: ["dective", "deactive", "deactive", "active", "deactive", "activeTo"],
-            edgeState:["married","others","others","married","others","married"],
+            edgeState:["married","others","others","married","married"],
             answer: [qsTr("Sister-in-law")],
             options: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
         },
@@ -540,10 +536,6 @@ QtObject {
             captions: [
                 [center - (nodeWidth * 3/ 4), gen_1 + nodeHeight / 4],
                 [left_1 - nodeWidth / 2, gen_2 + nodeHeight / 2]
-                /*
-                [0.32,0.15],
-                [0.05,0.50]
-                */
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
             currentState: ["active", "deactive", "deactive", "activeTo", "deactive", "deactive"],
