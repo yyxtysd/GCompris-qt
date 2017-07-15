@@ -61,7 +61,9 @@ ActivityBase {
             property alias playerTwoLevelScore: playerTwoLevelScore
             property alias boxModel: boxModel
             property bool computerTurn: false
-//             property alias sowSeedsTimer: sowSeedsTimer
+            property alias sowSeedsTimer: sowSeedsTimer
+            property var currentMove
+            property var player
 //             property int indexValue: indexValue
         }
 
@@ -75,12 +77,15 @@ ActivityBase {
             onTriggered: Activity.computerMove()
         }
 
-//         Timer {
-//             id: sowSeedsTimer
-//             repeat: false
-//             interval: 300
-//             onTriggered: Activity.sowSeeds(items.indexValue)
-//         }
+        Timer {
+            id: sowSeedsTimer
+            repeat: false
+            interval: 300
+            onTriggered: {
+                Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
+                Activity.setValues(Activity.house)
+            }
+        }
 
         Item {
             id: boxModel
@@ -152,15 +157,13 @@ ActivityBase {
                             anchors.fill: parent
                             onPressed: {
                                 indexValue = index
-                                var currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
-                                var nextPlayer = items.playerOneTurn ? 0 : 1
-                                if ((!items.computerTurn && items.playerOneTurn && (currentMove >= 0 && currentMove <= 5) && Activity.isValidMove(currentMove,1,Activity.house)) || (!items.playerOneTurn && (currentMove >= 6 && currentMove <= 11) && Activity.isValidMove(currentMove,0,Activity.house)) && Activity.house[currentMove] != 0) {
-                                        Activity.sowSeeds(currentMove,Activity.house,Activity.scoreHouse,nextPlayer)
+                                items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
+                                items.player = items.playerOneTurn ? 0 : 1
+                                if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
                                         items.playerOneTurn = !items.playerOneTurn
-//                                         Activity.setValues(Activity.house)
-//                                         Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
-//                                         items.sowSeedsTimer.start()
-//                                     }
+//                                         startAnim()
+                                        Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
+                                        items.sowSeedsTimer.start()
                                 }
                             }
                             onReleased: {
@@ -179,20 +182,7 @@ ActivityBase {
                             ScriptAction {
                             id: script
                             script: {
-                                var i = 0;
-                                for(var j = 0, seedMove = 0,currIndex = index; j < grainRepeater.count; j++, seedMove++,currIndex++) {
-                                 if(!items.playerOneTurn)
-                                    if(currIndex < 11)
-                                        grainRepeater.itemAt(j).x = 170 * (seedMove + 1)
-
-                                    else if(11 - currIndex <= 0 ) {
-                                        print("old",grainRepeater.itemAt(j).x)
-                                        grainRepeater.itemAt(j).y = -80
-                                            grainRepeater.itemAt(j).x = 170 * (11 - index)
-                                            print("new",grainRepeater.itemAt(j).x)
-//                                             grainRepeater.itemAt(j).x = -20 * 2
-                                    }
-                                }
+                                print(grainRepeater.itemAt(0))
                             }
                         }
 
@@ -208,25 +198,28 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
+
                                 NumberAnimation on x {
-                                     running: buttonClick.pressed && indexValue > 5 && indexValue < 12
+                                     running: buttonClick.pressed && indexValue > 5 && indexValue < 11
+                                     alwaysRunToEnd : true
                                      from: x; to: grainRepeater.count * parent.width
-                                     easing.type: Easing.OutInQuad
+                                     easing.type: Easing.InOutQuad
                                     }
                                 NumberAnimation on x {
-                                     running: buttonClick.pressed && indexValue >= 0 && indexValue < 5
+                                     running: buttonClick.pressed && indexValue > 0 && indexValue <= 5
+                                     alwaysRunToEnd : true
                                      from: x; to: -grainRepeater.count * parent.width
-                                     easing.type: Easing.OutInQuad
+                                     easing.type: Easing.InOutQuad
                                     }
                                 NumberAnimation on y {
                                      running: buttonClick.pressed && indexValue == 11
-                                     from: y; to: -board.height
-                                     easing.type: Easing.OutInQuad
+                                     from: y; to: -board.height * 1.5
+                                     easing.type: Easing.InOutQuad
                                     }
                                 NumberAnimation on y {
                                      running: buttonClick.pressed && indexValue == 0
-                                     from: y; to: board.height
-                                     easing.type: Easing.OutInQuad
+                                     from: y; to: board.height * 1.67
+                                     easing.type: Easing.InOutQuad
                                     }
 //                                 Behavior on x {
 //                                     NumberAnimation { duration: 400 }
