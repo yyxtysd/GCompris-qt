@@ -64,6 +64,8 @@ ActivityBase {
             property alias sowSeedsTimer: sowSeedsTimer
             property var currentMove
             property var player
+            property bool moveX: false
+            property bool moveY: false
 //             property int indexValue: indexValue
         }
 
@@ -83,7 +85,7 @@ ActivityBase {
             interval: 300
             onTriggered: {
                 Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
-                Activity.setValues(Activity.house)
+//                 Activity.setValues(Activity.house)
             }
         }
 
@@ -156,6 +158,8 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
+                                print(items.moveX)
+                                items.moveX = true
                                 indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 items.player = items.playerOneTurn ? 0 : 1
@@ -175,17 +179,6 @@ ActivityBase {
                             }
                         }
 
-                        function startAnim() {
-                            script.start()
-                        }
-
-                            ScriptAction {
-                            id: script
-                            script: {
-                                print(grainRepeater.itemAt(0))
-                            }
-                        }
-
                         Repeater {
                             id: grainRepeater
                             model: value
@@ -198,17 +191,45 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
-
+                                onXChanged: {
+                                    print(x,index)
+                                     if(indexValue > 5 && indexValue < 12 && (grainRepeater.count > 11 - indexValue)) {
+//                                          y = - 20
+//                                          startAnim()
+                                     }
+                                 }
+//                                  function startAnim() {
+//                                      anim.start()
+//                                  }
+//
+//                            SequentialAnimation {
+//                                 id: anim
+//                                 NumberAnimation { target: grain; property: "x"; to: grainRepeater.count * board.width * (1/7); duration: 1000 }
+//                                 PauseAnimation { duration: 100}
+//                                 NumberAnimation { target: grain; property: "y"; to: -20; duration: 1000 }
+//                             }
+//
+//                         ScriptAction {
+//                             id: script
+//                             script: {
+//                                 for(var j = 0, seedMove = 0; j < grainRepeater.count; j++, seedMove++) {
+//                                     if(170 * (seedMove + 1) >= board.width * 0.9) {
+//                                         y = 20
+//                                     }
+//                                     else {
+//                                     grainRepeater.itemAt(j).x = 170 * (seedMove + 1)
+//                                     }
+//                                 }
+//                             }
+//                         }
                                 NumberAnimation on x {
-                                     running: buttonClick.pressed && indexValue > 5 && indexValue < 11
-                                     alwaysRunToEnd : true
-                                     from: x; to: grainRepeater.count * parent.width
+                                     running: items.moveX && indexValue > 5 && indexValue < 11
+                                     from: x; to: grainRepeater.count * board.width * (1/7)
                                      easing.type: Easing.InOutQuad
-                                    }
+                                }
                                 NumberAnimation on x {
-                                     running: buttonClick.pressed && indexValue > 0 && indexValue <= 5
-                                     alwaysRunToEnd : true
-                                     from: x; to: -grainRepeater.count * parent.width
+                                     running: items.moveX && indexValue > 0 && indexValue <= 5
+                                     from: x; to: -grainRepeater.count * board.width * (1/7)
                                      easing.type: Easing.InOutQuad
                                     }
                                 NumberAnimation on y {
