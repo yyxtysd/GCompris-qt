@@ -66,7 +66,7 @@ ActivityBase {
             property var player
             property bool moveX: false
             property bool moveY: false
-//             property int indexValue: indexValue
+            //             property int indexValue: indexValue
         }
 
         onStart: { Activity.start(items,twoPlayer) }
@@ -85,7 +85,7 @@ ActivityBase {
             interval: 300
             onTriggered: {
                 Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
-//                 Activity.setValues(Activity.house)
+                //                 Activity.setValues(Activity.house)
             }
         }
 
@@ -103,7 +103,7 @@ ActivityBase {
                 anchors.fill: parent
             }
 
-             Rectangle {
+            Rectangle {
                 id: playerOneBorder
                 height: 5
                 width: parent.width/4
@@ -113,7 +113,7 @@ ActivityBase {
                 anchors.topMargin: 6
             }
 
-             Rectangle {
+            Rectangle {
                 id: playerTwoBorder
                 height: 5
                 width: parent.width/4
@@ -143,6 +143,7 @@ ActivityBase {
                         property real circleRadius: width
                         property int value
                         property int indexValue
+                        property int currentIndex
 
                         GCText {
                             text: index
@@ -158,16 +159,16 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
-                                print(items.moveX)
                                 items.moveX = true
                                 indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
-                                items.player = items.playerOneTurn ? 0 : 1
+                                currentIndex = grainRepeater.count
+                                startAnimation()
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
-                                        items.playerOneTurn = !items.playerOneTurn
-//                                         startAnim()
-                                        Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
-                                        items.sowSeedsTimer.start()
+                                    items.playerOneTurn = !items.playerOneTurn
+                                    //                                         startAnim()
+                                    Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
+                                    items.sowSeedsTimer.start()
                                 }
                             }
                             onReleased: {
@@ -176,6 +177,24 @@ ActivityBase {
                                     trigComputerMove.start()
                                     items.playerOneTurn = !items.playerOneTurn
                                 }
+                            }
+                        }
+
+                        function startAnimation() {
+                            currentIndex--;
+                            print("cecl",11 - indexValue,grainRepeater.count,currentIndex)
+                            if(currentIndex < 6) {
+                                for(var i = 0; i < grainRepeater.count; i++) {
+                                    grainRepeater.itemAt(i).xLeftAnimation.start()
+                                }
+                            }
+                            //                             if((11 - indexValue < grainRepeater.count) && currentIndex == -1) {
+                            //                             for(var i = 0; i < grainRepeater.count; i++) {
+                            //                             grainRepeater.itemAt(i).yUpAnimation.start()
+                            //                             }
+                            //                             }
+                            else {
+                                return
                             }
                         }
 
@@ -191,63 +210,42 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
-                                onXChanged: {
-                                    print(x,index)
-                                     if(indexValue > 5 && indexValue < 12 && (grainRepeater.count > 11 - indexValue)) {
-//                                          y = - 20
-//                                          startAnim()
-                                     }
-                                 }
-//                                  function startAnim() {
-//                                      anim.start()
-//                                  }
-//
-//                            SequentialAnimation {
-//                                 id: anim
-//                                 NumberAnimation { target: grain; property: "x"; to: grainRepeater.count * board.width * (1/7); duration: 1000 }
-//                                 PauseAnimation { duration: 100}
-//                                 NumberAnimation { target: grain; property: "y"; to: -20; duration: 1000 }
-//                             }
-//
-//                         ScriptAction {
-//                             id: script
-//                             script: {
-//                                 for(var j = 0, seedMove = 0; j < grainRepeater.count; j++, seedMove++) {
-//                                     if(170 * (seedMove + 1) >= board.width * 0.9) {
-//                                         y = 20
-//                                     }
-//                                     else {
-//                                     grainRepeater.itemAt(j).x = 170 * (seedMove + 1)
-//                                     }
-//                                 }
-//                             }
-//                         }
-                                NumberAnimation on x {
-                                     running: items.moveX && indexValue > 5 && indexValue < 11
-                                     from: x; to: grainRepeater.count * board.width * (1/7)
-                                     easing.type: Easing.InOutQuad
+                                property var xLeftAnimation: NumberAnimation {
+                                    target: grain
+                                    properties: "x"
+                                    to: x + board.width / 4.5
+                                    duration: 200
+                                    onStopped: {
+                                        print("stop")
+                                        if(currentIndex >= 0) {
+                                            startAnimation()
+                                        }
+                                    }
                                 }
-                                NumberAnimation on x {
-                                     running: items.moveX && indexValue > 0 && indexValue <= 5
-                                     from: x; to: -grainRepeater.count * board.width * (1/7)
-                                     easing.type: Easing.InOutQuad
+                                property var xRightAnimation: NumberAnimation {
+                                    running: items.moveX && indexValue > 0 && indexValue <= 5
+                                    from: x; to: (grainRepeater.count > 11 - items.currentMove) ? (-board.width * 0.9) : (-grainRepeater.count * board.width * (1/7))
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                property var yUpAnimation: NumberAnimation {
+                                    target: grain
+                                    properties: "y"
+                                    to: -50
+                                    duration: 200
+                                    onStopped: {
+                                        if(currentIndex) {
+                                            currentIndex--;
+                                            startAnimation()
+                                        }
                                     }
-                                NumberAnimation on y {
-                                     running: buttonClick.pressed && indexValue == 11
-                                     from: y; to: -board.height * 1.5
-                                     easing.type: Easing.InOutQuad
-                                    }
-                                NumberAnimation on y {
-                                     running: buttonClick.pressed && indexValue == 0
-                                     from: y; to: board.height * 1.67
-                                     easing.type: Easing.InOutQuad
-                                    }
-//                                 Behavior on x {
-//                                     NumberAnimation { duration: 400 }
-//                                 }
-//                                 Behavior on y {
-//                                     NumberAnimation { duration: 400 }
-//                                 }
+                                }
+
+                                property var yDownAnimation: NumberAnimation {
+                                    running: buttonClick.pressed && indexValue == 0
+                                    from: y; to: board.height * 1.67
+                                    easing.type: Easing.InOutQuad
+                                }
                             }
                         }
                     }
@@ -393,7 +391,7 @@ ActivityBase {
         Bar {
             id: bar
             content: BarEnumContent { value: twoPlayer ? (help | home | reload) : (tutorialSection.visible ?
-                                                             (help | home) : (help | home | level | reload)) }
+                                                                                       (help | home) : (help | home | level | reload)) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
