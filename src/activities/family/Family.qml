@@ -28,6 +28,8 @@ import "family.js" as Activity
 ActivityBase {
     id: activity
 
+    property string mode: "normal"
+
     onStart: focus = true
     onStop: {}
 
@@ -125,7 +127,7 @@ ActivityBase {
                             borderWidth: 4
                             color: "transparent"
                             radius: nodeWidth / 2
-                            state: currentState
+                            state: activity.mode == "normal" ? currentState : "deactive"
 
                             states: [
                                State {
@@ -154,7 +156,7 @@ ActivityBase {
 
                    Rectangle {
                        id: me
-                       visible: dataset.levelElements[bar.level-1].captions[0] !== undefined
+                       visible: dataset.levelElements[bar.level-1].captions[0] !== undefined && activity.mode == "normal"
                        x: dataset.levelElements[bar.level-1].captions[0][0]*treeArea.width
                        y: dataset.levelElements[bar.level-1].captions[0][1]*treeArea.height
 
@@ -176,7 +178,7 @@ ActivityBase {
                     Image {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
-                        visible: dataset.levelElements[bar.level-1].captions[1] !== undefined
+                        visible: dataset.levelElements[bar.level-1].captions[1] !== undefined && activity.mode == "normal"
                         x: dataset.levelElements[bar.level-1].captions[1][0]*treeArea.width
                         y: dataset.levelElements[bar.level-1].captions[1][1]*treeArea.height
                     }
@@ -243,7 +245,20 @@ ActivityBase {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: "transparent"
+
+                    GCText {
+                        id: question
+                        visible: activity.mode == "expert" ? true : false
+                        width: parent.width
+                        height: parent.height
+                        anchors.verticalCenter: parent.verticalCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
+                        text: qsTr("Select the pair which denote the following relation: \n" + dataset.levelElements[bar.level - 1].answer[0])
+                    }
+
                     Grid {
+                        visible: activity.mode == "normal" ? true : false
                         columns: 1
                         rowSpacing: 20
                         anchors.verticalCenter: parent.verticalCenter

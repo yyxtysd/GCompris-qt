@@ -53,7 +53,7 @@ Item {
 
             SequentialAnimation {
                 id: activeAnimation
-                running: currentPointer.state === "active" || currentPointer.state === "activeTo"
+                running: (currentPointer.state === "active" || currentPointer.state === "activeTo") && activity.mode == "normal"
                 loops: Animation.Infinite
                 alwaysRunToEnd: true
                 NumberAnimation {

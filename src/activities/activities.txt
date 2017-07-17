@@ -40,6 +40,7 @@ explore_monuments
 explore_world_animals
 explore_world_music
 family
+family_expert
 fifteen
 followline
 football
