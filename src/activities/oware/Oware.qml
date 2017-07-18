@@ -64,9 +64,6 @@ ActivityBase {
             property alias sowSeedsTimer: sowSeedsTimer
             property var currentMove
             property var player
-            property bool moveX: false
-            property bool moveY: false
-            //             property int indexValue: indexValue
         }
 
         onStart: { Activity.start(items,twoPlayer) }
@@ -144,6 +141,7 @@ ActivityBase {
                         property int value
                         property int indexValue
                         property int currentIndex
+                        property int currentSeeds
 
                         GCText {
                             text: index
@@ -162,11 +160,11 @@ ActivityBase {
                                 items.moveX = true
                                 indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
-                                currentIndex = grainRepeater.count
+                                currentIndex = indexValue
+                                currentSeeds = grainRepeater.count
                                 startAnimation()
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
                                     items.playerOneTurn = !items.playerOneTurn
-                                    //                                         startAnim()
                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
                                     items.sowSeedsTimer.start()
                                 }
@@ -181,18 +179,31 @@ ActivityBase {
                         }
 
                         function startAnimation() {
-                            currentIndex--;
-                            print("cecl",11 - indexValue,grainRepeater.count,currentIndex)
-                            if(currentIndex < 6) {
-                                for(var i = 0; i < grainRepeater.count; i++) {
+                            print("in animation",currentIndex,currentSeeds)
+                            if(currentIndex >= 6 && currentIndex < 11 && currentSeeds > 0) {
+                                for(var i = 0; i < currentSeeds; i++) {
+                                    print("moving x right",i,currentIndex,currentSeeds)
+                                    grainRepeater.itemAt(i).xRightAnimation.start()
+                                }
+                            }
+                            else if(currentIndex <= 5 && currentIndex > 0 && currentSeeds > 0) {
+                                for(var i = 0; i < currentSeeds; i++) {
+                                    print("moving x left",i,currentIndex,currentSeeds)
                                     grainRepeater.itemAt(i).xLeftAnimation.start()
                                 }
                             }
-                            //                             if((11 - indexValue < grainRepeater.count) && currentIndex == -1) {
-                            //                             for(var i = 0; i < grainRepeater.count; i++) {
-                            //                             grainRepeater.itemAt(i).yUpAnimation.start()
-                            //                             }
-                            //                             }
+                            else if(currentIndex == 11 && currentSeeds > 0) {
+                                for(var i = 0; i < currentSeeds; i++) {
+                                    print("moving y up",i,currentIndex,currentSeeds)
+                                    grainRepeater.itemAt(i).yUpAnimation.start()
+                                }
+                            }
+                            else if(currentIndex == 0 && currentSeeds > 0) {
+                                for(var i = 0; i < currentSeeds; i++) {
+                                    print("moving y down",i,currentIndex,currentSeeds)
+                                    grainRepeater.itemAt(i).yDownAnimation.start()
+                                }
+                            }
                             else {
                                 return
                             }
@@ -213,38 +224,58 @@ ActivityBase {
                                 property var xLeftAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    to: x + board.width / 4.5
+                                    from: x ;to: x - 200
                                     duration: 200
                                     onStopped: {
-                                        print("stop")
-                                        if(currentIndex >= 0) {
+                                            currentSeeds--
+                                            if(currentIndex <=5 && currentIndex >= 0 && currentSeeds > 0) {
+                                            currentIndex--;
+                                             print("stoop",currentIndex,currentSeeds)
                                             startAnimation()
-                                        }
+                                            }
                                     }
                                 }
                                 property var xRightAnimation: NumberAnimation {
-                                    running: items.moveX && indexValue > 0 && indexValue <= 5
-                                    from: x; to: (grainRepeater.count > 11 - items.currentMove) ? (-board.width * 0.9) : (-grainRepeater.count * board.width * (1/7))
-                                    easing.type: Easing.InOutQuad
+                                    target: grain
+                                    properties: "x"
+                                    from: x ;to: x + 200
+                                    duration: 200
+                                    onStopped: {
+                                            currentSeeds--
+                                            if(currentIndex >= 6 && currentIndex < 12 && currentSeeds > 0) {
+                                            currentIndex++;
+                                            print("stoop",currentIndex,currentSeeds)
+                                            startAnimation()
+                                            }
+                                    }
                                 }
 
                                 property var yUpAnimation: NumberAnimation {
                                     target: grain
                                     properties: "y"
-                                    to: -50
+                                    to: -100
                                     duration: 200
                                     onStopped: {
-                                        if(currentIndex) {
-                                            currentIndex--;
+                                        currentSeeds--
+                                        if(currentSeeds > 0) {
+                                            currentIndex = 5
                                             startAnimation()
                                         }
                                     }
                                 }
 
                                 property var yDownAnimation: NumberAnimation {
-                                    running: buttonClick.pressed && indexValue == 0
-                                    from: y; to: board.height * 1.67
-                                    easing.type: Easing.InOutQuad
+                                    target: grain
+                                    properties: "y"
+                                    to: 250
+                                    duration: 200
+                                    onStopped: {
+                                        currentSeeds--
+                                        if(currentSeeds > 0) {
+                                            currentIndex = 6
+                                            startAnimation()
+                                        }
+                                    }
                                 }
                             }
                         }
