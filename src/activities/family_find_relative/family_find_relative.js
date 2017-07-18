@@ -1,9 +1,10 @@
-/* GCompris - family_expert.qml
+/* GCompris - family_find_relative.js
  *
  * Copyright (C) 2017 RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com>
  *
  * Authors:
- *   RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
+ *   <THE GTK VERSION AUTHOR> (GTK+ version)
+ *   "YOUR NAME" <YOUR EMAIL> (Qt Quick port)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,14 +19,36 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+.pragma library
+.import QtQuick 2.0 as Quick
 
-import "../../core"
-import "family_expert.js" as Activity
-import "../family"
+var currentLevel = 0
+var numberOfLevel = 4
+var items
 
-Family {
-    id: activity
+function start(items_) {
+    items = items_
+    currentLevel = 0
+    initLevel()
+}
 
-    property string mode: "expert"
+function stop() {
+}
+
+function initLevel() {
+    items.bar.level = currentLevel + 1
+}
+
+function nextLevel() {
+    if(numberOfLevel <= ++currentLevel ) {
+        currentLevel = 0
+    }
+    initLevel();
+}
+
+function previousLevel() {
+    if(--currentLevel < 0) {
+        currentLevel = numberOfLevel - 1
+    }
+    initLevel();
 }

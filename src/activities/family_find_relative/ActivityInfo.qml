@@ -18,12 +18,12 @@
 import GCompris 1.0
 
 ActivityInfo {
-  name: "family_expert/Family_expert.qml"
+  name: "family_find_relative/Family_find_relative.qml"
   difficulty: 2
-  icon: "family_expert/family_expert.svg"
+  icon: "family_find_relative/family_find_relative.svg"
   author: "Rudra Nil Basu &lt;rudra.nil.basu.1996@gmail.com&gt;"
   demo: true
-  title: qsTr("Family pair matching")
+  title: qsTr("Family find relatives")
   description: ""
   //intro: "put here in comment the text for the intro voice"
   goal: ""
