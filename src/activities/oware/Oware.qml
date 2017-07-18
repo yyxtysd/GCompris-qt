@@ -82,7 +82,7 @@ ActivityBase {
             interval: 300
             onTriggered: {
                 Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
-                //                 Activity.setValues(Activity.house)
+                                Activity.setValues(Activity.house)
             }
         }
 
@@ -157,7 +157,6 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
-                                items.moveX = true
                                 indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 currentIndex = indexValue
