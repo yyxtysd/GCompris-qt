@@ -79,7 +79,7 @@ ActivityBase {
         Timer {
             id: sowSeedsTimer
             repeat: false
-            interval: 300
+            interval: 330
             onTriggered: {
                 Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
                                 Activity.setValues(Activity.house)
