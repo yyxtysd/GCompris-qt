@@ -88,7 +88,15 @@ ActivityBase {
             property alias edgeCreator: edgeCreator
             property alias wringcreator: wringcreator
             property alias dataset: dataset
+            property alias nodePreviouslySelected: background.nodePreviouslySelected
+            property alias firstNodeValue: background.firstNodeValue
+            property alias secondNodeValue: background.secondNodeValue
+            property string mode: activity.mode
         }
+
+        property bool nodePreviouslySelected: false
+        property int firstNodeValue
+        property int secondNodeValue
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
@@ -127,7 +135,8 @@ ActivityBase {
                             borderWidth: 4
                             color: "transparent"
                             radius: nodeWidth / 2
-                            state: activity.mode == "normal" ? currentState : "deactive"
+                            state:  currentState
+                            weight: nodeWeight
 
                             states: [
                                State {
@@ -254,7 +263,7 @@ ActivityBase {
                         anchors.verticalCenter: parent.verticalCenter
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
-                        text: qsTr("Select the pair which denote the following relation: \n" + dataset.levelElements[bar.level - 1].answer[0])
+                        text: qsTr("Select the pair which denote the following relation: %1").arg(dataset.levelElements[bar.level - 1].answer[0])
                     }
 
                     Grid {

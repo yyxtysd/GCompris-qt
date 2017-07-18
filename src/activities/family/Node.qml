@@ -34,6 +34,7 @@ Item {
     property real borderWidth
     property string color
     property real radius
+    property int weight
 
     Rectangle {
         id: content
@@ -76,6 +77,20 @@ Item {
                     from: -10; to: 0
                     duration: 200
                     easing.type: Easing.InQuad
+                }
+            }
+        }
+
+        MouseArea {
+            visible: activity.mode == "expert" ? true : false
+            anchors.fill: parent
+            onClicked: {
+                if (!items.nodePreviouslySelected) {
+                    items.nodePreviouslySelected = true
+                    items.firstNodeValue = currentPointer.weight
+                } else {
+                    items.secondNodeValue = currentPointer.weight
+                    Activity.checkPairs()
                 }
             }
         }

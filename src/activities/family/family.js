@@ -65,7 +65,8 @@ function loadDatasets() {
                        "xPosition": levelTree.nodePositions[i][0],
                        "yPosition": levelTree.nodePositions[i][1],
                        "nodeValue": levelTree.nodeleave[i],
-                       "currentState": levelTree.currentState[i]
+                       "currentState": items.mode == "normal" ? levelTree.currentState[i] : "deactive",
+                       "nodeWeight": levelTree.nodeWeights[i]
                      });
     }
 
@@ -97,6 +98,15 @@ function loadDatasets() {
             });
         }
     }
+}
+
+function checkPairs() {
+    if (items.firstNodeValue == (items.secondNodeValue * -1) && items.firstNodeValue != 0) {
+        items.bonus.good("lion")
+    } else {
+        items.bonus.bad("lion")
+    }
+    items.nodePreviouslySelected = false
 }
 
 function nextLevel() {

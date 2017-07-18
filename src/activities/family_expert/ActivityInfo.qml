@@ -23,7 +23,7 @@ ActivityInfo {
   icon: "family_expert/family_expert.svg"
   author: "Rudra Nil Basu &lt;rudra.nil.basu.1996@gmail.com&gt;"
   demo: true
-  title: "Family pair matching"
+  title: qsTr("Family pair matching")
   description: ""
   //intro: "put here in comment the text for the intro voice"
   goal: ""
