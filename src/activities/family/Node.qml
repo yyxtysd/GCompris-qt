@@ -54,7 +54,7 @@ Item {
 
             SequentialAnimation {
                 id: activeAnimation
-                running: (currentPointer.state === "active" || currentPointer.state === "activeTo") && activity.mode == "normal"
+                running: currentPointer.state === "active" || currentPointer.state === "activeTo"
                 loops: Animation.Infinite
                 alwaysRunToEnd: true
                 NumberAnimation {
@@ -86,10 +86,14 @@ Item {
             anchors.fill: parent
             onClicked: {
                 if (!items.nodePreviouslySelected) {
+                    currentPointer.state = "active"
                     items.nodePreviouslySelected = true
                     items.firstNodeValue = currentPointer.weight
+                    items.firstNodePointer = currentPointer
                 } else {
+                    currentPointer.state = "activeTo"
                     items.secondNodeValue = currentPointer.weight
+                    items.secondNodePointer = currentPointer
                     Activity.checkPairs()
                 }
             }

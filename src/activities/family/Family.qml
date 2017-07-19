@@ -91,12 +91,16 @@ ActivityBase {
             property alias nodePreviouslySelected: background.nodePreviouslySelected
             property alias firstNodeValue: background.firstNodeValue
             property alias secondNodeValue: background.secondNodeValue
+            property alias firstNodePointer: background.firstNodePointer
+            property alias secondNodePointer: background.secondNodePointer
             property string mode: activity.mode
         }
 
         property bool nodePreviouslySelected: false
         property int firstNodeValue
         property int secondNodeValue
+        property var firstNodePointer
+        property var secondNodePointer
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }

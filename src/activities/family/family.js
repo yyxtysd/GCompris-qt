@@ -105,7 +105,10 @@ function checkPairs() {
         items.bonus.good("lion")
     } else {
         items.bonus.bad("lion")
+        items.firstNodePointer.state = "deactive"
+        items.secondNodePointer.state = "deactive"
     }
+
     items.nodePreviouslySelected = false
 }
 
