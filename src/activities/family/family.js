@@ -100,18 +100,6 @@ function loadDatasets() {
     }
 }
 
-function checkPairs() {
-    if (items.firstNodeValue == (items.secondNodeValue * -1) && items.firstNodeValue != 0) {
-        items.bonus.good("lion")
-    } else {
-        items.bonus.bad("lion")
-        items.firstNodePointer.state = "deactive"
-        items.secondNodePointer.state = "deactive"
-    }
-
-    items.nodePreviouslySelected = false
-}
-
 function nextLevel() {
     if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0

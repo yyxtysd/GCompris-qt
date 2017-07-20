@@ -88,19 +88,8 @@ ActivityBase {
             property alias edgeCreator: edgeCreator
             property alias wringcreator: wringcreator
             property alias dataset: dataset
-            property alias nodePreviouslySelected: background.nodePreviouslySelected
-            property alias firstNodeValue: background.firstNodeValue
-            property alias secondNodeValue: background.secondNodeValue
-            property alias firstNodePointer: background.firstNodePointer
-            property alias secondNodePointer: background.secondNodePointer
             property string mode: activity.mode
         }
-
-        property bool nodePreviouslySelected: false
-        property int firstNodeValue
-        property int secondNodeValue
-        property var firstNodePointer
-        property var secondNodePointer
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
@@ -110,14 +99,61 @@ ActivityBase {
         }
 
         Item {
+            id: selectedPairs
+            property bool nodePreviouslySelected: false
+            property int firstNodeValue
+            property int secondNodeValue
+            property var firstNodePointer
+            property var secondNodePointer
+
+            function deactivatePairs() {
+                if (firstNodePointer && secondNodePointer) {
+                    firstNodePointer.changeState("deactive")
+                    secondNodePointer.changeState("deactive")
+                }
+            }
+
+            function checkResult() {
+                if (firstNodeValue == (secondNodeValue * -1) && firstNodeValue != 0) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+
+            function selectNode(node_) {
+                if(!nodePreviouslySelected) {
+                    nodePreviouslySelected = true
+                    firstNodePointer = node_
+                    firstNodeValue = node_.weight
+                    firstNodePointer.changeState("active")
+                } else {
+                    secondNodePointer = node_
+                    secondNodeValue = node_.weight
+                    secondNodePointer.changeState("activeTo")
+
+                    // checking results
+                    if (checkResult()) {
+                        bonus.good("lion")
+                    } else {
+                        bonus.bad("lion")
+                        deactivatePairs()
+                    }
+
+                    nodePreviouslySelected = false
+                }
+            }
+        }
+
+        Item {
             id: partition
             width: background.width
             height: background.height
             Rectangle {
                 id: treeArea
                 color: "transparent"
-                width: background.horizontalLayout ? background.width * 0.65 : background.width
-                height: background.horizontalLayout ? background.height : background.height * 0.65
+                width: background.treeAreaWidth
+                height: background.treeAreaHeight
                 border.color: "black"
                 border.width: 5
                 Item {
@@ -167,26 +203,26 @@ ActivityBase {
                         }
                     }
 
-                   Rectangle {
-                       id: me
-                       visible: dataset.levelElements[bar.level-1].captions[0] !== undefined && activity.mode == "normal"
-                       x: dataset.levelElements[bar.level-1].captions[0][0]*treeArea.width
-                       y: dataset.levelElements[bar.level-1].captions[0][1]*treeArea.height
+                    Rectangle {
+                        id: me
+                        visible: dataset.levelElements[bar.level-1].captions[0] !== undefined && activity.mode == "normal"
+                        x: dataset.levelElements[bar.level-1].captions[0][0]*treeArea.width
+                        y: dataset.levelElements[bar.level-1].captions[0][1]*treeArea.height
 
-                       width: treeArea.width/12
-                       height: treeArea.height/14
+                        width: treeArea.width/12
+                        height: treeArea.height/14
 
-                       radius: 5
-                       border.color: "black"
-                       GCText {
-                           id: meLabel
-                           text: qsTr("Me")
-                           anchors {
-                               horizontalCenter: parent.horizontalCenter
-                               verticalCenter: parent.verticalCenter
-                           }
-                       }
-                   }
+                        radius: 5
+                        border.color: "black"
+                        GCText {
+                            id: meLabel
+                            text: qsTr("Me")
+                            anchors {
+                                horizontalCenter: parent.horizontalCenter
+                                verticalCenter: parent.verticalCenter
+                            }
+                        }
+                    }
 
                     Image {
                         id: questionmark

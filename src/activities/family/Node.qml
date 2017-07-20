@@ -36,6 +36,10 @@ Item {
     property real radius
     property int weight
 
+    function changeState(state_) {
+        currentPointer.state = state_
+    }
+
     Rectangle {
         id: content
         color: node.color
@@ -44,6 +48,7 @@ Item {
         border.color: borderColor
         border.width: borderWidth
         radius: node.radius
+
         Image {
             id: nodeImage
             source: nodeImageSource
@@ -84,19 +89,7 @@ Item {
         MouseArea {
             visible: activity.mode == "expert" ? true : false
             anchors.fill: parent
-            onClicked: {
-                if (!items.nodePreviouslySelected) {
-                    currentPointer.state = "active"
-                    items.nodePreviouslySelected = true
-                    items.firstNodeValue = currentPointer.weight
-                    items.firstNodePointer = currentPointer
-                } else {
-                    currentPointer.state = "activeTo"
-                    items.secondNodeValue = currentPointer.weight
-                    items.secondNodePointer = currentPointer
-                    Activity.checkPairs()
-                }
-            }
+            onClicked: selectedPairs.selectNode(currentPointer)
         }
     }
 }
