@@ -236,8 +236,8 @@ ActivityBase {
                             source: Activity.url + "rings.svg"
                             width: treeArea.width*0.04
                             height: treeArea.width*0.04
-                            x:ringx*treeArea.width
-                            y:ringy*treeArea.height
+                            x: ringx*treeArea.width
+                            y: ringy*treeArea.height
                         }
                     }
                 }
@@ -263,11 +263,21 @@ ActivityBase {
                         id: question
                         visible: activity.mode == "expert" ? true : false
                         width: parent.width
-                        height: parent.height
                         anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
                         text: qsTr("Select the pair which denote the following relation: %1").arg(dataset.levelElements[bar.level - 1].answer[0])
+
+                        Rectangle {
+                            anchors.fill: parent
+                            z: parent.z - 1
+                            radius: 10
+                            border.width: 1
+
+                            color: "white"
+                            opacity: 0.8
+                        }
                     }
 
                     Grid {

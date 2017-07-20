@@ -25,10 +25,10 @@ ActivityInfo {
   demo: true
   title: qsTr("Family find relatives")
   description: ""
-  //intro: "put here in comment the text for the intro voice"
-  goal: ""
-  prerequisite: ""
-  manual: ""
+  //intro: "Click on the pair that best defines the given relation"
+  goal: qsTr("To get an idea of family relations")
+  prerequisite: qsTr("Reading, moving and clicking with the mouse")
+  manual: qsTr("You are provided with a relation and a family hierarchy. Click on a pair of family members which correctly identifies the given relation.")
   credit: ""
   section: "fun"
   createdInVersion: 8000

@@ -48,6 +48,13 @@ QtObject {
     readonly property real right_1: 0.5
     readonly property real right_2: 0.7
 
+    /*
+     * pairs are used to determine the correct
+     * pair for a given relation in the family_find_relative
+     * activity
+     * A correct pair is formed by selecting a node of type
+     * "pair_1" and "pair_2" only
+     */
     readonly property int pair_1: -1
     readonly property int pair_2: 1
     readonly property int no_pair: 0
