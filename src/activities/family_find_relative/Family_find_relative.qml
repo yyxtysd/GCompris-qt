@@ -21,7 +21,6 @@
 import QtQuick 2.1
 
 import "../../core"
-import "family_find_relative.js" as Activity
 import "../family"
 
 Family {

@@ -98,11 +98,10 @@ ActivityBase {
             id: dataset
         }
 
+        // handling pair matching for family_find_relative
         Item {
             id: selectedPairs
             property bool nodePreviouslySelected: false
-            property int firstNodeValue
-            property int secondNodeValue
             property var firstNodePointer
             property var secondNodePointer
 
@@ -114,7 +113,7 @@ ActivityBase {
             }
 
             function checkResult() {
-                if (firstNodeValue == (secondNodeValue * -1) && firstNodeValue != 0) {
+                if (firstNodePointer.weight == (secondNodePointer.weight * -1) && firstNodePointer.weight != 0) {
                     return true
                 } else {
                     return false
@@ -125,11 +124,9 @@ ActivityBase {
                 if(!nodePreviouslySelected) {
                     nodePreviouslySelected = true
                     firstNodePointer = node_
-                    firstNodeValue = node_.weight
                     firstNodePointer.changeState("active")
                 } else {
                     secondNodePointer = node_
-                    secondNodeValue = node_.weight
                     secondNodePointer.changeState("activeTo")
 
                     // checking results
