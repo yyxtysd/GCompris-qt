@@ -108,7 +108,7 @@ function loadDatasets() {
         }
     }
 
-    items.questionTopic = levelTree.answer.toString()
+    items.questionTopic = levelTree.answer[0]
 }
 
 function shuffle() {
