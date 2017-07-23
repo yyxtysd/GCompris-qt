@@ -89,6 +89,7 @@ ActivityBase {
             property alias wringcreator: wringcreator
             property alias dataset: dataset
             property string mode: activity.mode
+            property alias questionTopic: question.questionTopic
         }
 
         onStart: { Activity.start(items) }
@@ -294,13 +295,14 @@ ActivityBase {
 
                     GCText {
                         id: question
+                        property string questionTopic
                         visible: activity.mode == "expert" ? true : false
                         width: parent.width
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
-                        text: qsTr("Select the pair which denote the following relation: %1").arg(dataset.levelElements[bar.level - 1].answer[0])
+                        text: qsTr("Select the pair which denote the following relation: %1").arg(questionTopic)
 
                         Rectangle {
                             anchors.fill: parent

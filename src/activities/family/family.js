@@ -28,6 +28,8 @@ var barAtStart;
 var url = "qrc:/gcompris/src/activities/family/resource/"
 
 var numberOfLevel
+var shuffledLevelIndex = []
+var levelToLoad
 var answerButtonRatio = 0;
 
 function start(items_) {
@@ -36,6 +38,9 @@ function start(items_) {
     numberOfLevel = items.dataset.levelElements.length
     barAtStart = GCompris.ApplicationSettings.isBarHidden;
     GCompris.ApplicationSettings.isBarHidden = true;
+
+    shuffle()
+
     initLevel()
 }
 
@@ -46,6 +51,8 @@ function stop() {
 function initLevel() {
     items.bar.level = currentLevel + 1
 
+    levelToLoad = getCurrentLevelIndex()
+
     loadDatasets()
 }
 
@@ -53,13 +60,15 @@ function loadDatasets() {
     if (!items) {
         return
     }
-    var levelTree = items.dataset.levelElements[currentLevel]
+
+    var levelTree = items.dataset.levelElements[levelToLoad]
     answerButtonRatio = 1 / (levelTree.options.length + 4);
 
     items.nodeCreator.model.clear();
     items.answersChoice.model.clear();
     items.edgeCreator.model.clear();
     items.wringcreator.model.clear();
+
     for(var i = 0 ; i < levelTree.nodePositions.length ; i++) {
         items.nodeCreator.model.append({
                        "xPosition": levelTree.nodePositions[i][0],
@@ -70,34 +79,66 @@ function loadDatasets() {
                      });
     }
 
-    for(var j = 0 ; j <levelTree.options.length ; j++) {
+    for(var i = 0 ; i <levelTree.options.length ; i++) {
        items.answersChoice.model.append({
-               "optionn": levelTree.options[j],
+               "optionn": levelTree.options[i],
                "answer": levelTree.answer[0]
        });
     }
 
-    for(var k = 0 ; k < levelTree.edgeList.length ; k++) {
+    for(var i = 0 ; i < levelTree.edgeList.length ; i++) {
         items.edgeCreator.model.append({
-             "x1": levelTree.edgeList[k][0],
-             "y1": levelTree.edgeList[k][1],
-             "x22": levelTree.edgeList[k][2],
-             "y22": levelTree.edgeList[k][3],
-             "edgeState": levelTree.edgeState[k]
+             "x1": levelTree.edgeList[i][0],
+             "y1": levelTree.edgeList[i][1],
+             "x22": levelTree.edgeList[i][2],
+             "y22": levelTree.edgeList[i][3],
+             "edgeState": levelTree.edgeState[i]
 
         });
     }
 
-    for(var l = 0 ; l < levelTree.edgeState.length ; l++) {
-        if(levelTree.edgeState[l] === "married") {
-            var xcor = (levelTree.edgeList[l][0]+levelTree.edgeList[l][2]-0.04)/2;
-            var ycor =  levelTree.edgeList[l][3] -0.02
+    for(var i = 0 ; i < levelTree.edgeState.length ; i++) {
+        if(levelTree.edgeState[i] === "married") {
+            var xcor = (levelTree.edgeList[i][0]+levelTree.edgeList[i][2]-0.04)/2;
+            var ycor =  levelTree.edgeList[i][3] -0.02
             items.wringcreator.model.append({
                 "ringx": xcor,
                 "ringy": ycor
             });
         }
     }
+
+    items.questionTopic = levelTree.answer.toString()
+}
+
+function shuffle() {
+    if (items.mode == "normal") {
+        // not required for normal mode
+        return
+    }
+
+    for (var i = 0;i < numberOfLevel;i++) {
+        shuffledLevelIndex[i] = i
+    }
+
+    var currentIndex = shuffledLevelIndex.length, tmp, randomIndex
+
+    while (currentIndex != 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
+
+        tmp = shuffledLevelIndex[currentIndex]
+        shuffledLevelIndex[currentIndex] = shuffledLevelIndex[randomIndex]
+        shuffledLevelIndex[randomIndex] = tmp
+    }
+}
+
+function getCurrentLevelIndex() {
+    if (!items) {
+        return
+    }
+
+    return items.mode == "normal" ? currentLevel : shuffledLevelIndex[currentLevel]
 }
 
 function nextLevel() {
