@@ -43,10 +43,14 @@ QtObject {
     readonly property real center: 0.4
     readonly property real right: 0.6
 
-    readonly property real left_1: 0.1
-    readonly property real left_2: 0.3
-    readonly property real right_1: 0.5
-    readonly property real right_2: 0.7
+    /*
+     * ext: exterior
+     * int: interior
+     */
+    readonly property real left_ext: 0.1
+    readonly property real left_int: 0.3
+    readonly property real right_int: 0.5
+    readonly property real right_ext: 0.7
 
     /*
      * pairs are used to determine the correct
@@ -185,27 +189,27 @@ QtObject {
         // level 5
         {
             edgeList: [
-                [left_1 + nodeWidth, gen_1 + nodeHeight / 2, right_1, gen_1 + nodeHeight / 2],
-                [((left_1 + nodeWidth) + right_1) / 2, gen_1 + nodeHeight / 2, ((left_1 + nodeWidth) + right_1) / 2, gen_2],
-                [left_2 + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
-                [((left_2 + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_2 + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
+                [left_ext + nodeWidth, gen_1 + nodeHeight / 2, right_int, gen_1 + nodeHeight / 2],
+                [((left_ext + nodeWidth) + right_int) / 2, gen_1 + nodeHeight / 2, ((left_ext + nodeWidth) + right_int) / 2, gen_2],
+                [left_int + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
+                [((left_int + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_int + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, left + nodeWidth / 2, gen_3],
                 [center + nodeWidth / 2, gen_3 - nodeWidth / 4, center + nodeWidth / 2, gen_3],
                 [right + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [left_1, gen_1],
-                [right_1, gen_1],
-                [left_2, gen_2],
+                [left_ext, gen_1],
+                [right_int, gen_1],
+                [left_int, gen_2],
                 [right, gen_2],
                 [left, gen_3],
                 [center, gen_3],
                 [right, gen_3]
             ],
             captions: [
-                [left_1, gen_3 + nodeHeight / 4],
-                [left_1, gen_1 + nodeHeight]
+                [left_ext, gen_3 + nodeHeight / 4],
+                [left_ext, gen_1 + nodeHeight]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
             nodeWeights: [pair_1, no_pair, no_pair, no_pair, pair_2, pair_2, pair_2],
@@ -217,19 +221,19 @@ QtObject {
         // level 6
         {
             edgeList: [
-                [left_1 + nodeWidth, gen_1 + nodeHeight / 2, right_1, gen_1 + nodeHeight / 2],
-                [((left_1 + nodeWidth) + right_1) / 2, gen_1 + nodeHeight / 2, ((left_1 + nodeWidth) + right_1) / 2, gen_2],
-                [left_2 + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
-                [((left_2 + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_2 + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
+                [left_ext + nodeWidth, gen_1 + nodeHeight / 2, right_int, gen_1 + nodeHeight / 2],
+                [((left_ext + nodeWidth) + right_int) / 2, gen_1 + nodeHeight / 2, ((left_ext + nodeWidth) + right_int) / 2, gen_2],
+                [left_int + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
+                [((left_int + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_int + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, left + nodeWidth / 2, gen_3],
                 [center + nodeWidth / 2, gen_3 - nodeWidth / 4, center + nodeWidth / 2, gen_3],
                 [right + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [left_1, gen_1],
-                [right_1, gen_1],
-                [left_2, gen_2],
+                [left_ext, gen_1],
+                [right_int, gen_1],
+                [left_int, gen_2],
                 [right, gen_2],
                 [left, gen_3],
                 [center, gen_3],
@@ -237,7 +241,7 @@ QtObject {
             ],
             captions: [
                 [right + nodeWidth, gen_3 + (nodeHeight * 3 / 4)],
-                [right_1, gen_1 + nodeHeight]
+                [right_int, gen_1 + nodeHeight]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
             nodeWeights: [no_pair, pair_1, no_pair, no_pair, pair_2, pair_2, pair_2],
@@ -249,26 +253,26 @@ QtObject {
         // level 7
         {
             edgeList: [
-                [left_1 + nodeWidth, gen_1 + nodeHeight / 2, right_1, gen_1 + nodeHeight / 2],
-                [((left_1 + nodeWidth) + right_1) / 2, gen_1 + nodeHeight / 2, ((left_1 + nodeWidth) + right_1) / 2, gen_2],
-                [left_2 + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
-                [((left_2 + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_2 + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
+                [left_ext + nodeWidth, gen_1 + nodeHeight / 2, right_int, gen_1 + nodeHeight / 2],
+                [((left_ext + nodeWidth) + right_int) / 2, gen_1 + nodeHeight / 2, ((left_ext + nodeWidth) + right_int) / 2, gen_2],
+                [left_int + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
+                [((left_int + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_int + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, left + nodeWidth / 2, gen_3],
                 [center + nodeWidth / 2, gen_3 - nodeWidth / 4, center + nodeWidth / 2, gen_3],
                 [right + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [left_1, gen_1],
-                [right_1, gen_1],
-                [left_2, gen_2],
+                [left_ext, gen_1],
+                [right_int, gen_1],
+                [left_int, gen_2],
                 [right, gen_2],
                 [left, gen_3],
                 [center, gen_3],
                 [right, gen_3]
             ],
             captions: [
-                [left_1 + nodeWidth, gen_1],
+                [left_ext + nodeWidth, gen_1],
                 [right + nodeWidth, gen_3]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "boy2.svg","girl1.svg" ],
@@ -281,26 +285,26 @@ QtObject {
         // level 8
         {
             edgeList: [
-                [left_1 + nodeWidth, gen_1 + nodeHeight / 2, right_1, gen_1 + nodeHeight / 2],
-                [((left_1 + nodeWidth) + right_1) / 2, gen_1 + nodeHeight / 2, ((left_1 + nodeWidth) + right_1) / 2, gen_2],
-                [left_2 + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
-                [((left_2 + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_2 + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
+                [left_ext + nodeWidth, gen_1 + nodeHeight / 2, right_int, gen_1 + nodeHeight / 2],
+                [((left_ext + nodeWidth) + right_int) / 2, gen_1 + nodeHeight / 2, ((left_ext + nodeWidth) + right_int) / 2, gen_2],
+                [left_int + nodeWidth, gen_2 + nodeHeight / 2, right, gen_2 + nodeHeight / 2],
+                [((left_int + nodeWidth) + right) / 2, gen_2 + nodeHeight / 2, ((left_int + nodeWidth) + right) / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3 - nodeWidth / 4],
                 [left + nodeWidth / 2, gen_3 - nodeWidth / 4, left + nodeWidth / 2, gen_3],
                 [center + nodeWidth / 2, gen_3 - nodeWidth / 4, center + nodeWidth / 2, gen_3],
                 [right + nodeWidth / 2, gen_3 - nodeWidth / 4, right + nodeWidth / 2, gen_3]
             ],
             nodePositions: [
-                [left_1, gen_1],
-                [right_1, gen_1],
-                [left_2, gen_2],
+                [left_ext, gen_1],
+                [right_int, gen_1],
+                [left_int, gen_2],
                 [right, gen_2],
                 [left, gen_3],
                 [center, gen_3],
                 [right, gen_3]
             ],
             captions: [
-                [right_1 + nodeWidth, gen_1],
+                [right_int + nodeWidth, gen_1],
                 [right + nodeWidth, gen_3]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
@@ -439,20 +443,20 @@ QtObject {
         // level 14
         {
             edgeList: [
-                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
-                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
-                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
-                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_ext, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_ext), nodeMidPointY(gen_1), nodeMidPointX(center, right_ext), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_ext, nodeMidPointY(gen_2)],
+                [rightXEdge(left_ext), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
                 [center, gen_1],
-                [right_2, gen_1],
+                [right_ext, gen_1],
                 [center, gen_2],
-                [right_2, gen_2],
-                [left_1, gen_2]
+                [right_ext, gen_2],
+                [left_ext, gen_2]
             ],
             captions: [
-                [left_1 - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
+                [left_ext - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
                 [center - nodeWidth * 3 / 4, gen_1 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
@@ -465,21 +469,21 @@ QtObject {
         // level 15
         {
             edgeList: [
-                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
-                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
-                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
-                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_ext, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_ext), nodeMidPointY(gen_1), nodeMidPointX(center, right_ext), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_ext, nodeMidPointY(gen_2)],
+                [rightXEdge(left_ext), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
                 [center, gen_1],
-                [right_2, gen_1],
+                [right_ext, gen_1],
                 [center, gen_2],
-                [right_2, gen_2],
-                [left_1, gen_2]
+                [right_ext, gen_2],
+                [left_ext, gen_2]
             ],
             captions: [
-                [left_1 - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
-                [right_2 + nodeWidth * 1.1, gen_1 + nodeHeight / 4]
+                [left_ext - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
+                [right_ext + nodeWidth * 1.1, gen_1 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
             nodeWeights: [no_pair, pair_1, no_pair, no_pair, pair_2],
@@ -491,21 +495,21 @@ QtObject {
         // level 16
         {
             edgeList: [
-                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
-                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
-                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
-                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_ext, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_ext), nodeMidPointY(gen_1), nodeMidPointX(center, right_ext), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_ext, nodeMidPointY(gen_2)],
+                [rightXEdge(left_ext), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
                 [center, gen_1],
-                [right_2, gen_1],
+                [right_ext, gen_1],
                 [center, gen_2],
-                [right_2, gen_2],
-                [left_1, gen_2]
+                [right_ext, gen_2],
+                [left_ext, gen_2]
             ],
             captions: [
-                [left_1 - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
-                [right_2 + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
+                [left_ext - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
+                [right_ext + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_1, pair_2],
@@ -517,23 +521,23 @@ QtObject {
         // level 17
         {
             edgeList: [
-                [rightXEdge(left_2), nodeMidPointY(gen_1), right_1, nodeMidPointY(gen_1)],
-                [nodeMidPointX(left_2, right_1), nodeMidPointY(gen_1), nodeMidPointX(left_2, right_1), nodeMidPointY(gen_2)],
-                [rightXEdge(left_2), nodeMidPointY(gen_2), right_1, nodeMidPointY(gen_2)],
-                [rightXEdge(left_1), nodeMidPointY(gen_2), left_2, nodeMidPointY(gen_2)],
-                [rightXEdge(right_1), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)]
+                [rightXEdge(left_int), nodeMidPointY(gen_1), right_int, nodeMidPointY(gen_1)],
+                [nodeMidPointX(left_int, right_int), nodeMidPointY(gen_1), nodeMidPointX(left_int, right_int), nodeMidPointY(gen_2)],
+                [rightXEdge(left_int), nodeMidPointY(gen_2), right_int, nodeMidPointY(gen_2)],
+                [rightXEdge(left_ext), nodeMidPointY(gen_2), left_int, nodeMidPointY(gen_2)],
+                [rightXEdge(right_int), nodeMidPointY(gen_2), right_ext, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
-                [left_2, gen_1],
-                [right_1, gen_1],
-                [left_2, gen_2],
-                [left_1, gen_2],
-                [right_1, gen_2],
-                [right_2, gen_2]
+                [left_int, gen_1],
+                [right_int, gen_1],
+                [left_int, gen_2],
+                [left_ext, gen_2],
+                [right_int, gen_2],
+                [right_ext, gen_2]
             ],
             captions: [
-                [left_1 - nodeWidth / 2, gen_2],
-                [right_2 + nodeWidth, gen_2 + nodeHeight / 4]
+                [left_ext - nodeWidth / 2, gen_2],
+                [right_ext + nodeWidth, gen_2 + nodeHeight / 4]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg", "lady1.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_1, no_pair, pair_2],
@@ -545,21 +549,21 @@ QtObject {
         // level 18
         {
             edgeList: [
-                [rightXEdge(center), nodeMidPointY(gen_1), right_2, nodeMidPointY(gen_1)],
-                [nodeMidPointX(center, right_2), nodeMidPointY(gen_1), nodeMidPointX(center, right_2), nodeMidPointY(gen_2)],
-                [rightXEdge(center), nodeMidPointY(gen_2), right_2, nodeMidPointY(gen_2)],
-                [rightXEdge(left_1), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
+                [rightXEdge(center), nodeMidPointY(gen_1), right_ext, nodeMidPointY(gen_1)],
+                [nodeMidPointX(center, right_ext), nodeMidPointY(gen_1), nodeMidPointX(center, right_ext), nodeMidPointY(gen_2)],
+                [rightXEdge(center), nodeMidPointY(gen_2), right_ext, nodeMidPointY(gen_2)],
+                [rightXEdge(left_ext), nodeMidPointY(gen_2), center, nodeMidPointY(gen_2)]
             ],
             nodePositions: [
                 [center, gen_1],
-                [right_2, gen_1],
+                [right_ext, gen_1],
                 [center, gen_2],
-                [left_1, gen_2],
-                [right_2, gen_2]
+                [left_ext, gen_2],
+                [right_ext, gen_2]
             ],
             captions: [
                 [center - (nodeWidth * 3/ 4), gen_1 + nodeHeight / 4],
-                [left_1 - nodeWidth / 2, gen_2 + nodeHeight / 2]
+                [left_ext - nodeWidth / 2, gen_2 + nodeHeight / 2]
             ],
             nodeleave: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
             nodeWeights: [pair_1, pair_1, no_pair, pair_2, no_pair],
