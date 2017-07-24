@@ -82,7 +82,7 @@ ActivityBase {
             interval: 330
             onTriggered: {
                 Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
-                                Activity.setValues(Activity.house)
+//                                 Activity.setValues(Activity.house)
             }
         }
 
@@ -140,8 +140,6 @@ ActivityBase {
                         property real circleRadius: width
                         property int value
                         property int indexValue
-                        property int currentIndex
-                        property int currentSeeds
 
                         GCText {
                             text: index
@@ -159,9 +157,9 @@ ActivityBase {
                             onPressed: {
                                 indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
-                                currentIndex = indexValue
-                                currentSeeds = grainRepeater.count
-                                startAnimation()
+                                for(var i = 0; i < grainRepeater.count; i++) {
+                                    grainRepeater.itemAt(i).startAnimation()
+                                }
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
                                     items.playerOneTurn = !items.playerOneTurn
                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
@@ -177,37 +175,6 @@ ActivityBase {
                             }
                         }
 
-                        function startAnimation() {
-                            print("in animation",currentIndex,currentSeeds)
-                            if(currentIndex >= 6 && currentIndex < 11 && currentSeeds > 0) {
-                                for(var i = 0; i < currentSeeds; i++) {
-                                    print("moving x right",i,currentIndex,currentSeeds)
-                                    grainRepeater.itemAt(i).xRightAnimation.start()
-                                }
-                            }
-                            else if(currentIndex <= 5 && currentIndex > 0 && currentSeeds > 0) {
-                                for(var i = 0; i < currentSeeds; i++) {
-                                    print("moving x left",i,currentIndex,currentSeeds)
-                                    grainRepeater.itemAt(i).xLeftAnimation.start()
-                                }
-                            }
-                            else if(currentIndex == 11 && currentSeeds > 0) {
-                                for(var i = 0; i < currentSeeds; i++) {
-                                    print("moving y up",i,currentIndex,currentSeeds)
-                                    grainRepeater.itemAt(i).yUpAnimation.start()
-                                }
-                            }
-                            else if(currentIndex == 0 && currentSeeds > 0) {
-                                for(var i = 0; i < currentSeeds; i++) {
-                                    print("moving y down",i,currentIndex,currentSeeds)
-                                    grainRepeater.itemAt(i).yDownAnimation.start()
-                                }
-                            }
-                            else {
-                                return
-                            }
-                        }
-
                         Repeater {
                             id: grainRepeater
                             model: value
@@ -220,16 +187,44 @@ ActivityBase {
                                 x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
                                 y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
 
+                                property int currentIndex: index
+                                property int currentSeeds: grainRepeater.count
+                                property int movCount: (indexValue >= 6) ? 0 : 12
+
+                                function startAnimation() {
+                                    print("in animation",currentIndex,currentSeeds,index)
+                                    if(indexValue >= 6 && indexValue <= 11 && movCount  < (11 - indexValue) && currentIndex >= 0 && currentSeeds > 0) {
+                                            print("moving x right",currentIndex,currentSeeds,index)
+                                            xRightAnimation.start()
+                                    }
+                                    else if(index >= (11 - indexValue) && currentIndex >= 0 && currentSeeds > 0) {
+                                            print("moving y up",currentIndex,currentSeeds,index)
+                                            yUpAnimation.start()
+                                    }
+                                    else if(indexValue <= 5 && currentIndex >= 0 && movCount % 12 < (indexValue) && currentSeeds > 0) {
+                                            print("moving x left",currentIndex,currentSeeds,index)
+                                            xLeftAnimation.start()
+                                    }
+                                    else if(index >= (indexValue) && currentIndex >= 0 && currentSeeds > 0) {
+                                            print("moving y down",currentIndex,currentSeeds)
+                                            yDownAnimation.start()
+                                    }
+                                   else {
+                                        return
+                                    }
+                                }
+
                                 property var xLeftAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x - 200
+                                    from: x ;to: x - 150
                                     duration: 200
                                     onStopped: {
+                                            if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
-                                            if(currentIndex <=5 && currentIndex >= 0 && currentSeeds > 0) {
                                             currentIndex--;
-                                             print("stoop",currentIndex,currentSeeds)
+                                            movCount++
+                                            print("stoop",currentIndex,currentSeeds)
                                             startAnimation()
                                             }
                                     }
@@ -237,13 +232,14 @@ ActivityBase {
                                 property var xRightAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x + 200
+                                    from: x ;to: x + 150
                                     duration: 200
                                     onStopped: {
+                                            if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
-                                            if(currentIndex >= 6 && currentIndex < 12 && currentSeeds > 0) {
-                                            currentIndex++;
-                                            print("stoop",currentIndex,currentSeeds)
+                                            currentIndex--
+                                            movCount++
+                                            print("stop x anim",currentIndex,currentSeeds,index)
                                             startAnimation()
                                             }
                                     }
@@ -254,10 +250,15 @@ ActivityBase {
                                     properties: "y"
                                     to: -100
                                     duration: 200
+                                    onStarted: {
+                                        print("hello",index)
+                                    }
                                     onStopped: {
-                                        currentSeeds--
-                                        if(currentSeeds > 0) {
+                                        if(currentIndex >= 0 && currentSeeds > 0) {
+                                            currentSeeds--
                                             currentIndex = 5
+                                            movCount = 12
+                                            print("stop y anim",currentIndex,currentSeeds,index)
                                             startAnimation()
                                         }
                                     }
@@ -266,11 +267,12 @@ ActivityBase {
                                 property var yDownAnimation: NumberAnimation {
                                     target: grain
                                     properties: "y"
+                                    loops: 1
                                     to: 250
                                     duration: 200
                                     onStopped: {
-                                        currentSeeds--
-                                        if(currentSeeds > 0) {
+                                        if(currentIndex >= 0 && currentSeeds > 0) {
+                                            currentSeeds--
                                             currentIndex = 6
                                             startAnimation()
                                         }
