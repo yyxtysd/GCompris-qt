@@ -193,7 +193,7 @@ ActivityBase {
 
                                 function startAnimation() {
                                     print("in animation",currentIndex,currentSeeds,index)
-                                    if(indexValue >= 6 && indexValue <= 11 && movCount  < (11 - indexValue) && currentIndex >= 0 && currentSeeds > 0) {
+                                    if((indexValue >= 6 && indexValue <= 11 && movCount  < (11 - indexValue) && currentIndex >= 0 && currentSeeds > 0) || (currentIndex >= 6 && currentIndex <= 11 && currentIndex >= 0 && currentSeeds > 0)) {
                                             print("moving x right",currentIndex,currentSeeds,index)
                                             xRightAnimation.start()
                                     }
@@ -270,10 +270,14 @@ ActivityBase {
                                     loops: 1
                                     to: 250
                                     duration: 200
+                                    onStarted: {
+                                        print("hello",index)
+                                    }
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
                                             currentIndex = 6
+                                            print("stop y anim",currentIndex,currentSeeds,index)
                                             startAnimation()
                                         }
                                     }
