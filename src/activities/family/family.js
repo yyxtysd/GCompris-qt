@@ -64,13 +64,13 @@ function loadDatasets() {
     var levelTree = items.dataset.levelElements[levelToLoad]
     answerButtonRatio = 1 / (levelTree.options.length + 4);
 
-    items.nodeCreator.model.clear();
+    items.nodeRepeater.model.clear();
     items.answersChoice.model.clear();
-    items.edgeCreator.model.clear();
+    items.edgeRepeater.model.clear();
     items.wringcreator.model.clear();
 
     for(var i = 0 ; i < levelTree.nodePositions.length ; i++) {
-        items.nodeCreator.model.append({
+        items.nodeRepeater.model.append({
                        "xPosition": levelTree.nodePositions[i][0],
                        "yPosition": levelTree.nodePositions[i][1],
                        "nodeValue": levelTree.nodeleave[i],
@@ -87,7 +87,7 @@ function loadDatasets() {
     }
 
     for(var i = 0 ; i < levelTree.edgeList.length ; i++) {
-        items.edgeCreator.model.append({
+        items.edgeRepeater.model.append({
              "x1": levelTree.edgeList[i][0],
              "y1": levelTree.edgeList[i][1],
              "x22": levelTree.edgeList[i][2],

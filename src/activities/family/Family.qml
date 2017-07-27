@@ -83,9 +83,9 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property alias nodeCreator: nodeCreator
+            property alias nodeRepeater: nodeRepeater
             property alias answersChoice: answersChoice
-            property alias edgeCreator: edgeCreator
+            property alias edgeRepeater: edgeRepeater
             property alias wringcreator: wringcreator
             property alias dataset: dataset
             property string mode: activity.mode
@@ -144,7 +144,7 @@ ActivityBase {
         }
 
         Item {
-            id: partition
+            id: board
             width: background.width
             height: background.height
             Rectangle {
@@ -157,7 +157,7 @@ ActivityBase {
                 Item {
                     id: treeItem
                     Repeater {
-                        id: nodeCreator
+                        id: nodeRepeater
                         model: ListModel{}
                         delegate:
                             Node {
@@ -170,7 +170,7 @@ ActivityBase {
                             nodeHeight: currentPointer.height
                             nodeImageSource: Activity.url + nodeValue
                             borderColor: "black"
-                            borderWidth: 4
+                            borderWidth: 8
                             color: "transparent"
                             radius: nodeWidth / 2
                             state:  currentState
@@ -194,7 +194,7 @@ ActivityBase {
                                     name: "activeTo"
                                     PropertyChanges {
                                         target: currentPointer
-                                        borderColor: "red"
+                                        borderColor: "yellow"
                                     }
                                }
                             ]
@@ -231,7 +231,7 @@ ActivityBase {
                     }
 
                     Repeater {
-                        id: edgeCreator
+                        id: edgeRepeater
                         model: ListModel {}
                         delegate: Rectangle {
                             id: edge
@@ -282,8 +282,8 @@ ActivityBase {
                 color: "transparent"
                 width: background.horizontalLayout ? background.width*0.35 : background.width
                 height: background.horizontalLayout ? background.height : background.height*0.35
-                anchors.left: background.horizontalLayout ? treeArea.right : partition.left
-                anchors.top: background.horizontalLayout ? partition.top: treeArea.bottom
+                anchors.left: background.horizontalLayout ? treeArea.right : board.left
+                anchors.top: background.horizontalLayout ? board.top: treeArea.bottom
                 border.color: "black"
                 border.width: 5
                 Rectangle {

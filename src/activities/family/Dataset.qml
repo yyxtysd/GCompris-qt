@@ -539,8 +539,8 @@ QtObject {
                 [left_ext - nodeWidth / 2, gen_2],
                 [right_ext + nodeWidth, gen_2 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "man1.svg", "lady1.svg"],
-            nodeWeights: [no_pair, no_pair, no_pair, pair_1, no_pair, pair_2],
+            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "lady1.svg", "man1.svg"],
+            nodeWeights: [no_pair, no_pair, no_pair, pair_1, pair_2, no_pair],
             currentState: ["dective", "deactive", "deactive", "active", "deactive", "activeTo"],
             edgeState:["married","others","others","married","married"],
             answer: [qsTr("Sister-in-law")],
