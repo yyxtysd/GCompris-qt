@@ -86,7 +86,7 @@ ActivityBase {
             property alias nodeRepeater: nodeRepeater
             property alias answersChoice: answersChoice
             property alias edgeRepeater: edgeRepeater
-            property alias wringcreator: wringcreator
+            property alias ringRepeator: ringRepeator
             property alias dataset: dataset
             property string mode: activity.mode
             property alias questionTopic: question.questionTopic
@@ -238,10 +238,10 @@ ActivityBase {
                             opacity: 1
                             antialiasing: true
                             transformOrigin: Item.TopLeft
-                            x: x1*treeArea.width
-                            y: y1*treeArea.height
-                            property var x2: x22*treeArea.width
-                            property var y2: y22*treeArea.height
+                            x: _x1 * treeArea.width
+                            y: _y1 * treeArea.height
+                            property var x2: _x2 * treeArea.width
+                            property var y2: _y2 * treeArea.height
                             width: Math.sqrt(Math.pow(x - x2, 2) + Math.pow(y- y2, 2))
                             height: 4 * ApplicationInfo.ratio
                             rotation: (Math.atan((y2 - y)/(x2-x)) * 180 / Math.PI) + (((y2-y) < 0 && (x2-x) < 0) * 180) + (((y2-y) >= 0 && (x2-x) < 0) * 180)
@@ -263,15 +263,15 @@ ActivityBase {
                     }
 
                     Repeater {
-                        id: wringcreator
+                        id: ringRepeator
                         model: ListModel{}
                         delegate: Image {
-                            id: wring
+                            id: ring
                             source: Activity.url + "rings.svg"
-                            width: treeArea.width*0.04
-                            height: treeArea.width*0.04
-                            x: ringx*treeArea.width
-                            y: ringy*treeArea.height
+                            width: treeArea.width * 0.04
+                            height: treeArea.width * 0.04
+                            x: ringx * treeArea.width
+                            y: ringy * treeArea.height
                         }
                     }
                 }

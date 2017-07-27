@@ -103,7 +103,7 @@ QtObject {
                 [center - (nodeWidth *  3 / 4), gen_2 + nodeHeight / 2],
                 [left - nodeWidth / 2, gen_1]
             ],
-            nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
+            nodeValue: ["man3.svg", "lady2.svg", "boy1.svg"],
             nodeWeights: [pair_1, no_pair, pair_2],
             currentState: ["activeTo", "deactive", "active"],
             edgeState:["married","others"],
@@ -125,7 +125,7 @@ QtObject {
                 [center - (nodeWidth *  3 / 4), gen_2 + nodeHeight / 2],
                 [right + nodeWidth, gen_1]
             ],
-            nodeleave: ["man3.svg", "lady2.svg", "boy1.svg"],
+            nodeValue: ["man3.svg", "lady2.svg", "boy1.svg"],
             nodeWeights: [no_pair, pair_1, pair_2],
             currentState: ["deactive", "activeTo", "active"],
             edgeState:["married","others"],
@@ -151,7 +151,7 @@ QtObject {
                 [left - (nodeWidth *  3 / 4), gen_2 + nodeHeight / 2],
                 [right + nodeWidth, gen_2]
             ],
-            nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "boy2.svg"],
+            nodeValue: ["man3.svg", "lady2.svg", "boy1.svg", "boy2.svg"],
             nodeWeights: [no_pair, no_pair, pair_1, pair_2],
             currentState: ["deactive", "deactive", "active", "activeTo"],
             edgeState:["married","others","others","others"],
@@ -179,7 +179,7 @@ QtObject {
                 [left - (nodeWidth *  3 / 4), gen_2 + nodeHeight / 2],
                 [center + nodeWidth / 2, (gen_2 + nodeHeight)]
             ],
-            nodeleave: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
+            nodeValue: ["man3.svg", "lady2.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
             nodeWeights: [no_pair, no_pair, pair_1, pair_2, pair_1],
             currentState: ["deactive", "deactive", "active", "activeTo", "deactive"],
             edgeState:["married", "others", "others", "others", "others", "others"],
@@ -211,7 +211,7 @@ QtObject {
                 [left_ext, gen_3 + nodeHeight / 4],
                 [left_ext, gen_1 + nodeHeight]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "girl1.svg", "boy1.svg", "boy2.svg"],
             nodeWeights: [pair_1, no_pair, no_pair, no_pair, pair_2, pair_2, pair_2],
             currentState: ["activeTo", "deactive", "deactive", "deactive", "active", "deactive", "deactive"],
             edgeState:["married","others","married","others","others","others","others","others" ],
@@ -243,7 +243,7 @@ QtObject {
                 [right + nodeWidth, gen_3 + (nodeHeight * 3 / 4)],
                 [right_int, gen_1 + nodeHeight]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
             nodeWeights: [no_pair, pair_1, no_pair, no_pair, pair_2, pair_2, pair_2],
             currentState: ["deactive", "activeTo", "deactive", "deactive", "deactive", "deactive", "active", "active"],
             edgeState:["married","others","married","others","others","others","others","others" ],
@@ -275,7 +275,7 @@ QtObject {
                 [left_ext + nodeWidth, gen_1],
                 [right + nodeWidth, gen_3]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "boy2.svg","girl1.svg" ],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "boy2.svg","girl1.svg" ],
             nodeWeights: [pair_1, pair_1, no_pair, no_pair, no_pair, no_pair, pair_2],
             currentState: ["active", "deactive", "deactive", "deactive", "deactive", "deactive", "activeTo"],
             edgeState:["married","others","married","others","others","others","others","others" ],
@@ -307,7 +307,7 @@ QtObject {
                 [right_int + nodeWidth, gen_1],
                 [right + nodeWidth, gen_3]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man2.svg", "lady1.svg", "boy1.svg", "girl1.svg", "boy2.svg"],
             nodeWeights: [pair_1, pair_1, no_pair, no_pair, pair_2, no_pair, pair_2],
             currentState: ["deactive", "active", "deactive", "deactive", "deactive", "deactive", "activeTo", "active"],
             edgeState:["married","others","married","others","others","others","others","others" ],
@@ -333,7 +333,7 @@ QtObject {
                 [(right + nodeWidth * 1.1), gen_3 + nodeHeight / 4],
                 [left - nodeWidth / 2, gen_3 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg","boy2.svg"],
+            nodeValue: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg","boy2.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_2, pair_1],
             currentState: ["deactive", "deactive", "deactive", "activeTo","active"],
             edgeState:["others","others","others","others"],
@@ -357,7 +357,7 @@ QtObject {
                 [left - nodeWidth * 3 / 4, gen_3 + nodeHeight / 4],
                 [right + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
+            nodeValue: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
             nodeWeights: [no_pair, no_pair, pair_1, pair_2],
             currentState: ["deactive", "deactive", "activeTo", "active"],
             edgeState:["others","others","others"],
@@ -381,7 +381,7 @@ QtObject {
                 [right + nodeWidth * 1.1, gen_2 + nodeHeight / 4],
                 [left - nodeWidth * 3 / 4, gen_3 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
+            nodeValue: ["grandfather.svg", "man3.svg", "man2.svg", "boy1.svg"],
             nodeWeights: [no_pair, no_pair, pair_2, pair_1],
             currentState: ["deactive", "deactive", "active", "activeTo"],
             edgeState:["others","others","others"],
@@ -407,7 +407,7 @@ QtObject {
                 [left - nodeWidth * 3 / 4, gen_3 + nodeHeight / 4],
                 [right + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babyboy.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_1, pair_2],
             currentState: ["deactive", "deactive", "deactive", "activeTo", "active"],
             edgeState:["married","others","siblings","others","others","others"],
@@ -433,7 +433,7 @@ QtObject {
                 [right + nodeWidth * 1.1, gen_2 + nodeHeight / 4],
                 [left - nodeWidth / 2, gen_3 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babygirl.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady1.svg", "babygirl.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_2, pair_1],
             currentState: ["deactive", "deactive", "deactive", "active", "activeTo"],
             edgeState:["married","others","siblings","others","others","others"],
@@ -459,7 +459,7 @@ QtObject {
                 [left_ext - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
                 [center - nodeWidth * 3 / 4, gen_1 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
             nodeWeights: [pair_1, no_pair, no_pair, no_pair, pair_2],
             currentState: ["activeTo", "deactive", "deactive", "deactive", "active"],
             edgeState:["married","others","others","married"],
@@ -485,7 +485,7 @@ QtObject {
                 [left_ext - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
                 [right_ext + nodeWidth * 1.1, gen_1 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
             nodeWeights: [no_pair, pair_1, no_pair, no_pair, pair_2],
             currentState: ["deactive", "activeTo", "deactive", "deactive", "active"],
             edgeState:["married","others","others","married","others"],
@@ -511,7 +511,7 @@ QtObject {
                 [left_ext - nodeWidth / 2, gen_2 + nodeHeight * 3 / 4],
                 [right_ext + nodeWidth * 1.1, gen_2 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "man1.svg", "lady2.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_1, pair_2],
             currentState: ["deactive", "deactive", "deactive", "activeTo", "active"],
             edgeState:["married","others","others","married","others"],
@@ -539,7 +539,7 @@ QtObject {
                 [left_ext - nodeWidth / 2, gen_2],
                 [right_ext + nodeWidth, gen_2 + nodeHeight / 4]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "lady1.svg", "man1.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "lady1.svg", "man1.svg"],
             nodeWeights: [no_pair, no_pair, no_pair, pair_1, pair_2, no_pair],
             currentState: ["dective", "deactive", "deactive", "active", "deactive", "activeTo"],
             edgeState:["married","others","others","married","married"],
@@ -565,7 +565,7 @@ QtObject {
                 [center - (nodeWidth * 3/ 4), gen_1 + nodeHeight / 4],
                 [left_ext - nodeWidth / 2, gen_2 + nodeHeight / 2]
             ],
-            nodeleave: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
+            nodeValue: ["grandfather.svg", "old-lady.svg", "lady2.svg", "man3.svg", "man1.svg"],
             nodeWeights: [pair_1, pair_1, no_pair, pair_2, no_pair],
             currentState: ["active", "deactive", "deactive", "activeTo", "deactive", "deactive"],
             edgeState:["married","others","others","married","others"],

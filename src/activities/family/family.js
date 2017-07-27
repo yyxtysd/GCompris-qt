@@ -67,13 +67,13 @@ function loadDatasets() {
     items.nodeRepeater.model.clear();
     items.answersChoice.model.clear();
     items.edgeRepeater.model.clear();
-    items.wringcreator.model.clear();
+    items.ringRepeator.model.clear();
 
     for(var i = 0 ; i < levelTree.nodePositions.length ; i++) {
         items.nodeRepeater.model.append({
                        "xPosition": levelTree.nodePositions[i][0],
                        "yPosition": levelTree.nodePositions[i][1],
-                       "nodeValue": levelTree.nodeleave[i],
+                       "nodeValue": levelTree.nodeValue[i],
                        "currentState": items.mode == "normal" ? levelTree.currentState[i] : "deactive",
                        "nodeWeight": levelTree.nodeWeights[i]
                      });
@@ -88,10 +88,10 @@ function loadDatasets() {
 
     for(var i = 0 ; i < levelTree.edgeList.length ; i++) {
         items.edgeRepeater.model.append({
-             "x1": levelTree.edgeList[i][0],
-             "y1": levelTree.edgeList[i][1],
-             "x22": levelTree.edgeList[i][2],
-             "y22": levelTree.edgeList[i][3],
+             "_x1": levelTree.edgeList[i][0],
+             "_y1": levelTree.edgeList[i][1],
+             "_x2": levelTree.edgeList[i][2],
+             "_y2": levelTree.edgeList[i][3],
              "edgeState": levelTree.edgeState[i]
 
         });
@@ -101,7 +101,7 @@ function loadDatasets() {
         if(levelTree.edgeState[i] === "married") {
             var xcor = (levelTree.edgeList[i][0]+levelTree.edgeList[i][2]-0.04)/2;
             var ycor =  levelTree.edgeList[i][3] -0.02
-            items.wringcreator.model.append({
+            items.ringRepeator.model.append({
                 "ringx": xcor,
                 "ringy": ycor
             });
