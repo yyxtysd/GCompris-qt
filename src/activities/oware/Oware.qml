@@ -144,7 +144,7 @@ ActivityBase {
                         property var nextMove
 
                         GCText {
-                            text: index
+                            text: value
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
