@@ -159,6 +159,8 @@ ActivityBase {
                             onPressed: {
                                 items.indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
+                                items.player = items.playerOneTurn ? 0 : 1
+                                if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
                                 if(items.indexValue >= 6 && items.indexValue < 11)
                                     nextMove = "right"
                                 else if(items.indexValue == 11)
@@ -170,7 +172,6 @@ ActivityBase {
                                 for(var i = 0; i < grainRepeater.count; i++) {
                                     grainRepeater.itemAt(i).startAnimation()
                                 }
-                                if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
                                     items.playerOneTurn = !items.playerOneTurn
                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
                                     items.sowSeedsTimer.start()
