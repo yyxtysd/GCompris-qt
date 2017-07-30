@@ -61,7 +61,6 @@ ActivityBase {
             property alias playerTwoLevelScore: playerTwoLevelScore
             property alias boardModel: boardModel
             property bool computerTurn: false
-            property alias sowSeedsTimer: sowSeedsTimer
             property var currentMove
             property var player
             property int indexValue
@@ -76,17 +75,6 @@ ActivityBase {
             repeat: false
             interval: 600
             onTriggered: Activity.computerMove()
-        }
-
-        // Timer to sow seeds after animations are finished
-        Timer {
-            id: sowSeedsTimer
-            repeat: false
-            interval: 2600
-            onTriggered: {
-                Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
-                Activity.setValues(Activity.house)
-            }
         }
 
         Item {
@@ -130,7 +118,6 @@ ActivityBase {
                 rows: 2
                 anchors.horizontalCenter: board.horizontalCenter
                 anchors.top: board.top
-                z: 2
 
                 Repeater {
                     id: cellGridRepeater
@@ -180,7 +167,6 @@ ActivityBase {
                                     }
                                     items.playerOneTurn = !items.playerOneTurn
                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
-                                    items.sowSeedsTimer.start()
                                 }
                             }
                             onReleased: {
@@ -208,7 +194,14 @@ ActivityBase {
                                 property int currentSeeds: grainRepeater.count
                                 // moveCount is the current index of the moving seed wrt board.
                                 property int moveCount: items.indexValue
+                                signal checkAnimation
 
+                                onCheckAnimation: {
+                                    if(!currentSeeds) {
+                                        Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
+                                        Activity.setValues(Activity.house)
+                                    }
+                                }
                                 function startAnimation() {
                                     grainRepeater.itemAt(index).source = Activity.url + "grain.png"
                                     if(currentIndex >= 0 && currentSeeds > 0) {
@@ -223,6 +216,7 @@ ActivityBase {
                                     }
                                     else if(currentIndex == -1)
                                         grainRepeater.itemAt(index).source = Activity.url + "grain2.png"
+                                    checkAnimation()
                                 }
 
                                 property var xLeftAnimation: NumberAnimation {
@@ -266,7 +260,7 @@ ActivityBase {
                                 property var yUpAnimation: NumberAnimation {
                                     target: grain
                                     properties: "y"
-                                    to: -0.25 * board.height
+                                    from: y; to: y - 0.5 * board.height
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
@@ -283,7 +277,7 @@ ActivityBase {
                                     target: grain
                                     properties: "y"
                                     loops: 1
-                                    to: 0.7 * board.height
+                                    from: y; to: y + 0.5 * board.height
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
