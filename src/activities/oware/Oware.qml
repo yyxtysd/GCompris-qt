@@ -198,6 +198,7 @@ ActivityBase {
 
                                 onCheckAnimation: {
                                     if(!currentSeeds) {
+                                        grainRepeater.itemAt(index).source = Activity.url + "grain2.png"
                                         Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
                                         Activity.setValues(Activity.house)
                                     }
@@ -214,8 +215,6 @@ ActivityBase {
                                         else if(nextMove == "down" && currentIndex >= 0)
                                             yDownAnimation.start()
                                     }
-                                    else if(currentIndex == -1)
-                                        grainRepeater.itemAt(index).source = Activity.url + "grain2.png"
                                     checkAnimation()
                                 }
 
