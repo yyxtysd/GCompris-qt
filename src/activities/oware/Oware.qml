@@ -1,4 +1,3 @@
-
 /* GCompris - Oware.qml
  *
  * Copyright (C) 2017 Divyam Madaan <divyam3897@gmail.com>
@@ -60,7 +59,7 @@ ActivityBase {
             property int playerTwoScore: 0
             property alias playerOneLevelScore: playerOneLevelScore
             property alias playerTwoLevelScore: playerTwoLevelScore
-            property alias boxModel: boxModel
+            property alias boardModel: boardModel
             property bool computerTurn: false
             property alias sowSeedsTimer: sowSeedsTimer
             property var currentMove
@@ -71,6 +70,7 @@ ActivityBase {
         onStart: { Activity.start(items,twoPlayer) }
         onStop: { Activity.stop() }
 
+        // Timer to trigger computer move
         Timer {
             id: trigComputerMove
             repeat: false
@@ -78,6 +78,7 @@ ActivityBase {
             onTriggered: Activity.computerMove()
         }
 
+        // Timer to sow seeds after animations are finished
         Timer {
             id: sowSeedsTimer
             repeat: false
@@ -89,7 +90,7 @@ ActivityBase {
         }
 
         Item {
-            id: boxModel
+            id: boardModel
             width: parent.width * 0.7
             height: width * 0.4
             z: 2
@@ -122,6 +123,7 @@ ActivityBase {
                 anchors.bottomMargin: 5
             }
 
+            // Grid of houses with 6 houses for each player
             Grid {
                 id: boardGrid
                 columns: 6
@@ -161,17 +163,21 @@ ActivityBase {
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 items.player = items.playerOneTurn ? 0 : 1
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
-                                if(items.indexValue >= 6 && items.indexValue < 11)
-                                    nextMove = "right"
-                                else if(items.indexValue == 11)
-                                    nextMove = "up"
-                                else if(items.indexValue > 0 && items.indexValue <= 5)
-                                    nextMove = "left"
-                                else if(items.indexValue == 0)
-                                    nextMove = "down"
-                                for(var i = 0; i < grainRepeater.count; i++) {
-                                    grainRepeater.itemAt(i).startAnimation()
-                                }
+
+                                    /* If the indexValue on which player has clicked is between 6 and 11 then the first move will be towards right. */
+                                    if(items.indexValue >= 6 && items.indexValue < 11)
+                                        nextMove = "right"
+                                    /* Else if the indexValue on which player has clicked is 11 then first move will be up */
+                                    else if(items.indexValue == 11)
+                                        nextMove = "up"
+                                    /* Similarly if the indexValue on which player has clicked is between 0 and 5 then first move will be left and if equal to 0 then it will be down. */
+                                    else if(items.indexValue > 0 && items.indexValue <= 5)
+                                        nextMove = "left"
+                                    else if(items.indexValue == 0)
+                                        nextMove = "down"
+                                    for(var i = 0; i < grainRepeater.count; i++) {
+                                        grainRepeater.itemAt(i).startAnimation()
+                                    }
                                     items.playerOneTurn = !items.playerOneTurn
                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
                                     items.sowSeedsTimer.start()
@@ -200,19 +206,19 @@ ActivityBase {
 
                                 property int currentIndex: index
                                 property int currentSeeds: grainRepeater.count
+                                // moveCount is the current index of the moving seed wrt board.
                                 property int moveCount: items.indexValue
 
                                 function startAnimation() {
                                     grainRepeater.itemAt(index).source = Activity.url + "grain.png"
                                     if(currentIndex >= 0 && currentSeeds > 0) {
-                                    if(nextMove == "right" && currentIndex >= 0)
+                                        if(nextMove == "right" && currentIndex >= 0)
                                             xRightAnimation.start()
-                                    else if(nextMove == "up" && currentIndex >= 0)
+                                        else if(nextMove == "up" && currentIndex >= 0)
                                             yUpAnimation.start()
-                                    else if(nextMove == "left") {
+                                        else if(nextMove == "left")
                                             xLeftAnimation.start()
-                                    }
-                                    else if(nextMove == "down" && currentIndex >= 0)
+                                        else if(nextMove == "down" && currentIndex >= 0)
                                             yDownAnimation.start()
                                     }
                                     else if(currentIndex == -1)
@@ -224,8 +230,8 @@ ActivityBase {
                                     properties: "x"
                                     from: x ;to: x - (0.15 * board.width)
                                     duration: 450
-                                        onStopped: {
-                                            if(currentIndex >= 0 && currentSeeds > 0) {
+                                    onStopped: {
+                                        if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
                                             currentIndex--;
                                             moveCount--
@@ -234,16 +240,17 @@ ActivityBase {
                                             else if(moveCount == 0)
                                                 nextMove = "down"
                                             startAnimation()
-                                            }
+                                        }
                                     }
                                 }
+
                                 property var xRightAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
                                     from: x ;to: x + (0.15 * board.width)
                                     duration: 450
                                     onStopped: {
-                                            if(currentIndex >= 0 && currentSeeds > 0) {
+                                        if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
                                             currentIndex--
                                             moveCount++
@@ -300,7 +307,7 @@ ActivityBase {
                 width: height
                 source:Activity.url+"/score.png"
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: boxModel.left
+                anchors.right: boardModel.left
 
                 Flow {
                     width: board.width * (1/7.25)
@@ -341,7 +348,7 @@ ActivityBase {
                 width: height
                 source:Activity.url+"/score.png"
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: boxModel.right
+                anchors.left: boardModel.right
 
                 Flow {
                     width: board.width * (1/7.25)

@@ -72,8 +72,9 @@ function start(items_, twoPlayer_) {
 
 function stop() {}
 
+// Function to reload the activity.
 function reset() {
-    items.boxModel.enabled = true
+    items.boardModel.enabled = true
     items.playerOneLevelScore.endTurn()
     items.playerTwoLevelScore.endTurn()
     items.playerOneLevelScore.beginTurn()
@@ -107,11 +108,13 @@ function previousLevel() {
     initLevel();
 }
 
+// Function to get the x position of seeds.
 function getX(radius, index, value) {
     var step = (2 * Math.PI) * index / value;
     return radius * Math.cos(step);
 }
 
+// Function to get the y position of seeds.
 function getY(radius, index, value) {
     var step = (2 * Math.PI) * index / value;
     return radius * Math.sin(step);
@@ -135,6 +138,7 @@ function computerMove() {
     items.playerOneLevelScore.beginTurn()
 }
 
+// Random moves are made when the difference between scores is less than maxDiff[levelNumber]
 function randomMove() {
     var move = Math.floor(Math.random() * (12 - 6) + 6)
     if (house[move] != 0 && isValidMove(move, 0, house)) {
@@ -250,13 +254,13 @@ function setValues(board) {
         items.playerOneLevelScore.endTurn()
         items.playerTwoLevelScore.endTurn()
         items.playerTwoLevelScore.win()
-        items.boxModel.enabled = false
+        items.boardModel.enabled = false
         gameEnded = true
     } else if (items.playerOneScore >= 25) {
         print("won")
         items.playerOneLevelScore.win()
         items.playerTwoLevelScore.endTurn()
-        items.boxModel.enabled = false
+        items.boardModel.enabled = false
         gameEnded = true
     }
     if (!items.playerOneTurn && !gameEnded) {
