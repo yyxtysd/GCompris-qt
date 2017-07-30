@@ -22,6 +22,8 @@
 .import QtQuick 2.0 as Quick
 .import GCompris 1.0 as GCompris
 
+.import "qrc:/gcompris/src/core/core.js" as Core
+
 var currentLevel = 0
 var items;
 var barAtStart;
@@ -112,25 +114,11 @@ function loadDatasets() {
 }
 
 function shuffle() {
-    if (items.mode == "normal") {
-        // not required for normal mode
-        return
-    }
-
     for (var i = 0;i < numberOfLevel;i++) {
         shuffledLevelIndex[i] = i
     }
 
-    var currentIndex = shuffledLevelIndex.length, tmp, randomIndex
-
-    while (currentIndex != 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex)
-        currentIndex -= 1
-
-        tmp = shuffledLevelIndex[currentIndex]
-        shuffledLevelIndex[currentIndex] = shuffledLevelIndex[randomIndex]
-        shuffledLevelIndex[randomIndex] = tmp
-    }
+    Core.shuffle(shuffledLevelIndex);
 }
 
 function getCurrentLevelIndex() {
