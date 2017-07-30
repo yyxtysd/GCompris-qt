@@ -222,8 +222,8 @@ ActivityBase {
                                 property var xLeftAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x - 150
-                                    duration: 350
+                                    from: x ;to: x - (0.15 * board.width)
+                                    duration: 450
                                         onStopped: {
                                             if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
@@ -240,8 +240,8 @@ ActivityBase {
                                 property var xRightAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x + 145
-                                    duration: 350
+                                    from: x ;to: x + (0.15 * board.width)
+                                    duration: 450
                                     onStopped: {
                                             if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
@@ -259,8 +259,8 @@ ActivityBase {
                                 property var yUpAnimation: NumberAnimation {
                                     target: grain
                                     properties: "y"
-                                    to: -100
-                                    duration: 200
+                                    to: -0.25 * board.height
+                                    duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
@@ -276,8 +276,8 @@ ActivityBase {
                                     target: grain
                                     properties: "y"
                                     loops: 1
-                                    to: 250
-                                    duration: 200
+                                    to: 0.7 * board.height
+                                    duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
                                             currentSeeds--
