@@ -152,11 +152,11 @@ ActivityBase {
                                 items.indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 items.player = items.playerOneTurn ? 0 : 1
-                                cellGridRepeater.itemAt(index).z = 20
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
+                                    cellGridRepeater.itemAt(items.indexValue).z = 20
                                     firstMove()
                                     items.playerOneTurn = !items.playerOneTurn
-                                    Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
+//                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
                                 }
                             }
                         }

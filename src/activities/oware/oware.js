@@ -130,7 +130,9 @@ function computerMove() {
     if (items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel])
         randomMove()
     sowSeeds(finalMove, house, scoreHouse, 1)
+    items.cellGridRepeater.itemAt(items.indexValue).z = 0
     items.indexValue = 11 - finalMove
+    items.cellGridRepeater.itemAt(items.indexValue).z = 20
     items.cellGridRepeater.itemAt(11 - finalMove).firstMove()
     items.computerTurn = false
     items.playerTwoScore = scoreHouse[1]
