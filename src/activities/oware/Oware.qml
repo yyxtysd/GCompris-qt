@@ -150,37 +150,35 @@ ActivityBase {
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 items.player = items.playerOneTurn ? 0 : 1
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
-
-                                    /* If the indexValue on which player has clicked is between 6 and 11 then the first move will be towards right. */
-                                    if(items.indexValue >= 6 && items.indexValue < 11)
-                                        nextMove = "right"
-                                    /* Else if the indexValue on which player has clicked is 11 then first move will be up */
-                                    else if(items.indexValue == 11)
-                                        nextMove = "up"
-                                    /* Similarly if the indexValue on which player has clicked is between 0 and 5 then first move will be left and if equal to 0 then it will be down. */
-                                    else if(items.indexValue > 0 && items.indexValue <= 5)
-                                        nextMove = "left"
-                                    else if(items.indexValue == 0)
-                                        nextMove = "down"
-                                    for(var i = 0; i < grainRepeater.count; i++) {
-                                        grainRepeater.itemAt(i).startAnimation()
-                                    }
+                                    firstMove()
                                     items.playerOneTurn = !items.playerOneTurn
                                     Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
                                 }
                             }
-                            onReleased: {
-                                if(!twoPlayer && !items.playerOneTurn) {
-                                    items.computerTurn = true
-                                    trigComputerMove.start()
-                                    items.playerOneTurn = !items.playerOneTurn
-                                }
+                        }
+
+                        function firstMove() {
+                            items.boardModel.enabled = false
+                            /* If the indexValue on which player has clicked is between 6 and 11 then the first move will be towards right. */
+                            if(items.indexValue >= 6 && items.indexValue < 11)
+                                nextMove = "right"
+                            /* Else if the indexValue on which player has clicked is 11 then first move will be up */
+                            else if(items.indexValue == 11)
+                                nextMove = "up"
+                            /* Similarly if the indexValue on which player has clicked is between 0 and 5 then first move will be left and if equal to 0 then it will be down. */
+                            else if(items.indexValue > 0 && items.indexValue <= 5)
+                                nextMove = "left"
+                            else if(items.indexValue == 0)
+                                nextMove = "down"
+                            for(var i = 0; i < grainRepeater.count; i++) {
+                                grainRepeater.itemAt(i).startAnimation()
                             }
                         }
 
                         Repeater {
                             id: grainRepeater
                             model: value
+                            z: 1
 
                             Image {
                                 id: grain
@@ -196,15 +194,32 @@ ActivityBase {
                                 property int moveCount: items.indexValue
                                 signal checkAnimation
 
+                                Timer {
+                                    id: moveSeedsTimer
+                                    repeat: false
+                                    interval: 500
+                                    onTriggered: Activity.setValues(Activity.house)
+                                }
+
                                 onCheckAnimation: {
                                     if(!currentSeeds) {
                                         grainRepeater.itemAt(index).source = Activity.url + "grain2.png"
                                         Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
-                                        Activity.setValues(Activity.house)
+                                        moveSeedsTimer.start()
+                                        if(!twoPlayer && !items.playerOneTurn)  {
+                                            items.computerTurn = true
+                                            trigComputerMove.start()
+                                            items.playerOneTurn = !items.playerOneTurn
+                                        }
                                     }
                                 }
+
                                 function startAnimation() {
                                     grainRepeater.itemAt(index).source = Activity.url + "grain.png"
+                                    for(var i = 0; i < grainRepeater.count; i++) {
+                                        grainRepeater.itemAt(index).z = 2
+                                    }
+
                                     if(currentIndex >= 0 && currentSeeds > 0) {
                                         if(nextMove == "right" && currentIndex >= 0)
                                             xRightAnimation.start()

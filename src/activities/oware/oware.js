@@ -130,12 +130,11 @@ function computerMove() {
     if (items.playerOneScore - items.playerTwoScore < maxDiff[currentLevel])
         randomMove()
     sowSeeds(finalMove, house, scoreHouse, 1)
-    setValues(house)
+    items.indexValue = 11 - finalMove
+    items.cellGridRepeater.itemAt(11 - finalMove).firstMove()
     items.computerTurn = false
     items.playerTwoScore = scoreHouse[1]
     items.playerOneScore = scoreHouse[0]
-    items.playerTwoLevelScore.endTurn()
-    items.playerOneLevelScore.beginTurn()
 }
 
 // Random moves are made when the difference between scores is less than maxDiff[levelNumber]
@@ -263,10 +262,11 @@ function setValues(board) {
         items.boardModel.enabled = false
         gameEnded = true
     }
+    items.boardModel.enabled = true
     if (!items.playerOneTurn && !gameEnded) {
         items.playerOneLevelScore.endTurn()
         items.playerTwoLevelScore.beginTurn()
-    } else if (twoPlayer && !gameEnded) {
+    } else if (!gameEnded) {
         items.playerTwoLevelScore.endTurn()
         items.playerOneLevelScore.beginTurn()
     }
