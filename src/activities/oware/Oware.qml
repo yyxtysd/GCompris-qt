@@ -146,9 +146,13 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
+                                for(var i = 0; i < grainRepeater.count; i++)
+                                    grainRepeater.itemAt(i).source = Activity.url + "grain2.png"
+                                cellGridRepeater.itemAt(items.indexValue).z = 0
                                 items.indexValue = index
                                 items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 items.player = items.playerOneTurn ? 0 : 1
+                                cellGridRepeater.itemAt(index).z = 20
                                 if ((!items.computerTurn && items.playerOneTurn && (items.currentMove >= 0 && items.currentMove <= 5) && Activity.isValidMove(items.currentMove,1,Activity.house)) || (!items.playerOneTurn && (items.currentMove >= 6 && items.currentMove <= 11) && Activity.isValidMove(items.currentMove,0,Activity.house)) && Activity.house[items.currentMove] != 0) {
                                     firstMove()
                                     items.playerOneTurn = !items.playerOneTurn
@@ -178,7 +182,6 @@ ActivityBase {
                         Repeater {
                             id: grainRepeater
                             model: value
-                            z: 1
 
                             Image {
                                 id: grain
@@ -190,6 +193,7 @@ ActivityBase {
 
                                 property int currentIndex: index
                                 property int currentSeeds: grainRepeater.count
+                                property int totalSeeds: grainRepeater.count
                                 // moveCount is the current index of the moving seed wrt board.
                                 property int moveCount: items.indexValue
                                 signal checkAnimation
@@ -198,12 +202,13 @@ ActivityBase {
                                     id: moveSeedsTimer
                                     repeat: false
                                     interval: 500
-                                    onTriggered: Activity.setValues(Activity.house)
+                                    onTriggered: {
+                                        Activity.setValues(Activity.house)
+                                    }
                                 }
 
                                 onCheckAnimation: {
                                     if(!currentSeeds) {
-                                        grainRepeater.itemAt(index).source = Activity.url + "grain2.png"
                                         Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
                                         moveSeedsTimer.start()
                                         if(!twoPlayer && !items.playerOneTurn)  {
@@ -216,10 +221,6 @@ ActivityBase {
 
                                 function startAnimation() {
                                     grainRepeater.itemAt(index).source = Activity.url + "grain.png"
-                                    for(var i = 0; i < grainRepeater.count; i++) {
-                                        grainRepeater.itemAt(index).z = 2
-                                    }
-
                                     if(currentIndex >= 0 && currentSeeds > 0) {
                                         if(nextMove == "right" && currentIndex >= 0)
                                             xRightAnimation.start()
