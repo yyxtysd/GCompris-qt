@@ -209,7 +209,9 @@ ActivityBase {
 
                                 onCheckAnimation: {
                                     if(!currentSeeds) {
-                                        Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
+                                        if((twoPlayer) || (!twoPlayer && !items.playerOneTurn)) {
+                                            Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
+                                        }
                                         moveSeedsTimer.start()
                                         if(!twoPlayer && !items.playerOneTurn)  {
                                             items.computerTurn = true
