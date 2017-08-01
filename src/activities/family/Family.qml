@@ -132,9 +132,16 @@ ActivityBase {
 
                 if(numberOfNodesSelected == 0) {
                     firstNodePointer = node_
-                    firstNodePointer.changeState("active")
+                    firstNodePointer.changeState("activeTo")
                 } else {
                     secondNodePointer = node_
+
+                    if (firstNodePointer == secondNodePointer) {
+                        deactivatePairs()
+                        reset()
+                        return
+                    }
+
                     secondNodePointer.changeState("activeTo")
 
                     // checking results
@@ -310,7 +317,7 @@ ActivityBase {
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
-                        text: qsTr("Select the pair which denote the following relation: %1").arg(questionTopic)
+                        text: qsTr("Select one of the pairs which denote the following relation: %1").arg(questionTopic)
 
                         Rectangle {
                             anchors.fill: parent
