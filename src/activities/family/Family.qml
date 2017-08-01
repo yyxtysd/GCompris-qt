@@ -91,6 +91,8 @@ ActivityBase {
             property string mode: activity.mode
             property alias questionTopic: question.questionTopic
             property alias selectedPairs: selectedPairs
+            property point questionMarkPosition: questionMarkPosition
+            property point meLabelPosition: meLabelPosition
         }
 
         onStart: { Activity.start(items) }
@@ -219,8 +221,8 @@ ActivityBase {
                     Rectangle {
                         id: me
                         visible: dataset.levelElements[bar.level-1].captions[0] !== undefined && activity.mode == "normal"
-                        x: dataset.levelElements[bar.level-1].captions[0][0]*treeArea.width
-                        y: dataset.levelElements[bar.level-1].captions[0][1]*treeArea.height
+                        x: items.meLabelPosition.x * treeArea.width
+                        y: items.meLabelPosition.y * treeArea.height
 
                         width: treeArea.width/12
                         height: treeArea.height/14
@@ -241,8 +243,8 @@ ActivityBase {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
                         visible: dataset.levelElements[bar.level-1].captions[1] !== undefined && activity.mode == "normal"
-                        x: dataset.levelElements[bar.level-1].captions[1][0]*treeArea.width
-                        y: dataset.levelElements[bar.level-1].captions[1][1]*treeArea.height
+                        x: items.questionMarkPosition.x * treeArea.width
+                        y: items.questionMarkPosition.y * treeArea.height
                     }
 
                     Repeater {

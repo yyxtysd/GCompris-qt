@@ -112,6 +112,10 @@ function loadDatasets() {
     }
 
     items.questionTopic = levelTree.answer[0]
+    items.questionMarkPosition.x = levelTree.captions[1][0]
+    items.questionMarkPosition.y = levelTree.captions[1][1]
+    items.meLabelPosition.x = levelTree.captions[0][0]
+    items.meLabelPosition.y = levelTree.captions[0][1]
 }
 
 function shuffle() {
@@ -127,7 +131,7 @@ function getCurrentLevelIndex() {
         return
     }
 
-    return items.mode == "normal" ? currentLevel : shuffledLevelIndex[currentLevel]
+    return shuffledLevelIndex[currentLevel]
 }
 
 function nextLevel() {
