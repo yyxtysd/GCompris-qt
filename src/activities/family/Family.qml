@@ -90,6 +90,7 @@ ActivityBase {
             property alias dataset: dataset
             property string mode: activity.mode
             property alias questionTopic: question.questionTopic
+            property alias selectedPairs: selectedPairs
         }
 
         onStart: { Activity.start(items) }
@@ -102,9 +103,13 @@ ActivityBase {
         // handling pair matching for family_find_relative
         Item {
             id: selectedPairs
-            property bool nodePreviouslySelected: false
+            property int numberOfNodesSelected: 0
             property var firstNodePointer
             property var secondNodePointer
+
+            function reset() {
+                numberOfNodesSelected = 0
+            }
 
             function deactivatePairs() {
                 if (firstNodePointer && secondNodePointer) {
@@ -122,8 +127,10 @@ ActivityBase {
             }
 
             function selectNode(node_) {
-                if(!nodePreviouslySelected) {
-                    nodePreviouslySelected = true
+                if (numberOfNodesSelected >= 2)
+                    return
+
+                if(numberOfNodesSelected == 0) {
                     firstNodePointer = node_
                     firstNodePointer.changeState("active")
                 } else {
@@ -136,10 +143,11 @@ ActivityBase {
                     } else {
                         bonus.bad("lion")
                         deactivatePairs()
+                        reset()
+                        return
                     }
-
-                    nodePreviouslySelected = false
                 }
+                numberOfNodesSelected ++;
             }
         }
 

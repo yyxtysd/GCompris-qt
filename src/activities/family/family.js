@@ -53,6 +53,7 @@ function stop() {
 function initLevel() {
     items.bar.level = currentLevel + 1
 
+    items.selectedPairs.reset()
     levelToLoad = getCurrentLevelIndex()
 
     loadDatasets()
