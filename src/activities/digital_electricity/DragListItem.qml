@@ -75,8 +75,8 @@ Item {
 
             property double smallWidth: widthInColumn
             property double smallHeight: heightInColumn
-            property double fullWidth: imgWidth * backgroundContainer.width
-            property double fullHeight: imgHeight * backgroundContainer.height
+            property double fullWidth: imgWidth * playArea.width
+            property double fullHeight: imgHeight * playArea.height
             property QtObject tileImageParent
             property bool small: true
 
@@ -122,8 +122,8 @@ Item {
                     if (pressedOnce) {
                         pressedOnce = false
                         item.selected = false
-                        var coord = backgroundContainer.mapFromItem(tileImage.parent, parent.x, parent.y)
-                        if(coord.x > 0 && (backgroundContainer.width - coord.x > tileImage.fullWidth))
+                        var coord = playArea.mapFromItem(tileImage.parent, parent.x, parent.y)
+                        if(coord.x > 0 && (playArea.width - coord.x > tileImage.fullWidth))
                             Activity.createComponent(coord.x, coord.y, index)
                         tileImage.anchors.centerIn = tile
                         tileImage.toSmall()

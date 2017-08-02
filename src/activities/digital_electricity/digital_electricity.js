@@ -212,8 +212,8 @@ function reset() {
 // Creates component from ListWidget to the drawing board area
 function createComponent(x, y, componentIndex) {
 
-    x = x / items.backgroundContainer.width
-    y = y / items.backgroundContainer.height
+    x = x / items.playArea.width
+    y = y / items.playArea.height
 
     var index
     if(deletedIndex.length > 0) {
@@ -229,7 +229,7 @@ function createComponent(x, y, componentIndex) {
 
     //console.log("Error loading component:", electricComponent.errorString())
     components[index] = electricComponent.createObject(
-                        items.backgroundContainer, {
+                        items.playArea, {
                             "index": index,
                             "posX": x,
                             "posY": y,
@@ -260,7 +260,7 @@ function terminalPointSelected(terminal) {
         if(connected[inTerminal] == undefined || connected[inTerminal] == -1) {
             var wireComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Wire.qml")
             var wire = wireComponent.createObject(
-                       items.backgroundContainer, {
+                       items.playArea, {
                             "from": outTerminal,
                             "to": inTerminal
                         });

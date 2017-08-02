@@ -49,7 +49,7 @@ ActivityBase {
         QtObject {
             id: items
             property Item main: activity.main
-            property alias backgroundContainer: backgroundContainer
+            property alias playArea: playArea
             property alias bar: bar
             property alias bonus: bonus
             property alias availablePieces: availablePieces
@@ -59,6 +59,7 @@ ActivityBase {
             property alias displayTruthTable: inputOutputTxt.displayTruthTable
             property alias dataset: dataset
             property alias infoImage: infoImage
+            property bool tutorialMode: mode.isTutorialMode
         }
 
         Loader {
@@ -70,7 +71,7 @@ ActivityBase {
         onStop: { Activity.stop() }
 
         Rectangle {
-            id: backgroundContainer
+            id: playArea
 
             color: "#ffffb3"
             x: background.vert ? 90 * ApplicationInfo.ratio : 0
@@ -256,7 +257,7 @@ ActivityBase {
         }
 
         Rectangle {
-            id: leftWidget
+            id: inputComponentsContainer
             width: background.vert ?
                        90 * ApplicationInfo.ratio :
                        background.width
@@ -278,7 +279,7 @@ ActivityBase {
             anchors {
                 bottom: bar.top
                 bottomMargin: 10
-                left: leftWidget.left
+                left: inputComponentsContainer.left
                 leftMargin: 5
             }
             width: toolTipTxt.width + 10
@@ -317,6 +318,29 @@ ActivityBase {
             }
         }
 
+        DialogActivityConfig {
+            id: dialogActivityConfig
+            content: Component {
+                Column {
+                    id: column
+                    spacing: 5
+                    width: dialogActivityConfig.width
+                    height: dialogActivityConfig.height
+                    GCDialogCheckBox {
+                        id: mode
+                        property bool isTutorialMode: true
+                        width: column.width - 50
+                        text: qsTr("Tutorial Mode")
+                        checked: isTutorialMode
+                        onClicked: isTutorialMode = !isTutorialMode
+                    }
+                }
+
+            }
+
+            onClose: home()
+        }
+
         DialogHelp {
             id: dialogHelp
             onClose: home()
@@ -324,12 +348,16 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level | reload}
+            content: BarEnumContent { value: help | home | level | reload | config}
             onHelpClicked: {displayDialog(dialogHelp)}
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
             onReloadClicked: Activity.reset()
+            onConfigClicked: {
+                dialogActivityConfig.active = true
+                displayDialog(dialogActivityConfig)
+            }
         }
 
         Bonus {
