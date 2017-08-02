@@ -38,7 +38,7 @@ var lastMove
 var finalMove
 var twoPlayer
 var tutorialInstructions = [{
-        "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses  belong to the other player."),
+        "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses belong to the other player."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
     },
     {
@@ -132,11 +132,11 @@ function computerMove() {
     sowSeeds(finalMove, house, scoreHouse, 1)
     items.cellGridRepeater.itemAt(items.indexValue).z = 0
     items.indexValue = 11 - finalMove
-    items.cellGridRepeater.itemAt(items.indexValue).z = 20
-    items.cellGridRepeater.itemAt(11 - finalMove).firstMove()
-    items.computerTurn = false
-    items.playerTwoScore = scoreHouse[1]
-    items.playerOneScore = scoreHouse[0]
+    if(!items.gameEnded) {
+        items.cellGridRepeater.itemAt(items.indexValue).z = 20
+        items.cellGridRepeater.itemAt(11 - finalMove).firstMove()
+        items.computerTurn = false
+    }
 }
 
 // Random moves are made when the difference between scores is less than maxDiff[levelNumber]
@@ -243,7 +243,7 @@ function setValues(board) {
     for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
         items.cellGridRepeater.itemAt(i).value = board[j]
 
-    var gameEnded = false
+    items.gameEnded = false
     items.playerTwoScore = scoreHouse[1]
     items.playerOneScore = scoreHouse[0]
 
@@ -256,21 +256,22 @@ function setValues(board) {
         items.playerTwoLevelScore.endTurn()
         items.playerTwoLevelScore.win()
         items.boardModel.enabled = false
-        gameEnded = true
+        items.gameEnded = true
     } else if (items.playerOneScore >= 25) {
         print("won")
         items.playerOneLevelScore.win()
         items.playerTwoLevelScore.endTurn()
         items.boardModel.enabled = false
-        gameEnded = true
+        items.gameEnded = true
     }
-    items.boardModel.enabled = true
-    if (!items.playerOneTurn && !gameEnded) {
+    if (!items.playerOneTurn && !items.gameEnded) {
         items.playerOneLevelScore.endTurn()
         items.playerTwoLevelScore.beginTurn()
-    } else if (!gameEnded) {
+        items.boardModel.enabled = true
+    } else if (!items.gameEnded) {
         items.playerTwoLevelScore.endTurn()
         items.playerOneLevelScore.beginTurn()
+        items.boardModel.enabled = true
     }
 }
 

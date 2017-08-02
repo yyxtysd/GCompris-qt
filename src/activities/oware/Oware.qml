@@ -64,6 +64,7 @@ ActivityBase {
             property var currentMove
             property var player
             property int indexValue
+            property bool gameEnded: false
         }
 
         onStart: { Activity.start(items,twoPlayer) }
@@ -208,7 +209,7 @@ ActivityBase {
                                 }
 
                                 onCheckAnimation: {
-                                    if(!currentSeeds) {
+                                    if(!currentSeeds && !items.gameEnded) {
                                         if((twoPlayer) || (!twoPlayer && !items.playerOneTurn)) {
                                             Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
                                         }
