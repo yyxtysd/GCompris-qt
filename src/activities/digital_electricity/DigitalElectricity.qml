@@ -352,7 +352,7 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level | reload | config}
+            content: BarEnumContent { value: help | home | ( activity.isTutorialMode ? level : 0) | reload | config}
             onHelpClicked: {displayDialog(dialogHelp)}
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
