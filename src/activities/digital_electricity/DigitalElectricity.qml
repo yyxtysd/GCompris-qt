@@ -31,6 +31,8 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
+    property bool isTutorialMode: false
+
     pageComponent: Rectangle {
         id: background
         anchors.fill: parent
@@ -59,7 +61,7 @@ ActivityBase {
             property alias displayTruthTable: inputOutputTxt.displayTruthTable
             property alias dataset: dataset
             property alias infoImage: infoImage
-            property bool tutorialMode: mode.isTutorialMode
+            property bool isTutorialMode: activity.isTutorialMode
         }
 
         Loader {
@@ -328,11 +330,13 @@ ActivityBase {
                     height: dialogActivityConfig.height
                     GCDialogCheckBox {
                         id: mode
-                        property bool isTutorialMode: true
                         width: column.width - 50
                         text: qsTr("Tutorial Mode")
-                        checked: isTutorialMode
-                        onClicked: isTutorialMode = !isTutorialMode
+                        checked: activity.isTutorialMode
+                        onClicked: {
+                            activity.isTutorialMode = !activity.isTutorialMode
+                            Activity.changeMode()
+                        }
                     }
                 }
 

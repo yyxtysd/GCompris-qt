@@ -46,7 +46,7 @@ Item {
 
     Grid {
         id: view
-        width: listWidget.vert ? leftWidget.width : 2 * bar.height
+        width: listWidget.vert ? inputComponentsContainer.width : 2 * bar.height
         height: listWidget.vert ? background.height - 2 * bar.height : bar.height
         spacing: 5
         z: 20
@@ -66,7 +66,7 @@ Item {
 
         onNbDisplayedGroupChanged: {
             view.setCurrentDisplayedGroup = 0
-            refreshLeftWidget()
+            refreshInputComponentsContainer()
         }
 
         add: Transition {
@@ -91,7 +91,7 @@ Item {
                 previousNavigation = 1
         }
 
-        function refreshLeftWidget() {
+        function refreshInputComponentsContainer() {
             availablePieces.view.currentDisplayedGroup = availablePieces.view.setCurrentDisplayedGroup
             availablePieces.view.setNextNavigation()
             availablePieces.view.setPreviousNavigation()
@@ -279,7 +279,7 @@ Item {
                         repeater.currentIndex = -1
                         if(previous.opacity == 1) {
                             view.setCurrentDisplayedGroup = view.currentDisplayedGroup - view.previousNavigation
-                            view.refreshLeftWidget()
+                            view.refreshInputComponentsContainer()
                         }
                     }
                 }
@@ -297,7 +297,7 @@ Item {
                     onClicked: {
                         repeater.currentIndex = -1
                         view.setCurrentDisplayedGroup = view.currentDisplayedGroup + view.nextNavigation
-                        view.refreshLeftWidget()
+                        view.refreshInputComponentsContainer()
                     }
                 }
             }

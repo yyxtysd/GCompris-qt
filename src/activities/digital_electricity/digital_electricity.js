@@ -23,7 +23,7 @@
 .import QtQuick 2.3 as Quick
 
 var currentLevel = 1
-var numberOfLevel = 4
+var numberOfLevel
 var items
 var url = "qrc:/gcompris/src/activities/digital_electricity/resource/"
 var toolDelete
@@ -39,6 +39,7 @@ function start(items_) {
 
     items = items_
     currentLevel = 1
+    numberOfLevel = items.isTutorialMode ? 10 : 1
     initLevel()
 }
 
@@ -60,6 +61,26 @@ function initLevel() {
     items.bar.level = currentLevel
     var sizeMultiplier = 1 + (1 / (1.5 * currentLevel))
 
+    if (!items.isTutorialMode) {
+        loadFreeMode(sizeMultiplier)
+    } else {
+        // load tutorial levels from dataset
+    }
+
+    items.availablePieces.view.currentDisplayedGroup = 0
+    items.availablePieces.view.previousNavigation = 1
+    items.availablePieces.view.nextNavigation = 1
+    deletedIndex = []
+    components = []
+    connected = []
+    animationInProgress = false
+    toolDelete = false
+    toolDeleteSticky = false
+    deselect()
+    updateToolTip("")
+}
+
+function loadFreeMode(sizeMultiplier) {
     items.availablePieces.model.append( {
         "imgName": "zero.svg",
         "componentSrc": "Zero.qml",
@@ -88,101 +109,94 @@ function initLevel() {
         "imgHeight": sizeMultiplier * 0.12,
         "toolTipText": qsTr("AND gate")
     })
-    if(currentLevel > 1) {
-        items.availablePieces.model.append( {
-            "imgName": "gateNand.svg",
-            "componentSrc": "NandGate.qml",
-            "imgWidth": sizeMultiplier * 0.15,
-            "imgHeight": sizeMultiplier * 0.12,
-            "toolTipText": qsTr("NAND gate")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "gateNor.svg",
-            "componentSrc": "NorGate.qml",
-            "imgWidth": sizeMultiplier * 0.15,
-            "imgHeight": sizeMultiplier * 0.12,
-            "toolTipText": qsTr("NOR gate")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "gateNot.svg",
-            "componentSrc": "NotGate.qml",
-            "imgWidth": sizeMultiplier * 0.15,
-            "imgHeight": sizeMultiplier * 0.12,
-            "toolTipText": qsTr("NOT gate")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "gateOr.svg",
-            "componentSrc": "OrGate.qml",
-            "imgWidth": sizeMultiplier * 0.15,
-            "imgHeight": sizeMultiplier * 0.12,
-            "toolTipText": qsTr("OR gate")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "gateXor.svg",
-            "componentSrc": "XorGate.qml",
-            "imgWidth": sizeMultiplier * 0.15,
-            "imgHeight": sizeMultiplier * 0.12,
-            "toolTipText": qsTr("XOR gate")
-        })
-    }
-    if(currentLevel > 2) {
-        items.availablePieces.model.append( {
-            "imgName": "comparator.svg",
-            "componentSrc": "Comparator.qml",
-            "imgWidth": sizeMultiplier * 0.3,
-            "imgHeight": sizeMultiplier * 0.25,
-            "toolTipText": qsTr("Comparator")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "BCDTo7Segment.svg",
-            "componentSrc": "BCDToSevenSegment.qml",
-            "imgWidth": sizeMultiplier * 0.3,
-            "imgHeight": sizeMultiplier * 0.4,
-            "toolTipText": qsTr("BCD To 7 Segment")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "sevenSegmentDisplay.svgz",
-            "componentSrc": "SevenSegment.qml",
-            "imgWidth": sizeMultiplier * 0.18,
-            "imgHeight": sizeMultiplier * 0.4,
-            "toolTipText": qsTr("7 Segment Display")
-        })
-    }
-    if(currentLevel > 3) {
-        items.availablePieces.model.append( {
-            "imgName": "switchOff.svg",
-            "componentSrc": "Switch.qml",
-            "imgWidth": sizeMultiplier * 0.18,
-            "imgHeight": sizeMultiplier * 0.15,
-            "toolTipText": qsTr("Switch")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "signalGenerator.svg",
-            "componentSrc": "SignalGenerator.qml",
-            "imgWidth": sizeMultiplier * 0.25,
-            "imgHeight": sizeMultiplier * 0.18,
-            "toolTipText": qsTr("Signal Generator")
-        })
-        items.availablePieces.model.append( {
-            "imgName": "bcdCounter.svg",
-            "componentSrc": "BcdCounter.qml",
-            "imgWidth": sizeMultiplier * 0.3,
-            "imgHeight": sizeMultiplier * 0.4,
-            "toolTipText": qsTr("BCD Counter")
-        })
-    }
+    items.availablePieces.model.append( {
+        "imgName": "gateNand.svg",
+        "componentSrc": "NandGate.qml",
+        "imgWidth": sizeMultiplier * 0.15,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("NAND gate")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "gateNor.svg",
+        "componentSrc": "NorGate.qml",
+        "imgWidth": sizeMultiplier * 0.15,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("NOR gate")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "gateNot.svg",
+        "componentSrc": "NotGate.qml",
+        "imgWidth": sizeMultiplier * 0.15,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("NOT gate")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "gateOr.svg",
+        "componentSrc": "OrGate.qml",
+        "imgWidth": sizeMultiplier * 0.15,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("OR gate")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "gateXor.svg",
+        "componentSrc": "XorGate.qml",
+        "imgWidth": sizeMultiplier * 0.15,
+        "imgHeight": sizeMultiplier * 0.12,
+        "toolTipText": qsTr("XOR gate")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "comparator.svg",
+        "componentSrc": "Comparator.qml",
+        "imgWidth": sizeMultiplier * 0.3,
+        "imgHeight": sizeMultiplier * 0.25,
+        "toolTipText": qsTr("Comparator")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "BCDTo7Segment.svg",
+        "componentSrc": "BCDToSevenSegment.qml",
+        "imgWidth": sizeMultiplier * 0.3,
+        "imgHeight": sizeMultiplier * 0.4,
+        "toolTipText": qsTr("BCD To 7 Segment")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "sevenSegmentDisplay.svgz",
+        "componentSrc": "SevenSegment.qml",
+        "imgWidth": sizeMultiplier * 0.18,
+        "imgHeight": sizeMultiplier * 0.4,
+        "toolTipText": qsTr("7 Segment Display")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "switchOff.svg",
+        "componentSrc": "Switch.qml",
+        "imgWidth": sizeMultiplier * 0.18,
+        "imgHeight": sizeMultiplier * 0.15,
+        "toolTipText": qsTr("Switch")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "signalGenerator.svg",
+        "componentSrc": "SignalGenerator.qml",
+        "imgWidth": sizeMultiplier * 0.25,
+        "imgHeight": sizeMultiplier * 0.18,
+        "toolTipText": qsTr("Signal Generator")
+    })
+    items.availablePieces.model.append( {
+        "imgName": "bcdCounter.svg",
+        "componentSrc": "BcdCounter.qml",
+        "imgWidth": sizeMultiplier * 0.3,
+        "imgHeight": sizeMultiplier * 0.4,
+        "toolTipText": qsTr("BCD Counter")
+    })
+}
 
-    items.availablePieces.view.currentDisplayedGroup = 0
-    items.availablePieces.view.previousNavigation = 1
-    items.availablePieces.view.nextNavigation = 1
-    deletedIndex = []
-    components = []
-    connected = []
-    animationInProgress = false
-    toolDelete = false
-    toolDeleteSticky = false
-    deselect()
-    updateToolTip("")
+function changeMode() {
+    if (items.isTutorialMode) {
+        numberOfLevel = 10
+        currentLevel = 1
+    } else {
+        numberOfLevel = 1
+        currentLevel = 1
+    }
+    reset()
 }
 
 function nextLevel() {
