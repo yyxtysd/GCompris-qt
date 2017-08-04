@@ -60,6 +60,7 @@ ActivityBase {
             property alias truthTablesModel: truthTablesModel
             property alias displayTruthTable: inputOutputTxt.displayTruthTable
             property alias dataset: dataset
+            property alias tutorialDataset: tutorialDataset
             property alias infoImage: infoImage
             property bool isTutorialMode: activity.isTutorialMode
         }
@@ -67,6 +68,10 @@ ActivityBase {
         Loader {
             id: dataset
             asynchronous: false
+        }
+
+        Dataset {
+            id: tutorialDataset
         }
 
         onStart: { Activity.start(items) }

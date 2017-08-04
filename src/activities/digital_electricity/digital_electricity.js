@@ -65,6 +65,16 @@ function initLevel() {
         loadFreeMode(sizeMultiplier)
     } else {
         // load tutorial levels from dataset
+        var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
+        for (var i = 0; i < levelProperties.totalComponents; i++) {
+            items.availablePieces.model.append( {
+                "imgName": levelProperties.imageName[i],
+                "componentSrc": levelProperties.componentSource[i],
+                "imgWidth": levelProperties.imgWidth[i] * sizeMultiplier,
+                "imgHeight": levelProperties.imgHeight[i] * sizeMultiplier,
+                "toolTipText": levelProperties.toolTipText[i]
+            })
+        }
     }
 
     items.availablePieces.view.currentDisplayedGroup = 0
@@ -190,7 +200,7 @@ function loadFreeMode(sizeMultiplier) {
 
 function changeMode() {
     if (items.isTutorialMode) {
-        numberOfLevel = 10
+        numberOfLevel = items.tutorialDataset.tutorialLevels.length
         currentLevel = 1
     } else {
         numberOfLevel = 1
