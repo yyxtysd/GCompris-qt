@@ -22,19 +22,40 @@
 import QtQuick 2.6
 
 QtObject {
+    property variant zero: {
+        'imageName': 'zero.svg',
+        'componentSource': 'Zero.qml',
+        'width': 0.12,
+        'height': 0.2,
+        'toolTipText': qsTr("Zero input")
+    }
+    property variant one: {
+        'imageName': 'one.svg',
+        'componentSource': 'One.qml',
+        'width': 0.12,
+        'height': 0.2,
+        'toolTipText': qsTr("One input")
+    }
+    property variant digitalLight: {
+        'imageName': 'DigitalLightOff.svg',
+        'componentSource': 'DigitalLight.qml',
+        'width': 0.12,
+        'height': 0.12,
+        'toolTipText': qsTr("Digital Light")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
         {
             totalComponents: 3,
-            imageName: ["zero.svg", "one.svg", "DigitalLightOff.svg"],
-            componentSource: ["Zero.qml", "One.qml", "DigitalLight.qml"],
-            imgWidth: [0.12, 0.12, 0.12],
-            imgHeight: [0.2, 0.2, 0.12],
-            toolTipText: [
-                qsTr("Zero input"),
-                qsTr("One input"),
-                qsTr("Digital Light")
+            imageName: [zero.imageName, one.imageName, digitalLight.imageName],
+            componentSource: [zero.componentSource, one.componentSource, digitalLight.componentSource],
+            imgWidth: [zero.width, one.width, digitalLight.width],
+            imgHeight: [zero.height, one.height, digitalLight.height],
+            toolTipText: [zero.toolTipText, one.toolTipText, digitalLight.toolTipText],
+            introMessage: [
+                qsTr("The Digital light will glow when it's terminal is connected with an input of 1"),
+                qsTr("Turn the Digital light on using the inputs provided")
             ]
         }
     ]

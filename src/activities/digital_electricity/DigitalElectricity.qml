@@ -31,7 +31,7 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
-    property bool isTutorialMode: false
+    property bool isTutorialMode: true
 
     pageComponent: Rectangle {
         id: background
@@ -63,6 +63,7 @@ ActivityBase {
             property alias tutorialDataset: tutorialDataset
             property alias infoImage: infoImage
             property bool isTutorialMode: activity.isTutorialMode
+            property alias tutorialInstruction: tutorialInstruction
         }
 
         Loader {
@@ -72,6 +73,21 @@ ActivityBase {
 
         Dataset {
             id: tutorialDataset
+        }
+
+        IntroMessage {
+            id: tutorialInstruction
+            visible: activity.isTutorialMode
+            anchors {
+                top: parent.top
+                topMargin: 10
+                right: parent.right
+                rightMargin: 5
+                left: parent.left
+                leftMargin: 5
+            }
+            z: 100
+            onIntroDone: tutorialInstruction.visible = false
         }
 
         onStart: { Activity.start(items) }

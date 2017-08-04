@@ -39,7 +39,7 @@ function start(items_) {
 
     items = items_
     currentLevel = 1
-    numberOfLevel = items.isTutorialMode ? 10 : 1
+    numberOfLevel = items.isTutorialMode ? items.tutorialDataset.tutorialLevels.length : 1
     initLevel()
 }
 
@@ -62,6 +62,7 @@ function initLevel() {
     var sizeMultiplier = 1 + (1 / (1.5 * currentLevel))
 
     if (!items.isTutorialMode) {
+        items.tutorialInstruction.visible = false
         loadFreeMode(sizeMultiplier)
     } else {
         // load tutorial levels from dataset
@@ -74,6 +75,10 @@ function initLevel() {
                 "imgHeight": levelProperties.imgHeight[i] * sizeMultiplier,
                 "toolTipText": levelProperties.toolTipText[i]
             })
+
+            items.tutorialInstruction.visible = true
+            items.tutorialInstruction.index = 0
+            items.tutorialInstruction.intro = levelProperties.introMessage
         }
     }
 
@@ -201,11 +206,10 @@ function loadFreeMode(sizeMultiplier) {
 function changeMode() {
     if (items.isTutorialMode) {
         numberOfLevel = items.tutorialDataset.tutorialLevels.length
-        currentLevel = 1
     } else {
         numberOfLevel = 1
-        currentLevel = 1
     }
+    currentLevel = 1
     reset()
 }
 
