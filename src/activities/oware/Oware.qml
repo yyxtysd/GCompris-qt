@@ -241,11 +241,11 @@ ActivityBase {
                                 property var xLeftAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x - (0.15 * board.width)
+                                    from: x ;to: x - (0.162 * board.width)
                                     duration: 450
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
-                                            if(moveCount == items.indexValue + 1 && totalMoves == 11) {
+                                            if(moveCount == items.indexValue + 1 && (totalMoves == 11 || totalMoves == 23)) {
                                                 nextMove = "left"
                                                 currentSeeds++
                                                 currentIndex++
@@ -271,11 +271,11 @@ ActivityBase {
                                 property var xRightAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x + (0.15 * board.width)
+                                    from: x ;to: x + (0.16 * board.width)
                                     duration: 450
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
-                                            if(moveCount == items.indexValue - 1 && totalMoves == 11) {
+                                            if(moveCount == items.indexValue - 1 && (totalMoves == 11 || totalMoves == 23)) {
                                                 currentSeeds++
                                                 currentIndex++
                                                 if(items.indexValue == 11)
@@ -304,6 +304,12 @@ ActivityBase {
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            if(moveCount == 11 && (totalMoves == 11 || totalMoves == 23)) {
+                                                currentSeeds++
+                                                currentIndex++
+                                                nextMove = "left"
+                                                startAnimation()
+                                            }
                                             totalMoves++
                                             currentSeeds--
                                             currentIndex--
@@ -322,6 +328,12 @@ ActivityBase {
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            if(moveCount == 0 && (totalMoves == 11 || totalMoves == 23)) {
+                                                currentSeeds++
+                                                currentIndex++
+                                                nextMove = "right"
+                                                startAnimation()
+                                            }
                                             totalMoves++
                                             currentSeeds--
                                             currentIndex--
