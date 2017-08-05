@@ -22,28 +22,28 @@
 import QtQuick 2.6
 
 QtObject {
-    property variant zero: {
+    property var zero: {
         'imageName': 'zero.svg',
         'componentSource': 'Zero.qml',
         'width': 0.12,
         'height': 0.2,
         'toolTipText': qsTr("Zero input")
     }
-    property variant one: {
+    property var one: {
         'imageName': 'one.svg',
         'componentSource': 'One.qml',
         'width': 0.12,
         'height': 0.2,
         'toolTipText': qsTr("One input")
     }
-    property variant digitalLight: {
+    property var digitalLight: {
         'imageName': 'DigitalLightOff.svg',
         'componentSource': 'DigitalLight.qml',
         'width': 0.12,
         'height': 0.12,
         'toolTipText': qsTr("Digital Light")
     }
-    property variant andGate: {
+    property var andGate: {
         'imageName': 'gateAnd.svg',
         'componentSource': 'AndGate.qml',
         'width': 0.15,
@@ -54,7 +54,6 @@ QtObject {
     property var tutorialLevels: [
         // level 1
         {
-            totalComponents: 3,
             imageName: [zero.imageName, one.imageName, digitalLight.imageName],
             componentSource: [zero.componentSource, one.componentSource, digitalLight.componentSource],
             imgWidth: [zero.width, one.width, digitalLight.width],
@@ -67,7 +66,6 @@ QtObject {
         },
         // level 2
         {
-            totalComponents: 4,
             imageName: [zero.imageName, one.imageName, andGate.imageName, digitalLight.imageName],
             componentSource: [zero.componentSource, one.componentSource, andGate.componentSource, digitalLight.componentSource],
             imgWidth: [zero.width, one.width, andGate.width, digitalLight.width],

@@ -31,7 +31,8 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
-    property bool isTutorialMode: true
+    property string mode: "tutorial"
+    property bool isTutorialMode: mode == "tutorial" ? true : false
 
     pageComponent: Rectangle {
         id: background
@@ -43,6 +44,7 @@ ActivityBase {
         property bool vert: background.width > background.height
 
         Component.onCompleted: {
+            dialogActivityConfig.getInitialConfiguration()
             activity.start.connect(start)
             activity.stop.connect(stop)
         }
@@ -343,27 +345,55 @@ ActivityBase {
 
         DialogActivityConfig {
             id: dialogActivityConfig
+            currentActivity: activity
             content: Component {
-                Column {
-                    id: column
-                    spacing: 5
-                    width: dialogActivityConfig.width
-                    height: dialogActivityConfig.height
-                    GCDialogCheckBox {
-                        id: mode
-                        width: column.width - 50
-                        text: qsTr("Tutorial Mode")
-                        checked: activity.isTutorialMode
-                        onClicked: {
-                            activity.isTutorialMode = !activity.isTutorialMode
-                            Activity.changeMode()
+                Item {
+                    property alias modesComboBox: modesComboBox
+
+                    property var availableModes: [
+                        { "text": qsTr("Tutorial Mode"), "value": "tutorial" },
+                        { "text": qsTr("Free Mode"), "value": "free" },
+                    ]
+
+                    Flow {
+                        id: flow
+                        spacing: 5
+                        width: dialogActivityConfig.width
+                        GCComboBox {
+                            id: modesComboBox
+                            model: availableModes
+                            background: dialogActivityConfig
+                            label: qsTr("Select your Mode")
                         }
                     }
                 }
-
             }
 
-            onClose: home()
+            onClose: home();
+
+            onLoadData: {
+                if(dataToSave && dataToSave["modes"]) {
+                    activity.mode = dataToSave["modes"];
+                }
+            }
+
+            onSaveData: {
+                var newMode = dialogActivityConfig.configItem.availableModes[dialogActivityConfig.configItem.modesComboBox.currentIndex].value;
+                if (newMode !== activity.mode) {
+                    activity.mode = newMode;
+                    dataToSave = {"modes": activity.mode};
+                    Activity.reset()
+                }
+            }
+
+            function setDefaultValues() {
+                for(var i = 0 ; i < dialogActivityConfig.configItem.availableModes.length; i ++) {
+                    if(dialogActivityConfig.configItem.availableModes[i].value === activity.levelSet) {
+                        dialogActivityConfig.configItem.modesComboBox.currentIndex = i;
+                        break;
+                    }
+                }
+            }
         }
 
         DialogHelp {
@@ -381,6 +411,7 @@ ActivityBase {
             onReloadClicked: Activity.reset()
             onConfigClicked: {
                 dialogActivityConfig.active = true
+                dialogActivityConfig.setDefaultValues()
                 displayDialog(dialogActivityConfig)
             }
         }

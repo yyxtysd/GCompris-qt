@@ -39,7 +39,7 @@ function start(items_) {
 
     items = items_
     currentLevel = 1
-    numberOfLevel = items.isTutorialMode ? items.tutorialDataset.tutorialLevels.length : 1
+    numberOfLevel = items.tutorialDataset.tutorialLevels.length
     initLevel()
 }
 
@@ -67,7 +67,7 @@ function initLevel() {
     } else {
         // load tutorial levels from dataset
         var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
-        for (var i = 0; i < levelProperties.totalComponents; i++) {
+        for (var i = 0; i < levelProperties.imageName.length; i++) {
             items.availablePieces.model.append( {
                 "imgName": levelProperties.imageName[i],
                 "componentSrc": levelProperties.componentSource[i],
@@ -201,16 +201,6 @@ function loadFreeMode(sizeMultiplier) {
         "imgHeight": sizeMultiplier * 0.4,
         "toolTipText": qsTr("BCD Counter")
     })
-}
-
-function changeMode() {
-    if (items.isTutorialMode) {
-        numberOfLevel = items.tutorialDataset.tutorialLevels.length
-    } else {
-        numberOfLevel = 1
-    }
-    currentLevel = 1
-    reset()
 }
 
 function nextLevel() {
