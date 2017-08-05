@@ -197,6 +197,7 @@ ActivityBase {
                                 property int totalSeeds: grainRepeater.count
                                 // moveCount is the current index of the moving seed wrt board.
                                 property int moveCount: items.indexValue
+                                property int totalMoves: 0
                                 signal checkAnimation
 
                                 Timer {
@@ -244,6 +245,17 @@ ActivityBase {
                                     duration: 450
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            if(moveCount == items.indexValue + 1 && totalMoves == 11) {
+                                                nextMove = "left"
+                                                currentSeeds++
+                                                currentIndex++
+                                                if(items.indexValue == 0)
+                                                    nextMove = "down"
+                                                else
+                                                    nextMove = "left"
+                                                startAnimation()
+                                            }
+                                            totalMoves++;
                                             currentSeeds--
                                             currentIndex--;
                                             moveCount--
@@ -263,6 +275,16 @@ ActivityBase {
                                     duration: 450
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            if(moveCount == items.indexValue - 1 && totalMoves == 11) {
+                                                currentSeeds++
+                                                currentIndex++
+                                                if(items.indexValue == 11)
+                                                    nextMove = "up"
+                                                else
+                                                    nextMove = "right"
+                                                startAnimation()
+                                            }
+                                            totalMoves++
                                             currentSeeds--
                                             currentIndex--
                                             moveCount++
@@ -282,6 +304,7 @@ ActivityBase {
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            totalMoves++
                                             currentSeeds--
                                             currentIndex--
                                             moveCount = 5
@@ -299,6 +322,7 @@ ActivityBase {
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            totalMoves++
                                             currentSeeds--
                                             currentIndex--
                                             moveCount = 6
