@@ -43,6 +43,13 @@ QtObject {
         'height': 0.12,
         'toolTipText': qsTr("Digital Light")
     }
+    property variant andGate: {
+        'imageName': 'gateAnd.svg',
+        'componentSource': 'AndGate.qml',
+        'width': 0.15,
+        'height': 0.12,
+        'toolTipText': qsTr("AND gate")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -56,6 +63,19 @@ QtObject {
             introMessage: [
                 qsTr("The Digital light will glow when it's terminal is connected with an input of 1"),
                 qsTr("Turn the Digital light on using the inputs provided")
+            ]
+        },
+        // level 2
+        {
+            totalComponents: 4,
+            imageName: [zero.imageName, one.imageName, andGate.imageName, digitalLight.imageName],
+            componentSource: [zero.componentSource, one.componentSource, andGate.componentSource, digitalLight.componentSource],
+            imgWidth: [zero.width, one.width, andGate.width, digitalLight.width],
+            imgHeight: [zero.height, one.height, andGate.height, digitalLight.height],
+            toolTipText: [zero.toolTipText, one.toolTipText, andGate.toolTipText, digitalLight.toolTipText],
+            introMessage: [
+                qsTr("The AND Gate"),
+                qsTr("Turn the Digital light on using an AND gate and the inputs provided")
             ]
         }
     ]

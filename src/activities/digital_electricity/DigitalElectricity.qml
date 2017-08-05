@@ -79,11 +79,11 @@ ActivityBase {
             id: tutorialInstruction
             visible: activity.isTutorialMode
             anchors {
-                top: parent.top
+                top: background.vert ? parent.top : inputComponentsContainer.bottom
                 topMargin: 10
                 right: parent.right
                 rightMargin: 5
-                left: parent.left
+                left: background.vert ? inputComponentsContainer.right : parent.left
                 leftMargin: 5
             }
             z: 100
