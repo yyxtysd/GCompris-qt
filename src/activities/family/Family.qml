@@ -169,7 +169,9 @@ ActivityBase {
                 color: "transparent"
                 width: background.treeAreaWidth
                 height: background.treeAreaHeight
-                border.color: "black"
+                anchors.horizontalCenter: activity.mode == "expert" ? board.horizontalCenter : undefined
+                anchors.verticalCenter: activity.mode == "expert" ? board.verticalCenter : undefined
+                border.color: activity.mode == "normal" ? "black" : "transparent"
                 border.width: 5
                 Item {
                     id: treeItem
@@ -301,7 +303,7 @@ ActivityBase {
                 height: background.horizontalLayout ? background.height : background.height*0.35
                 anchors.left: background.horizontalLayout ? treeArea.right : board.left
                 anchors.top: background.horizontalLayout ? board.top: treeArea.bottom
-                border.color: "black"
+                border.color: activity.mode == "normal" ? "black" : "transparent"
                 border.width: 5
                 Rectangle {
                     width: parent.width * 0.99
@@ -309,28 +311,6 @@ ActivityBase {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: "transparent"
-
-                    GCText {
-                        id: question
-                        property string questionTopic
-                        visible: activity.mode == "expert" ? true : false
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.WordWrap
-                        text: qsTr("Select one of the pairs which denote the following relation: %1").arg(questionTopic)
-
-                        Rectangle {
-                            anchors.fill: parent
-                            z: parent.z - 1
-                            radius: 10
-                            border.width: 1
-
-                            color: "white"
-                            opacity: 0.8
-                        }
-                    }
 
                     Grid {
                         visible: activity.mode == "normal" ? true : false
@@ -354,6 +334,31 @@ ActivityBase {
                         }
                     }
                 }
+            }
+        }
+
+        GCText {
+            id: question
+            property string questionTopic
+            visible: activity.mode == "expert" ? true : false
+            width: background.width
+            anchors.horizontalCenter: background.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            fontSize: smallSize
+            text: qsTr("Select one of the pairs denoting: %1").arg(questionTopic)
+
+            Rectangle {
+                width: parent.width
+                height: parent.height
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                z: parent.z - 1
+                radius: 10
+                border.width: 1
+
+                color: "white"
+                opacity: 0.8
             }
         }
 
