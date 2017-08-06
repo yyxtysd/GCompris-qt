@@ -54,11 +54,14 @@ QtObject {
     property var tutorialLevels: [
         // level 1
         {
+            totalInputComponents: 2,
             imageName: [zero.imageName, one.imageName, digitalLight.imageName],
             componentSource: [zero.componentSource, one.componentSource, digitalLight.componentSource],
             imgWidth: [zero.width, one.width, digitalLight.width],
             imgHeight: [zero.height, one.height, digitalLight.height],
             toolTipText: [zero.toolTipText, one.toolTipText, digitalLight.toolTipText],
+            playAreaComponentPositionX: [-1, -1, 0.4],
+            playAreaComponentPositionY: [-1, -1, 0.3],
             introMessage: [
                 qsTr("The Digital light will glow when it's terminal is connected with an input of 1"),
                 qsTr("Turn the Digital light on using the inputs provided")
@@ -66,11 +69,14 @@ QtObject {
         },
         // level 2
         {
+            totalInputComponents: 2,
             imageName: [zero.imageName, one.imageName, andGate.imageName, digitalLight.imageName],
             componentSource: [zero.componentSource, one.componentSource, andGate.componentSource, digitalLight.componentSource],
             imgWidth: [zero.width, one.width, andGate.width, digitalLight.width],
             imgHeight: [zero.height, one.height, andGate.height, digitalLight.height],
             toolTipText: [zero.toolTipText, one.toolTipText, andGate.toolTipText, digitalLight.toolTipText],
+            playAreaComponentPositionX: [-1, -1, 0.4, 0.6],
+            playAreaComponentPositionY: [-1, -1, 0.3, 0.3],
             introMessage: [
                 qsTr("The AND Gate"),
                 qsTr("Turn the Digital light on using an AND gate and the inputs provided")

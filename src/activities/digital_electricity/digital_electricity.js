@@ -61,27 +61,6 @@ function initLevel() {
     items.bar.level = currentLevel
     var sizeMultiplier = 1 + (1 / (1.5 * currentLevel))
 
-    if (!items.isTutorialMode) {
-        items.tutorialInstruction.visible = false
-        loadFreeMode(sizeMultiplier)
-    } else {
-        // load tutorial levels from dataset
-        var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
-        for (var i = 0; i < levelProperties.imageName.length; i++) {
-            items.availablePieces.model.append( {
-                "imgName": levelProperties.imageName[i],
-                "componentSrc": levelProperties.componentSource[i],
-                "imgWidth": levelProperties.imgWidth[i] * sizeMultiplier,
-                "imgHeight": levelProperties.imgHeight[i] * sizeMultiplier,
-                "toolTipText": levelProperties.toolTipText[i]
-            })
-
-            items.tutorialInstruction.visible = true
-            items.tutorialInstruction.index = 0
-            items.tutorialInstruction.intro = levelProperties.introMessage
-        }
-    }
-
     items.availablePieces.view.currentDisplayedGroup = 0
     items.availablePieces.view.previousNavigation = 1
     items.availablePieces.view.nextNavigation = 1
@@ -93,6 +72,42 @@ function initLevel() {
     toolDeleteSticky = false
     deselect()
     updateToolTip("")
+
+    if (!items.isTutorialMode) {
+        items.tutorialInstruction.visible = false
+        loadFreeMode(sizeMultiplier)
+    } else {
+        // load tutorial levels from dataset
+        var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
+        for (var i = 0; i < levelProperties.totalInputComponents; i++) {
+            items.availablePieces.model.append( {
+                "imgName": levelProperties.imageName[i],
+                "componentSrc": levelProperties.componentSource[i],
+                "imgWidth": levelProperties.imgWidth[i] * sizeMultiplier,
+                "imgHeight": levelProperties.imgHeight[i] * sizeMultiplier,
+                "toolTipText": levelProperties.toolTipText[i]
+            })
+        }
+
+        for (var i = levelProperties.totalInputComponents; i < levelProperties.imageName.length; i++) {
+            var index = components.length
+            var staticElectricalComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + levelProperties.componentSource[i])
+            components[index] = staticElectricalComponent.createObject(
+                        items.playArea, {
+                          "index": index,
+                          "posX": levelProperties.playAreaComponentPositionX[i],
+                          "posY": levelProperties.playAreaComponentPositionY[i],
+                          "imgSrc": levelProperties.imageName[i],
+                          "toolTipTxt": levelProperties.toolTipText[i],
+                          "imgWidth": levelProperties.imgWidth[i],
+                          "imgHeight": levelProperties.imgHeight[i]
+                        });
+        }
+
+        items.tutorialInstruction.visible = true
+        items.tutorialInstruction.index = 0
+        items.tutorialInstruction.intro = levelProperties.introMessage
+    }
 }
 
 function loadFreeMode(sizeMultiplier) {
