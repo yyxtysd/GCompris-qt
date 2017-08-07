@@ -80,29 +80,36 @@ function initLevel() {
         // load tutorial levels from dataset
         var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
 
-        for (var i = 0; i < levelProperties.totalInputComponents; i++) {
+        for (var i = 0; i < levelProperties.inputComponentList.length; i++) {
             items.availablePieces.model.append( {
-               "imgName": levelProperties.componentList[i].imageName,
-               "componentSrc": levelProperties.componentList[i].componentSource,
-               "imgWidth": levelProperties.componentList[i].width * sizeMultiplier,
-               "imgHeight": levelProperties.componentList[i].height * sizeMultiplier,
-               "toolTipText": levelProperties.componentList[i].toolTipText
+               "imgName": levelProperties.inputComponentList[i].imageName,
+               "componentSrc": levelProperties.inputComponentList[i].componentSource,
+               "imgWidth": levelProperties.inputComponentList[i].width * sizeMultiplier,
+               "imgHeight": levelProperties.inputComponentList[i].height * sizeMultiplier,
+               "toolTipText": levelProperties.inputComponentList[i].toolTipText
             })
         }
 
-        for (var i = levelProperties.totalInputComponents; i < levelProperties.componentList.length; i++) {
+        for (var i = 0; i < levelProperties.playAreaComponentList.length; i++) {
             var index = components.length
-            var staticElectricalComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + levelProperties.componentList[i].componentSource)
+            var staticElectricalComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + levelProperties.playAreaComponentList[i].componentSource)
             components[index] = staticElectricalComponent.createObject(
                         items.playArea, {
                           "index": index,
                           "posX": levelProperties.playAreaComponentPositionX[i],
                           "posY": levelProperties.playAreaComponentPositionY[i],
-                          "imgSrc": levelProperties.componentList[i].imageName,
-                          "toolTipTxt": levelProperties.componentList[i].toolTipText,
-                          "imgWidth": levelProperties.componentList[i].width,
-                          "imgHeight": levelProperties.componentList[i].height
+                          "imgSrc": levelProperties.playAreaComponentList[i].imageName,
+                          "toolTipTxt": levelProperties.playAreaComponentList[i].toolTipText,
+                          "imgWidth": levelProperties.playAreaComponentList[i].width,
+                          "imgHeight": levelProperties.playAreaComponentList[i].height
                         });
+        }
+
+        // creating wires
+        for (i = 0; i < levelProperties.wires.length; i++) {
+            var outTerminal = components[levelProperties.wires[i][0]].outputTerminals.itemAt(0)
+            var inTerminal = components[levelProperties.wires[i][1]].inputTerminals.itemAt(0)
+            createWire(inTerminal, outTerminal, false)
         }
 
         items.tutorialInstruction.visible = true
@@ -219,6 +226,14 @@ function loadFreeMode(sizeMultiplier) {
     })
 }
 
+function isTutorialMode() {
+    return items.isTutorialMode
+}
+
+function checkAnswer() {
+    items.bonus.good('tux')
+}
+
 function nextLevel() {
 
     if(numberOfLevel < ++currentLevel ) {
@@ -292,19 +307,7 @@ function terminalPointSelected(terminal) {
         var inTerminal = terminal.type == "In" ? terminal : selectedTerminal
         var outTerminal = terminal.type == "Out" ? terminal : selectedTerminal
         if(connected[inTerminal] == undefined || connected[inTerminal] == -1) {
-            var wireComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Wire.qml")
-            var wire = wireComponent.createObject(
-                       items.playArea, {
-                            "from": outTerminal,
-                            "to": inTerminal
-                        });
-            inTerminal.value = outTerminal.value
-            inTerminal.wires.push(wire)
-            outTerminal.wires.push(wire)
-            updateWires(inTerminal.parent.index)
-            updateWires(outTerminal.parent.index)
-            updateComponent(inTerminal.parent.index)
-            connected[inTerminal] = outTerminal
+            createWire(inTerminal, outTerminal, true)
         }
         deselect()
     }
@@ -313,6 +316,23 @@ function terminalPointSelected(terminal) {
         selectedTerminal = terminal
         terminal.selected = true
     }
+}
+
+function createWire(inTerminal, outTerminal, destructible) {
+    var wireComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/Wire.qml")
+    var wire = wireComponent.createObject(
+               items.playArea, {
+                    "from": outTerminal,
+                    "to": inTerminal,
+                    "destructible": destructible
+                });
+    inTerminal.value = outTerminal.value
+    inTerminal.wires.push(wire)
+    outTerminal.wires.push(wire)
+    updateWires(inTerminal.parent.index)
+    updateWires(outTerminal.parent.index)
+    updateComponent(inTerminal.parent.index)
+    connected[inTerminal] = outTerminal
 }
 
 /* Updates the output of the component. 'wireVisited' is used to update the value of

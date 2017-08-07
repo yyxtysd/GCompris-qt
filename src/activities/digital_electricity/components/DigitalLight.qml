@@ -21,6 +21,7 @@
  */
 import QtQuick 2.3
 import GCompris 1.0
+import "../digital_electricity.js" as Activity
 
 ElectricalComponent {
     id: digitalLight
@@ -51,9 +52,12 @@ ElectricalComponent {
 
     function updateOutput(wireVisited) {
 
-        if(inputTerminals.itemAt(0).value == 1)
+        if(inputTerminals.itemAt(0).value == 1) {
             imgSrc = "DigitalLightOn.svg"
-        else
+            if (Activity.isTutorialMode())
+                Activity.checkAnswer()
+        } else {
             imgSrc = "DigitalLightOff.svg"
+        }
     }
 }

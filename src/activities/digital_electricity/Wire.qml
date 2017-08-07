@@ -29,6 +29,7 @@ Rectangle {
 
     property QtObject from
     property QtObject to
+    property bool destructible
 
     height: 5
     color: from.value == 0 ? "Red" : "Green"
@@ -37,6 +38,7 @@ Rectangle {
 
     MouseArea {
         id: mouseArea
+        visible: destructible
         width: parent.width
         height: parent.height * 3
         anchors.centerIn: parent
