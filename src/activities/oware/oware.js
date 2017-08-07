@@ -30,7 +30,6 @@ var url = "qrc:/gcompris/src/activities/oware/resource/"
 var house = []
 var scoreHouse = [0, 0]
 var nextPlayer = 1
-var playerSideEmpty = false;
 var maxDiff = [20, 15, 10, 5, 0]
 var depth
 var heuristicValue
@@ -154,29 +153,6 @@ function gameOver(board, score) {
     return false
 }
 
-function seedsExhausted(board,next,score) {
-    var canGive = false
-    if(!next) {
-        for(var i = 6; i < 12; i++) {
-            if(board[i] % 12 > 12 - i)
-                canGive = true
-        }
-    }
-    else if(next) {
-        for(var i = 0; i < 6; i++) {
-           if( board[move] % 12 > 6 - move)
-               canGive = true
-        }
-    }
-    if(canGive)
-        return true
-    else {
-        for(var i = next * 6; i < next * 6 + 6; i++)
-            scoreHouse[next] += house[i]
-        setValues(board)
-    }
-}
-
 function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
     var heuristicValue
     var childHeuristics
@@ -231,7 +207,9 @@ function isValidMove(move, next, board) {
     var sum = 0;
     for (var j = next * 6; j < (next * 6 + 6); j++)
         sum += board[j];
-    if (sum == 0 && ((!next && board[move] % 12 < 12 - move) || (next && board[move] % 12 < 6 - move)))
+    if(board[move] >= 12)
+        return true
+    else if (sum == 0 && ((!next && board[move] % 12 < 12 - move) || (next && board[move] % 12 < 6 - move)))
         return false
     else
         return true
@@ -247,7 +225,9 @@ function setValues(board) {
     items.playerTwoScore = scoreHouse[1]
     items.playerOneScore = scoreHouse[0]
 
-    if (items.playerTwoScore >= 25) {
+    if(items.playerOneScore == 24 && items.playerTwoScore == 24)
+        items.bonus.good("flower")
+    else if (items.playerTwoScore >= 25) {
         if(!twoPlayer)
             items.bonus.bad("flower")
         else
@@ -323,6 +303,31 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
             }
         }
     }
+    var playerSideEmpty = true
+    for (var j = nextPlayer * 6; j < (nextPlayer * 6 + 6); j++) {
+		if (board[j]) {
+			playerSideEmpty = false;
+			break;
+		}
+	}
+
+    if (playerSideEmpty) {
+        var canGiveSeeds = false;
+		for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
+			if ((board[j] >= 6 - j) || (board[j] > 12)) {
+				canGiveSeeds = true;
+				break;
+			}
+		}
+
+		// If opponent can't give seeds, remaining seeds go to the opponent
+		if (!canGiveSeeds) {
+			for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
+				scoreHouse[currentPlayer] += board[j];
+				board[j] = 0;
+			}
+		}
+	}
 
     nextPlayer = currentPlayer
     var obj = {

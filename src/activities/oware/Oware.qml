@@ -66,11 +66,11 @@ ActivityBase {
             property int indexValue
             property bool gameEnded: false
             /* The grid starts from top, top houses are occupied by player two so start and end index for player two are 0 and 5 and start and end index for player one are 6 and 11 */
-            property int playerOneStartIndex: 6
-            property int playerOneEndIndex: 11
-            property int playerTwoStartIndex: 0
-            property int playerTwoEndIndex: 5
-            property int housesCount: 12
+            readonly property int playerOneStartIndex: 6
+            readonly property int playerOneEndIndex: 11
+            readonly property int playerTwoStartIndex: 0
+            readonly property int playerTwoEndIndex: 5
+            readonly property int housesCount: 12
         }
 
         onStart: { Activity.start(items,twoPlayer) }
@@ -80,7 +80,7 @@ ActivityBase {
         Timer {
             id: trigComputerMove
             repeat: false
-            interval: 600
+            interval: 1000
             onTriggered: Activity.computerMove()
         }
 
@@ -168,7 +168,6 @@ ActivityBase {
                                     cellGridRepeater.itemAt(items.indexValue).z = 20
                                     firstMove()
                                     items.playerOneTurn = !items.playerOneTurn
-//                                  Activity.seedsExhausted(Activity.house,0,Activity.scoreHouse)
                                 }
                             }
                         }
@@ -352,7 +351,7 @@ ActivityBase {
                 id: playerOneScoreBox
                 height: board.height * 0.5
                 width: height
-                source:Activity.url+"/score.png"
+                source: Activity.url + "/score.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: boardModel.left
 
@@ -393,14 +392,12 @@ ActivityBase {
                 id: playerTwoScore
                 height: board.height * 0.5
                 width: height
-                source:Activity.url+"/score.png"
-                anchors.verticalCenter: parent.verticalCenter
+                source: Activity.url + "/score.png"
                 anchors.left: boardModel.right
 
                 Flow {
-                    width: board.width * (1/7.25)
+                    width: parent.width
                     height: parent.height
-                    anchors.centerIn: parent
 
                     Repeater {
                         id: playerTwoScoreRepeater
@@ -410,8 +407,8 @@ ActivityBase {
                             source: Activity.url + "grain2.png"
                             height: board.width * (1 / 7.25) * 0.2
                             width: board.width * (1 / 7.25) * 0.2
-                            x: parent.width/2 + Activity.getX(parent.width/6, index,items.playerTwoScore)
-                            y: parent.width/2 + Activity.getY(parent.width/5, index,items.playerTwoScore)
+                            x: parent.width/2 + Activity.getX(board.width * (1/6.25), index,items.playerTwoScore)
+                            y: parent.width/2 + Activity.getY(board.width * (1/5.25), index,items.playerTwoScore)
                         }
                     }
                 }
