@@ -87,7 +87,7 @@ Item {
         }
 
         MouseArea {
-            visible: activity.mode == "expert" ? true : false
+            visible: activity.mode == "find_relative" ? true : false
             anchors.fill: parent
             onClicked: selectedPairs.selectNode(currentPointer)
         }

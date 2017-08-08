@@ -28,7 +28,7 @@ import "family.js" as Activity
 ActivityBase {
     id: activity
 
-    property string mode: "normal"
+    property string mode: "family"
 
     onStart: focus = true
     onStop: {}
@@ -169,9 +169,9 @@ ActivityBase {
                 color: "transparent"
                 width: background.treeAreaWidth
                 height: background.treeAreaHeight
-                anchors.horizontalCenter: activity.mode == "expert" ? board.horizontalCenter : undefined
-                anchors.verticalCenter: activity.mode == "expert" ? board.verticalCenter : undefined
-                border.color: activity.mode == "normal" ? "black" : "transparent"
+                anchors.horizontalCenter: activity.mode == "find_relative" ? board.horizontalCenter : undefined
+                anchors.verticalCenter: activity.mode == "find_relative" ? board.verticalCenter : undefined
+                border.color: activity.mode == "family" ? "black" : "transparent"
                 border.width: 5
                 Item {
                     id: treeItem
@@ -222,7 +222,7 @@ ActivityBase {
 
                     Rectangle {
                         id: me
-                        visible: dataset.levelElements[bar.level-1].captions[0] !== undefined && activity.mode == "normal"
+                        visible: dataset.levelElements[bar.level-1].captions[0] !== undefined && activity.mode == "family"
                         x: items.meLabelPosition.x * treeArea.width
                         y: items.meLabelPosition.y * treeArea.height
 
@@ -244,7 +244,7 @@ ActivityBase {
                     Image {
                         id: questionmark
                         source: Activity.url + "questionmark.svg"
-                        visible: dataset.levelElements[bar.level-1].captions[1] !== undefined && activity.mode == "normal"
+                        visible: dataset.levelElements[bar.level-1].captions[1] !== undefined && activity.mode == "family"
                         x: items.questionMarkPosition.x * treeArea.width
                         y: items.questionMarkPosition.y * treeArea.height
                     }
@@ -303,7 +303,7 @@ ActivityBase {
                 height: background.horizontalLayout ? background.height : background.height*0.35
                 anchors.left: background.horizontalLayout ? treeArea.right : board.left
                 anchors.top: background.horizontalLayout ? board.top: treeArea.bottom
-                border.color: activity.mode == "normal" ? "black" : "transparent"
+                border.color: activity.mode == "family" ? "black" : "transparent"
                 border.width: 5
                 Rectangle {
                     width: parent.width * 0.99
@@ -313,7 +313,7 @@ ActivityBase {
                     color: "transparent"
 
                     Grid {
-                        visible: activity.mode == "normal" ? true : false
+                        visible: activity.mode == "family" ? true : false
                         columns: 1
                         rowSpacing: 20
                         anchors.verticalCenter: parent.verticalCenter
@@ -340,7 +340,7 @@ ActivityBase {
         GCText {
             id: question
             property string questionTopic
-            visible: activity.mode == "expert" ? true : false
+            visible: activity.mode == "find_relative" ? true : false
             width: background.width
             anchors.horizontalCenter: background.horizontalCenter
             horizontalAlignment: Text.AlignHCenter

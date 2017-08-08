@@ -77,7 +77,7 @@ function loadDatasets() {
                        "xPosition": levelTree.nodePositions[i][0],
                        "yPosition": levelTree.nodePositions[i][1],
                        "nodeValue": levelTree.nodeValue[i],
-                       "currentState": items.mode == "normal" ? levelTree.currentState[i] : "deactive",
+                       "currentState": items.mode == "family" ? levelTree.currentState[i] : "deactive",
                        "nodeWeight": levelTree.nodeWeights[i]
                      });
     }

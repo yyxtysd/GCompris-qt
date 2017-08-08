@@ -26,5 +26,5 @@ import "../family"
 Family {
     id: activity
 
-    property string mode: "expert"
+    property string mode: "find_relative"
 }

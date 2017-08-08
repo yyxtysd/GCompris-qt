@@ -537,11 +537,11 @@ QtObject {
             ],
             captions: [
                 [leftExt - nodeWidth / 2, gen2],
-                [rightExt + nodeWidth, gen2 + nodeHeight / 4]
+                [rightInt + nodeWidth, gen2]
             ],
             nodeValue: ["grandfather.svg", "old-lady.svg", "man3.svg", "lady2.svg", "lady1.svg", "man1.svg"],
             nodeWeights: [noPair, noPair, noPair, pair1, pair2, noPair],
-            currentState: ["dective", "deactive", "deactive", "active", "deactive", "activeTo"],
+            currentState: ["dective", "deactive", "deactive", "active", "activeTo", "deactive"],
             edgeState:["married","others","others","married","married"],
             answer: [qsTr("Sister-in-law")],
             options: [qsTr("Father-in-law"), qsTr("Mother-in-law"), qsTr("Sister-in-law"), qsTr("Brother-in-law"), qsTr("Daughter-in-law")]
