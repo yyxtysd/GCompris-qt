@@ -81,27 +81,29 @@ function initLevel() {
         var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
 
         for (var i = 0; i < levelProperties.inputComponentList.length; i++) {
+            var currentInputComponent = levelProperties.inputComponentList[i]
             items.availablePieces.model.append( {
-               "imgName": levelProperties.inputComponentList[i].imageName,
-               "componentSrc": levelProperties.inputComponentList[i].componentSource,
-               "imgWidth": levelProperties.inputComponentList[i].width * sizeMultiplier,
-               "imgHeight": levelProperties.inputComponentList[i].height * sizeMultiplier,
-               "toolTipText": levelProperties.inputComponentList[i].toolTipText
+               "imgName": currentInputComponent.imageName,
+               "componentSrc": currentInputComponent.componentSource,
+               "imgWidth": currentInputComponent.width * sizeMultiplier,
+               "imgHeight": currentInputComponent.height * sizeMultiplier,
+               "toolTipText": currentInputComponent.toolTipText
             })
         }
 
         for (var i = 0; i < levelProperties.playAreaComponentList.length; i++) {
             var index = components.length
-            var staticElectricalComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + levelProperties.playAreaComponentList[i].componentSource)
+            var currentPlayAreaComponent = levelProperties.playAreaComponentList[i]
+            var staticElectricalComponent = Qt.createComponent("qrc:/gcompris/src/activities/digital_electricity/components/" + currentPlayAreaComponent.componentSource)
             components[index] = staticElectricalComponent.createObject(
                         items.playArea, {
                           "index": index,
                           "posX": levelProperties.playAreaComponentPositionX[i],
                           "posY": levelProperties.playAreaComponentPositionY[i],
-                          "imgSrc": levelProperties.playAreaComponentList[i].imageName,
-                          "toolTipTxt": levelProperties.playAreaComponentList[i].toolTipText,
-                          "imgWidth": levelProperties.playAreaComponentList[i].width,
-                          "imgHeight": levelProperties.playAreaComponentList[i].height
+                          "imgSrc": currentPlayAreaComponent.imageName,
+                          "toolTipTxt": currentPlayAreaComponent.toolTipText,
+                          "imgWidth": currentPlayAreaComponent.width,
+                          "imgHeight": currentPlayAreaComponent.height
                         });
         }
 
