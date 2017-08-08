@@ -41,6 +41,7 @@ Image {
     property int initialAngle: 0
     property int startingAngle: 0
     property double terminalSize
+    property bool destructible
 
     property alias rotateComponent: rotateComponent
 
@@ -116,7 +117,11 @@ Image {
         }
         onClicked: {
             if(Activity.toolDelete || Activity.toolDeleteSticky) {
-                Activity.removeComponent(index)
+                if (destructible) {
+                    Activity.removeComponent(index)
+                } else {
+                    Activity.deselect()
+                }
             }
             else {
                 if(imgSrc == "switchOff.svg") {

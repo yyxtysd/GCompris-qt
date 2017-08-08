@@ -103,7 +103,8 @@ function initLevel() {
                           "imgSrc": currentPlayAreaComponent.imageName,
                           "toolTipTxt": currentPlayAreaComponent.toolTipText,
                           "imgWidth": currentPlayAreaComponent.width,
-                          "imgHeight": currentPlayAreaComponent.height
+                          "imgHeight": currentPlayAreaComponent.height,
+                          "destructible": false
                         });
         }
 
@@ -287,7 +288,8 @@ function createComponent(x, y, componentIndex) {
                             "imgSrc": component.imageName,
                             "toolTipTxt": component.toolTipTxt,
                             "imgWidth": component.imageWidth,
-                            "imgHeight": component.imageHeight
+                            "imgHeight": component.imageHeight,
+                            "destructible": true
                         });
 
     toolDeleteSticky = false

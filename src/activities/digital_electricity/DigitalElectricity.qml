@@ -388,7 +388,7 @@ ActivityBase {
 
             function setDefaultValues() {
                 for(var i = 0 ; i < dialogActivityConfig.configItem.availableModes.length; i ++) {
-                    if(dialogActivityConfig.configItem.availableModes[i].value === activity.levelSet) {
+                    if(dialogActivityConfig.configItem.availableModes[i].value === activity.mode) {
                         dialogActivityConfig.configItem.modesComboBox.currentIndex = i;
                         break;
                     }

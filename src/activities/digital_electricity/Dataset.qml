@@ -50,6 +50,13 @@ QtObject {
         'height': 0.12,
         'toolTipText': qsTr("AND gate")
     }
+    property var orGate: {
+        'imageName': 'gateOr.svg',
+        'componentSource': 'OrGate.qml',
+        'width': 0.15,
+        'height': 0.12,
+        'toolTipText': qsTr("OR gate")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -72,7 +79,19 @@ QtObject {
             playAreaComponentPositionX: [0.4, 0.6],
             playAreaComponentPositionY: [0.3, 0.3],
             introMessage: [
-                qsTr("The AND Gate"),
+                qsTr("The AND Gate produces an output of one when both of it's input terminal are of value 1"),
+                qsTr("Turn the Digital light on using an AND gate and the inputs provided")
+            ]
+        },
+        // level 3
+        {
+            inputComponentList: [zero, one],
+            playAreaComponentList: [orGate, digitalLight],
+            wires: [ [0, 1] ],
+            playAreaComponentPositionX: [0.4, 0.6],
+            playAreaComponentPositionY: [0.3, 0.3],
+            introMessage: [
+                qsTr("The OR Gate produces an output of 1  when at least one of the input terminal is of value 1"),
                 qsTr("Turn the Digital light on using an AND gate and the inputs provided")
             ]
         }
