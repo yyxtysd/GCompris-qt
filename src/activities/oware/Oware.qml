@@ -172,6 +172,14 @@ ActivityBase {
                             }
                         }
 
+                        function scoresAnimation() {
+                            print("test")
+//                             print(cellGridRepeater.itemAt(5).content)
+//                             for(var i = 0; i < cellGridRepeater.itemAt(5).grainRepeater.count; i++) {
+//                                 grainRepeater.itemAt(i).startScoreAnimation()
+//                             }
+                        }
+
                         function firstMove() {
                             items.boardModel.enabled = false
                             /* If the indexValue on which player has clicked is between 6 and 11 then the first move will be towards right. */
@@ -246,6 +254,13 @@ ActivityBase {
                                             yDownAnimation.start()
                                     }
                                     checkAnimation()
+                                }
+
+                                property var scoreUpAnimation: NumberAnimation {
+                                    target: grain
+                                    properties: "x"
+                                    from: x ; to: playerTwoLevelScore.x
+                                    duration: 450
                                 }
 
                                 property var xLeftAnimation: NumberAnimation {
@@ -349,16 +364,25 @@ ActivityBase {
 
             Image {
                 id: playerOneScoreBox
-                height: board.height * 0.5
+                height: board.height * 0.54
                 width: height
                 source: Activity.url + "/score.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: boardModel.left
 
                 Flow {
-                    width: board.width * (1/7.25)
+                    width: parent.width
                     height: parent.height
-                    anchors.centerIn: parent
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        leftMargin: parent.width * 0.15
+                        topMargin: parent.height * 0.15
+                        right: parent.right
+                        rightMargin: parent.width * 0.15
+                        bottom: parent.bottom
+                        bottomMargin: parent.height * 0.2
+                    }
 
                     Repeater {
                         id: playerOneScoreRepeater
@@ -367,10 +391,10 @@ ActivityBase {
                         Image {
                             id: playerOneSeedsImage
                             source: Activity.url + "grain2.png"
-                            height: board.width * (1 / 7.25) * 0.2
-                            width: board.width * (1 / 7.25) * 0.2
-                            x: parent.width/2 + Activity.getX(parent.width/6, index,items.playerOneScore)
-                            y: parent.width/2 + Activity.getY(parent.width/5, index,items.playerOneScore)
+                            height: board.width * (1 / 7.25) * 0.17
+                            width: board.width * (1 / 7.25) * 0.17
+//                             x: parent.width/2 + Activity.getX(parent.width/6, index,items.playerOneScore)
+//                             y: parent.width/2 + Activity.getY(parent.width/5, index,items.playerOneScore)
                         }
                     }
                 }
@@ -390,14 +414,25 @@ ActivityBase {
 
             Image {
                 id: playerTwoScore
-                height: board.height * 0.5
+                height: board.height * 0.54
                 width: height
                 source: Activity.url + "/score.png"
                 anchors.left: boardModel.right
+                anchors.verticalCenter: parent.verticalCenter
 
                 Flow {
                     width: parent.width
                     height: parent.height
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        leftMargin: parent.width * 0.15
+                        topMargin: parent.height * 0.15
+                        right: parent.right
+                        rightMargin: parent.width * 0.15
+                        bottom: parent.bottom
+                        bottomMargin: parent.height * 0.2
+                    }
 
                     Repeater {
                         id: playerTwoScoreRepeater

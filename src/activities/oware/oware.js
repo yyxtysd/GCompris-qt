@@ -74,6 +74,8 @@ function stop() {}
 // Function to reload the activity.
 function reset() {
     items.boardModel.enabled = true
+    for (var i = 0; i < 12; i++)
+        items.cellGridRepeater.itemAt(i).value = 0
     items.playerOneLevelScore.endTurn()
     items.playerTwoLevelScore.endTurn()
     items.playerOneLevelScore.beginTurn()
@@ -224,6 +226,7 @@ function setValues(board) {
     items.gameEnded = false
     items.playerTwoScore = scoreHouse[1]
     items.playerOneScore = scoreHouse[0]
+    items.cellGridRepeater.itemAt(items.indexValue).scoresAnimation()
 
     if(items.playerOneScore == 24 && items.playerTwoScore == 24)
         items.bonus.good("flower")
