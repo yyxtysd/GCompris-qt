@@ -34,6 +34,7 @@ var selectedTerminal
 var deletedIndex = []
 var components = []
 var connected = []
+var determiningComponents = []
 
 function start(items_) {
 
@@ -67,6 +68,7 @@ function initLevel() {
     deletedIndex = []
     components = []
     connected = []
+    determiningComponents = []
     animationInProgress = false
     toolDelete = false
     toolDeleteSticky = false
@@ -108,6 +110,11 @@ function initLevel() {
                         });
         }
 
+        var _determiningComponentsIndex = levelProperties.determiningComponentsIndex
+        for (var i = 0; i < _determiningComponentsIndex.length; i++) {
+            determiningComponents[determiningComponents.length] = components[_determiningComponentsIndex[i]]
+        }
+
         // creating wires
         for (i = 0; i < levelProperties.wires.length; i++) {
             var terminal_number = levelProperties.wires[i][1]
@@ -119,9 +126,13 @@ function initLevel() {
             createWire(inTerminal, outTerminal, false)
         }
 
-        items.tutorialInstruction.visible = true
-        items.tutorialInstruction.index = 0
-        items.tutorialInstruction.intro = levelProperties.introMessage
+        if (levelProperties.introMessage.length != 0) {
+            items.tutorialInstruction.visible = true
+            items.tutorialInstruction.index = 0
+            items.tutorialInstruction.intro = levelProperties.introMessage
+        } else {
+            items.tutorialInstruction.visible = false
+        }
     }
 }
 
@@ -238,7 +249,11 @@ function isTutorialMode() {
 }
 
 function checkAnswer() {
-    items.bonus.good('tux')
+    // for levels with single light
+    if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
+        items.bonus.good('tux')
+    else
+        items.bonus.bad('tux')
 }
 
 function nextLevel() {

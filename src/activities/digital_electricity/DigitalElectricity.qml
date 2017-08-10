@@ -401,6 +401,21 @@ ActivityBase {
             onClose: home()
         }
 
+        BarButton {
+            id: okButton
+            visible: activity.isTutorialMode
+            anchors {
+                bottom: bar.top
+                right: parent.right
+                rightMargin: 10 * ApplicationInfo.ratio
+                bottomMargin: 10 * ApplicationInfo.ratio
+            }
+            source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
+            sourceSize.width: 60 * ApplicationInfo.ratio
+
+            onClicked: Activity.checkAnswer()
+        }
+
         Bar {
             id: bar
             content: BarEnumContent { value: help | home | ( activity.isTutorialMode ? level : 0) | reload | config}

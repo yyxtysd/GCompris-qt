@@ -52,12 +52,9 @@ ElectricalComponent {
 
     function updateOutput(wireVisited) {
 
-        if(inputTerminals.itemAt(0).value == 1) {
+        if(inputTerminals.itemAt(0).value == 1)
             imgSrc = "DigitalLightOn.svg"
-            if (Activity.isTutorialMode())
-                Activity.checkAnswer()
-        } else {
+        else
             imgSrc = "DigitalLightOff.svg"
-        }
     }
 }

@@ -63,6 +63,7 @@ QtObject {
         {
             inputComponentList: [zero, one],
             playAreaComponentList: [digitalLight],
+            determiningComponentsIndex: [0],
             wires: [],
             playAreaComponentPositionX: [0.4],
             playAreaComponentPositionY: [0.3],
@@ -75,6 +76,7 @@ QtObject {
         {
             inputComponentList: [zero, one],
             playAreaComponentList: [andGate, digitalLight],
+            determiningComponentsIndex: [1],
             wires: [ [0, 0, 1, 0] ], // from_component_index, from_terminal_no, to_component_index, to_terminal_no
             playAreaComponentPositionX: [0.4, 0.6],
             playAreaComponentPositionY: [0.3, 0.3],
@@ -87,6 +89,7 @@ QtObject {
         {
             inputComponentList: [zero, one],
             playAreaComponentList: [orGate, digitalLight],
+            determiningComponentsIndex: [1],
             wires: [ [0, 0, 1, 0] ],
             playAreaComponentPositionX: [0.4, 0.6],
             playAreaComponentPositionY: [0.3, 0.3],
@@ -97,15 +100,13 @@ QtObject {
         },
         // level 4
         {
-            inputComponentList: [one],
-            playAreaComponentList: [zero, orGate, andGate, digitalLight, one],
-            wires: [ [0, 0, 1, 0], [1, 0, 2, 0], [2, 0, 3, 0], [4, 0, 2, 1]],
-            playAreaComponentPositionX: [0.2, 0.4, 0.6, 0.8],
-            playAreaComponentPositionY: [0.1, 0.3, 0.3, 0.4],
-            introMessage: [
-                qsTr("The OR Gate produces an output of 1  when at least one of the input terminal is of value 1"),
-                qsTr("Turn the Digital light on using an AND gate and the inputs provided")
-            ]
+            inputComponentList: [zero],
+            playAreaComponentList: [zero, one, orGate, andGate, digitalLight],
+            determiningComponentsIndex: [4],
+            wires: [ [0, 0, 2, 0], [2, 0, 3, 0], [3, 0, 4, 0]],
+            playAreaComponentPositionX: [0.2, 0.3, 0.4, 0.6, 0.8],
+            playAreaComponentPositionY: [0.1, 0.4, 0.3, 0.3, 0.4],
+            introMessage: []
         }
     ]
 }
