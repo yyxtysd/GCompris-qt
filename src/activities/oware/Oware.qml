@@ -81,7 +81,10 @@ ActivityBase {
             id: trigComputerMove
             repeat: false
             interval: 1000
-            onTriggered: Activity.computerMove()
+            onTriggered: {
+                if(items.computerTurn)
+                    Activity.computerMove()
+            }
         }
 
         Item {
@@ -142,7 +145,7 @@ ActivityBase {
                         property int maxIndex
 
                         GCText {
-                            text: value
+                            text: index
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -172,12 +175,10 @@ ActivityBase {
                             }
                         }
 
-                        function scoresAnimation() {
-                            print("test")
-//                             print(cellGridRepeater.itemAt(5).content)
-//                             for(var i = 0; i < cellGridRepeater.itemAt(5).grainRepeater.count; i++) {
-//                                 grainRepeater.itemAt(i).startScoreAnimation()
-//                             }
+                        function scoresAnimation(scoreDirection) {
+                            for(var i = 0; i < grainRepeater.count; i++) {
+                                grainRepeater.itemAt(i).startScoreAnimation(scoreDirection)
+                            }
                         }
 
                         function firstMove() {
@@ -236,7 +237,6 @@ ActivityBase {
                                         if(!twoPlayer && !items.playerOneTurn)  {
                                             items.computerTurn = true
                                             trigComputerMove.start()
-                                            items.playerOneTurn = !items.playerOneTurn
                                         }
                                     }
                                 }
@@ -256,10 +256,15 @@ ActivityBase {
                                     checkAnimation()
                                 }
 
+                                function startScoreAnimation(scoreDirection) {
+//                                     print(scoreDirection)
+                                    scoreUpAnimation.start()
+                                }
+
                                 property var scoreUpAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ; to: playerTwoLevelScore.x
+                                    from: x ; to: x + 200
                                     duration: 450
                                 }
 

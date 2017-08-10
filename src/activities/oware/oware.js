@@ -36,6 +36,7 @@ var heuristicValue
 var lastMove
 var finalMove
 var twoPlayer
+var capturedHousesIndex
 var tutorialInstructions = [{
         "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses belong to the other player."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
@@ -73,17 +74,18 @@ function stop() {}
 
 // Function to reload the activity.
 function reset() {
-    items.boardModel.enabled = true
     for (var i = 0; i < 12; i++)
         items.cellGridRepeater.itemAt(i).value = 0
     items.playerOneLevelScore.endTurn()
     items.playerTwoLevelScore.endTurn()
     items.playerOneLevelScore.beginTurn()
     items.playerOneTurn = true
+    items.computerTurn = false
     initLevel()
 }
 
 function initLevel() {
+    items.boardModel.enabled = true
     items.bar.level = currentLevel + 1
     var singleHouseSeeds = 4
     for (var i = 11; i >= 0; i--)
@@ -99,7 +101,7 @@ function nextLevel() {
     if (numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
-    initLevel();
+    reset()
 }
 
 function previousLevel() {
@@ -107,6 +109,7 @@ function previousLevel() {
         currentLevel = numberOfLevel - 1
     }
     initLevel();
+    reset()
 }
 
 // Function to get the x position of seeds.
@@ -136,6 +139,7 @@ function computerMove() {
     if(!items.gameEnded) {
         items.cellGridRepeater.itemAt(items.indexValue).z = 20
         items.cellGridRepeater.itemAt(11 - finalMove).firstMove()
+        items.playerOneTurn = !items.playerOneTurn
         items.computerTurn = false
     }
 }
@@ -170,6 +174,7 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
         score = scoreHouse.slice()
         var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
         var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove)
+//         print(JSON.stringify(lastMoveAI))
         childHeuristics = out[1]
         if (nextPlayer) {
             if (beta > childHeuristics) {
@@ -198,7 +203,7 @@ function heuristicEvaluation(score) {
         if (playerScores[i] > 24)
             playerScores[i] += 100
     }
-    return playerScores[1] - playerScores[0]
+    return playerScores[0] - playerScores[1]
 }
 
 function isValidMove(move, next, board) {
@@ -224,9 +229,18 @@ function setValues(board) {
         items.cellGridRepeater.itemAt(i).value = board[j]
 
     items.gameEnded = false
+    if(items.playerTwoScore != scoreHouse[1]) {
+        print(capturedHousesIndex)
+        for(var i = 0; i < capturedHousesIndex.length; i++)
+            items.cellGridRepeater.itemAt(capturedHousesIndex[i]).scoresAnimation("right")
+    }
+    else if(items.playerOneScore != scoreHouse[0]) {
+        print(capturedHousesIndex)
+        for(var i = 0; i < capturedHousesIndex.length; i++)
+            items.cellGridRepeater.itemAt(capturedHousesIndex[i]).scoresAnimation("left")
+    }
     items.playerTwoScore = scoreHouse[1]
     items.playerOneScore = scoreHouse[0]
-    items.cellGridRepeater.itemAt(items.indexValue).scoresAnimation()
 
     if(items.playerOneScore == 24 && items.playerTwoScore == 24)
         items.bonus.good("flower")
@@ -262,7 +276,7 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
     var currentPlayer = (nextPlayer + 1) % 2
     var nextIndex = index
     lastMove = index
-
+    capturedHousesIndex = []
     // The seeds are sown until the picked seeds are equal to zero
     while (board[index]) {
         nextIndex = (nextIndex + 1) % 12
@@ -301,7 +315,12 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
         for (var j = currentPlayer * 6; j < (currentPlayer * 6 + 6); j++) {
             /* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
             if (capture[j % 6]) {
-                scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j];
+                scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j]
+                print(nextPlayer,j)
+                if(!nextPlayer)
+                    capturedHousesIndex.push(11 - j)
+                else
+                    capturedHousesIndex.push(6 + j)
                 board[j] = 0;
             }
         }
