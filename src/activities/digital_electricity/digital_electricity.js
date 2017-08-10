@@ -110,8 +110,12 @@ function initLevel() {
 
         // creating wires
         for (i = 0; i < levelProperties.wires.length; i++) {
-            var outTerminal = components[levelProperties.wires[i][0]].outputTerminals.itemAt(0)
-            var inTerminal = components[levelProperties.wires[i][1]].inputTerminals.itemAt(0)
+            var terminal_number = levelProperties.wires[i][1]
+            var outTerminal = components[levelProperties.wires[i][0]].outputTerminals.itemAt(terminal_number)
+
+            terminal_number = levelProperties.wires[i][3]
+            var inTerminal = components[levelProperties.wires[i][2]].inputTerminals.itemAt(terminal_number)
+
             createWire(inTerminal, outTerminal, false)
         }
 
