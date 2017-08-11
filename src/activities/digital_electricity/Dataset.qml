@@ -57,6 +57,13 @@ QtObject {
         'height': 0.12,
         'toolTipText': qsTr("OR gate")
     }
+    property var notGate: {
+        'imageName': 'gateNot.svg',
+        'componentSource': 'NotGate.qml',
+        'width': 0.15,
+        'height': 0.12,
+        'toolTipText': qsTr("NOT gate")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -107,6 +114,18 @@ QtObject {
             playAreaComponentPositionX: [0.2, 0.3, 0.4, 0.6, 0.8],
             playAreaComponentPositionY: [0.1, 0.4, 0.3, 0.3, 0.4],
             introMessage: []
+        },
+        // level 5
+        {
+            inputComponentList: [zero],
+            playAreaComponentList: [notGate, notGate,  orGate, orGate, andGate, digitalLight],
+            determiningComponentsIndex: [5],
+            wires: [ [4, 0, 5, 0], [2, 0, 4, 0], [3, 0, 4, 1]],
+            playAreaComponentPositionX: [0.2, 0.2, 0.5, 0.5, 0.6, 0.8],
+            playAreaComponentPositionY: [0.1, 0.4, 0.2, 0.6, 0.4, 0.4],
+            introMessage: [
+                qsTr("The NOT gate takes a single binary input and flips the value in the output")
+            ]
         }
     ]
 }
