@@ -64,6 +64,13 @@ QtObject {
         'height': 0.12,
         'toolTipText': qsTr("NOT gate")
     }
+    property var switchKey: {
+        'imageName': 'switchOff.svg',
+        'componentSource': 'Switch.qml',
+        'width': 0.18,
+        'height': 0.15,
+        'toolTipText': qsTr("Switch")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -125,6 +132,18 @@ QtObject {
             playAreaComponentPositionY: [0.1, 0.4, 0.2, 0.6, 0.4, 0.4],
             introMessage: [
                 qsTr("The NOT gate takes a single binary input and flips the value in the output")
+            ]
+        },
+        // level 6
+        {
+            inputComponentList: [zero, notGate, orGate, andGate],
+            playAreaComponentList: [one, one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [2, 3, 4],
+            wires: [ ],
+            playAreaComponentPositionX: [0.0, 0.0, 0.1, 0.1, 0.8],
+            playAreaComponentPositionY: [0.0, 0.8, 0.3, 0.6, 0.4],
+            introMessage: [
+                qsTr("Light the bulb using both the switches such that the bulb will glow when only one of the switches are turned on")
             ]
         }
     ]
