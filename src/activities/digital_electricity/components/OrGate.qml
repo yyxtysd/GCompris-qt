@@ -79,11 +79,18 @@ ElectricalComponent {
         for(var i = 0 ; i < terminal.wires.length ; ++i) {
             var wire = terminal.wires[i]
             var component = wire.to.parent
+            /*
+            // NOTE: Removed because the output of a > 1 input gate may depend on > 1 conditions
+            // thus it may be needed to be revisited
             if(componentVisited[component] != true && wireVisited[wire] != true) {
                 componentVisited[component] = true
                 wireVisited[wire] = true
                 component.updateOutput(wireVisited)
             }
+            */
+            componentVisited[component] = true
+            wireVisited[wire] = true
+            component.updateOutput(wireVisited)
         }
     }
 }
