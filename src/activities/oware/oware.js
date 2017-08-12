@@ -223,24 +223,24 @@ function isValidMove(move, next, board) {
 }
 
 function setValues(board) {
+    items.gameEnded = false
+    if(items.playerTwoScore != scoreHouse[1]) {
+        for(var i = 0; i < capturedHousesIndex.length; i++) {
+            print("details",JSON.stringify(capturedHousesIndex[i]))
+            items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("right",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
+        }
+    }
+    else if(items.playerOneScore != scoreHouse[0]) {
+        for(var i = 0; i < capturedHousesIndex.length; i++) {
+            print("details",JSON.stringify(capturedHousesIndex[i]))
+            items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("left",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
+        }
+    }
+
     for (var i = 6, j = 0; i < 12, j < 6; j++, i++)
         items.cellGridRepeater.itemAt(i).value = board[j]
     for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
         items.cellGridRepeater.itemAt(i).value = board[j]
-
-    items.gameEnded = false
-    if(items.playerTwoScore != scoreHouse[1]) {
-        print(capturedHousesIndex)
-        for(var i = 0; i < capturedHousesIndex.length; i++)
-            items.cellGridRepeater.itemAt(capturedHousesIndex[i]).scoresAnimation("right")
-    }
-    else if(items.playerOneScore != scoreHouse[0]) {
-        print(capturedHousesIndex)
-        for(var i = 0; i < capturedHousesIndex.length; i++)
-            items.cellGridRepeater.itemAt(capturedHousesIndex[i]).scoresAnimation("left")
-    }
-    items.playerTwoScore = scoreHouse[1]
-    items.playerOneScore = scoreHouse[0]
 
     if(items.playerOneScore == 24 && items.playerTwoScore == 24)
         items.bonus.good("flower")
@@ -318,9 +318,9 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
                 scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j]
                 print(nextPlayer,j)
                 if(!nextPlayer)
-                    capturedHousesIndex.push(11 - j)
+                    capturedHousesIndex.push({ "index": 11 - j,"seeds": board[j] })
                 else
-                    capturedHousesIndex.push(6 + j)
+                    capturedHousesIndex.push({ "index": 6 + j, "seeds": board[j] })
                 board[j] = 0;
             }
         }

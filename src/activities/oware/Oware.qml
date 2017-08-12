@@ -143,6 +143,7 @@ ActivityBase {
                         property var nextMove
                         property int minIndex
                         property int maxIndex
+                        property real scoreBoardX
 
                         GCText {
                             text: index
@@ -175,8 +176,17 @@ ActivityBase {
                             }
                         }
 
-                        function scoresAnimation(scoreDirection) {
+                        function scoresAnimation(scoreDirection,seedsCount,currentScoreIndex) {
+                            print(seedsCount)
+                            value = seedsCount
+                            grainRepeater.model = value
+                            print(currentScoreIndex)
+                            cellGridRepeater.itemAt(currentScoreIndex).z = 10
+                            print("x value",cellGridRepeater.itemAt(currentScoreIndex).x)
+                            scoreBoardX = cellGridRepeater.itemAt(currentScoreIndex).x
+                            print("counnt",grainRepeater.count)
                             for(var i = 0; i < grainRepeater.count; i++) {
+//                                 grainRepeater.itemAt(i).z = 5
                                 grainRepeater.itemAt(i).startScoreAnimation(scoreDirection)
                             }
                         }
@@ -197,6 +207,13 @@ ActivityBase {
                             for(var i = 0; i < grainRepeater.count; i++) {
                                 grainRepeater.itemAt(i).startAnimation()
                             }
+                        }
+
+                        function setScoreValues() {
+                            items.playerTwoScore = Activity.scoreHouse[1]
+                            items.playerOneScore = Activity.scoreHouse[0]
+                            value = 0
+                            grainRepeater.model = value
                         }
 
                         Repeater {
@@ -257,15 +274,74 @@ ActivityBase {
                                 }
 
                                 function startScoreAnimation(scoreDirection) {
-//                                     print(scoreDirection)
-                                    scoreUpAnimation.start()
+                                    if(scoreDirection == "left")
+                                        scoreLeftAnimation.start()
+                                    else if(scoreDirection == "right")
+                                        scoreRightAnimation.start()
                                 }
 
-                                property var scoreUpAnimation: NumberAnimation {
-                                    target: grain
-                                    properties: "x"
-                                    from: x ; to: x + 200
-                                    duration: 450
+                                property var scoreLeftAnimation: SequentialAnimation {
+
+                                    NumberAnimation {
+                                        target: grain
+                                        properties: "y"
+                                        from: y; to: y - (board.height)/2
+                                        duration: 1000
+                                    }
+
+                                    NumberAnimation {
+                                        target: grain
+                                        properties: "x"
+                                        from: x ; to: x - (scoreBoardX * 1.3)
+                                        duration: 2000
+                                    }
+
+                                    NumberAnimation {
+                                        target: grain
+                                        properties: "y"
+                                        from: y; to: y + (board.height)/2
+                                        duration: 2000
+                                    }
+
+                                    ScriptAction {
+                                        script: {
+                                            setScoreValues()
+                                        }
+                                    }
+                                }
+
+                                property var scoreRightAnimation: SequentialAnimation {
+
+                                    NumberAnimation {
+                                        target: grain
+                                        properties: "y"
+                                        from: y; to: y + (board.height)/2
+                                        duration: 400
+                                    }
+
+                                    NumberAnimation {
+                                        target: grain
+                                        properties: "x"
+                                        from: x ; to: x + (board.width - scoreBoardX)
+                                        duration: 1000
+                                    }
+
+                                    NumberAnimation {
+                                        target: grain
+                                        properties: "y"
+                                        from: y; to: y - (board.height)/2
+                                        duration: 1000
+                                    }
+
+                                     ScriptAction {
+                                        script: {
+                                            print("hello in scropt")
+                                            items.playerTwoScore = Activity.scoreHouse[1]
+                                            items.playerOneScore = Activity.scoreHouse[0]
+                                            value = 0
+                                            grainRepeater.model = value
+                                        }
+                                    }
                                 }
 
                                 property var xLeftAnimation: NumberAnimation {
