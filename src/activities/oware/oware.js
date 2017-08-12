@@ -226,13 +226,13 @@ function setValues(board) {
     items.gameEnded = false
     if(items.playerTwoScore != scoreHouse[1]) {
         for(var i = 0; i < capturedHousesIndex.length; i++) {
-            print("details",JSON.stringify(capturedHousesIndex[i]))
+//             print("details",JSON.stringify(capturedHousesIndex[i]))
             items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("right",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
         }
     }
     else if(items.playerOneScore != scoreHouse[0]) {
         for(var i = 0; i < capturedHousesIndex.length; i++) {
-            print("details",JSON.stringify(capturedHousesIndex[i]))
+//             print("details",JSON.stringify(capturedHousesIndex[i]))
             items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("left",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
         }
     }
@@ -316,7 +316,7 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
             /* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
             if (capture[j % 6]) {
                 scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j]
-                print(nextPlayer,j)
+//                 print(nextPlayer,j)
                 if(!nextPlayer)
                     capturedHousesIndex.push({ "index": 11 - j,"seeds": board[j] })
                 else

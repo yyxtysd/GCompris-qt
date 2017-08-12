@@ -146,7 +146,7 @@ ActivityBase {
                         property real scoreBoardX
 
                         GCText {
-                            text: index
+                            text: value
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -177,14 +177,10 @@ ActivityBase {
                         }
 
                         function scoresAnimation(scoreDirection,seedsCount,currentScoreIndex) {
-                            print(seedsCount)
                             value = seedsCount
                             grainRepeater.model = value
-                            print(currentScoreIndex)
                             cellGridRepeater.itemAt(currentScoreIndex).z = 10
-                            print("x value",cellGridRepeater.itemAt(currentScoreIndex).x)
                             scoreBoardX = cellGridRepeater.itemAt(currentScoreIndex).x
-                            print("counnt",grainRepeater.count)
                             for(var i = 0; i < grainRepeater.count; i++) {
 //                                 grainRepeater.itemAt(i).z = 5
                                 grainRepeater.itemAt(i).startScoreAnimation(scoreDirection)
@@ -335,7 +331,6 @@ ActivityBase {
 
                                      ScriptAction {
                                         script: {
-                                            print("hello in scropt")
                                             items.playerTwoScore = Activity.scoreHouse[1]
                                             items.playerOneScore = Activity.scoreHouse[0]
                                             value = 0
