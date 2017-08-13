@@ -64,6 +64,27 @@ QtObject {
         'height': 0.12,
         'toolTipText': qsTr("NOT gate")
     }
+    property var xorGate: {
+        'imageName': 'gateXor.svg',
+        'componentSource': 'XorGate.qml',
+        'width': 0.15,
+        'height': 0.12,
+        'toolTipText': qsTr("XOR gate")
+    }
+    property var nandGate: {
+        'imageName': 'gateNand.svg',
+        'componentSource': 'NandGate.qml',
+        'width': 0.15,
+        'height': 0.12,
+        'toolTipText': qsTr("NAND gate")
+    }
+    property var norGate: {
+        'imageName': 'gateNor.svg',
+        'componentSource': 'NorGate.qml',
+        'width': 0.15,
+        'height': 0.12,
+        'toolTipText': qsTr("NOR gate")
+    }
     property var switchKey: {
         'imageName': 'switchOff.svg',
         'componentSource': 'Switch.qml',
@@ -144,6 +165,47 @@ QtObject {
             playAreaComponentPositionY: [0.0, 0.8, 0.3, 0.6, 0.4],
             introMessage: [
                 qsTr("Light the bulb using both the switches such that the bulb will glow when only one of the switches are turned on")
+            ]
+        },
+        // level 7
+        {
+            inputComponentList: [zero, one],
+            playAreaComponentList: [nandGate, digitalLight],
+            determiningComponentsIndex: [1],
+            wires: [ [0, 0, 1, 0] ],
+            playAreaComponentPositionX: [0.4, 0.8],
+            playAreaComponentPositionY: [0.4, 0.4],
+            introMessage: [
+                qsTr("The NAND Gate takes two binary inputs and produces one binary output"),
+                qsTr("The output of the NAND gate will be zero if the both the inputs are \"0\". Else, the output will be one."),
+                qsTr("For a more detailed description about the gate, select it and click on the info button."),
+                qsTr("Light the bulb using the NAND gate provided.")
+            ]
+        },
+        // level 8
+        {
+            inputComponentList: [zero, one],
+            playAreaComponentList: [xorGate, digitalLight],
+            determiningComponentsIndex: [1],
+            wires: [ [0, 0, 1, 0] ],
+            playAreaComponentPositionX: [0.4, 0.8],
+            playAreaComponentPositionY: [0.4, 0.4],
+            introMessage: [
+                qsTr("The XOR Gate takes two binary inputs and produces one binary output"),
+                qsTr("The output of the XOR gate will be one if the number of \"1\" in the input is odd. Else, the output will be zero."),
+                qsTr("Light the bulb using the XOR gate provided.")
+            ]
+        },
+        // level 9
+        {
+            inputComponentList: [zero, one, xorGate],
+            playAreaComponentList: [switchKey, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [0, 1, 2, 3],
+            wires: [  ],
+            playAreaComponentPositionX: [0.2, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.2, 0.4, 0.6, 0.4],
+            introMessage: [
+                qsTr("Light the bulb using the three switches such that the bulb glows when odd number of the switches are turned on")
             ]
         }
     ]
