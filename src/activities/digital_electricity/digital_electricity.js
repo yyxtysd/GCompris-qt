@@ -250,7 +250,7 @@ function isTutorialMode() {
 
 function checkAnswer() {
     // for levels with single light
-    if (currentLevel != 6) {
+    if (currentLevel != 6 && currentLevel != 8) {
         if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
             items.bonus.good('tux')
         else
@@ -296,6 +296,84 @@ function checkAnswer() {
         updateComponent(switch2.index)
 
         if (digitalLight.inputTerminals.itemAt(0).value != 0) {
+            items.bonus.bad('tux')
+            return 0
+        }
+
+        items.bonus.good('tux')
+    } else if (currentLevel == 8) {
+        var switch1 = determiningComponents[0]
+        var switch2 = determiningComponents[1]
+        var switch3 = determiningComponents[2]
+
+        var digitalLight = determiningComponents[3]
+
+        // A = 1, B = 0, C = 0
+        switch1.imgSrc = "switchOn.svg"
+        switch2.imgSrc = "switchOff.svg"
+        switch3.imgSrc = "switchOff.svg"
+
+        updateComponent(switch1.index)
+        updateComponent(switch2.index)
+        updateComponent(switch3.index)
+
+        if (digitalLight.inputTerminals.itemAt(0).value != 1) {
+            items.bonus.bad('tux')
+            return 0
+        }
+
+        // A = 0, B = 0, C = 0
+        switch1.imgSrc = "switchOff.svg"
+        switch2.imgSrc = "switchOff.svg"
+        switch3.imgSrc = "switchOff.svg"
+
+        updateComponent(switch1.index)
+        updateComponent(switch2.index)
+        updateComponent(switch3.index)
+
+        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
+            items.bonus.bad('tux')
+            return 0
+        }
+
+        // A = 0, B = 1, C = 0
+        switch1.imgSrc = "switchOff.svg"
+        switch2.imgSrc = "switchOn.svg"
+        switch3.imgSrc = "switchOff.svg"
+
+        updateComponent(switch1.index)
+        updateComponent(switch2.index)
+        updateComponent(switch3.index)
+
+        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
+            items.bonus.bad('tux')
+            return 0
+        }
+
+        // A = 0, B = 0, C = 1
+        switch1.imgSrc = "switchOff.svg"
+        switch2.imgSrc = "switchOff.svg"
+        switch3.imgSrc = "switchOn.svg"
+
+        updateComponent(switch1.index)
+        updateComponent(switch2.index)
+        updateComponent(switch3.index)
+
+        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
+            items.bonus.bad('tux')
+            return 0
+        }
+
+        // A = 0, B = 1, C = 1
+        switch1.imgSrc = "switchOff.svg"
+        switch2.imgSrc = "switchOn.svg"
+        switch3.imgSrc = "switchOn.svg"
+
+        updateComponent(switch1.index)
+        updateComponent(switch2.index)
+        updateComponent(switch3.index)
+
+        if (digitalLight.inputTerminals.itemAt(0).value != 1) {
             items.bonus.bad('tux')
             return 0
         }

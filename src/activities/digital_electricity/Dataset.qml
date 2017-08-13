@@ -184,6 +184,20 @@ QtObject {
         },
         // level 8
         {
+            inputComponentList: [zero, one, andGate, orGate, nandGate],
+            playAreaComponentList: [switchKey, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [0, 1, 2, 3],
+            wires: [  ],
+            playAreaComponentPositionX: [0.2, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.2, 0.5, 0.8, 0.5],
+            introMessage: [
+                qsTr("Light the bulb using the components provided such that the bulb will glow under the following two circumstances:"),
+                qsTr("1. The first switch is turned ON, or"),
+                qsTr("2. Both of the second and the third switches are turned on.")
+            ]
+        },
+        // level 9
+        {
             inputComponentList: [zero, one],
             playAreaComponentList: [xorGate, digitalLight],
             determiningComponentsIndex: [1],
@@ -196,7 +210,7 @@ QtObject {
                 qsTr("Light the bulb using the XOR gate provided.")
             ]
         },
-        // level 9
+        // level 10
         {
             inputComponentList: [zero, one, xorGate],
             playAreaComponentList: [switchKey, switchKey, switchKey, digitalLight],
