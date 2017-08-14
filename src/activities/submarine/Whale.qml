@@ -82,7 +82,7 @@ Image {
         if (x <= leftLimit) {
             rotateLeftAnimation.start()
             whale.movingLeft = false
-        } else if (x >= rightLimit ) {
+        } else if (x >= rightLimit) {
             rotateRightAnimation.start()
             whale.movingLeft = true
         }
@@ -125,7 +125,6 @@ Image {
     }
 
     Body {
-        id: whalebody
         target: whale
         bodyType: Body.Dynamic
         sleepingAllowed: true
@@ -134,7 +133,6 @@ Image {
         linearVelocity: isHit ? Qt.point(0,0) : Qt.point( (whale.movingLeft ? -1 : 1) , 0)
 
         fixtures: Box {
-            id: whalefixer
             width: whale.width
             height: whale.height
             categories: items.whaleCategory

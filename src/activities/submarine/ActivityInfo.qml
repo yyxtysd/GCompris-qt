@@ -24,7 +24,7 @@ ActivityInfo {
   author: "Rudra Nil Basu &lt;rudra.nil.basu.1996@gmail.com&gt;"
   demo: true
   title: qsTr("Pilot a Submarine")
-  description: qsTr("Drive the submarine to the end point")
+  description: qsTr("Drive the submarine to the end point.")
   //intro: "Drive the submarine to the right end of the screen without colliding with any objects"
   goal: qsTr("Learn how to control a submarine")
   prerequisite: qsTr("Move and click using the mouse, physics basics")
@@ -50,5 +50,5 @@ ActivityInfo {
  - : Decrease diving plane angle")
   credit: ""
   section: "experimental"
-  createdInVersion: 8000
+  createdInVersion: 9000
 }

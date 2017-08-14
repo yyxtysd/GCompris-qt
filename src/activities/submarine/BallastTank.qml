@@ -23,9 +23,9 @@
 import QtQuick 2.6
 
 Item {
-    property int initialWaterLevel
+    property int initialWaterLevel: 0
     property int waterLevel: 0
-    property int maxWaterLevel
+    property int maxWaterLevel: 500
     property int waterRate: 100
     property bool waterFilling: false
     property bool waterFlushing: false

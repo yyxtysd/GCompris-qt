@@ -110,6 +110,7 @@ ActivityBase {
             property alias upperGate: upperGate
             property alias ship: ship
             property alias physicalWorld: physicalWorld
+            property bool processingAnswer: false
         }
 
         IntroMessage {
@@ -124,7 +125,6 @@ ActivityBase {
             }
             z: 100
             onIntroDone: {
-                physicalWorld.turnOn()
                 tutorial.visible = false
             }
         }
@@ -134,21 +134,9 @@ ActivityBase {
 
         World {
             id: physicalWorld
-            running: false
+            running: !tutorial.visible && !items.processingAnswer
             gravity: Qt.point(0,0)
             autoClearForces: false
-
-            function turnOff() {
-                physicalWorld.running = false
-            }
-
-            function turnOn() {
-                physicalWorld.running = true
-            }
-
-            function status() {
-                return physicalWorld.running
-            }
         }
 
         Item {
@@ -356,23 +344,14 @@ ActivityBase {
 
             BallastTank {
                 id: leftBallastTank
-
-                initialWaterLevel: 0
-                maxWaterLevel: 500
             }
 
             BallastTank {
                 id: rightBallastTank
-
-                initialWaterLevel: 0
-                maxWaterLevel: 500
             }
 
             BallastTank {
                 id: centralBallastTank
-
-                initialWaterLevel: 0
-                maxWaterLevel: 500
             }
 
             Image {
@@ -402,7 +381,7 @@ ActivityBase {
                 }
 
                 transform: Rotation {
-                    id: submarineRotation;
+                    id: submarineRotation
                     origin.x: submarineImage.width / 2;
                     origin.y: 0;
                     angle: 0;
@@ -743,7 +722,7 @@ ActivityBase {
             }
 
             transform: Rotation {
-                id: rotateShip;
+                id: rotateShip
                 origin.x: ship.width / 2;
                 origin.y: 0;
                 axis { x: 0; y: 1; z: 0 } angle: 0
@@ -848,7 +827,7 @@ ActivityBase {
         /* Just a space */
         Rectangle {
             id: space
-            width: bar.level < 8 ? rock1.width : rock1.width * ( 1 - (Math.random() * 0.5))
+            width: bar.level < 8 ? rock1.width : rock1.width * (1 - (Math.random() * 0.5))
             height: rock1.height
 
             color: "transparent"

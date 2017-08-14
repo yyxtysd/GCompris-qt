@@ -26,7 +26,6 @@
 var currentLevel = 0
 var numberOfLevel = 10
 var items
-var processingAnswer
 
 var tutorials = [
             [
@@ -71,7 +70,6 @@ function initLevel() {
         items.tutorial.intro = tutorials[currentLevel]
     } else {
         items.tutorial.visible = false
-        items.physicalWorld.turnOn()
     }
 
     setUpLevelElements()
@@ -88,13 +86,13 @@ function setUpLevelElements() {
     items.crown.reset()
     items.whale.reset()
 
-    processingAnswer = false
+    items.processingAnswer = false
 
     resetUpperGate()
 }
 
 function resetUpperGate() {
-    if ( items && !items.crown.visible && items.upperGate.visible) {
+    if (items && items.crown && !items.crown.visible && items.upperGate && items.upperGate.visible) {
         items.upperGate.openGate()
     }
 }
@@ -106,10 +104,9 @@ function closeGate() {
 }
 
 function finishLevel(win) {
-    if (processingAnswer)
+    if (items.processingAnswer)
         return
-    items.physicalWorld.turnOff()
-    processingAnswer = true
+    items.processingAnswer = true
     if (win) {
         items.bonus.good("flower")
     } else {
@@ -119,15 +116,17 @@ function finishLevel(win) {
 }
 
 function nextLevel() {
+    items.processingAnswer = true
     closeGate()
 
-    if(numberOfLevel <= ++currentLevel ) {
+    if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
     initLevel();
 }
 
 function previousLevel() {
+    items.processingAnswer = true
     closeGate()
 
     if(--currentLevel < 0) {
