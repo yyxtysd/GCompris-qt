@@ -103,7 +103,7 @@ QtObject {
             playAreaComponentPositionX: [0.4],
             playAreaComponentPositionY: [0.3],
             introMessage: [
-                qsTr("The Digital light will glow when it's terminal is connected with an input of 1"),
+                qsTr("The Digital light will glow when its terminal is connected with an input of 1"),
                 qsTr("Turn the Digital light on using the inputs provided")
             ]
         },
@@ -129,8 +129,8 @@ QtObject {
             playAreaComponentPositionX: [0.4, 0.6],
             playAreaComponentPositionY: [0.3, 0.3],
             introMessage: [
-                qsTr("The OR Gate produces an output of 1  when at least one of the input terminal is of value 1"),
-                qsTr("Turn the Digital light on using an AND gate and the inputs provided")
+                qsTr("The OR Gate produces an output of 1 when at least one of the input terminal is of value 1"),
+                qsTr("Turn the Digital light on using an OR gate and the inputs provided")
             ]
         },
         // level 4
@@ -141,7 +141,9 @@ QtObject {
             wires: [ [0, 0, 2, 0], [2, 0, 3, 0], [3, 0, 4, 0]],
             playAreaComponentPositionX: [0.2, 0.3, 0.4, 0.6, 0.8],
             playAreaComponentPositionY: [0.1, 0.4, 0.3, 0.3, 0.4],
-            introMessage: []
+            introMessage: [
+                qsTr("NOTE: You can draw multiple wires from the output terminal of a component.")
+            ]
         },
         // level 5
         {

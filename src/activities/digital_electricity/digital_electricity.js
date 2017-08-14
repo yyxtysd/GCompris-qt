@@ -250,7 +250,7 @@ function isTutorialMode() {
 
 function checkAnswer() {
     // for levels with single light
-    if (currentLevel != 6 && currentLevel != 8) {
+    if (currentLevel != 6 && currentLevel != 8 && currentLevel != 10) {
         if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
             items.bonus.good('tux')
         else
@@ -260,46 +260,29 @@ function checkAnswer() {
         var switch1 = determiningComponents[0]
         var switch2 = determiningComponents[1]
 
-        switch1.imgSrc = "switchOn.svg"
-        switch2.imgSrc = "switchOff.svg"
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
+        var switch1InitialState = switch1.imgSrc
+        var switch2InitialState = switch2.imgSrc
 
-        if (digitalLight.inputTerminals.itemAt(0).value != 1) {
-            items.bonus.bad('tux')
-            return 0
+        for (var A = 0; A <= 1; A++) {
+            for (var B = 0; B <= 1; B++) {
+                switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+                switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
+
+                updateComponent(switch1.index)
+                updateComponent(switch2.index)
+
+                var operationResult = A ^ B
+
+                if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                    switch1.imgSrc = switch1InitialState
+                    switch2.imgSrc = switch2InitialState
+                    updateComponent(switch1.index)
+                    updateComponent(switch2.index)
+                    items.bonus.bad('tux')
+                    return
+                }
+            }
         }
-
-        switch1.imgSrc = "switchOff.svg"
-        switch2.imgSrc = "switchOn.svg"
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-
-        if (digitalLight.inputTerminals.itemAt(0).value != 1) {
-            items.bonus.bad('tux')
-            return 0
-        }
-
-        switch1.imgSrc = "switchOn.svg"
-        switch2.imgSrc = "switchOn.svg"
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-
-        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
-            items.bonus.bad('tux')
-            return 0
-        }
-
-        switch1.imgSrc = "switchOff.svg"
-        switch2.imgSrc = "switchOff.svg"
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-
-        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
-            items.bonus.bad('tux')
-            return 0
-        }
-
         items.bonus.good('tux')
     } else if (currentLevel == 8) {
         var switch1 = determiningComponents[0]
@@ -308,76 +291,70 @@ function checkAnswer() {
 
         var digitalLight = determiningComponents[3]
 
-        // A = 1, B = 0, C = 0
-        switch1.imgSrc = "switchOn.svg"
-        switch2.imgSrc = "switchOff.svg"
-        switch3.imgSrc = "switchOff.svg"
+        var switch1InitialState = switch1.imgSrc
+        var switch2InitialState = switch2.imgSrc
+        var switch3InitialState = switch3.imgSrc
 
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-        updateComponent(switch3.index)
+        for (var A = 0; A <= 1; A++) {
+            for (var B = 0; B <= 1; B++) {
+                for (var C = 0; C <= 1; C++) {
+                    switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+                    switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
+                    switch3.imgSrc = C == 1 ? "switchOn.svg" : "switchOff.svg"
 
-        if (digitalLight.inputTerminals.itemAt(0).value != 1) {
-            items.bonus.bad('tux')
-            return 0
+                    updateComponent(switch1.index)
+                    updateComponent(switch2.index)
+                    updateComponent(switch3.index)
+
+                    var operationResult = A | (B & C)
+
+                    if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                        switch1.imgSrc = switch1InitialState
+                        switch2.imgSrc = switch2InitialState
+                        switch3.imgSrc = switch3InitialState
+                        updateComponent(switch1.index)
+                        updateComponent(switch2.index)
+                        return
+                    }
+                }
+            }
         }
+        items.bonus.good('tux')
+    } else if (currentLevel == 10) {
+        var switch1 = determiningComponents[0]
+        var switch2 = determiningComponents[1]
+        var switch3 = determiningComponents[2]
 
-        // A = 0, B = 0, C = 0
-        switch1.imgSrc = "switchOff.svg"
-        switch2.imgSrc = "switchOff.svg"
-        switch3.imgSrc = "switchOff.svg"
+        var digitalLight = determiningComponents[3]
 
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-        updateComponent(switch3.index)
+        var switch1InitialState = switch1.imgSrc
+        var switch2InitialState = switch2.imgSrc
+        var switch3InitialState = switch3.imgSrc
 
-        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
-            items.bonus.bad('tux')
-            return 0
+        for (var A = 0; A <= 1; A++) {
+            for (var B = 0; B <= 1; B++) {
+                for (var C = 0; C <= 1; C++) {
+                    switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+                    switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
+                    switch3.imgSrc = C == 1 ? "switchOn.svg" : "switchOff.svg"
+
+                    updateComponent(switch1.index)
+                    updateComponent(switch2.index)
+                    updateComponent(switch3.index)
+
+                    var operationResult = A ^ (B ^ C)
+
+                    if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                        switch1.imgSrc = switch1InitialState
+                        switch2.imgSrc = switch2InitialState
+                        switch3.imgSrc = switch3InitialState
+                        updateComponent(switch1.index)
+                        updateComponent(switch2.index)
+                        return
+                    }
+                }
+            }
         }
-
-        // A = 0, B = 1, C = 0
-        switch1.imgSrc = "switchOff.svg"
-        switch2.imgSrc = "switchOn.svg"
-        switch3.imgSrc = "switchOff.svg"
-
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-        updateComponent(switch3.index)
-
-        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
-            items.bonus.bad('tux')
-            return 0
-        }
-
-        // A = 0, B = 0, C = 1
-        switch1.imgSrc = "switchOff.svg"
-        switch2.imgSrc = "switchOff.svg"
-        switch3.imgSrc = "switchOn.svg"
-
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-        updateComponent(switch3.index)
-
-        if (digitalLight.inputTerminals.itemAt(0).value != 0) {
-            items.bonus.bad('tux')
-            return 0
-        }
-
-        // A = 0, B = 1, C = 1
-        switch1.imgSrc = "switchOff.svg"
-        switch2.imgSrc = "switchOn.svg"
-        switch3.imgSrc = "switchOn.svg"
-
-        updateComponent(switch1.index)
-        updateComponent(switch2.index)
-        updateComponent(switch3.index)
-
-        if (digitalLight.inputTerminals.itemAt(0).value != 1) {
-            items.bonus.bad('tux')
-            return 0
-        }
-
         items.bonus.good('tux')
     }
 }
