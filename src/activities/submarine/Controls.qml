@@ -94,6 +94,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: submarine.increaseHorizontalVelocity(1)
             }
@@ -108,6 +109,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: submarine.decreaseHorizontalVelocity(1)
             }
@@ -143,15 +145,6 @@ Item {
                     }
                 }
             }
-        }
-
-        Rectangle {
-            x: leftBallastTankPosition.x
-            y: leftBallastTankPosition.y + (leftBallastTankDisplay.height * 1.1)
-            width: leftBallastTankWidth
-            height: leftBallastTankLabel.height
-            color: "black"
-            radius: 10
 
             GCText {
                 id: leftBallastTankLabel
@@ -162,8 +155,8 @@ Item {
                 anchors.centerIn: parent
                 horizontalAlignment: Text.AlignHCenter
 
-                fontSize: 10
-                color: "green"
+                fontSize: 8
+                color: "white"
             }
         }
 
@@ -183,6 +176,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: leftBallastTank.fillBallastTanks()
             }
@@ -204,6 +198,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: leftBallastTank.flushBallastTanks()
             }
@@ -239,15 +234,6 @@ Item {
                     }
                 }
             }
-        }
-
-        Rectangle {
-            x: centralBallastTankPosition.x
-            y: centralBallastTankPosition.y + (centralBallastTankDisplay.height * 1.1)
-            width: centralBallastTankWidth
-            height: centralBallastTankLabel.height
-            color: "black"
-            radius: 10
 
             GCText {
                 id: centralBallastTankLabel
@@ -258,8 +244,8 @@ Item {
                 anchors.centerIn: parent
                 horizontalAlignment: Text.AlignHCenter
 
-                fontSize: 10
-                color: "green"
+                fontSize: 8
+                color: "white"
             }
         }
 
@@ -279,6 +265,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: centralBallastTank.fillBallastTanks()
             }
@@ -300,6 +287,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: centralBallastTank.flushBallastTanks()
             }
@@ -334,15 +322,6 @@ Item {
                     }
                 }
             }
-        }
-
-        Rectangle {
-            x: rightBallastTankPosition.x
-            y: rightBallastTankPosition.y + (rightBallastTankDisplay.height * 1.1)
-            width: rightBallastTankWidth
-            height: rightBallastTankLabel.height
-            color: "black"
-            radius: 10
 
             GCText {
                 id: rightBallastTankLabel
@@ -353,8 +332,8 @@ Item {
                 anchors.centerIn: parent
                 horizontalAlignment: Text.AlignHCenter
 
-                fontSize: 10
-                color: "green"
+                fontSize: 8
+                color: "white"
             }
         }
 
@@ -374,6 +353,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: rightBallastTank.fillBallastTanks()
             }
@@ -395,6 +375,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: rightBallastTank.flushBallastTanks()
             }
@@ -436,6 +417,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: submarine.increaseWingsAngle(1)
             }
@@ -452,6 +434,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                visible: !tutorial.visible
 
                 onClicked: submarine.decreaseWingsAngle(1)
             }

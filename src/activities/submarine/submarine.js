@@ -93,13 +93,13 @@ function setUpLevelElements() {
 
 function resetUpperGate() {
     if (items && items.crown && !items.crown.visible && items.upperGate && items.upperGate.visible) {
-        items.upperGate.openGate()
+        items.upperGate.isGateOpen = true
     }
 }
 
 function closeGate() {
     if (items.upperGate.visible) {
-        items.upperGate.closeGate()
+        items.upperGate.isGateOpen = false
     }
 }
 

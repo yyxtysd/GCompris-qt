@@ -54,36 +54,36 @@ ActivityBase {
 
         /* Testing purposes, A / Left Key => Reduces velocity, D / Right Key => Increases velocity */
         Keys.onPressed: {
-            if ((event.key == Qt.Key_D || event.key == Qt.Key_Right)) {
+            if ((event.key == Qt.Key_D || event.key == Qt.Key_Right) && !tutorial.visible) {
                 submarine.increaseHorizontalVelocity(1)
             }
-            if ((event.key == Qt.Key_A || event.key == Qt.Key_Left)) {
+            if ((event.key == Qt.Key_A || event.key == Qt.Key_Left) && !tutorial.visible) {
                 submarine.decreaseHorizontalVelocity(1)
             }
-            if ((event.key == Qt.Key_W || event.key == Qt.Key_Up)) {
+            if ((event.key == Qt.Key_W || event.key == Qt.Key_Up) && !tutorial.visible) {
                 centralBallastTank.fillBallastTanks()
             }
-            if ((event.key == Qt.Key_S || event.key == Qt.Key_Down)) {
+            if ((event.key == Qt.Key_S || event.key == Qt.Key_Down) && !tutorial.visible) {
                 centralBallastTank.flushBallastTanks()
             }
-            if ((event.key == Qt.Key_Plus)) {
+            if ((event.key == Qt.Key_Plus) && !tutorial.visible) {
                 submarine.increaseWingsAngle(1)
             }
-            if ((event.key == Qt.Key_Minus)) {
+            if ((event.key == Qt.Key_Minus) && !tutorial.visible) {
                 submarine.decreaseWingsAngle(1)
             }
 
-            if ((event.key == Qt.Key_R)) {
+            if ((event.key == Qt.Key_R) && !tutorial.visible) {
                 leftBallastTank.fillBallastTanks()
             }
-            if ((event.key == Qt.Key_F)) {
+            if ((event.key == Qt.Key_F) && !tutorial.visible) {
                 leftBallastTank.flushBallastTanks()
             }
 
-            if ((event.key == Qt.Key_T)) {
+            if ((event.key == Qt.Key_T) && !tutorial.visible) {
                 rightBallastTank.fillBallastTanks()
             }
-            if ((event.key == Qt.Key_G)) {
+            if ((event.key == Qt.Key_G) && !tutorial.visible) {
                 rightBallastTank.flushBallastTanks()
             }
         }
@@ -200,7 +200,6 @@ ActivityBase {
 
             function destroySubmarine() {
                 isHit = true
-                submarineImage.broken()
             }
 
             function resetSubmarine() {
@@ -216,6 +215,7 @@ ActivityBase {
 
                 currentFinalVelocity = 0
                 velocity = Qt.point(0,0)
+                smoothHorizontalVelocity.stop()
                 wingsAngle = initialWingsAngle
             }
 
@@ -364,12 +364,7 @@ ActivityBase {
                 width: background.width / 9
                 height: background.height / 9
 
-                function broken() {
-                    submarine.isHit = true
-                }
-
                 function reset() {
-                    submarine.isHit = false
                     x = submarine.initialPosition.x
                     y = submarine.initialPosition.y
                 }
@@ -551,18 +546,6 @@ ActivityBase {
 
             property bool isGateOpen: false
 
-            function openGate() {
-                if (!isGateOpen) {
-                    isGateOpen = true
-                }
-            }
-
-            function closeGate() {
-                if (isGateOpen) {
-                    isGateOpen = false
-                }
-            }
-
             Body {
                 id: upperGateBody
                 target: upperGate
@@ -642,18 +625,20 @@ ActivityBase {
             width: submarineImage.width * 0.85
             height: width * 0.55
 
-            visible: (bar.level) > 2 ? true : false
+            visible: ((bar.level > 2) && !isCaptured) ? true : false
             source: url + "crown.png"
 
+            property bool isCaptured: false
+
             function captureCrown() {
-                upperGate.openGate()
+                upperGate.isGateOpen = true
+                isCaptured = true
                 sparkle.createSparkle()
-                crown.visible = false
             }
 
             function reset() {
-                crown.visible = (bar.level) > 2 ? true : false
-                upperGate.closeGate()
+                isCaptured = false
+                upperGate.isGateOpen = false
             }
 
             x: background.width / 2
