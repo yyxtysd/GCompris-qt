@@ -223,6 +223,20 @@ QtObject {
             introMessage: [
                 qsTr("Light the bulb using the three switches such that the bulb glows when odd number of the switches are turned on")
             ]
+        },
+        // level 11
+        {
+            inputComponentList: [one, notGate],
+            playAreaComponentList: [norGate, digitalLight],
+            determiningComponentsIndex: [1],
+            wires: [ [0, 0, 1, 0] ],
+            playAreaComponentPositionX: [0.6, 0.8],
+            playAreaComponentPositionY: [0.5, 0.5],
+            introMessage: [
+                qsTr("A NOT gate takes 2 binary input and outputs 1 if both of them are 0, otherwise produces an output of 1."),
+                qsTr("For a more detailed description about the gate, select it and click on the info button."),
+                qsTr("Light the bulb using the NOR gate provided.")
+            ]
         }
     ]
 }
