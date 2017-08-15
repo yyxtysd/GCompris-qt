@@ -94,7 +94,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: submarine.increaseHorizontalVelocity(1)
             }
@@ -109,7 +109,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: submarine.decreaseHorizontalVelocity(1)
             }
@@ -176,7 +176,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: leftBallastTank.fillBallastTanks()
             }
@@ -198,7 +198,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: leftBallastTank.flushBallastTanks()
             }
@@ -265,7 +265,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: centralBallastTank.fillBallastTanks()
             }
@@ -287,7 +287,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: centralBallastTank.flushBallastTanks()
             }
@@ -353,7 +353,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: rightBallastTank.fillBallastTanks()
             }
@@ -375,7 +375,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: rightBallastTank.flushBallastTanks()
             }
@@ -417,7 +417,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: submarine.increaseWingsAngle(1)
             }
@@ -434,7 +434,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                visible: !tutorial.visible
+                enabled: !tutorial.visible
 
                 onClicked: submarine.decreaseWingsAngle(1)
             }
