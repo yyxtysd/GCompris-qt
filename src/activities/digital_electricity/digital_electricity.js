@@ -250,7 +250,7 @@ function isTutorialMode() {
 
 function checkAnswer() {
     // for levels with single light
-    if (currentLevel != 6 && currentLevel != 8 && currentLevel != 10) {
+    if (currentLevel != 6 && currentLevel != 8 && currentLevel != 10 && currentLevel != 12) {
         if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
             items.bonus.good('tux')
         else
@@ -314,6 +314,8 @@ function checkAnswer() {
                         switch3.imgSrc = switch3InitialState
                         updateComponent(switch1.index)
                         updateComponent(switch2.index)
+                        updateComponent(switch3.index)
+                        items.bonus.bad('tux')
                         return
                     }
                 }
@@ -350,9 +352,33 @@ function checkAnswer() {
                         switch3.imgSrc = switch3InitialState
                         updateComponent(switch1.index)
                         updateComponent(switch2.index)
+                        updateComponent(switch3.index)
+                        items.bonus.bad('tux')
                         return
                     }
                 }
+            }
+        }
+        items.bonus.good('tux')
+    } else if (currentLevel == 12) {
+        var switch1 = determiningComponents[0]
+
+        var digitalLight = determiningComponents[1]
+
+        var switch1InitialState = switch1.imgSrc
+
+        for (var A = 0; A <= 1; A++) {
+            switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+
+            updateComponent(switch1.index)
+
+            var operationResult = !A
+
+            if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                switch1.imgSrc = switch1InitialState
+                updateComponent(switch1.index)
+                items.bonus.bad('tux')
+                return
             }
         }
         items.bonus.good('tux')

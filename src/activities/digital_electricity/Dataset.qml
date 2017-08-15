@@ -233,9 +233,21 @@ QtObject {
             playAreaComponentPositionX: [0.6, 0.8],
             playAreaComponentPositionY: [0.5, 0.5],
             introMessage: [
-                qsTr("A NOT gate takes 2 binary input and outputs 1 if both of them are 0, otherwise produces an output of 1."),
+                qsTr("A NOR gate takes 2 binary input and outputs 1 if both of them are 0, otherwise produces an output of 1."),
                 qsTr("For a more detailed description about the gate, select it and click on the info button."),
                 qsTr("Light the bulb using the NOR gate provided.")
+            ]
+        },
+        // level 12
+        {
+            inputComponentList: [nandGate],
+            playAreaComponentList: [one, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2],
+            wires: [ [0, 0, 1, 0] ],
+            playAreaComponentPositionX: [0.1, 0.3, 0.8],
+            playAreaComponentPositionY: [0.5, 0.5, 0.5],
+            introMessage: [
+                qsTr("Use the gates such that the bulb will glow only when the switch is turned off and remain off when the switch is turned on.")
             ]
         }
     ]
