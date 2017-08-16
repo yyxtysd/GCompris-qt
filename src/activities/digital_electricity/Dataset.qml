@@ -92,6 +92,13 @@ QtObject {
         'height': 0.15,
         'toolTipText': qsTr("Switch")
     }
+    property var comparator: {
+        'imageName': 'comparator.svg',
+        'componentSource': 'Comparator.qml',
+        'width': 0.3,
+        'height': 0.25,
+        'toolTipText': qsTr("Comparator")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -284,6 +291,67 @@ QtObject {
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned off.")
+            ]
+        },
+        // level 16
+        {
+            inputComponentList: [norGate],
+            playAreaComponentList: [one, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2],
+            wires: [ [0, 0, 1, 0] ],
+            playAreaComponentPositionX: [0.1, 0.3, 0.8],
+            playAreaComponentPositionY: [0.5, 0.5, 0.5],
+            introMessage: [
+                qsTr("Use the gates such that the bulb will glow only when the switch is turned off and remain off when the switch is turned on.")
+            ]
+        },
+        // level 17
+        {
+            inputComponentList: [norGate],
+            playAreaComponentList: [one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2, 3],
+            wires: [ [0, 0, 1, 0], [0, 0, 2, 0] ],
+            playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
+            introMessage: [
+                qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned on.")
+            ]
+        },
+        // level 18
+        {
+            inputComponentList: [norGate],
+            playAreaComponentList: [one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2, 3],
+            wires: [ [0, 0, 1, 0], [0, 0, 2, 0] ],
+            playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
+            introMessage: [
+                qsTr("Create a circuit using the components provided such that the bulb glows when either of the switches are turned on.")
+            ]
+        },
+        // level 19
+        {
+            inputComponentList: [norGate],
+            playAreaComponentList: [one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2, 3],
+            wires: [ [0, 0, 1, 0], [0, 0, 2, 0] ],
+            playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
+            introMessage: [
+                qsTr("Create a circuit using the components provided such that the bulb will glow when at least one of the switches are turned off.")
+            ]
+        },
+        // level 20
+        {
+            inputComponentList: [one, andGate, notGate, norGate, xorGate, nandGate, orGate],
+            playAreaComponentList: [switchKey, switchKey, comparator, digitalLight],
+            determiningComponentsIndex: [0, 1, 3],
+            wires: [  ],
+            playAreaComponentPositionX: [0.0, 0.0, 0.4, 0.9],
+            playAreaComponentPositionY: [0.2, 0.4, 0.5, 0.5],
+            introMessage: [
+                qsTr("A comparator takes two numbers (A and B) as input and produces 3 values as output. First value is 1 if A < B, second value is 1 for A = B and third value is 1 for A > B."),
+                qsTr("Create a circuit using the components provided such that the bulb will glow when the value of the current flowing through the first switch is less than or equal to that of the second switch.")
             ]
         }
     ]
