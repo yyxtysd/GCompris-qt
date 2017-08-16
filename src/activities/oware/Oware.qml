@@ -144,6 +144,8 @@ ActivityBase {
                         property int minIndex
                         property int maxIndex
                         property real scoreBoardX
+                        property int previousIndex
+                        property alias grainRepeater: grainRepeater
 
                         GCText {
                             text: value
@@ -179,10 +181,11 @@ ActivityBase {
                         function scoresAnimation(scoreDirection,seedsCount,currentScoreIndex) {
                             value = seedsCount
                             grainRepeater.model = value
-                            cellGridRepeater.itemAt(currentScoreIndex).z = 10
+                            print(grainRepeater.model)
+                            previousIndex = currentScoreIndex
                             scoreBoardX = cellGridRepeater.itemAt(currentScoreIndex).x
                             for(var i = 0; i < grainRepeater.count; i++) {
-//                                 grainRepeater.itemAt(i).z = 5
+                                print("hhhh")
                                 grainRepeater.itemAt(i).startScoreAnimation(scoreDirection)
                             }
                         }
@@ -206,8 +209,15 @@ ActivityBase {
                         }
 
                         function setScoreValues() {
+                            print(Activity.scoreHouse)
+//                             for(var i = 0; i < 12; i++) {
+//                                 print(cellGridRepeater.itemAt(i).value)
+//                             }
                             items.playerTwoScore = Activity.scoreHouse[1]
                             items.playerOneScore = Activity.scoreHouse[0]
+//                             Activity.setAfterValues(Activity.house)
+                            print(items.cellGridRepeater.itemAt(previousIndex).grainRepeater.model)
+//                             Activity.setValues(Activity.house)
                             value = 0
                             grainRepeater.model = value
                         }
@@ -301,6 +311,7 @@ ActivityBase {
 
                                     ScriptAction {
                                         script: {
+                                            print("check")
                                             setScoreValues()
                                         }
                                     }
@@ -331,10 +342,7 @@ ActivityBase {
 
                                      ScriptAction {
                                         script: {
-                                            items.playerTwoScore = Activity.scoreHouse[1]
-                                            items.playerOneScore = Activity.scoreHouse[0]
-                                            value = 0
-                                            grainRepeater.model = value
+                                            setScoreValues()
                                         }
                                     }
                                 }

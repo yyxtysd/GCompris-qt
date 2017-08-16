@@ -241,6 +241,9 @@ function setValues(board) {
         items.cellGridRepeater.itemAt(i).value = board[j]
     for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
         items.cellGridRepeater.itemAt(i).value = board[j]
+//     for(i = 0; i < 12; i++) {
+//         print(items.cellGridRepeater.itemAt(i).value)
+//     }
 
     if(items.playerOneScore == 24 && items.playerTwoScore == 24)
         items.bonus.good("flower")
