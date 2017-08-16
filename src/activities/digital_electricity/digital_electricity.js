@@ -249,13 +249,7 @@ function isTutorialMode() {
 }
 
 function checkAnswer() {
-    // for levels with single light
-    if (currentLevel != 6 && currentLevel != 8 && currentLevel != 10 && currentLevel != 12) {
-        if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
-            items.bonus.good('tux')
-        else
-            items.bonus.bad('tux')
-    } else if (currentLevel == 6) {
+    if (currentLevel == 6) {
         var digitalLight = determiningComponents[determiningComponents.length - 1]
         var switch1 = determiningComponents[0]
         var switch2 = determiningComponents[1]
@@ -382,6 +376,102 @@ function checkAnswer() {
             }
         }
         items.bonus.good('tux')
+    } else if (currentLevel == 13) {
+        var switch1 = determiningComponents[0]
+        var switch2 = determiningComponents[1]
+
+        var digitalLight = determiningComponents[2]
+
+        var switch1InitialState = switch1.imgSrc
+        var switch2InitialState = switch2.imgSrc
+
+        for (var A = 0; A <= 1; A++) {
+            for (var B = 0; B <= 1; B++) {
+                switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+                switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
+
+                updateComponent(switch1.index)
+                updateComponent(switch2.index)
+
+                var operationResult = A & B
+
+                if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                    switch1.imgSrc = switch1InitialState
+                    switch2.imgSrc = switch2InitialState
+                    updateComponent(switch1.index)
+                    updateComponent(switch2.index)
+                    items.bonus.bad('tux')
+                    return
+                }
+            }
+        }
+        items.bonus.good('tux')
+    } else if (currentLevel == 14) {
+        var switch1 = determiningComponents[0]
+        var switch2 = determiningComponents[1]
+
+        var digitalLight = determiningComponents[2]
+
+        var switch1InitialState = switch1.imgSrc
+        var switch2InitialState = switch2.imgSrc
+
+        for (var A = 0; A <= 1; A++) {
+            for (var B = 0; B <= 1; B++) {
+                switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+                switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
+
+                updateComponent(switch1.index)
+                updateComponent(switch2.index)
+
+                var operationResult = A | B
+
+                if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                    switch1.imgSrc = switch1InitialState
+                    switch2.imgSrc = switch2InitialState
+                    updateComponent(switch1.index)
+                    updateComponent(switch2.index)
+                    items.bonus.bad('tux')
+                    return
+                }
+            }
+        }
+        items.bonus.good('tux')
+    } else if (currentLevel == 15) {
+        var switch1 = determiningComponents[0]
+        var switch2 = determiningComponents[1]
+
+        var digitalLight = determiningComponents[2]
+
+        var switch1InitialState = switch1.imgSrc
+        var switch2InitialState = switch2.imgSrc
+
+        for (var A = 0; A <= 1; A++) {
+            for (var B = 0; B <= 1; B++) {
+                switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
+                switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
+
+                updateComponent(switch1.index)
+                updateComponent(switch2.index)
+
+                var operationResult = !(A | B)
+
+                if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
+                    switch1.imgSrc = switch1InitialState
+                    switch2.imgSrc = switch2InitialState
+                    updateComponent(switch1.index)
+                    updateComponent(switch2.index)
+                    items.bonus.bad('tux')
+                    return
+                }
+            }
+        }
+        items.bonus.good('tux')
+    }
+    else {
+        if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
+            items.bonus.good('tux')
+        else
+            items.bonus.bad('tux')
     }
 }
 

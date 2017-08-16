@@ -249,6 +249,42 @@ QtObject {
             introMessage: [
                 qsTr("Use the gates such that the bulb will glow only when the switch is turned off and remain off when the switch is turned on.")
             ]
+        },
+        // level 13
+        {
+            inputComponentList: [nandGate],
+            playAreaComponentList: [one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2, 3],
+            wires: [ [0, 0, 1, 0], [0, 0, 2, 0] ],
+            playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
+            introMessage: [
+                qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned on.")
+            ]
+        },
+        // level 14
+        {
+            inputComponentList: [nandGate],
+            playAreaComponentList: [one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2, 3],
+            wires: [ [0, 0, 1, 0], [0, 0, 2, 0] ],
+            playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
+            introMessage: [
+                qsTr("Create a circuit using the components provided such that the bulb glows when either of the switches are turned on.")
+            ]
+        },
+        // level 15
+        {
+            inputComponentList: [nandGate],
+            playAreaComponentList: [one, switchKey, switchKey, digitalLight],
+            determiningComponentsIndex: [1, 2, 3],
+            wires: [ [0, 0, 1, 0], [0, 0, 2, 0] ],
+            playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
+            playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
+            introMessage: [
+                qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned off.")
+            ]
         }
     ]
 }
