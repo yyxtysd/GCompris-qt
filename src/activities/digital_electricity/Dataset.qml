@@ -99,6 +99,20 @@ QtObject {
         'height': 0.25,
         'toolTipText': qsTr("Comparator")
     }
+    property var bcdToSevenSegment: {
+        'imageName': 'BCDTo7Segment.svg',
+        'componentSource': 'BCDToSevenSegment.qml',
+        'width': 0.3,
+        'height': 0.4,
+        'toolTipText': qsTr("BCD To 7 Segment")
+    }
+    property var sevenSegmentDisplay: {
+        'imageName': 'sevenSegmentDisplay.svgz',
+        'componentSource': 'SevenSegment.qml',
+        'width': 0.18,
+        'height': 0.4,
+        'toolTipText': qsTr("7 Segment Display")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -352,6 +366,21 @@ QtObject {
             introMessage: [
                 qsTr("A comparator takes two numbers (A and B) as input and produces 3 values as output. First value is 1 if A < B, second value is 1 for A = B and third value is 1 for A > B."),
                 qsTr("Create a circuit using the components provided such that the bulb will glow when the value of the current flowing through the first switch is less than or equal to that of the second switch.")
+            ]
+        },
+        // level 21
+        {
+            inputComponentList: [one, switchKey, nandGate, norGate, andGate, orGate, notGate],
+            playAreaComponentList: [bcdToSevenSegment, sevenSegmentDisplay],
+            determiningComponentsIndex: [0, 1],
+            wires: [ [0, 0, 1, 0], [0, 1, 1, 1], [0, 2, 1, 2], [0, 3, 1, 3], [0, 4, 1, 4], [0, 5, 1, 5], [0, 6, 1, 6] ],
+            playAreaComponentPositionX: [0.4, 0.8],
+            playAreaComponentPositionY: [0.3, 0.3],
+            introMessage: [
+                qsTr("The component in the middle is the BCD to seven segment converter."),
+                qsTr("It takes 4 bits as input represented in the binary coded decimal (BCD) format and converts the BCD number into a seven segment code."),
+                qsTr("The output of the converter is connected to the seven segment display, to view the value of the input provided."),
+                qsTr("Display the number \"6\" in the seve segment display."),
             ]
         }
     ]
