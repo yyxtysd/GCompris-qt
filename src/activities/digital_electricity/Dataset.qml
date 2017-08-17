@@ -113,6 +113,20 @@ QtObject {
         'height': 0.4,
         'toolTipText': qsTr("7 Segment Display")
     }
+    property var signalGenerator: {
+        'imageName': 'signalGenerator.svg',
+        'componentSource': 'SignalGenerator.qml',
+        'width': 0.25,
+        'height': 0.18,
+        'toolTipText': qsTr("Signal Generator")
+    }
+    property var bcdCounter: {
+        'imageName': 'bcdCounter.svg',
+        'componentSource': 'BcdCounter.qml',
+        'width': 0.3,
+        'height': 0.4,
+        'toolTipText': qsTr("BCD Counter")
+    }
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -380,7 +394,21 @@ QtObject {
                 qsTr("The component in the middle is the BCD to seven segment converter."),
                 qsTr("It takes 4 bits as input represented in the binary coded decimal (BCD) format and converts the BCD number into a seven segment code."),
                 qsTr("The output of the converter is connected to the seven segment display, to view the value of the input provided."),
-                qsTr("Display the number \"6\" in the seve segment display."),
+                qsTr("Display the number \"6\" in the seven segment display.")
+            ]
+        },
+        // level 22
+        {
+            inputComponentList: [one, switchKey, nandGate, norGate, andGate, orGate, notGate],
+            playAreaComponentList: [signalGenerator, bcdCounter, digitalLight, digitalLight, digitalLight, digitalLight],
+            determiningComponentsIndex: [1, 2, 3, 4, 5],
+            wires: [  ],
+            playAreaComponentPositionX: [0.1, 0.3, 0.7, 0.7, 0.7, 0.7],
+            playAreaComponentPositionY: [0.2, 0.5, 0.2, 0.4, 0.6, 0.8],
+            introMessage: [
+                qsTr("The signal generator on the left is used to generate alternating signals between 0 and 1 in a given time period take as input. The time period by default is 1 second, but it can be changed between 0.25 and 2s"),
+                qsTr("The BCD counter placed next to it is a special type of counter which can count to ten on application of a clock signal."),
+                qsTr("Connect the components to make sure that the count of 0 to 10 is visible in the digital lights provided.")
             ]
         }
     ]

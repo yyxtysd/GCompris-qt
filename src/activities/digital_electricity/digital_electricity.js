@@ -540,6 +540,34 @@ function checkAnswer() {
             return
         }
         items.bonus.bad('tux')
+    } else if (currentLevel == 22) {
+        var bcdCounter = determiningComponents[0]
+
+        var bcdOutput =
+                bcdCounter.outputTerminals.itemAt(3).value +
+                bcdCounter.outputTerminals.itemAt(2).value * 2 +
+                bcdCounter.outputTerminals.itemAt(1).value * 4 +
+                bcdCounter.outputTerminals.itemAt(0).value * 8
+
+        var digitalLightOutput =
+                determiningComponents[4].inputTerminals.itemAt(0).value +
+                determiningComponents[3].inputTerminals.itemAt(0).value * 2 +
+                determiningComponents[2].inputTerminals.itemAt(0).value * 4 +
+                determiningComponents[1].inputTerminals.itemAt(0).value * 8
+
+        if (bcdCounter.inputTerminals.itemAt(0).wires.length == 0 ||
+                bcdCounter.outputTerminals.itemAt(0).wires.length == 0 ||
+                bcdCounter.outputTerminals.itemAt(1).wires.length == 0 ||
+                bcdCounter.outputTerminals.itemAt(2).wires.length == 0 ||
+                bcdCounter.outputTerminals.itemAt(3).wires.length == 0) {
+            items.bonus.bad('tux')
+            return
+        }
+        if ((bcdOutput == digitalLightOutput) && (bcdCounter.inputTerminals.itemAt(0).wires.length != 0) ) {
+            items.bonus.good('tux')
+            return
+        }
+        items.bonus.bad('tux')
     }
     else {
         if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
