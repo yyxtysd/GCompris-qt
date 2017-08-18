@@ -127,6 +127,8 @@ QtObject {
         'height': 0.4,
         'toolTipText': qsTr("BCD Counter")
     }
+    // List of all components
+    property var componentList: [zero, one, digitalLight, andGate, orGate, notGate, xorGate, nandGate, norGate, switchKey, comparator, bcdToSevenSegment, sevenSegmentDisplay, signalGenerator, bcdCounter]
     // tutorial levels
     property var tutorialLevels: [
         // level 1
@@ -151,7 +153,7 @@ QtObject {
             playAreaComponentPositionX: [0.4, 0.6],
             playAreaComponentPositionY: [0.3, 0.3],
             introMessage: [
-                qsTr("The AND Gate produces an output of one when both of it's input terminal are of value 1"),
+                qsTr("The AND Gate produces an output of one when both of its input terminal are of value 1"),
                 qsTr("Turn the Digital light on using an AND gate and the inputs provided")
             ]
         },
@@ -407,7 +409,8 @@ QtObject {
             playAreaComponentPositionY: [0.2, 0.5, 0.2, 0.4, 0.6, 0.8],
             introMessage: [
                 qsTr("The signal generator on the left is used to generate alternating signals between 0 and 1 in a given time period take as input. The time period by default is 1 second, but it can be changed between 0.25 and 2s"),
-                qsTr("The BCD counter placed next to it is a special type of counter which can count to ten on application of a clock signal."),
+                qsTr("The BCD counter placed next to it is a special type of counter which can count from 0 to 10 and back to 0 on application of a clock signal."),
+                qsTr("The value of the counter is in the form a BCD number in the output of the BCD counter, with 'A' representing the least significant bit."),
                 qsTr("Connect the components to make sure that the count of 0 to 10 is visible in the digital lights provided.")
             ]
         }

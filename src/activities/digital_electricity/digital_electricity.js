@@ -137,111 +137,16 @@ function initLevel() {
 }
 
 function loadFreeMode(sizeMultiplier) {
-    items.availablePieces.model.append( {
-        "imgName": "zero.svg",
-        "componentSrc": "Zero.qml",
-        "imgWidth": sizeMultiplier * 0.12,
-        "imgHeight": sizeMultiplier * 0.2,
-        "toolTipText": qsTr("Zero input")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "one.svg",
-        "componentSrc": "One.qml",
-        "imgWidth": sizeMultiplier * 0.12,
-        "imgHeight": sizeMultiplier * 0.2,
-        "toolTipText": qsTr("One input")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "DigitalLightOff.svg",
-        "componentSrc": "DigitalLight.qml",
-        "imgWidth": sizeMultiplier * 0.12,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("Digital Light")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateAnd.svg",
-        "componentSrc": "AndGate.qml",
-        "imgWidth": sizeMultiplier * 0.15,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("AND gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateNand.svg",
-        "componentSrc": "NandGate.qml",
-        "imgWidth": sizeMultiplier * 0.15,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("NAND gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateNor.svg",
-        "componentSrc": "NorGate.qml",
-        "imgWidth": sizeMultiplier * 0.15,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("NOR gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateNot.svg",
-        "componentSrc": "NotGate.qml",
-        "imgWidth": sizeMultiplier * 0.15,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("NOT gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateOr.svg",
-        "componentSrc": "OrGate.qml",
-        "imgWidth": sizeMultiplier * 0.15,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("OR gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "gateXor.svg",
-        "componentSrc": "XorGate.qml",
-        "imgWidth": sizeMultiplier * 0.15,
-        "imgHeight": sizeMultiplier * 0.12,
-        "toolTipText": qsTr("XOR gate")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "comparator.svg",
-        "componentSrc": "Comparator.qml",
-        "imgWidth": sizeMultiplier * 0.3,
-        "imgHeight": sizeMultiplier * 0.25,
-        "toolTipText": qsTr("Comparator")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "BCDTo7Segment.svg",
-        "componentSrc": "BCDToSevenSegment.qml",
-        "imgWidth": sizeMultiplier * 0.3,
-        "imgHeight": sizeMultiplier * 0.4,
-        "toolTipText": qsTr("BCD To 7 Segment")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "sevenSegmentDisplay.svgz",
-        "componentSrc": "SevenSegment.qml",
-        "imgWidth": sizeMultiplier * 0.18,
-        "imgHeight": sizeMultiplier * 0.4,
-        "toolTipText": qsTr("7 Segment Display")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "switchOff.svg",
-        "componentSrc": "Switch.qml",
-        "imgWidth": sizeMultiplier * 0.18,
-        "imgHeight": sizeMultiplier * 0.15,
-        "toolTipText": qsTr("Switch")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "signalGenerator.svg",
-        "componentSrc": "SignalGenerator.qml",
-        "imgWidth": sizeMultiplier * 0.25,
-        "imgHeight": sizeMultiplier * 0.18,
-        "toolTipText": qsTr("Signal Generator")
-    })
-    items.availablePieces.model.append( {
-        "imgName": "bcdCounter.svg",
-        "componentSrc": "BcdCounter.qml",
-        "imgWidth": sizeMultiplier * 0.3,
-        "imgHeight": sizeMultiplier * 0.4,
-        "toolTipText": qsTr("BCD Counter")
-    })
+    var componentList = items.tutorialDataset.componentList
+    for (var i = 0; i < componentList.length; i++) {
+        items.availablePieces.model.append( {
+            "imgName": componentList[i].imageName,
+            "componentSrc": componentList[i].componentSource,
+            "imgWidth": sizeMultiplier * componentList[i].width,
+            "imgHeight": sizeMultiplier * componentList[i].height,
+            "toolTipText": componentList[i].toolTipText
+        })
+    }
 }
 
 function isTutorialMode() {

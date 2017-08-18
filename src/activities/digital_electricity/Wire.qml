@@ -38,7 +38,7 @@ Rectangle {
 
     MouseArea {
         id: mouseArea
-        visible: destructible
+        enabled: destructible
         width: parent.width
         height: parent.height * 3
         anchors.centerIn: parent
