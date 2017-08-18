@@ -71,7 +71,8 @@ ElectricalComponent {
 
     function updateOutput(wireVisited) {
         var terminal = outputTerminals.itemAt(0)
-        terminal.value = inputTerminals.itemAt(0).value | inputTerminals.itemAt(1).value
+        /* Keep the output value == 0 if only one of the input terminals is connected */
+        terminal.value = (inputTerminals.itemAt(0).wires.length != 0 && inputTerminals.itemAt(1).wires.length != 0) ? (inputTerminals.itemAt(0).value | inputTerminals.itemAt(1).value) : 0
         for(var i = 0 ; i < terminal.wires.length ; ++i)
             terminal.wires[i].to.value = terminal.value
 
