@@ -406,7 +406,7 @@ QtObject {
             wires: [  ],
             playAreaComponentPositionX: [0.0, 0.0, 0.4, 0.9],
             playAreaComponentPositionY: [0.2, 0.4, 0.5, 0.5],
-            type: [problemType.others],
+            type: [problemType.equation2Variables],
             introMessage: [
                 qsTr("A comparator takes two numbers (A and B) as input and produces 3 values as output. First value is 1 if A < B, second value is 1 for A = B and third value is 1 for A > B."),
                 qsTr("Create a circuit using the components provided such that the bulb will glow when the value of the current flowing through the first switch is less than or equal to that of the second switch.")

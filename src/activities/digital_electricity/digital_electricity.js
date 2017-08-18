@@ -35,6 +35,7 @@ var deletedIndex = []
 var components = []
 var connected = []
 var determiningComponents = []
+var processingAnswer
 
 function start(items_) {
 
@@ -80,6 +81,7 @@ function initLevel() {
         loadFreeMode(sizeMultiplier)
     } else {
         // load tutorial levels from dataset
+        processingAnswer = false
         var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
 
         for (var i = 0; i < levelProperties.inputComponentList.length; i++) {
@@ -154,13 +156,19 @@ function isTutorialMode() {
 }
 
 function checkAnswer() {
+    if (processingAnswer)
+        return
+
+    processingAnswer = true
     var problemType = items.tutorialDataset.tutorialLevels[currentLevel - 1].type
 
     if (problemType == items.tutorialDataset.problemType.lightTheBulb) {
-        if (determiningComponents[0].inputTerminals.itemAt(0).value == 1)
+        if (determiningComponents[0].inputTerminals.itemAt(0).value == 1) {
             items.bonus.good('tux')
-        else
+        } else {
             items.bonus.bad('tux')
+            processingAnswer = false
+        }
     } else if (problemType == items.tutorialDataset.problemType.equation1Variable) {
         var switch1 = determiningComponents[0]
 
@@ -179,6 +187,7 @@ function checkAnswer() {
                 switch1.imgSrc = switch1InitialState
                 updateComponent(switch1.index)
                 items.bonus.bad('tux')
+                processingAnswer = false
                 return
             }
         }
@@ -210,6 +219,8 @@ function checkAnswer() {
                     operationResult = !(A | B)
                 } else if (currentLevel == 19) {
                     operationResult = !(A & B)
+                } else if (currentLevel == 20) {
+                    operationResult = (A <= B)
                 }
 
                 if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
@@ -218,6 +229,7 @@ function checkAnswer() {
                     updateComponent(switch1.index)
                     updateComponent(switch2.index)
                     items.bonus.bad('tux')
+                    processingAnswer = false
                     return
                 }
             }
@@ -259,6 +271,7 @@ function checkAnswer() {
                         updateComponent(switch1.index)
                         updateComponent(switch2.index)
                         updateComponent(switch3.index)
+                        processingAnswer = false
                         items.bonus.bad('tux')
                         return
                     }
@@ -267,37 +280,7 @@ function checkAnswer() {
         }
         items.bonus.good('tux')
     } else if (problemType == items.tutorialDataset.problemType.others) {
-        if (currentLevel == 20) {
-                var switch1 = determiningComponents[0]
-                var switch2 = determiningComponents[1]
-
-                var digitalLight = determiningComponents[2]
-
-                var switch1InitialState = switch1.imgSrc
-                var switch2InitialState = switch2.imgSrc
-
-                for (var A = 0; A <= 1; A++) {
-                    for (var B = 0; B <= 1; B++) {
-                        switch1.imgSrc = A == 1 ? "switchOn.svg" : "switchOff.svg"
-                        switch2.imgSrc = B == 1 ? "switchOn.svg" : "switchOff.svg"
-
-                        updateComponent(switch1.index)
-                        updateComponent(switch2.index)
-
-                        var operationResult = A <= B
-
-                        if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
-                            switch1.imgSrc = switch1InitialState
-                            switch2.imgSrc = switch2InitialState
-                            updateComponent(switch1.index)
-                            updateComponent(switch2.index)
-                            items.bonus.bad('tux')
-                            return
-                        }
-                    }
-                }
-                items.bonus.good('tux')
-        } else if (currentLevel == 21) {
+        if (currentLevel == 21) {
             var bcdToSevenSegment = determiningComponents[0]
 
             var decimalValue =
@@ -311,6 +294,8 @@ function checkAnswer() {
                 return
             }
             items.bonus.bad('tux')
+            processingAnswer = false
+            return
         } else if (currentLevel == 22) {
             var bcdCounter = determiningComponents[0]
 
@@ -332,6 +317,7 @@ function checkAnswer() {
                     bcdCounter.outputTerminals.itemAt(2).wires.length == 0 ||
                     bcdCounter.outputTerminals.itemAt(3).wires.length == 0) {
                 items.bonus.bad('tux')
+                processingAnswer = false
                 return
             }
             if ((bcdOutput == digitalLightOutput) && (bcdCounter.inputTerminals.itemAt(0).wires.length != 0) ) {
@@ -339,6 +325,7 @@ function checkAnswer() {
                 return
             }
             items.bonus.bad('tux')
+            processingAnswer = false
         }
     }
 }
