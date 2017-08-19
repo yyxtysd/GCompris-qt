@@ -38,27 +38,27 @@ var finalMove
 var twoPlayer
 var capturedHousesIndex
 var tutorialInstructions = [{
-        "instruction": qsTr("At the beginning of the game four seeds are placed in each house. Each player has 6 houses. The first 6 houses starting from the bottom left belong to one player and the upper 6 houses belong to the other player."),
+        "instruction": qsTr("<li>- Each player has 6 houses with 4 seeds each.</li><li>- Lower 6 houses are of player 1.</li><li>- Upper 6 houses are for player 2.</li>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
     },
     {
-        "instruction": qsTr("In each turn, a player chooses one of their 6 houses. All seeds from that house are picked and dropped one in each house counter-clockwise from the house they chose, in a process called sowing. As in the image below the blue seeds from the second house are picked and sown in next houses (yellow seeds represent the sown seeds)."),
+        "instruction": qsTr("<h3><b>Sowing: </b></h3><li>- Chose any house from your set of houses. </li> <li>- All seeds from that house will be picked and dropped in each house counter-clockwise.</li><li><b>Example: </b>If player 1 choses second house, blue seeds from the second house below are picked and dropped in next houses (yellow seeds represent the dropped seeds)."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
     },
     {
-        "instruction": qsTr("However if the number of seeds in the house chosen is equal or more than 12, then seed is not dropped in the house from which the player picked up the seeds. As in the image below second house has more than 12 seeds so while sowing the seed is not dropped in that house."),
+        "instruction": qsTr("<li>If the number of seeds in the chosen house is >= 12, seed is not dropped in that house while sowing. </li><li><b>Example: </b>If player 1 choses second house with 14 seeds, seed will not be dropped in that house.</li>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial3.png"
     },
     {
-        "instruction": qsTr("After a turn, if the last seed was placed into the opponent's house and brought the total number of seeds in that house to two or three, all the seeds in that house are captured and added to player's scoring house. If the previous-to-last seed dropped also brought the total seeds in an opponent's house to two or three, these are captured as well, and so on."),
+        "instruction": qsTr("<h3><b>Capturing:</b></h3> The seeds are captured when all below conditions are true: <li>- Last seed is dropped into the opponent's house. <li>- Total number of seeds in that house are now two or three </li><li><b>Those seeds will go to your scoring box </b></li>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial4.png"
     },
     {
-        "instruction": qsTr("If all the houses of one player are empty, the other player has to take such a move that it gives one or more seeds to the other player to continue the game."),
+        "instruction": qsTr("<li>If all the houses of one player are <b>empty</b>, the other player has to take such a move that it gives one or more seeds to the other player to continue the game.</li><li><b>Example: </b>Player 1 has no more seeds left, so player 2 needs to give seeds to player 1 in next move.</li>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial5.png"
     },
     {
-        "instruction": qsTr("However, if the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends."),
+        "instruction": qsTr("<li>- The player who gets 25 seeds first wins the game.</li><li>- If the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends.</li> <li><b>Example:</b> Player 1 has no more seeds, neither player 2 can give any so player 2 will take the seed and game ends.</b>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial6.png"
     }
 ]
