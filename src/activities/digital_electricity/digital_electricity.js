@@ -305,11 +305,12 @@ function checkAnswer() {
                     bcdCounter.outputTerminals.itemAt(1).value * 4 +
                     bcdCounter.outputTerminals.itemAt(0).value * 8
 
-            var digitalLightOutput =
-                    determiningComponents[4].inputTerminals.itemAt(0).value +
-                    determiningComponents[3].inputTerminals.itemAt(0).value * 2 +
-                    determiningComponents[2].inputTerminals.itemAt(0).value * 4 +
-                    determiningComponents[1].inputTerminals.itemAt(0).value * 8
+            var bcdToSevenSegment = determiningComponents[1]
+            var decimalValue =
+                    bcdToSevenSegment.inputTerminals.itemAt(3).value +
+                    (bcdToSevenSegment.inputTerminals.itemAt(2).value * 2) +
+                    (bcdToSevenSegment.inputTerminals.itemAt(1).value * 4) +
+                    (bcdToSevenSegment.inputTerminals.itemAt(0).value * 8)
 
             if (bcdCounter.inputTerminals.itemAt(0).wires.length == 0 ||
                     bcdCounter.outputTerminals.itemAt(0).wires.length == 0 ||
@@ -320,7 +321,7 @@ function checkAnswer() {
                 processingAnswer = false
                 return
             }
-            if ((bcdOutput == digitalLightOutput) && (bcdCounter.inputTerminals.itemAt(0).wires.length != 0) ) {
+            if ((bcdOutput == decimalValue) && (bcdCounter.inputTerminals.itemAt(0).wires.length != 0) ) {
                 items.bonus.good('tux')
                 return
             }

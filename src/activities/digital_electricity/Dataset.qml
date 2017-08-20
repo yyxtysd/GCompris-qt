@@ -163,7 +163,7 @@ QtObject {
             playAreaComponentPositionY: [0.3, 0.3],
             type: [problemType.lightTheBulb],
             introMessage: [
-                qsTr("The AND Gate produces an output of one when both of its input terminal are of value 1"),
+                qsTr("The AND Gate produces an output of one when both of its input terminals are of value 1"),
                 qsTr("Turn the Digital light on using an AND gate and the inputs provided")
             ]
         },
@@ -217,7 +217,7 @@ QtObject {
             playAreaComponentPositionY: [0.0, 0.8, 0.3, 0.6, 0.4],
             type: [problemType.equation2Variables],
             introMessage: [
-                qsTr("Light the bulb using both the switches such that the bulb will glow when only one of the switches are turned on")
+                qsTr("Light the bulb using both the switches such that the bulb will glow only when either the first switch is on and the second switch is off or the first switch is off and the second switch is on.")
             ]
         },
         // level 7
@@ -431,17 +431,16 @@ QtObject {
         // level 22
         {
             inputComponentList: [one, switchKey, nandGate, norGate, andGate, orGate, notGate],
-            playAreaComponentList: [signalGenerator, bcdCounter, digitalLight, digitalLight, digitalLight, digitalLight],
-            determiningComponentsIndex: [1, 2, 3, 4, 5],
-            wires: [  ],
-            playAreaComponentPositionX: [0.1, 0.3, 0.7, 0.7, 0.7, 0.7],
-            playAreaComponentPositionY: [0.2, 0.5, 0.2, 0.4, 0.6, 0.8],
+            playAreaComponentList: [signalGenerator, bcdCounter, bcdToSevenSegment, sevenSegmentDisplay],
+            determiningComponentsIndex: [1, 2],
+            wires: [ [2, 0, 3, 0], [2, 1, 3, 1], [2, 2, 3, 2], [2, 3, 3, 3], [2, 4, 3, 4], [2, 5, 3, 5], [2, 6, 3, 6] ],
+            playAreaComponentPositionX: [0.0, 0.1, 0.4, 0.8],
+            playAreaComponentPositionY: [0.2, 0.6, 0.2, 0.2],
             type: [problemType.others],
             introMessage: [
-                qsTr("The signal generator on the left is used to generate alternating signals between 0 and 1 in a given time period take as input. The time period by default is 1 second, but it can be changed between 0.25 and 2s"),
-                qsTr("The BCD counter placed next to it is a special type of counter which can count from 0 to 10 and back to 0 on application of a clock signal."),
-                qsTr("The value of the counter is in the form a BCD number in the output of the BCD counter, with 'A' representing the least significant bit."),
-                qsTr("Connect the components to make sure that the count of 0 to 10 is visible in the digital lights provided.")
+                qsTr("The signal generator on the left is used to generate alternating signals between 0 and 1 in a given time period taken as input. The time period by default is 1 second, but it can be changed between 0.25 and 2s"),
+                qsTr("The BCD counter placed under it is a special type of counter which can count from 0 to 9 and back to 0 on application of a clock signal."),
+                qsTr("Connect the components to make sure that the count of 0 to 9 is visible in the seven segment dispay provided.")
             ]
         }
     ]
