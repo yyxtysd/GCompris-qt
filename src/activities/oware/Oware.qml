@@ -61,8 +61,6 @@ ActivityBase {
             property alias playerTwoLevelScore: playerTwoLevelScore
             property alias boardModel: boardModel
             property bool computerTurn: false
-            property var currentMove
-            property var player
             property int indexValue
             property bool gameEnded: false
             /* The grid starts from top, top houses are occupied by player two so start and end index for player two are 0 and 5 and start and end index for player one are 6 and 11 */
@@ -80,7 +78,7 @@ ActivityBase {
         Timer {
             id: trigComputerMove
             repeat: false
-            interval: 1000
+            interval: 2500
             onTriggered: {
                 if(items.computerTurn)
                     Activity.computerMove()
@@ -129,6 +127,8 @@ ActivityBase {
                 anchors.horizontalCenter: board.horizontalCenter
                 anchors.top: board.top
 
+                property int currentMove
+
                 Repeater {
                     id: cellGridRepeater
                     model: 12
@@ -140,9 +140,7 @@ ActivityBase {
                         width: board.width * (1/6.25)
                         property real circleRadius: width
                         property int value
-                        property var nextMove
-                        property int minIndex
-                        property int maxIndex
+                        property string nextMove
                         property real scoreBoardX
                         property int previousIndex
                         property alias grainRepeater: grainRepeater
@@ -153,7 +151,7 @@ ActivityBase {
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
                             z: 2
-                            rotation:  (background.width > background.height) ? 0 : 270
+                            rotation: (background.width > background.height) ? 0 : 270
                             fontSize: smallSize
                         }
 
@@ -161,16 +159,12 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
-                                for(var i = 0; i < grainRepeater.count; i++)
-                                    grainRepeater.itemAt(i).source = Activity.url + "grain2.png"
                                 cellGridRepeater.itemAt(items.indexValue).z = 0
                                 items.indexValue = index
-                                items.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
-                                items.player = items.playerOneTurn ? 0 : 1
-                                minIndex = items.playerOneTurn ? items.playerTwoStartIndex : items.playerOneStartIndex
-                                maxIndex = items.playerOneTurn ? items.playerTwoEndIndex : items.playerOneEndIndex
+                                boardGrid.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 var nextPlayer = items.playerOneTurn ? 1 : 0
-                                if ((!items.computerTurn && (items.currentMove >= minIndex && items.currentMove <= maxIndex) && Activity.isValidMove(items.currentMove,nextPlayer,Activity.house)) && Activity.house[items.currentMove] != 0) {
+
+                                if (!items.computerTurn && Activity.isValidMove(boardGrid.currentMove, nextPlayer, Activity.house)) {
                                     cellGridRepeater.itemAt(items.indexValue).z = 20
                                     firstMove()
                                     items.playerOneTurn = !items.playerOneTurn
@@ -253,8 +247,9 @@ ActivityBase {
 
                                 onCheckAnimation: {
                                     if(!currentSeeds && !items.gameEnded) {
-                                        if((twoPlayer) || (!twoPlayer && !items.playerOneTurn)) {
-                                            Activity.sowSeeds(items.currentMove,Activity.house,Activity.scoreHouse,items.player)
+                                        if(twoPlayer || !items.playerOneTurn) {
+                                            var nextPlayer = items.playerOneTurn ? 1 : 0
+                                            Activity.sowSeeds(boardGrid.currentMove, Activity.house, Activity.scoreHouse, nextPlayer)
                                         }
                                         moveSeedsTimer.start()
                                         if(!twoPlayer && !items.playerOneTurn)  {
@@ -267,13 +262,13 @@ ActivityBase {
                                 function startAnimation() {
                                     grainRepeater.itemAt(index).source = Activity.url + "grain.png"
                                     if(currentIndex >= 0 && currentSeeds > 0) {
-                                        if(nextMove == "right" && currentIndex >= 0)
+                                        if(nextMove == "right")
                                             xRightAnimation.start()
-                                        else if(nextMove == "up" && currentIndex >= 0)
+                                        else if(nextMove == "up")
                                             yUpAnimation.start()
                                         else if(nextMove == "left")
                                             xLeftAnimation.start()
-                                        else if(nextMove == "down" && currentIndex >= 0)
+                                        else if(nextMove == "down")
                                             yDownAnimation.start()
                                     }
                                     checkAnimation()
@@ -350,20 +345,18 @@ ActivityBase {
                                 property var xLeftAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x - (0.162 * board.width)
+                                    from: x; to: x - (0.162 * board.width)
                                     duration: 450
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
                                             if(moveCount == items.indexValue + 1 && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                nextMove = "left"
-                                                currentSeeds++
-                                                currentIndex++
-                                                nextMove = (items.indexValue == items.playerTwoStartIndex) ? "down" : "left"
-                                                startAnimation()
+                                                // don't drop seed if it's in the starting house
                                             }
-                                            totalMoves++;
-                                            currentSeeds--
-                                            currentIndex--;
+                                            else {
+                                                currentSeeds--
+                                                currentIndex--
+                                            }
+                                            totalMoves++
                                             moveCount--
                                             nextMove = (moveCount == items.playerTwoStartIndex) ? "down" : "left"
                                             startAnimation()
@@ -374,19 +367,18 @@ ActivityBase {
                                 property var xRightAnimation: NumberAnimation {
                                     target: grain
                                     properties: "x"
-                                    from: x ;to: x + (0.16 * board.width)
+                                    from: x; to: x + (0.16 * board.width)
                                     duration: 450
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
                                             if(moveCount == items.indexValue - 1 && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                currentSeeds++
-                                                currentIndex++
-                                                nextMove = (items.indexValue == items.playerOneEndIndex) ? "up" : "right"
-                                                startAnimation()
+                                                // don't drop seed if it's in the starting house
+                                            }
+                                            else {
+                                                currentSeeds--
+                                                currentIndex--
                                             }
                                             totalMoves++
-                                            currentSeeds--
-                                            currentIndex--
                                             moveCount++
                                             nextMove = (moveCount == items.playerOneEndIndex) ? "up" : "right"
                                             startAnimation()
@@ -401,15 +393,14 @@ ActivityBase {
                                     duration: 350
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
+                                            // don't drop seed if it's in the starting house
                                             if(moveCount == items.playerOneEndIndex && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                currentSeeds++
-                                                currentIndex++
-                                                nextMove = "left"
-                                                startAnimation()
+                                            }
+                                            else {
+                                                currentSeeds--
+                                                currentIndex--
                                             }
                                             totalMoves++
-                                            currentSeeds--
-                                            currentIndex--
                                             moveCount = items.playerTwoEndIndex
                                             nextMove = "left"
                                             startAnimation()
@@ -426,14 +417,13 @@ ActivityBase {
                                     onStopped: {
                                         if(currentIndex >= 0 && currentSeeds > 0) {
                                             if(moveCount == items.playerTwoStartIndex && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                currentSeeds++
-                                                currentIndex++
-                                                nextMove = "right"
-                                                startAnimation()
+                                                // don't drop seed if it's in the starting house
+                                            }
+                                            else {
+                                                currentSeeds--
+                                                currentIndex--
                                             }
                                             totalMoves++
-                                            currentSeeds--
-                                            currentIndex--
                                             moveCount = items.playerOneStartIndex
                                             nextMove = "right"
                                             startAnimation()
@@ -446,102 +436,22 @@ ActivityBase {
                 }
             }
 
-            Image {
+            PlayerScoreBox {
                 id: playerOneScoreBox
                 height: board.height * 0.54
                 width: height
-                source: Activity.url + "/score.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: boardModel.left
-
-                Flow {
-                    width: parent.width
-                    height: parent.height
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        leftMargin: parent.width * 0.15
-                        topMargin: parent.height * 0.15
-                        right: parent.right
-                        rightMargin: parent.width * 0.15
-                        bottom: parent.bottom
-                        bottomMargin: parent.height * 0.2
-                    }
-
-                    Repeater {
-                        id: playerOneScoreRepeater
-                        model: items.playerOneScore
-
-                        Image {
-                            id: playerOneSeedsImage
-                            source: Activity.url + "grain2.png"
-                            height: board.width * (1 / 7.25) * 0.17
-                            width: board.width * (1 / 7.25) * 0.17
-//                             x: parent.width/2 + Activity.getX(parent.width/6, index,items.playerOneScore)
-//                             y: parent.width/2 + Activity.getY(parent.width/5, index,items.playerOneScore)
-                        }
-                    }
-                }
-
-                GCText {
-                    id: playerOneScoreText
-                    color: "white"
-                    anchors.bottom: parent.top
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    fontSize: smallSize
-                    text: items.playerOneScore
-                    horizontalAlignment: Text.AlignHCenter
-                    rotation:  (background.width > background.height) ? 0 : 270
-                    wrapMode: TextEdit.WordWrap
-                }
+                playerScore: items.playerOneScore
             }
 
-            Image {
-                id: playerTwoScore
+            PlayerScoreBox {
+                id: playerTwoScoreBox
                 height: board.height * 0.54
                 width: height
-                source: Activity.url + "/score.png"
-                anchors.left: boardModel.right
                 anchors.verticalCenter: parent.verticalCenter
-
-                Flow {
-                    width: parent.width
-                    height: parent.height
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        leftMargin: parent.width * 0.15
-                        topMargin: parent.height * 0.15
-                        right: parent.right
-                        rightMargin: parent.width * 0.15
-                        bottom: parent.bottom
-                        bottomMargin: parent.height * 0.2
-                    }
-
-                    Repeater {
-                        id: playerTwoScoreRepeater
-                        model: items.playerTwoScore
-                        Image {
-                            id: playerTwoSeedsImage
-                            source: Activity.url + "grain2.png"
-                            height: board.width * (1 / 7.25) * 0.2
-                            width: board.width * (1 / 7.25) * 0.2
-                            x: parent.width/2 + Activity.getX(board.width * (1/6.25), index,items.playerTwoScore)
-                            y: parent.width/2 + Activity.getY(board.width * (1/5.25), index,items.playerTwoScore)
-                        }
-                    }
-                }
-
-                GCText {
-                    id: playerTwoScoreText
-                    color: "white"
-                    fontSize: smallSize
-                    text: items.playerTwoScore
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.top
-                    rotation:  (background.width > background.height) ? 0 : 270
-                    wrapMode: TextEdit.WordWrap
-                }
+                anchors.left: boardModel.right
+                playerScore: items.playerTwoScore
             }
         }
 
@@ -556,8 +466,7 @@ ActivityBase {
                 tutorialDetails: Activity.tutorialInstructions
                 onSkipPressed: {
                     Activity.initLevel()
-                    tutorialImage.z = 0
-                    playerOneLevelScore.beginTurn()
+                    tutorialImage.visible = false
                 }
             }
         }
@@ -602,8 +511,9 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: twoPlayer ? (help | home | reload) : (tutorialSection.visible ?
-                                                                                       (help | home) : (help | home | level | reload)) }
+            content: BarEnumContent {
+                value: twoPlayer ? (help | home | reload) :
+                       (tutorialSection.visible ? (help | home) : (help | home | level | reload)) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
