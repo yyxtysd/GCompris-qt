@@ -37,6 +37,12 @@ var connected = []
 var determiningComponents = []
 var processingAnswer
 
+var currentZoom
+var maxZoom = 1
+var minZoom = 0.5
+var defaultZoom = 1
+var zoomStep = 0.25
+
 function start(items_) {
 
     items = items_
@@ -76,6 +82,8 @@ function initLevel() {
     deselect()
     updateToolTip("")
 
+    currentZoom = defaultZoom
+
     if (!items.isTutorialMode) {
         items.tutorialInstruction.visible = false
         loadFreeMode(sizeMultiplier)
@@ -106,8 +114,8 @@ function initLevel() {
                           "posY": levelProperties.playAreaComponentPositionY[i],
                           "imgSrc": currentPlayAreaComponent.imageName,
                           "toolTipTxt": currentPlayAreaComponent.toolTipText,
-                          "imgWidth": currentPlayAreaComponent.width,
-                          "imgHeight": currentPlayAreaComponent.height,
+                          "imgWidth": currentPlayAreaComponent.width * currentZoom,
+                          "imgHeight": currentPlayAreaComponent.height * currentZoom,
                           "destructible": false
                         });
         }
@@ -331,6 +339,31 @@ function checkAnswer() {
     }
 }
 
+function zoomIn() {
+    var previousZoom = currentZoom
+    currentZoom += zoomStep
+    if (currentZoom > maxZoom)
+        currentZoom = maxZoom
+    var zoomRatio = currentZoom / previousZoom
+    updateComponentDimension(zoomRatio)
+}
+
+function zoomOut() {
+    var previousZoom = currentZoom
+    currentZoom -= zoomStep
+    if (currentZoom < minZoom)
+        currentZoom = minZoom
+    var zoomRatio = currentZoom / previousZoom
+    updateComponentDimension(zoomRatio)
+}
+
+function updateComponentDimension(zoomRatio) {
+    for (var i = 0; i < components.length; i++) {
+        components[i].imgWidth *= zoomRatio
+        components[i].imgHeight *= zoomRatio
+    }
+}
+
 function nextLevel() {
 
     if(numberOfLevel < ++currentLevel ) {
@@ -381,8 +414,8 @@ function createComponent(x, y, componentIndex) {
                             "posY": y,
                             "imgSrc": component.imageName,
                             "toolTipTxt": component.toolTipTxt,
-                            "imgWidth": component.imageWidth,
-                            "imgHeight": component.imageHeight,
+                            "imgWidth": component.imageWidth * currentZoom,
+                            "imgHeight": component.imageHeight * currentZoom,
                             "destructible": true
                         });
 
