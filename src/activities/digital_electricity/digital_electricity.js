@@ -217,17 +217,17 @@ function checkAnswer() {
                 updateComponent(switch2.index)
 
                 var operationResult
-                if (currentLevel == 6) {
+                if (currentLevel == 22) {
                     operationResult = A ^ B
-                } else if (currentLevel == 13 || currentLevel == 17) {
+                } else if (currentLevel == 12 || currentLevel == 16) {
                     operationResult = A & B
-                } else if (currentLevel == 14 || currentLevel == 18) {
+                } else if (currentLevel == 13 || currentLevel == 17) {
                     operationResult = A | B
-                } else if (currentLevel == 15) {
+                } else if (currentLevel == 14) {
                     operationResult = !(A | B)
-                } else if (currentLevel == 19) {
+                } else if (currentLevel == 18) {
                     operationResult = !(A & B)
-                } else if (currentLevel == 20) {
+                } else if (currentLevel == 19) {
                     operationResult = (A <= B)
                 }
 
@@ -266,9 +266,9 @@ function checkAnswer() {
                     updateComponent(switch3.index)
 
                     var operationResult
-                    if (currentLevel == 8) {
+                    if (currentLevel == 7) {
                         operationResult = A | (B & C)
-                    } else if (currentLevel == 10) {
+                    } else if (currentLevel == 9) {
                         operationResult = A ^ (B ^ C)
                     }
 
@@ -288,7 +288,7 @@ function checkAnswer() {
         }
         items.bonus.good('tux')
     } else if (problemType == items.tutorialDataset.problemType.others) {
-        if (currentLevel == 21) {
+        if (currentLevel == 20) {
             var bcdToSevenSegment = determiningComponents[0]
 
             var decimalValue =
@@ -304,7 +304,7 @@ function checkAnswer() {
             items.bonus.bad('tux')
             processingAnswer = false
             return
-        } else if (currentLevel == 22) {
+        } else if (currentLevel == 21) {
             var bcdCounter = determiningComponents[0]
 
             var bcdOutput =
