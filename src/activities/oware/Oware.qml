@@ -61,7 +61,7 @@ ActivityBase {
             property alias playerTwoLevelScore: playerTwoLevelScore
             property alias boardModel: boardModel
             property bool computerTurn: false
-            property int indexValue
+            property int selectedIndexValue
             property bool gameEnded: false
             /* The grid starts from top, top houses are occupied by player two so start and end index for player two are 0 and 5 and start and end index for player one are 6 and 11 */
             readonly property int playerOneStartIndex: 6
@@ -139,14 +139,14 @@ ActivityBase {
                         height: board.height/2
                         width: board.width * (1/6.25)
                         property real circleRadius: width
-                        property int value
+                        property int numberOfSeedsInHouse
                         property string nextMove
                         property real scoreBoardX
                         property int previousIndex
                         property alias grainRepeater: grainRepeater
 
                         GCText {
-                            text: value
+                            text: numberOfSeedsInHouse
                             color: "white"
                             anchors.top: parent.top
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -159,13 +159,13 @@ ActivityBase {
                             id: buttonClick
                             anchors.fill: parent
                             onPressed: {
-                                cellGridRepeater.itemAt(items.indexValue).z = 0
-                                items.indexValue = index
+                                cellGridRepeater.itemAt(items.selectedIndexValue).z = 0
+                                items.selectedIndexValue = index
                                 boardGrid.currentMove = items.playerOneTurn ? (index - 6) : (11 - index)
                                 var nextPlayer = items.playerOneTurn ? 1 : 0
 
                                 if (!items.computerTurn && Activity.isValidMove(boardGrid.currentMove, nextPlayer, Activity.house)) {
-                                    cellGridRepeater.itemAt(items.indexValue).z = 20
+                                    cellGridRepeater.itemAt(items.selectedIndexValue).z = 20
                                     firstMove()
                                     items.playerOneTurn = !items.playerOneTurn
                                 }
@@ -173,29 +173,28 @@ ActivityBase {
                         }
 
                         function scoresAnimation(scoreDirection,seedsCount,currentScoreIndex) {
-                            value = seedsCount
-                            grainRepeater.model = value
+                            numberOfSeedsInHouse = seedsCount
+                            grainRepeater.model = numberOfSeedsInHouse
                             print(grainRepeater.model)
                             previousIndex = currentScoreIndex
                             scoreBoardX = cellGridRepeater.itemAt(currentScoreIndex).x
                             for(var i = 0; i < grainRepeater.count; i++) {
-                                print("hhhh")
                                 grainRepeater.itemAt(i).startScoreAnimation(scoreDirection)
                             }
                         }
 
                         function firstMove() {
                             items.boardModel.enabled = false
-                            /* If the indexValue on which player has clicked is between 6 and 11 then the first move will be towards right. */
-                            if(items.indexValue >= items.playerOneStartIndex && items.indexValue < items.playerOneEndIndex)
+                            /* If the selectedIndexValue on which player has clicked is between 6 and 11 then the first move will be towards right. */
+                            if(items.selectedIndexValue >= items.playerOneStartIndex && items.selectedIndexValue < items.playerOneEndIndex)
                                 nextMove = "right"
-                            /* Else if the indexValue on which player has clicked is 11 then first move will be up */
-                            else if(items.indexValue == items.playerOneEndIndex)
+                            /* Else if the selectedIndexValue on which player has clicked is 11 then first move will be up */
+                            else if(items.selectedIndexValue == items.playerOneEndIndex)
                                 nextMove = "up"
-                            /* Similarly if the indexValue on which player has clicked is between 0 and 5 then first move will be left and if equal to 0 then it will be down. */
-                            else if(items.indexValue > items.playerTwoStartIndex && items.indexValue <= items.playerTwoEndIndex)
+                            /* Similarly if the selectedIndexValue on which player has clicked is between 0 and 5 then first move will be left and if equal to 0 then it will be down. */
+                            else if(items.selectedIndexValue > items.playerTwoStartIndex && items.selectedIndexValue <= items.playerTwoEndIndex)
                                 nextMove = "left"
-                            else if(items.indexValue == items.playerTwoStartIndex)
+                            else if(items.selectedIndexValue == items.playerTwoStartIndex)
                                 nextMove = "down"
                             for(var i = 0; i < grainRepeater.count; i++) {
                                 grainRepeater.itemAt(i).startAnimation()
@@ -211,28 +210,28 @@ ActivityBase {
                             items.playerOneScore = Activity.scoreHouse[0]
 //                             Activity.setAfterValues(Activity.house)
                             print(items.cellGridRepeater.itemAt(previousIndex).grainRepeater.model)
-//                             Activity.setValues(Activity.house)
-                            value = 0
+//                             Activity.setHouseAndScoreValues(Activity.house)
+                            numberOfSeedsInHouse = 0
                             grainRepeater.model = value
                         }
 
                         Repeater {
                             id: grainRepeater
-                            model: value
+                            model: numberOfSeedsInHouse
 
                             Image {
                                 id: grain
                                 source: Activity.url + "grain2.png"
                                 height: circleRadius * 0.2
                                 width: circleRadius * 0.2
-                                x: circleRadius/2 + Activity.getX(circleRadius/6, index,value)
-                                y: circleRadius/2 + Activity.getY(circleRadius/5, index,value)
+                                x: circleRadius/2 + Activity.getX(circleRadius/6, index,numberOfSeedsInHouse)
+                                y: circleRadius/2 + Activity.getY(circleRadius/5, index,numberOfSeedsInHouse)
 
                                 property int currentIndex: index
                                 property int currentSeeds: grainRepeater.count
                                 property int totalSeeds: grainRepeater.count
                                 // moveCount is the current index of the moving seed wrt board.
-                                property int moveCount: items.indexValue
+                                property int moveCount: items.selectedIndexValue
                                 property int totalMoves: 0
                                 signal checkAnimation
 
@@ -241,7 +240,7 @@ ActivityBase {
                                     repeat: false
                                     interval: 500
                                     onTriggered: {
-                                        Activity.setValues(Activity.house)
+                                        Activity.setHouseAndScoreValues(Activity.house)
                                     }
                                 }
 
@@ -272,6 +271,19 @@ ActivityBase {
                                             yDownAnimation.start()
                                     }
                                     checkAnimation()
+                                }
+
+                                function animation(playerEndIndex) {
+                                    if(currentIndex >= 0 && currentSeeds > 0) {
+                                        if(moveCount == playerEndIndex && totalMoves%items.housesCount == items.housesCount - 1) {
+                                            // don't drop seed if it's in the starting house
+                                        }
+                                        else {
+                                            currentSeeds--
+                                            currentIndex--
+                                        }
+                                        totalMoves++
+                                    }
                                 }
 
                                 function startScoreAnimation(scoreDirection) {
@@ -348,19 +360,10 @@ ActivityBase {
                                     from: x; to: x - (0.162 * board.width)
                                     duration: 450
                                     onStopped: {
-                                        if(currentIndex >= 0 && currentSeeds > 0) {
-                                            if(moveCount == items.indexValue + 1 && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                // don't drop seed if it's in the starting house
-                                            }
-                                            else {
-                                                currentSeeds--
-                                                currentIndex--
-                                            }
-                                            totalMoves++
+                                            animation(items.selectedIndexValue + 1)
                                             moveCount--
                                             nextMove = (moveCount == items.playerTwoStartIndex) ? "down" : "left"
                                             startAnimation()
-                                        }
                                     }
                                 }
 
@@ -370,19 +373,10 @@ ActivityBase {
                                     from: x; to: x + (0.16 * board.width)
                                     duration: 450
                                     onStopped: {
-                                        if(currentIndex >= 0 && currentSeeds > 0) {
-                                            if(moveCount == items.indexValue - 1 && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                // don't drop seed if it's in the starting house
-                                            }
-                                            else {
-                                                currentSeeds--
-                                                currentIndex--
-                                            }
-                                            totalMoves++
+                                            animation(items.selectedIndexValue - 1)
                                             moveCount++
                                             nextMove = (moveCount == items.playerOneEndIndex) ? "up" : "right"
                                             startAnimation()
-                                        }
                                     }
                                 }
 
@@ -392,19 +386,10 @@ ActivityBase {
                                     from: y; to: y - 0.5 * board.height
                                     duration: 350
                                     onStopped: {
-                                        if(currentIndex >= 0 && currentSeeds > 0) {
-                                            // don't drop seed if it's in the starting house
-                                            if(moveCount == items.playerOneEndIndex && totalMoves%items.housesCount == items.housesCount - 1) {
-                                            }
-                                            else {
-                                                currentSeeds--
-                                                currentIndex--
-                                            }
-                                            totalMoves++
-                                            moveCount = items.playerTwoEndIndex
-                                            nextMove = "left"
-                                            startAnimation()
-                                        }
+                                        animation(items.playerOneEndIndex)
+                                        moveCount = items.playerTwoEndIndex
+                                        nextMove = "left"
+                                        startAnimation()
                                     }
                                 }
 
@@ -415,19 +400,10 @@ ActivityBase {
                                     from: y; to: y + 0.5 * board.height
                                     duration: 350
                                     onStopped: {
-                                        if(currentIndex >= 0 && currentSeeds > 0) {
-                                            if(moveCount == items.playerTwoStartIndex && totalMoves%items.housesCount == items.housesCount - 1) {
-                                                // don't drop seed if it's in the starting house
-                                            }
-                                            else {
-                                                currentSeeds--
-                                                currentIndex--
-                                            }
-                                            totalMoves++
-                                            moveCount = items.playerOneStartIndex
-                                            nextMove = "right"
-                                            startAnimation()
-                                        }
+                                        animation(items.playerTwoStartIndex)
+                                        moveCount = items.playerOneStartIndex
+                                        nextMove = "right"
+                                        startAnimation()
                                     }
                                 }
                             }

@@ -37,11 +37,15 @@ var finalMove
 var twoPlayer
 var capturedHousesIndex
 var tutorialInstructions = [{
-        "instruction": qsTr("<li>- Each player has 6 houses with 4 seeds each.</li><li>- Lower 6 houses are of player 1.</li><li>- Upper 6 houses are for player 2.</li>"),
+        "instruction": qsTr("<h5><b>Introduction: </b></h5><ul><li>Each player has 6 houses with 4 seeds each.</li><li>Lower 6 houses are for player 1.</li><li>Upper 6 houses are for player 2.</li></ul>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial1.png"
     },
     {
-        "instruction": qsTr("<h3><b>Sowing: </b></h3><li>- Chose any house from your set of houses. </li> <li>- All seeds from that house will be picked and dropped in each house counter-clockwise.</li><li><b>Example: </b>If player 1 choses second house, blue seeds from the second house below are picked and dropped in next houses (yellow seeds represent the dropped seeds)."),
+        "instruction": qsTr("<h4><b>Sowing: </b></h4><ul><li>Chose any house from your set of houses. </li> <li>All seeds from that house will be picked and dropped in each house counter-clockwise</li></ul>"),
+        "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
+    },
+    {
+        "instruction": qsTr("<h5><b>Example: </b></h5>If player 1 choses second house, blue seeds from the second house below are picked and dropped in next houses (yellow seeds represent the dropped seeds)."),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial2.png"
     },
     {
@@ -49,15 +53,15 @@ var tutorialInstructions = [{
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial3.png"
     },
     {
-        "instruction": qsTr("<h3><b>Capturing:</b></h3> The seeds are captured when all below conditions are true: <li>- Last seed is dropped into the opponent's house. <li>- Total number of seeds in that house are now two or three </li><li><b>Those seeds will go to your scoring box </b></li>"),
+        "instruction": qsTr("<h6><b>Capturing:</b></h6> The seeds are captured when all below conditions are true:<ul> <li> Last seed is dropped into the opponent's house. <li>Total number of seeds in that house are now two or three </li><li><b>Those seeds will go to your scoring box.</b></li></ul>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial4.png"
     },
     {
-        "instruction": qsTr("<li>If all the houses of one player are <b>empty</b>, the other player has to take such a move that it gives one or more seeds to the other player to continue the game.</li><li><b>Example: </b>Player 1 has no more seeds left, so player 2 needs to give seeds to player 1 in next move.</li>"),
+        "instruction": qsTr("If all the houses of one player are <b>empty</b>, the other player has to take such a move that it gives one or more seeds to the other player to continue the game.<li><b>Example: </b>Player 1 has no more seeds left, so player 2 needs to give seeds to player 1 in next move.</li>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial5.png"
     },
     {
-        "instruction": qsTr("<li>- The player who gets 25 seeds first wins the game.</li><li>- If the current player is unable to give any seed to the opponent, then the current player keeps all the seeds in the houses of his side and the game ends.</li> <li><b>Example:</b> Player 1 has no more seeds, neither player 2 can give any so player 2 will take the seed and game ends.</b>"),
+        "instruction": qsTr("<ul><li>The player who gets 25 seeds first wins the game.</li><li>If the current player is unable to give any seed then he keeps all the seeds of his houses and the game ends.</li> <li><b>Example:</b> Player 1 has no seeds, neither player 2 can give any so player 2 will take the seed and game ends.</b></li></ul>"),
         "instructionImage": "qrc:/gcompris/src/activities/oware/resource/tutorial6.png"
     }
 ]
@@ -74,7 +78,7 @@ function stop() {}
 // Function to reload the activity.
 function reset() {
     for (var i = 0; i < 12; i++)
-        items.cellGridRepeater.itemAt(i).value = 0
+        items.cellGridRepeater.itemAt(i).numberOfSeedsInHouse = 0
     items.playerOneLevelScore.endTurn()
     items.playerTwoLevelScore.endTurn()
     items.playerOneLevelScore.beginTurn()
@@ -93,7 +97,7 @@ function initLevel() {
     items.playerTwoScore = 0
     scoreHouse = [0, 0]
     depth = currentLevel
-    setValues(house)
+    setHouseAndScoreValues(house)
 }
 
 function nextLevel() {
@@ -112,14 +116,14 @@ function previousLevel() {
 }
 
 // Function to get the x position of seeds.
-function getX(radius, index, value) {
-    var step = (2 * Math.PI) * index / value;
+function getX(radius, index, numberOfSeedsInHouse) {
+    var step = (2 * Math.PI) * index / numberOfSeedsInHouse;
     return radius * Math.cos(step);
 }
 
 // Function to get the y position of seeds.
-function getY(radius, index, value) {
-    var step = (2 * Math.PI) * index / value;
+function getY(radius, index, numberOfSeedsInHouse) {
+    var step = (2 * Math.PI) * index / numberOfSeedsInHouse;
     return radius * Math.sin(step);
 }
 
@@ -127,18 +131,19 @@ function computerMove() {
     if (items.playerOneScore - items.playerTwoScore >= maxDiff[currentLevel]) {
         var houseClone = house.slice()
         var scoreClone = scoreHouse.slice()
-        var index = alphaBeta(4, -200, 200, houseClone, scoreClone, 0, lastMove)
+        var heuristicValue
+        var index = alphaBeta(4, -200, 200, houseClone, scoreClone, 0, lastMove, heuristicValue)
         finalMove = index[0]
     }
     else {
         randomMove()
     }
     sowSeeds(finalMove, house, scoreHouse, 1)
-    items.cellGridRepeater.itemAt(items.indexValue).z = 0
-    items.indexValue = 11 - finalMove
+    items.cellGridRepeater.itemAt(items.selectedIndexValue).z = 0
+    items.selectedIndexValue = 11 - finalMove
     if(!items.gameEnded) {
-        items.cellGridRepeater.itemAt(items.indexValue).z = 20
-        items.cellGridRepeater.itemAt(items.indexValue).firstMove()
+        items.cellGridRepeater.itemAt(items.selectedIndexValue).z = 20
+        items.cellGridRepeater.itemAt(items.selectedIndexValue).firstMove()
         items.playerOneTurn = !items.playerOneTurn
         items.computerTurn = false
     }
@@ -154,17 +159,17 @@ function randomMove() {
 }
 
 function gameOver(board, score) {
-    if (score[0] > 24 || score[1] > 24)
+    if (score[0] > 24 || score[1] > 24 || (score[0] == 24 && score[1] == 24))
         return true
     return false
 }
 
-function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
-    var heuristicValue
+function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove,heuristicValue) {
     var childHeuristics
     var bestMove
     if (depth == 0 || gameOver(board, score)) {
         heuristicValue = heuristicEvaluation(score)
+        print("depth over heauristic value,alpha,beta",heuristicValue,alpha,beta);
         return [-1, heuristicValue]
     }
     for (var move = 0; move < 12; move++) {
@@ -173,7 +178,9 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
         board = house.slice()
         score = scoreHouse.slice()
         var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
-        var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove)
+//         print("lst move", JSON.stringify(lastMoveAI))
+        var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove,childHeuristics)
+//         print(out)
         childHeuristics = out[1]
         if (nextPlayer) {
             if (beta > childHeuristics) {
@@ -192,6 +199,7 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove) {
         }
     }
     heuristicValue = nextPlayer ? beta : alpha
+    print("one result bestMove,heuristicValue,alpha,beta",bestMove,depth,heuristicValue,alpha,beta);
     return [bestMove, heuristicValue]
 }
 
@@ -202,7 +210,7 @@ function heuristicEvaluation(score) {
         if (playerScores[i] > 24)
             playerScores[i] += 100
     }
-    return playerScores[0] - playerScores[1]
+    return playerScores[1] - playerScores[0]
 }
 
 function isValidMove(move, nextPlayer, board) {
@@ -222,28 +230,28 @@ function isValidMove(move, nextPlayer, board) {
         return true
 }
 
-function setValues(board) {
+function setHouseAndScoreValues(board) {
     items.gameEnded = false
-    if(items.playerTwoScore != scoreHouse[1]) {
-        for(var i = 0; i < capturedHousesIndex.length; i++) {
-//             print("details",JSON.stringify(capturedHousesIndex[i]))
-            items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("right",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
-        }
-    }
-    else if(items.playerOneScore != scoreHouse[0]) {
-        for(var i = 0; i < capturedHousesIndex.length; i++) {
-//             print("details",JSON.stringify(capturedHousesIndex[i]))
-            items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("left",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
-        }
-    }
+//     if(items.playerTwoScore != scoreHouse[1]) {
+//         for(var i = 0; i < capturedHousesIndex.length; i++) {
+// //             print("details",JSON.stringify(capturedHousesIndex[i]))
+//             items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("right",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
+//         }
+//     }
+//     else if(items.playerOneScore != scoreHouse[0]) {
+//         for(var i = 0; i < capturedHousesIndex.length; i++) {
+// //             print("details",JSON.stringify(capturedHousesIndex[i]))
+//             items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("left",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
+//         }
+//     }
 
     for (var i = 6, j = 0; i < 12, j < 6; j++, i++)
-        items.cellGridRepeater.itemAt(i).value = board[j]
+        items.cellGridRepeater.itemAt(i).numberOfSeedsInHouse = board[j]
     for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
-        items.cellGridRepeater.itemAt(i).value = board[j]
-//     for(i = 0; i < 12; i++) {
-//         print(items.cellGridRepeater.itemAt(i).value)
-//     }
+        items.cellGridRepeater.itemAt(i).numberOfSeedsInHouse = board[j]
+
+    items.playerTwoScore = scoreHouse[1]
+    items.playerOneScore = scoreHouse[0]
 
     if(items.playerOneScore == 24 && items.playerTwoScore == 24)
         items.bonus.good("flower")
@@ -332,7 +340,7 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
 	if (board[j]) {
 	    playerSideEmpty = false;
 	    break;
-	}
+        }
     }
 
     if (playerSideEmpty) {

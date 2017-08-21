@@ -1,4 +1,4 @@
-/* GCompris - Oware.qml
+/* GCompris - PlayerScoreBox.qml
  *
  * Copyright (C) 2017 Divyam Madaan <divyam3897@gmail.com>
  *
