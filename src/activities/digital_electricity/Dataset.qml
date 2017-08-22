@@ -232,6 +232,9 @@ QtObject {
             playAreaComponentPositionX: [0.2, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.2, 0.5, 0.8, 0.5],
             type: [problemType.equation3Variables],
+            result: function (A, B, C) {
+                return A | (B & C)
+            },
             introMessage: [
                 qsTr("Light the bulb using the components provided such that the bulb will glow under the following two circumstances:"),
                 qsTr("1. The first switch is turned ON, or"),
@@ -262,6 +265,9 @@ QtObject {
             playAreaComponentPositionX: [0.2, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.2, 0.4, 0.6, 0.4],
             type: [problemType.equation3Variables],
+            result: function (A, B, C) {
+                return A ^ B ^ C
+            },
             introMessage: [
                 qsTr("Light the bulb using the three switches such that the bulb glows when odd number of the switches are turned on")
             ]
@@ -303,6 +309,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return A & B
+            },
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned on.")
             ]
@@ -316,6 +325,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return A | B
+            },
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb glows when either of the switches are turned on.")
             ]
@@ -329,6 +341,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return !(A | B)
+            },
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned off.")
             ]
@@ -355,6 +370,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return A & B
+            },
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb glows only when both of the switches are turned on.")
             ]
@@ -368,6 +386,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return A | B
+            },
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb glows when either of the switches are turned on.")
             ]
@@ -381,6 +402,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.2, 0.2, 0.8],
             playAreaComponentPositionY: [0.5, 0.4, 0.6, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return !(A & B)
+            },
             introMessage: [
                 qsTr("Create a circuit using the components provided such that the bulb will glow when at least one of the switches are turned off.")
             ]
@@ -394,6 +418,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.0, 0.4, 0.9],
             playAreaComponentPositionY: [0.2, 0.4, 0.5, 0.5],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return A <= B
+            },
             introMessage: [
                 qsTr("A comparator takes two numbers (A and B) as input and produces 3 values as output. First value is 1 if A < B, second value is 1 for A = B and third value is 1 for A > B."),
                 qsTr("Create a circuit using the components provided such that the bulb will glow when the value of the current flowing through the first switch is less than or equal to that of the second switch.")
@@ -439,6 +466,9 @@ QtObject {
             playAreaComponentPositionX: [0.0, 0.0, 0.1, 0.1, 0.8],
             playAreaComponentPositionY: [0.0, 0.8, 0.3, 0.6, 0.4],
             type: [problemType.equation2Variables],
+            result: function (A, B) {
+                return A ^ B
+            },
             introMessage: [
                 qsTr("Light the bulb using both the switches such that the bulb will glow only when either the first switch is on and the second switch is off or the first switch is off and the second switch is on.")
             ]

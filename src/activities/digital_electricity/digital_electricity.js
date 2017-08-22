@@ -185,6 +185,7 @@ function checkAnswer() {
 
     processingAnswer = true
     var problemType = items.tutorialDataset.tutorialLevels[currentLevel - 1].type
+    var levelProperties = items.tutorialDataset.tutorialLevels[currentLevel - 1]
 
     if (problemType == items.tutorialDataset.problemType.lightTheBulb) {
         if (determiningComponents[0].inputTerminals.itemAt(0).value == 1) {
@@ -232,20 +233,7 @@ function checkAnswer() {
                 updateComponent(switch1.index)
                 updateComponent(switch2.index)
 
-                var operationResult
-                if (currentLevel == 22) {
-                    operationResult = A ^ B
-                } else if (currentLevel == 12 || currentLevel == 16) {
-                    operationResult = A & B
-                } else if (currentLevel == 13 || currentLevel == 17) {
-                    operationResult = A | B
-                } else if (currentLevel == 14) {
-                    operationResult = !(A | B)
-                } else if (currentLevel == 18) {
-                    operationResult = !(A & B)
-                } else if (currentLevel == 19) {
-                    operationResult = (A <= B)
-                }
+                var operationResult = levelProperties.result(A, B)
 
                 if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
                     switch1.imgSrc = switch1InitialState
@@ -281,12 +269,7 @@ function checkAnswer() {
                     updateComponent(switch2.index)
                     updateComponent(switch3.index)
 
-                    var operationResult
-                    if (currentLevel == 7) {
-                        operationResult = A | (B & C)
-                    } else if (currentLevel == 9) {
-                        operationResult = A ^ (B ^ C)
-                    }
+                    var operationResult = levelProperties.result(A, B, C)
 
                     if (operationResult != digitalLight.inputTerminals.itemAt(0).value) {
                         switch1.imgSrc = switch1InitialState
