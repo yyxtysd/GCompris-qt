@@ -43,6 +43,22 @@ var minZoom = 0.5
 var defaultZoom = 1
 var zoomStep = 0.25
 
+var direction = {
+    LEFT: -1,
+    RIGHT: 1,
+    UP: -2,
+    DOWN: 2
+}
+
+var viewPort = {
+    leftExtreme: 0,
+    rightExtreme: 2,
+    topExtreme: 0,
+    bottomExtreme: 2.5,
+    leftEdge: 0,
+    topEdge: 0
+}
+
 function start(items_) {
 
     items = items_
@@ -110,8 +126,8 @@ function initLevel() {
             components[index] = staticElectricalComponent.createObject(
                         items.playArea, {
                           "index": index,
-                          "posX": levelProperties.playAreaComponentPositionX[i],
-                          "posY": levelProperties.playAreaComponentPositionY[i],
+                          "posX": levelProperties.playAreaComponentPositionX[i] * currentZoom,
+                          "posY": levelProperties.playAreaComponentPositionY[i] * currentZoom,
                           "imgSrc": currentPlayAreaComponent.imageName,
                           "toolTipTxt": currentPlayAreaComponent.toolTipText,
                           "imgWidth": currentPlayAreaComponent.width * currentZoom,
@@ -359,8 +375,60 @@ function zoomOut() {
 
 function updateComponentDimension(zoomRatio) {
     for (var i = 0; i < components.length; i++) {
+        components[i].posX *= zoomRatio
+        components[i].posY *= zoomRatio
         components[i].imgWidth *= zoomRatio
         components[i].imgHeight *= zoomRatio
+    }
+}
+
+function move(_direction) {
+    var x, y
+    x = 0
+    y = 0
+    if (_direction == direction.RIGHT) {
+        x = 0.1
+    } else if (_direction == direction.LEFT) {
+        x = -0.1
+    } else if (_direction == direction.UP) {
+        y = -0.1
+    } else if (_direction == direction.DOWN) {
+        y = 0.1
+    }
+
+    if (x == 0.1) {
+        var viewPortRightEdge = Math.round(((viewPort.leftEdge + 0.1) + (1 / currentZoom)) * 100) / 100
+        if ( viewPortRightEdge > viewPort.rightExtreme) {
+            return
+        } else {
+            viewPort.leftEdge = Math.round((viewPort.leftEdge + 0.1) * 100) / 100
+        }
+    } else if (x == -0.1) {
+        var viewportLeftEdge = Math.round(((viewPort.leftEdge - 0.1)) * 100) / 100
+        if (viewportLeftEdge < viewPort.leftExtreme) {
+            return
+        } else {
+            viewPort.leftEdge = Math.round((viewPort.leftEdge - 0.1) * 100) / 100
+        }
+    } else if (y == 0.1) {
+        var viewPortBottomEdge = Math.round(((viewPort.topEdge + 0.1) + (1 / currentZoom)) * 100) / 100
+        if (viewPortBottomEdge > viewPort.bottomExtreme) {
+            return
+        } else {
+            viewPort.topEdge = Math.round((viewPort.topEdge + 0.1) * 100) / 100
+        }
+    } else if (y == -0.1) {
+        var viewportTopEdge = Math.round((viewPort.topEdge - 0.1) * 100) / 100
+        if (viewportTopEdge < viewPort.topExtreme) {
+            return
+        } else {
+            viewPort.topEdge = Math.round((viewPort.topEdge - 0.1) * 100) / 100
+        }
+    }
+
+    for (var i = 0; i < components.length; i++) {
+        components[i].posX -= x
+        components[i].posY -= y
     }
 }
 

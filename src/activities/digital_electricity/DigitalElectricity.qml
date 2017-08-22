@@ -56,6 +56,18 @@ ActivityBase {
             if (event.key == Qt.Key_Minus) {
                 Activity.zoomOut()
             }
+            if (event.key == Qt.Key_Right) {
+                Activity.move(Activity.direction.RIGHT)
+            }
+            if (event.key == Qt.Key_Left) {
+                Activity.move(Activity.direction.LEFT)
+            }
+            if (event.key == Qt.Key_Up) {
+                Activity.move(Activity.direction.UP)
+            }
+            if (event.key == Qt.Key_Down) {
+                Activity.move(Activity.direction.DOWN)
+            }
         }
 
         // Add here the QML items you need to access in javascript
