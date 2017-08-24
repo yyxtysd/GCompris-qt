@@ -87,8 +87,8 @@ Item {
             }
 
             function toFull() {
-                width = fullWidth
-                height = fullHeight
+                width = fullWidth * Activity.currentZoom
+                height = fullHeight * Activity.currentZoom
                 small = false
             }
 
