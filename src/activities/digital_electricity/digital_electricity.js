@@ -99,6 +99,8 @@ function initLevel() {
     updateToolTip("")
 
     currentZoom = defaultZoom
+    viewPort.leftEdge = 0
+    viewPort.topEdge = 0
 
     if (!items.isTutorialMode) {
         items.tutorialInstruction.visible = false
