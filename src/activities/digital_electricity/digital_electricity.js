@@ -428,8 +428,8 @@ function move(_direction) {
     }
 
     for (var i = 0; i < components.length; i++) {
-        components[i].posX -= x
-        components[i].posY -= y
+        components[i].posX -= (x * currentZoom)
+        components[i].posY -= (y * currentZoom)
     }
 }
 

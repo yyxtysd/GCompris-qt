@@ -112,6 +112,7 @@ Item {
                 anchors.centerIn: parent
                 color: "white"
                 text: qsTr("Tools")
+                scale: paintedWidth > toolButton.width ? (toolButton.width / paintedWidth) : 1
             }
 
             MouseArea {
