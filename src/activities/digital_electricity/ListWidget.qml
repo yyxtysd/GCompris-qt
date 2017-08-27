@@ -39,6 +39,8 @@ Item {
     property alias rotateLeft: rotateLeft
     property alias rotateRight: rotateRight
     property alias info: info
+    property alias zoomInBtn: zoomInBtn
+    property alias zoomOutBtn: zoomOutBtn
 
     ListModel {
         id: mymodel
@@ -197,7 +199,7 @@ Item {
                         states: [
                             State {
                                 name: "canBeSelected"
-                                PropertyChanges{
+                                PropertyChanges {
                                     target: info
                                     source: Activity.url + "Info.svg"
                                 }
@@ -273,6 +275,78 @@ Item {
                                 PropertyChanges {
                                     target: rotateRight
                                     source: Activity.url + "rotateRightOff.svg"
+                                }
+                            }
+                        ]
+                    }
+
+                    Rectangle {
+                        id: zoomInBtn
+                        width: 100
+                        height: 100
+                        radius: 100
+
+                        color: "black"
+
+                        GCText {
+                            anchors.centerIn: parent
+                            text: qsTr("+")
+                            color: "white"
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: Activity.zoomIn()
+                        }
+                        states: [
+                            State {
+                                name: "canZoomIn"
+                                PropertyChanges {
+                                    target: zoomInBtn
+                                    opacity: 1.0
+                                }
+                            },
+                            State {
+                                name: "cannotZoomIn"
+                                PropertyChanges {
+                                    target: zoomInBtn
+                                    opacity: 0.5
+                                }
+                            }
+                        ]
+                    }
+
+                    Rectangle {
+                        id: zoomOutBtn
+                        width: 100
+                        height: 100
+                        radius: 100
+
+                        color: "black"
+
+                        GCText {
+                            anchors.centerIn: parent
+                            text: qsTr("-")
+                            color: "white"
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: Activity.zoomOut()
+                        }
+                        states: [
+                            State {
+                                name: "canZoomOut"
+                                PropertyChanges {
+                                    target: zoomOutBtn
+                                    opacity: 1.0
+                                }
+                            },
+                            State {
+                                name: "cannotZoomOut"
+                                PropertyChanges {
+                                    target: zoomOutBtn
+                                    opacity: 0.5
                                 }
                             }
                         ]

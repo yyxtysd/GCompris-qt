@@ -99,6 +99,8 @@ function initLevel() {
     updateToolTip("")
 
     currentZoom = defaultZoom
+    items.availablePieces.zoomInBtn.state = "cannotZoomIn"
+    items.availablePieces.zoomOutBtn.state = "canZoomOut"
     viewPort.leftEdge = 0
     viewPort.topEdge = 0
 
@@ -347,6 +349,13 @@ function zoomIn() {
         currentZoom = maxZoom
     var zoomRatio = currentZoom / previousZoom
     updateComponentDimension(zoomRatio)
+
+    if (currentZoom == maxZoom) {
+        items.availablePieces.zoomInBtn.state = "cannotZoomIn"
+    } else {
+        items.availablePieces.zoomInBtn.state = "canZoomIn"
+    }
+    items.availablePieces.zoomOutBtn.state = "canZoomOut"
 }
 
 function zoomOut() {
@@ -356,6 +365,13 @@ function zoomOut() {
         currentZoom = minZoom
     var zoomRatio = currentZoom / previousZoom
     updateComponentDimension(zoomRatio)
+
+    if (currentZoom == minZoom) {
+        items.availablePieces.zoomOutBtn.state = "cannotZoomOut"
+    } else {
+        items.availablePieces.zoomOutBtn.state = "canZoomOut"
+    }
+    items.availablePieces.zoomInBtn.state = "canZoomIn"
 }
 
 function updateComponentDimension(zoomRatio) {
