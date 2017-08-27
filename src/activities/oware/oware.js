@@ -83,6 +83,7 @@ function reset() {
     items.playerTwoLevelScore.endTurn()
     items.playerOneLevelScore.beginTurn()
     items.playerOneTurn = true
+    items.gameEnded = false
     items.computerTurn = false
     initLevel()
 }
@@ -91,13 +92,14 @@ function initLevel() {
     items.boardModel.enabled = true
     items.bar.level = currentLevel + 1
     var initialSeedsNumber = 4
-    for (var i = 11; i >= 0; i--)
+    for (var i = 11; i >= 0; i--) {
         house[i] = initialSeedsNumber
+        items.cellGridRepeater.itemAt(i).numberOfSeedsInHouse = initialSeedsNumber
+    }
     items.playerOneScore = 0
     items.playerTwoScore = 0
     scoreHouse = [0, 0]
     depth = currentLevel
-    setHouseAndScoreValues(house)
 }
 
 function nextLevel() {
@@ -151,15 +153,15 @@ function computerMove() {
 
 // Random moves are made when the difference between scores is less than maxDiff[levelNumber]
 function randomMove() {
-    var move = Math.floor(Math.random() * (12 - 6) + 6)
     do {
+        var move = Math.floor(Math.random() * (12 - 6) + 6)
         finalMove = move
     }
     while(house[move] == 0 || !isValidMove(move, 0, house))
 }
 
 function gameOver(board, score) {
-    if (score[0] > 24 || score[1] > 24 || (score[0] == 24 && score[1] == 24))
+    if (score[0] > 24 || score[1] > 24)
         return true
     return false
 }
@@ -169,37 +171,37 @@ function alphaBeta(depth, alpha, beta, board, score, nextPlayer, lastMove,heuris
     var bestMove
     if (depth == 0 || gameOver(board, score)) {
         heuristicValue = heuristicEvaluation(score)
-        print("depth over heauristic value,alpha,beta",heuristicValue,alpha,beta);
+//         print("heauristic value,alpha,beta",heuristicValue,alpha,beta);
         return [-1, heuristicValue]
     }
     for (var move = 0; move < 12; move++) {
         if (!isValidMove(move, nextPlayer, board))
             continue
-        board = house.slice()
-        score = scoreHouse.slice()
-        var lastMoveAI = sowSeeds(move, board, score, nextPlayer)
-//         print("lst move", JSON.stringify(lastMoveAI))
+        var currentBoard = board.slice()
+        var currentScore = score.slice()
+        var lastMoveAI = sowSeeds(move, currentBoard, currentScore, nextPlayer)
+//         print("last move", JSON.stringify(lastMoveAI),depth)
         var out = alphaBeta(depth - 1, alpha, beta, lastMoveAI.board, lastMoveAI.scoreHouse, lastMoveAI.nextPlayer, lastMoveAI.lastMove,childHeuristics)
-//         print(out)
+//         print("out",out)
         childHeuristics = out[1]
         if (nextPlayer) {
             if (beta > childHeuristics) {
                 beta = childHeuristics
-                bestMove = lastMoveAI.lastMove
+                bestMove = move
             }
             if (alpha >= childHeuristics)
                 break;
         } else {
             if (alpha < childHeuristics) {
                 alpha = childHeuristics
-                bestMove = lastMoveAI.lastMove
+                bestMove = move
             }
             if (beta <= childHeuristics)
                 break;
         }
     }
     heuristicValue = nextPlayer ? beta : alpha
-    print("one result bestMove,heuristicValue,alpha,beta",bestMove,depth,heuristicValue,alpha,beta);
+//     print("bestMove,heuristicValue,alpha,beta",bestMove,depth,heuristicValue,alpha,beta);
     return [bestMove, heuristicValue]
 }
 
@@ -210,13 +212,13 @@ function heuristicEvaluation(score) {
         if (playerScores[i] > 24)
             playerScores[i] += 100
     }
-    return playerScores[1] - playerScores[0]
+    return playerScores[0] - playerScores[1]
 }
 
 function isValidMove(move, nextPlayer, board) {
     if (move < 0 || !board[move])
         return false
-    if ((nextPlayer && move > 6) || (!nextPlayer && move < 6))
+    if ((nextPlayer && move >= 6) || (!nextPlayer && move < 6))
         return false
     if(board[move] >= 12)
         return true
@@ -228,58 +230,6 @@ function isValidMove(move, nextPlayer, board) {
         return false
     else
         return true
-}
-
-function setHouseAndScoreValues(board) {
-    items.gameEnded = false
-//     if(items.playerTwoScore != scoreHouse[1]) {
-//         for(var i = 0; i < capturedHousesIndex.length; i++) {
-// //             print("details",JSON.stringify(capturedHousesIndex[i]))
-//             items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("right",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
-//         }
-//     }
-//     else if(items.playerOneScore != scoreHouse[0]) {
-//         for(var i = 0; i < capturedHousesIndex.length; i++) {
-// //             print("details",JSON.stringify(capturedHousesIndex[i]))
-//             items.cellGridRepeater.itemAt(capturedHousesIndex[i].index).scoresAnimation("left",capturedHousesIndex[i].seeds,capturedHousesIndex[i].index)
-//         }
-//     }
-
-    for (var i = 6, j = 0; i < 12, j < 6; j++, i++)
-        items.cellGridRepeater.itemAt(i).numberOfSeedsInHouse = board[j]
-    for (var i = 0, j = 11; i < 6, j > 5; j--, i++)
-        items.cellGridRepeater.itemAt(i).numberOfSeedsInHouse = board[j]
-
-    items.playerTwoScore = scoreHouse[1]
-    items.playerOneScore = scoreHouse[0]
-
-    if(items.playerOneScore == 24 && items.playerTwoScore == 24)
-        items.bonus.good("flower")
-    else if (items.playerTwoScore >= 25) {
-        if(!twoPlayer)
-            items.bonus.bad("flower")
-        else
-            items.bonus.good("flower")
-        items.playerOneLevelScore.endTurn()
-        items.playerTwoLevelScore.endTurn()
-        items.playerTwoLevelScore.win()
-        items.boardModel.enabled = false
-        items.gameEnded = true
-    } else if (items.playerOneScore >= 25) {
-        items.playerOneLevelScore.win()
-        items.playerTwoLevelScore.endTurn()
-        items.boardModel.enabled = false
-        items.gameEnded = true
-    }
-    if (!items.playerOneTurn && !items.gameEnded) {
-        items.playerOneLevelScore.endTurn()
-        items.playerTwoLevelScore.beginTurn()
-        items.boardModel.enabled = true
-    } else if (!items.gameEnded) {
-        items.playerTwoLevelScore.endTurn()
-        items.playerOneLevelScore.beginTurn()
-        items.boardModel.enabled = true
-    }
 }
 
 function sowSeeds(index, board, scoreHouse, nextPlayer) {
@@ -326,7 +276,6 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
             /* If opponent's houses capture is true we set the no of seeds in that house as 0 and give the seeds to the opponent. */
             if (capture[j % 6]) {
                 scoreHouse[nextPlayer] = scoreHouse[nextPlayer] + board[j]
-//                 print(nextPlayer,j)
                 if(!nextPlayer)
                     capturedHousesIndex.push({ "index": 11 - j,"seeds": board[j] })
                 else
@@ -358,15 +307,14 @@ function sowSeeds(index, board, scoreHouse, nextPlayer) {
 		scoreHouse[currentPlayer] += board[j];
 		board[j] = 0;
 	    }
-	}
+     }
     }
-
-    nextPlayer = currentPlayer
     var obj = {
         board: board,
         scoreHouse: scoreHouse,
         nextPlayer: nextPlayer,
         lastMove: lastMove
     }
+    nextPlayer = currentPlayer
     return obj
 }

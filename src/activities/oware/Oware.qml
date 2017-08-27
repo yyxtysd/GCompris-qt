@@ -144,6 +144,11 @@ ActivityBase {
                         property real scoreBoardX
                         property int previousIndex
                         property alias grainRepeater: grainRepeater
+                        signal setHouseValues
+                        signal scoreAnimationStarted
+                        signal setScoreValues
+                        signal changePlayer
+                        property bool scoreAnimationsToBeStarted: true
 
                         GCText {
                             text: numberOfSeedsInHouse
@@ -173,9 +178,7 @@ ActivityBase {
                         }
 
                         function scoresAnimation(scoreDirection,seedsCount,currentScoreIndex) {
-                            numberOfSeedsInHouse = seedsCount
-                            grainRepeater.model = numberOfSeedsInHouse
-                            print(grainRepeater.model)
+                            cellGridRepeater.itemAt(currentScoreIndex).numberOfSeedsInHouse = seedsCount
                             previousIndex = currentScoreIndex
                             scoreBoardX = cellGridRepeater.itemAt(currentScoreIndex).x
                             for(var i = 0; i < grainRepeater.count; i++) {
@@ -201,18 +204,76 @@ ActivityBase {
                             }
                         }
 
-                        function setScoreValues() {
-                            print(Activity.scoreHouse)
-//                             for(var i = 0; i < 12; i++) {
-//                                 print(cellGridRepeater.itemAt(i).value)
-//                             }
+                        onSetHouseValues: {
+                            for (var i = 6, j = 0; i < 12, j < 6; j++, i++) {
+                                cellGridRepeater.itemAt(i).numberOfSeedsInHouse = Activity.house[j]
+                            }
+                            for (var i = 0, j = 11; i < 6, j > 5; j--, i++) {
+                                cellGridRepeater.itemAt(i).numberOfSeedsInHouse = Activity.house[j]
+                            }
+                            scoreAnimationStarted()
+                        }
+
+                        onSetScoreValues: {
                             items.playerTwoScore = Activity.scoreHouse[1]
                             items.playerOneScore = Activity.scoreHouse[0]
-//                             Activity.setAfterValues(Activity.house)
-                            print(items.cellGridRepeater.itemAt(previousIndex).grainRepeater.model)
-//                             Activity.setHouseAndScoreValues(Activity.house)
-                            numberOfSeedsInHouse = 0
-                            grainRepeater.model = value
+                            changePlayer()
+                        }
+
+                        onChangePlayer: {
+                            items.gameEnded = false
+                            if(items.playerOneScore == 24 && items.playerTwoScore == 24)
+                                items.bonus.good("flower")
+                            else if (items.playerTwoScore >= 25) {
+                                if(!twoPlayer)
+                                    items.bonus.bad("flower")
+                                else
+                                    items.bonus.good("flower")
+                                items.playerOneLevelScore.endTurn()
+                                items.playerTwoLevelScore.endTurn()
+                                items.playerTwoLevelScore.win()
+                                items.boardModel.enabled = false
+                                items.gameEnded = true
+                            } else if (items.playerOneScore >= 25) {
+                                items.playerOneLevelScore.win()
+                                items.playerTwoLevelScore.endTurn()
+                                items.boardModel.enabled = false
+                                items.gameEnded = true
+                            }
+                            if (!items.playerOneTurn && !items.gameEnded) {
+                                items.playerOneLevelScore.endTurn()
+                                items.playerTwoLevelScore.beginTurn()
+                                trigComputerMove.start()
+                                items.boardModel.enabled = true
+                            } else if (!items.gameEnded) {
+                                items.playerTwoLevelScore.endTurn()
+                                items.playerOneLevelScore.beginTurn()
+                                items.boardModel.enabled = true
+                            }
+                        }
+
+                        Timer {
+                            id: moveSeedsTimer
+                            repeat: false
+                            interval: 500
+                            onTriggered: {
+                                setHouseValues()
+                            }
+                        }
+
+                        onScoreAnimationStarted: {
+                            if(Activity.capturedHousesIndex.length > 0 && scoreAnimationsToBeStarted) {
+                                for(var i = 0; i < Activity.capturedHousesIndex.length; i++) {
+                                    var capturedHouse = Activity.capturedHousesIndex[i]
+                                    if(!items.playerOneTurn)
+                                        cellGridRepeater.itemAt(capturedHouse.index).scoresAnimation("left",capturedHouse.seeds,capturedHouse.index)
+                                    else
+                                        cellGridRepeater.itemAt(capturedHouse.index).scoresAnimation("right",capturedHouse.seeds,capturedHouse.index)
+                                }
+                            }
+                            else
+                                setScoreValues()
+                            scoreAnimationsToBeStarted = true
                         }
 
                         Repeater {
@@ -235,15 +296,6 @@ ActivityBase {
                                 property int totalMoves: 0
                                 signal checkAnimation
 
-                                Timer {
-                                    id: moveSeedsTimer
-                                    repeat: false
-                                    interval: 500
-                                    onTriggered: {
-                                        Activity.setHouseAndScoreValues(Activity.house)
-                                    }
-                                }
-
                                 onCheckAnimation: {
                                     if(!currentSeeds && !items.gameEnded) {
                                         if(twoPlayer || !items.playerOneTurn) {
@@ -253,7 +305,6 @@ ActivityBase {
                                         moveSeedsTimer.start()
                                         if(!twoPlayer && !items.playerOneTurn)  {
                                             items.computerTurn = true
-                                            trigComputerMove.start()
                                         }
                                     }
                                 }
@@ -318,8 +369,8 @@ ActivityBase {
 
                                     ScriptAction {
                                         script: {
-                                            print("check")
-                                            setScoreValues()
+                                            scoreAnimationsToBeStarted = false
+                                            setHouseValues()
                                         }
                                     }
                                 }
@@ -330,26 +381,27 @@ ActivityBase {
                                         target: grain
                                         properties: "y"
                                         from: y; to: y + (board.height)/2
-                                        duration: 400
+                                        duration: 1000
                                     }
 
                                     NumberAnimation {
                                         target: grain
                                         properties: "x"
                                         from: x ; to: x + (board.width - scoreBoardX)
-                                        duration: 1000
+                                        duration: 2000
                                     }
 
                                     NumberAnimation {
                                         target: grain
                                         properties: "y"
                                         from: y; to: y - (board.height)/2
-                                        duration: 1000
+                                        duration: 2000
                                     }
 
-                                     ScriptAction {
+                                    ScriptAction {
                                         script: {
-                                            setScoreValues()
+                                            scoreAnimationsToBeStarted = false
+                                            setHouseValues()
                                         }
                                     }
                                 }
@@ -360,10 +412,10 @@ ActivityBase {
                                     from: x; to: x - (0.162 * board.width)
                                     duration: 450
                                     onStopped: {
-                                            animation(items.selectedIndexValue + 1)
-                                            moveCount--
-                                            nextMove = (moveCount == items.playerTwoStartIndex) ? "down" : "left"
-                                            startAnimation()
+                                        animation(items.selectedIndexValue + 1)
+                                        moveCount--
+                                        nextMove = (moveCount == items.playerTwoStartIndex) ? "down" : "left"
+                                        startAnimation()
                                     }
                                 }
 
@@ -373,10 +425,10 @@ ActivityBase {
                                     from: x; to: x + (0.16 * board.width)
                                     duration: 450
                                     onStopped: {
-                                            animation(items.selectedIndexValue - 1)
-                                            moveCount++
-                                            nextMove = (moveCount == items.playerOneEndIndex) ? "up" : "right"
-                                            startAnimation()
+                                        animation(items.selectedIndexValue - 1)
+                                        moveCount++
+                                        nextMove = (moveCount == items.playerOneEndIndex) ? "up" : "right"
+                                        startAnimation()
                                     }
                                 }
 
@@ -416,8 +468,11 @@ ActivityBase {
                 id: playerOneScoreBox
                 height: board.height * 0.54
                 width: height
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: boardModel.left
+                anchors.verticalCenter: horizontalLayout ? parent.verticalCenter : undefined
+                anchors.horizontalCenter: horizontalLayout ? undefined : parent.horizontalCenter
+                anchors.right: horizontalLayout ? board.left : undefined
+                anchors.topMargin: horizontalLayout ? undefined : 50
+                anchors.top: horizontalLayout ? undefined : board.bottom
                 playerScore: items.playerOneScore
             }
 
@@ -425,8 +480,11 @@ ActivityBase {
                 id: playerTwoScoreBox
                 height: board.height * 0.54
                 width: height
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: boardModel.right
+                anchors.verticalCenter: horizontalLayout ? parent.verticalCenter : undefined
+                anchors.horizontalCenter: horizontalLayout ? undefined : parent.horizontalCenter
+                anchors.bottomMargin: horizontalLayout ? undefined : 30
+                anchors.bottom: horizontalLayout ? undefined : board.top
+                anchors.left: horizontalLayout ? board.right : undefined
                 playerScore: items.playerTwoScore
             }
         }
@@ -489,7 +547,7 @@ ActivityBase {
             id: bar
             content: BarEnumContent {
                 value: twoPlayer ? (help | home | reload) :
-                       (tutorialSection.visible ? (help | home) : (help | home | level | reload)) }
+                                   (tutorialSection.visible ? (help | home) : (help | home | level | reload)) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
