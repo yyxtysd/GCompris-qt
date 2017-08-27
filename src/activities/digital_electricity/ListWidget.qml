@@ -109,10 +109,12 @@ Item {
             property bool showToolBar: false
 
             GCText {
-                anchors.centerIn: parent
+                width: parent.width
+                fontSizeMode: Text.Fit
                 color: "white"
                 text: qsTr("Tools")
-                scale: paintedWidth > toolButton.width ? (toolButton.width / paintedWidth) : 1
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
             }
 
             MouseArea {
