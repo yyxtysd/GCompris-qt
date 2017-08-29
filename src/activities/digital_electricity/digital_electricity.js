@@ -105,7 +105,7 @@ function initLevel() {
     viewPort.topEdge = 0
 
     if (!items.isTutorialMode) {
-        items.tutorialInstruction.visible = false
+        items.tutorialInstruction.index = -1
         loadFreeMode(sizeMultiplier)
     } else {
         // load tutorial levels from dataset
@@ -157,11 +157,10 @@ function initLevel() {
         }
 
         if (levelProperties.introMessage.length != 0) {
-            items.tutorialInstruction.visible = true
             items.tutorialInstruction.index = 0
             items.tutorialInstruction.intro = levelProperties.introMessage
         } else {
-            items.tutorialInstruction.visible = false
+            items.tutorialInstruction.index = -1
         }
     }
 }

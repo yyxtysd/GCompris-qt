@@ -100,7 +100,6 @@ ActivityBase {
 
         IntroMessage {
             id: tutorialInstruction
-            visible: activity.isTutorialMode
             anchors {
                 top: background.vert ? parent.top : inputComponentsContainer.bottom
                 topMargin: 10
@@ -110,7 +109,6 @@ ActivityBase {
                 leftMargin: 5
             }
             z: 100
-            onIntroDone: tutorialInstruction.visible = false
         }
 
         onStart: { Activity.start(items) }
