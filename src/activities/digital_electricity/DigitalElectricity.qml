@@ -108,7 +108,7 @@ ActivityBase {
                 left: background.vert ? inputComponentsContainer.right : parent.left
                 leftMargin: 5
             }
-            z: 100
+            z: 5
         }
 
         onStart: { Activity.start(items) }
@@ -316,6 +316,7 @@ ActivityBase {
                 id: availablePieces
                 vert: background.vert ? true : false
             }
+            z: 10
         }
 
         Rectangle {
