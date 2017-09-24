@@ -1,9 +1,11 @@
 ﻿/* GCompris - family.js
  *
- * Copyright (C) 2016 RAJDEEP KAUR <rajdeep.kaur@kde.org>
+ * Copyright (C) 2016 Rajdeep Kaur <rajdeep.kaur@kde.org>
  *
  * Authors:
- *   RAJDEEP KAUR <rajdeep.kaur@kde.org>
+ *
+ *   Rajdeep Kaur <rajdeep.kaur@kde.org>
+ *   Rudra Nil Basu <rudra.nil.basu.1996@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -96,14 +98,13 @@ function loadDatasets() {
              "_x2": levelTree.edgeList[i][2],
              "_y2": levelTree.edgeList[i][3],
              "edgeState": levelTree.edgeState[i]
-
         });
     }
 
     for(var i = 0 ; i < levelTree.edgeState.length ; i++) {
         if(levelTree.edgeState[i] === "married") {
             var xcor = (levelTree.edgeList[i][0]+levelTree.edgeList[i][2]-0.04)/2;
-            var ycor =  levelTree.edgeList[i][3] -0.02
+            var ycor =  levelTree.edgeList[i][3] - 0.02
             items.ringRepeator.model.append({
                 "ringx": xcor,
                 "ringy": ycor

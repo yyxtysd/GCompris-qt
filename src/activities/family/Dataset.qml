@@ -1,10 +1,11 @@
 /* GCompris - Dataset.qml
  *
- * Copyright (C) RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
+ * Copyright (C) 2017 Rudra Nil Basu <rudra.nil.basu.1996@gmail.com>
  *
  * Authors:
- *   Holger Kaelberer <holger.k@elberer.de>
- *   RUDRA NIL BASU <rudra.nil.basu.1996@gmail.com> (Qt Quick port)
+ *
+ *   Rajdeep Kaur <rajdeep.kaur@kde.org>
+ *   Rudra Nil Basu <rudra.nil.basu.1996@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -63,27 +64,27 @@ QtObject {
     readonly property int pair2: 1
     readonly property int noPair: 0
 
+    /*
+    * Returns the x coordinate of the
+    * right edge of a node
+    */
     function rightXEdge(xPosition) {
-        /*
-         * Returns the x coordinate of the
-         * right edge of a node
-         */
         return xPosition + nodeWidth
     }
 
+    /*
+    * Returns the y coordinate of the
+    * midpoint of a node
+    */
     function nodeMidPointY(yPosition) {
-        /*
-         * Returns the y coordinate of the
-         * midpoint of a node
-         */
         return yPosition + nodeHeight / 2
     }
 
+    /*
+    * Returns the x coordinate of the
+    * midpoint of two nodes
+    */
     function nodeMidPointX(xLeftPosition, xRightPosition) {
-        /*
-         * Returns the x coordinate of the
-         * midpoint of two nodes
-         */
         return ((xLeftPosition + nodeWidth) + xRightPosition) / 2
     }
 
