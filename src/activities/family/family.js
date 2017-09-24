@@ -57,8 +57,10 @@ function initLevel() {
 
     items.selectedPairs.reset()
     levelToLoad = getCurrentLevelIndex()
-
-    loadDatasets()
+    var levelTree = items.dataset.levelElements[levelToLoad]
+    items.dataset.numberOfGenerations = levelTree.numberOfGenerations
+    // Need to delay in order of the number of generation change to be taken in account
+    items.loadDatasetDelay.start()
 }
 
 function loadDatasets() {
@@ -67,6 +69,7 @@ function loadDatasets() {
     }
 
     var levelTree = items.dataset.levelElements[levelToLoad]
+
     answerButtonRatio = 1 / (levelTree.options.length + 4);
 
     items.nodeRepeater.model.clear();

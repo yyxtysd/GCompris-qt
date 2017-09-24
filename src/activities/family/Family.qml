@@ -92,6 +92,7 @@ ActivityBase {
             property string mode: activity.mode
             property alias questionTopic: question.questionTopic
             property alias selectedPairs: selectedPairs
+            property alias loadDatasetDelay: loadDatasetDelay
             property point questionMarkPosition: questionMarkPosition
             property point meLabelPosition: meLabelPosition
         }
@@ -175,7 +176,7 @@ ActivityBase {
                     id: treeItem
                     Repeater {
                         id: nodeRepeater
-                        model: ListModel{}
+                        model: ListModel {}
                         delegate:
                             Node {
                             id: currentPointer
@@ -224,8 +225,8 @@ ActivityBase {
                         x: items.meLabelPosition.x * treeArea.width
                         y: items.meLabelPosition.y * treeArea.height
 
-                        width: treeArea.width/12
-                        height: treeArea.height/14
+                        width: treeArea.width / 12
+                        height: treeArea.height / 14
 
                         radius: 5
                         border.color: "black"
@@ -281,7 +282,7 @@ ActivityBase {
 
                     Repeater {
                         id: ringRepeator
-                        model: ListModel{}
+                        model: ListModel {}
                         delegate: Image {
                             id: ring
                             source: Activity.url + "rings.svg"
