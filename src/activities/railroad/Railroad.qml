@@ -1,6 +1,6 @@
 /* GCompris - railroad.qml
  *
- * Copyright (C) 2016  Utkarsh Tiwari <iamutkarshtiwari@kde.org>
+ * Copyright (C) 2016 Utkarsh Tiwari <iamutkarshtiwari@kde.org>
  *
  * Authors:
  *   Pascal Georges (GTK+ version)
@@ -61,8 +61,8 @@ ActivityBase {
             property alias displayList: displayList
             property alias animateFlow: animateFlow
             property alias displayRow: displayRow
-            property alias railCollection: railCollection
             property alias introMessage: introMessage
+            property bool memoryMode: false
             property bool mouseEnabled: true
         }
 
@@ -89,7 +89,7 @@ ActivityBase {
             id: timer
             repeat: false
             interval: 4000
-            onTriggered: items.animateFlow.start();
+            onTriggered: items.animateFlow.start()
         }
 
         // Intro message
@@ -117,7 +117,7 @@ ActivityBase {
             height: background.height / 5
             color: 'transparent'
             x: 2
-            y : 0
+            y: 0
             z: 1
 
             Flickable {
@@ -141,12 +141,11 @@ ActivityBase {
                     Repeater {
                         id: displayList
                         model: listModel
-                        delegate : Image {
+                        delegate: Image {
                             id: wagon
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
                             width: ((background.width > background.height) ? background.width : background.height) / 5.66
-                            visible: true
 
                             function checkDrop(dragItem) {
                                 // Checks the drop location of this wagon
@@ -182,14 +181,14 @@ ActivityBase {
                                 anchors.fill: parent
 
                                 onPressed: {
-                                    if(Activity.memoryMode == true) {
+                                    if(items.memoryMode == true) {
                                         drag.target = parent.createNewItem();
                                         parent.opacity = 0
                                         listModel.move(index, listModel.count - 1, 1)
                                     }
                                 }
                                 onReleased: {
-                                    if(Activity.memoryMode == true) {
+                                    if(items.memoryMode == true) {
                                         var dragItem = drag.target
                                         parent.checkDrop(dragItem)
                                         dragItem.destroy();
@@ -199,24 +198,12 @@ ActivityBase {
                                 }
 
                                 onClicked: {
-                                    if(Activity.memoryMode == false) {
-                                        timer.stop()
-                                        animateFlow.stop();
-                                        displayRow.x = 2;
-                                        listModel.clear();
-                                        Activity.isReset = false;
-                                        for (var index = 0; index < Activity.backupListModel.length; index++) {
-                                            Activity.items.listModel.append({"id" : Activity.backupListModel[index]});
-                                            (Activity.items.displayList.itemAt(Activity.items.listModel.count - 1)).source = Activity.resourceURL + "loco" + (Activity.backupListModel[index]) + ".svg";
-                                        }
-                                        Activity.memoryMode = true;
-                                        Activity.items.railCollection.visible = true
-                                    }
+                                    bar.hintClicked()
                                 }
                             }
                             states: State {
-                                name: "waganHover"
-                                when: displayWagonMouseArea.containsMouse && (Activity.memoryMode === true)
+                                name: "wagonHover"
+                                when: displayWagonMouseArea.containsMouse && (items.memoryMode === true)
                                 PropertyChanges {
                                     target: wagon
                                     scale: 1.1
@@ -230,8 +217,7 @@ ActivityBase {
                             animateFlow.stop();
                             displayRow.x = 2;
                             listModel.clear();
-                            Activity.memoryMode = true;
-                            items.railCollection.visible = true;
+                            items.memoryMode = true;
                         }
                     }
                     PropertyAnimation {
@@ -256,7 +242,7 @@ ActivityBase {
         Rectangle {
             id: railCollection
             color: "transparent"
-            visible: false
+            visible: items.memoryMode
             Repeater {
                 id: sampleList
                 model: 4
@@ -266,7 +252,7 @@ ActivityBase {
                     height: background.height / 7.5
                     z: 1
                     width: background.width
-                    contentWidth:  railCarriages.childrenRect.width
+                    contentWidth: railCarriages.childrenRect.width
                     contentHeight: height
                     flickableDirection: Flickable.HorizontalFlick
                     Row {
@@ -306,12 +292,8 @@ ActivityBase {
                                     // Checks the drop location of this wagon
                                     var globalCoordinates = loco.mapToItem(displayList, 0, 0)
                                     if(globalCoordinates.y <= ((background.height / 8.0) + (background.height / 12.5))) {
-                                        if(listModel.count == 0) {
-                                            Activity.addWagon(uniqueID + 1, 0);
-                                        } else {
-                                            var dropIndex = Activity.getDropIndex(globalCoordinates.x)
-                                            Activity.addWagon(uniqueID + 1, dropIndex);
-                                        }
+                                        var dropIndex = Activity.getDropIndex(globalCoordinates.x)
+                                        Activity.addWagon(uniqueID + 1, dropIndex);
                                     }
                                     Activity.isAnswer()
                                 }
@@ -321,7 +303,7 @@ ActivityBase {
                                     hoverEnabled: true
                                     anchors.fill: parent
                                     drag.target: parent
-                                    drag.axis: (parent.y  >= 0  &&  parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
+                                    drag.axis: (parent.y >= 0 && parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
                                     enabled: items.mouseEnabled
                                     onPressed: {
                                         parent.initDrag()
@@ -378,7 +360,6 @@ ActivityBase {
             anchors.leftMargin: 10 * ApplicationInfo.ratio
             anchors.bottom: undefined
             anchors.left: undefined
-            visible: true
         }
 
         Bar {
@@ -391,21 +372,18 @@ ActivityBase {
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
             onHintClicked: {
-                if (!introMessage.visible && items.mouseEnabled) {
-                    if(Activity.memoryMode == false) {
+                if(!introMessage.visible && items.mouseEnabled) {
+                    if(items.memoryMode == false) {
                         timer.stop()
                         animateFlow.stop();
                         displayRow.x = 2;
                         listModel.clear();
-                        Activity.isReset = false;
-                        for (var index = 0; index < Activity.backupListModel.length; index++) {
-                            Activity.items.listModel.append({"id" : Activity.backupListModel[index]});
-                            (Activity.items.displayList.itemAt(Activity.items.listModel.count - 1)).source = Activity.resourceURL + "loco" + (Activity.backupListModel[index]) + ".svg";
+                        for(var index = 0; index < Activity.backupListModel.length; index++) {
+                            Activity.addWagon(Activity.backupListModel[index], index);
                         }
-                        Activity.memoryMode = true;
-                        Activity.items.railCollection.visible = true
+                        items.memoryMode = true;
                     } else {
-                        Activity.reset();
+                        Activity.restoreLevel();
                     }
                 }
             }
@@ -413,7 +391,7 @@ ActivityBase {
 
         Bonus {
             id: bonus
-            Component.onCompleted: win.connect(Activity.advanceSubLevel)
+            Component.onCompleted: win.connect(Activity.nextSubLevel)
         }
     }
 }

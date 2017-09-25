@@ -27,18 +27,17 @@ var currentLevel = 0
 var numberOfLevel = 4
 var noOfCarriages = [5, 6, 5, 6]
 var rowWidth = [0.95, 0.1, 0.1, 0.1]
-var memoryMode = false
 var solutionArray = []
 var backupListModel = []
-var isReset = false
+var isNewLevel = true
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
-var maxSubLevel = 3
+var numberOfSubLevels = 3
 var items
 
 function start(items_) {
     items = items_
     currentLevel = 0
-    items.score.numberOfSubLevels = maxSubLevel;
+    items.score.numberOfSubLevels = numberOfSubLevels;
     items.score.currentSubLevel = 1;
     initLevel()
 }
@@ -49,22 +48,20 @@ function stop() {
 function initLevel() {
     var index = 0;
     items.mouseEnabled = true;
-    memoryMode = false;
-    items.railCollection.visible = false;
+    items.memoryMode = false;
     items.timer.stop();
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
-    if(isReset == false) {
+    if(isNewLevel) {
         // Initiates a new level
         backupListModel = [];
         solutionArray = [];
-        for (var i = 0; i < currentLevel + 2; i++) {
+        for(var i = 0; i < currentLevel + 2; i++) {
             if(i == (currentLevel + 1)) {
                 // Selects the last carriage
                 do {
                     index = Math.floor(Math.random() * 9) + 1;
                 } while (solutionArray.indexOf(index) != -1) // Ensures non-repeative wagons setup
-
             } else {
                 // Selects the follow up wagons
                 do {
@@ -72,17 +69,16 @@ function initLevel() {
                 } while (solutionArray.indexOf(index) != -1)
             }
             solutionArray.push(index);
-            items.listModel.append({"id" : index});
-            (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (index) + ".svg";
+            
+            addWagon(index, i);
         }
     } else {
         // Re-setup the same level
-        for ( var i = 0; i < solutionArray.length; i++) {
-            items.listModel.append({"id" : solutionArray[i]});
-            (items.displayList.itemAt(items.listModel.count - 1)).source = resourceURL + "loco" + (solutionArray[i]) + ".svg";
+        for(var i = 0; i < solutionArray.length; i++) {
+            addWagon(solutionArray[i], i);
         }
     }
-    if(items.introMessage.visible === false && !isReset) {
+    if(items.introMessage.visible == false && isNewLevel) {
         items.timer.start()
     }
     items.bar.level = currentLevel + 1;
@@ -93,7 +89,7 @@ function nextLevel() {
         currentLevel = 0
     }
     items.score.currentSubLevel = 1;
-    isReset = false;
+    isNewLevel = true;
     initLevel();
 }
 
@@ -102,29 +98,26 @@ function previousLevel() {
         currentLevel = numberOfLevel - 1
     }
     items.score.currentSubLevel = 1;
-    isReset = false;
+    isNewLevel = true;
     initLevel();
 }
 
-function reset() {
-    if(!isReset) {
-        // If reset was not pressed twice
-        backupListModel = [];
-        for (var index = 0; index < items.listModel.count; index++) {
-            backupListModel.push(items.listModel.get(index).id);
-        }
-        isReset = true;
-        initLevel();
+function restoreLevel() {
+    backupListModel = [];
+    for (var index = 0; index < items.listModel.count; index++) {
+        backupListModel.push(items.listModel.get(index).id);
     }
+    isNewLevel = false;
+    initLevel();
 }
 
-function advanceSubLevel() {
+function nextSubLevel() {
     /* Sets up the next sublevel */
-    items.score.currentSubLevel++;
-    if(items.score.currentSubLevel > maxSubLevel) {
+    items.score.currentSubLevel ++;
+    if(items.score.currentSubLevel > numberOfSubLevels) {
         nextLevel();
-        items.score.currentSubLevel = 1;
     } else {
+        isNewLevel = true;
         initLevel();
     }
 }
@@ -149,14 +142,14 @@ function isAnswer() {
 function sum(index) {
     /* Returns the sum up till the specified index */
     var total = 0
-    for (var i = 0; i <index; i++)
+    for (var i = 0; i < index; i++)
         total += noOfCarriages[i];
     return total;
 }
 
 function addWagon(index, dropIndex) {
     /* Appends wagons to the display area */
-    items.listModel.insert(dropIndex, {"id" : index});
+    items.listModel.insert(dropIndex, {"id": index});
     (items.displayList.itemAt(dropIndex)).source = resourceURL + "loco" + (index) + ".svg";
 }
 
@@ -173,4 +166,5 @@ function getDropIndex(x) {
             return index + 1;
         }
     }
+    return 0;
 }
