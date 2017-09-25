@@ -1,6 +1,6 @@
 /* GCompris - Loco.qml
  *
- * Copyright (C) 2017  Utkarsh Tiwari <iamutkarshtiwari@kde.org>
+ * Copyright (C) 2017 Utkarsh Tiwari <iamutkarshtiwari@kde.org>
  *
  * Authors:
  *   Pascal Georges (GTK+ version)
@@ -23,11 +23,11 @@ import QtQuick 2.0
 import "railroad.js" as Activity
 
 Item {
-    id:draggedItem
+    id: draggedItem
     property int imageIndex
     Image {
         id: img
-        source: Activity.resourceURL + "loco"+ imageIndex +".svg"
+        source: Activity.resourceURL + "loco" + imageIndex + ".svg"
         height: background.height / 8.0
         width: ((background.width > background.height) ? background.width : background.height) / 5.66
         Drag.hotSpot.x: width / 2
