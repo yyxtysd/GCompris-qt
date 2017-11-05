@@ -42,6 +42,10 @@ Item {
     property alias zoomInBtn: zoomInBtn
     property alias zoomOutBtn: zoomOutBtn
 
+    signal hideToolbar
+
+    onHideToolbar: toolButton.showToolBar = false
+
     ListModel {
         id: mymodel
     }

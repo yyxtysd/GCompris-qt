@@ -60,7 +60,6 @@ var viewPort = {
 }
 
 function start(items_) {
-
     items = items_
     currentLevel = 1
     numberOfLevel = items.tutorialDataset.tutorialLevels.length
@@ -68,7 +67,6 @@ function start(items_) {
 }
 
 function stop() {
-
     for(var i = 0 ; i < components.length ; ++i) {
         var j
         for(j = 0 ; j < deletedIndex.length ; ++j) {
@@ -81,7 +79,6 @@ function stop() {
 }
 
 function initLevel() {
-
     items.bar.level = currentLevel
     var sizeMultiplier = 1 + (1 / (1.5 * currentLevel))
 
@@ -97,6 +94,7 @@ function initLevel() {
     toolDeleteSticky = false
     deselect()
     updateToolTip("")
+    items.availablePieces.hideToolbar()
 
     currentZoom = defaultZoom
     items.availablePieces.zoomInBtn.state = "cannotZoomIn"
@@ -176,10 +174,6 @@ function loadFreeMode(sizeMultiplier) {
             "toolTipText": componentList[i].toolTipText
         })
     }
-}
-
-function isTutorialMode() {
-    return items.isTutorialMode
 }
 
 function checkAnswer() {
@@ -383,9 +377,7 @@ function updateComponentDimension(zoomRatio) {
 }
 
 function move(_direction) {
-    var x, y
-    x = 0
-    y = 0
+    var x = 0, y = 0
     if (_direction == direction.RIGHT) {
         x = 0.1
     } else if (_direction == direction.LEFT) {
@@ -398,7 +390,7 @@ function move(_direction) {
 
     if (x == 0.1) {
         var viewPortRightEdge = Math.round(((viewPort.leftEdge + 0.1) + (1 / currentZoom)) * 100) / 100
-        if ( viewPortRightEdge > viewPort.rightExtreme) {
+        if (viewPortRightEdge > viewPort.rightExtreme) {
             return
         } else {
             viewPort.leftEdge = Math.round((viewPort.leftEdge + 0.1) * 100) / 100
@@ -433,15 +425,13 @@ function move(_direction) {
 }
 
 function nextLevel() {
-
-    if(numberOfLevel < ++currentLevel ) {
+    if(numberOfLevel < ++currentLevel) {
         currentLevel = 1
     }
     reset();
 }
 
 function previousLevel() {
-
     if(--currentLevel < 1) {
         currentLevel = numberOfLevel
     }
@@ -449,8 +439,6 @@ function previousLevel() {
 }
 
 function reset() {
-
-    deselect()
     stop()
     items.availablePieces.model.clear()
     initLevel()
@@ -458,7 +446,6 @@ function reset() {
 
 // Creates component from ListWidget to the drawing board area
 function createComponent(x, y, componentIndex) {
-
     x = x / items.playArea.width
     y = y / items.playArea.height
 
@@ -499,7 +486,6 @@ function createComponent(x, y, componentIndex) {
  * to make sure that an input is connected by only 1 wire.
 */
 function terminalPointSelected(terminal) {
-
     if(selectedTerminal == -1 || selectedTerminal == terminal)
         selectedTerminal = terminal
     else if((selectedTerminal.type != terminal.type) && (selectedTerminal.parent != terminal.parent)) {
@@ -546,7 +532,6 @@ function updateComponent(index) {
  * an object is rotated.
 */
 function updateWires(index) {
-
     var component = components[index]
     if(component == undefined || component.noOfInputs == undefined || component.noOfOutputs == undefined)
         return
@@ -604,7 +589,6 @@ function updateWires(index) {
 }
 
 function deselect() {
-
     if(toolDeleteSticky == false) {
         toolDelete = false
         items.availablePieces.toolDelete.state = "notSelected"
@@ -625,7 +609,6 @@ function deselect() {
 }
 
 function removeComponent(index) {
-
     var component = components[index]
     for(var i = 0 ; i < component.noOfInputs ; ++i) {
         var terminal = component.inputTerminals.itemAt(i)
@@ -644,7 +627,6 @@ function removeComponent(index) {
 }
 
 function removeWire(wire) {
-
     var inTerminal = wire.to
     var outTerminal = wire.from
 
@@ -661,7 +643,6 @@ function removeWire(wire) {
 }
 
 function componentSelected(index) {
-
     selectedIndex = index
     items.availablePieces.rotateLeft.state = "canBeSelected"
     items.availablePieces.rotateRight.state = "canBeSelected"
@@ -669,19 +650,16 @@ function componentSelected(index) {
 }
 
 function rotateLeft() {
-
     components[selectedIndex].rotationAngle = -2
     components[selectedIndex].rotateComponent.start()
 }
 
 function rotateRight() {
-
     components[selectedIndex].rotationAngle = 2
     components[selectedIndex].rotateComponent.start()
 }
 
 function displayInfo() {
-
     var component = components[selectedIndex]
     var componentTruthTable = component.truthTable
     deselect()

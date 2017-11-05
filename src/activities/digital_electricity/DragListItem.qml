@@ -120,7 +120,6 @@ Item {
 
                 onReleased: {
                     if (pressedOnce) {
-
                         pressedOnce = false
                         item.selected = false
                         var coord = playArea.mapFromItem(tileImage.parent, parent.x, parent.y)

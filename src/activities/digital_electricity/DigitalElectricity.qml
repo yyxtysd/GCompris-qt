@@ -100,6 +100,7 @@ ActivityBase {
 
         IntroMessage {
             id: tutorialInstruction
+            intro: []
             anchors {
                 top: background.vert ? parent.top : inputComponentsContainer.bottom
                 topMargin: 10
