@@ -107,7 +107,7 @@ QtObject {
         'toolTipText': qsTr("BCD To 7 Segment")
     }
     property var sevenSegmentDisplay: {
-        'imageName': 'sevenSegmentDisplay.svgz',
+        'imageName': 'sevenSegmentDisplay.svg',
         'componentSource': 'SevenSegment.qml',
         'width': 0.18,
         'height': 0.4,

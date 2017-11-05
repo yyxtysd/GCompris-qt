@@ -20,7 +20,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.3 as Quick
+.import QtQuick 2.6 as Quick
 
 var currentLevel = 1
 var numberOfLevel

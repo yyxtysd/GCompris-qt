@@ -19,7 +19,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.3
+import QtQuick 2.6
 import GCompris 1.0
 import "digital_electricity.js" as Activity
 
@@ -120,10 +120,11 @@ Item {
 
                 onReleased: {
                     if (pressedOnce) {
+
                         pressedOnce = false
                         item.selected = false
                         var coord = playArea.mapFromItem(tileImage.parent, parent.x, parent.y)
-                        if(coord.x > 0 && (playArea.width - coord.x > tileImage.fullWidth))
+                        if(coord.x > 0 && ((playArea.width/Activity.currentZoom) - coord.x > tileImage.fullWidth))
                             Activity.createComponent(coord.x, coord.y, index)
                         tileImage.anchors.centerIn = tile
                         tileImage.toSmall()
