@@ -30,8 +30,6 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
-    property variant barAtStart
-
     pageComponent: Image {
         id: background
         source: Activity.resourceURL + "railroad-bg.svg"
@@ -66,9 +64,7 @@ ActivityBase {
             property bool mouseEnabled: true
         }
 
-        onStart: {
-            Activity.start(items)
-        }
+        onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
         // Swipe message
@@ -113,10 +109,11 @@ ActivityBase {
 
         // Top Display Area
         Rectangle {
+            id: topDisplayArea
             width: background.width
-            height: background.height / 5
+            height: background.height / 4.5
             color: 'transparent'
-            x: 2
+            x: 0
             y: 0
             z: 1
 
@@ -239,94 +236,73 @@ ActivityBase {
         }
 
         // Lower Sample Wagon Display Area
-        Rectangle {
-            id: railCollection
-            color: "transparent"
+        GridView {
+            id: sampleList
             visible: items.memoryMode
-            Repeater {
-                id: sampleList
-                model: 4
-                Flickable {
-                    x: 2
-                    y: (background.height / 4.7) + (index * (background.height / 6.5))
-                    height: background.height / 7.5
-                    z: 1
-                    width: background.width
-                    contentWidth: railCarriages.childrenRect.width
-                    contentHeight: height
-                    flickableDirection: Flickable.HorizontalFlick
-                    Row {
-                        id: railCarriages
-                        property real rowNo: index
-                        anchors.margins: 1
-                        anchors.bottomMargin: 10
-                        spacing: background.width * 0.0025
-                        y: 0
-                        height: background.height / 7.5
-                        width: childrenRect.width
-                        Repeater {
-                            id: eachRow
-                            model: Activity.noOfCarriages[parent.rowNo]
+            x: 0
+            y: (background.height / 4.7)
+            z: 1
+            width: background.width
+            height: background.height - topDisplayArea.height
+            anchors.margins: 20
+            cellWidth: width / 5
+            cellHeight: background.height / 7
+            model: 20
+            delegate: Image {
+                id: loco
+                readonly property int uniqueID: index
+                property real originX
+                property real originY
+                source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
+                height: background.height / 7.5
+                width: ((background.width > background.height) ? background.width/5.66 : background.height/6.2)
+                visible: true
 
-                            Image {
-                                id: loco
-                                readonly property int uniqueID: Activity.sum(parent.rowNo) + index
-                                property real originX
-                                property real originY
-                                source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
-                                height: background.height / 7.5
-                                width: ((background.width > background.height) ? background.width : background.height) / 5.66
-                                visible: true
+                function initDrag() {
+                    originX = x
+                    originY = y
+                }
 
-                                function initDrag() {
-                                    originX = x
-                                    originY = y
-                                }
+                function replace() {
+                    x = originX
+                    y = originY
+                }
 
-                                function replace() {
-                                    x = originX
-                                    y = originY
-                                }
+                function checkDrop() {
+                    // Checks the drop location of this wagon
+                    var globalCoordinates = loco.mapToItem(displayList, 0, 0)
+                    if(globalCoordinates.y <= ((background.height / 8.0) + (background.height / 12.5))) {
+                        var dropIndex = Activity.getDropIndex(globalCoordinates.x)
+                        Activity.addWagon(uniqueID + 1, dropIndex);
+                    }
+                    Activity.isAnswer()
+                }
 
-                                function checkDrop() {
-                                    // Checks the drop location of this wagon
-                                    var globalCoordinates = loco.mapToItem(displayList, 0, 0)
-                                    if(globalCoordinates.y <= ((background.height / 8.0) + (background.height / 12.5))) {
-                                        var dropIndex = Activity.getDropIndex(globalCoordinates.x)
-                                        Activity.addWagon(uniqueID + 1, dropIndex);
-                                    }
-                                    Activity.isAnswer()
-                                }
+                MouseArea {
+                    id: mouseArea
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    drag.target: parent
+                    drag.axis: (parent.y >= 0 && parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
+                    enabled: items.mouseEnabled
+                    onPressed: {
+                        parent.initDrag()
+                    }
+                    onReleased: {
+                        parent.Drag.cancel()
+                        parent.checkDrop()
+                        parent.replace()
+                    }
+                }
 
-                                MouseArea {
-                                    id: mouseArea
-                                    hoverEnabled: true
-                                    anchors.fill: parent
-                                    drag.target: parent
-                                    drag.axis: (parent.y >= 0 && parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
-                                    enabled: items.mouseEnabled
-                                    onPressed: {
-                                        parent.initDrag()
-                                    }
-                                    onReleased: {
-                                        parent.Drag.cancel()
-                                        parent.checkDrop()
-                                        parent.replace()
-                                    }
-                                }
+                Component.onCompleted: initDrag();
 
-                                Component.onCompleted: initDrag();
-
-                                states: State {
-                                    name: "carHover"
-                                    when: mouseArea.containsMouse
-                                    PropertyChanges {
-                                        target: loco
-                                        scale: 1.1
-                                    }
-                                }
-                            }
-                        }
+                states: State {
+                    name: "carHover"
+                    when: mouseArea.containsMouse
+                    PropertyChanges {
+                        target: loco
+                        scale: 1.1
                     }
                 }
             }
@@ -338,12 +314,13 @@ ActivityBase {
             model: 4
             Rectangle {
                 x: 0
-                y: (background.height / 2.9) + (index * (background.height / 6.5))
+                y: sampleList.y + ((index+1) * (background.height / 7.5)) + (index*5)
+                z: 1
                 width: background.width
-                height: 5
+                height: 6
                 border.color: "#808180"
                 color: "transparent"
-                border.width: 5
+                border.width: 4
             }
         }
 
