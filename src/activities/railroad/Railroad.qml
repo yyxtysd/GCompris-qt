@@ -113,8 +113,6 @@ ActivityBase {
             width: background.width
             height: background.height / 4.5
             color: 'transparent'
-            x: 0
-            y: 0
             z: 1
 
             Flickable {
@@ -157,7 +155,7 @@ ActivityBase {
                                     listModel.move(listModel.count - 1, dropIndex, 1)
                                     opacity = 1
                                 }
-                                if(globalCoordinates.y > ((background.height / 12.5) + (background.height / 8))){
+                                if(globalCoordinates.y > (background.height / 8)){
                                     // Remove it if dropped in the lower section
                                     listModel.remove(listModel.count - 1)
                                 }
@@ -239,9 +237,8 @@ ActivityBase {
         GridView {
             id: sampleList
             visible: items.memoryMode
-            x: 0
             y: (background.height / 4.7)
-            z: 1
+            z: 5
             width: background.width
             height: background.height - topDisplayArea.height
             anchors.margins: 20
@@ -271,7 +268,7 @@ ActivityBase {
                 function checkDrop() {
                     // Checks the drop location of this wagon
                     var globalCoordinates = loco.mapToItem(displayList, 0, 0)
-                    if(globalCoordinates.y <= ((background.height / 8.0) + (background.height / 12.5))) {
+                    if(globalCoordinates.y <= (background.height / 12.5)) {
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
                         Activity.addWagon(uniqueID + 1, dropIndex);
                     }
