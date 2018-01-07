@@ -24,11 +24,10 @@
 .import GCompris 1.0 as GCompris
 
 var currentLevel = 0
-var numberOfLevel = 4
-var noOfCarriages = [5, 6, 5, 6]
-var rowWidth = [0.95, 0.1, 0.1, 0.1]
+var numberOfLevel = 5
 var solutionArray = []
 var backupListModel = []
+var memoryTime = [4, 6, 7, 8, 10]
 var isNewLevel = true
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var numberOfSubLevels = 3
@@ -56,8 +55,8 @@ function initLevel() {
         // Initiates a new level
         backupListModel = [];
         solutionArray = [];
-        for(var i = 0; i < currentLevel + 2; i++) {
-            if(i == (currentLevel + 1)) {
+        for(var i = 0; i < currentLevel + 1; i++) {
+            if(i == (currentLevel)) {
                 // Selects the last carriage
                 do {
                     index = Math.floor(Math.random() * 9) + 1;
@@ -82,6 +81,7 @@ function initLevel() {
         items.timer.start()
     }
     items.bar.level = currentLevel + 1;
+    items.timer.interval = memoryTime[currentLevel] * 1000
 }
 
 function nextLevel() {

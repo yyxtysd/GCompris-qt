@@ -140,7 +140,7 @@ ActivityBase {
                             id: wagon
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
-                            width: ((background.width > background.height) ? background.width : background.height) / 5.66
+                            width: (background.width > background.height) ? background.width / 5.66 : background.height / 6.2
 
                             function checkDrop(dragItem) {
                                 // Checks the drop location of this wagon
@@ -224,6 +224,7 @@ ActivityBase {
                         duration: 4000
                         easing.type: Easing.InExpo
                         loops: 1
+                        onStopped: displayRow.x = 2;
                     }
                 }
             }
