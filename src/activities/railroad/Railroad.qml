@@ -246,6 +246,7 @@ ActivityBase {
             cellWidth: width / 5
             cellHeight: background.height / 7
             model: 20
+            interactive: false
             delegate: Image {
                 id: loco
                 readonly property int uniqueID: index
