@@ -12,8 +12,14 @@
    height="100"
    id="svg2"
    sodipodi:version="0.32"
+<<<<<<< f792a01f75d3094329dabeae098eefe21dc36e38
    inkscape:version="0.44.1"
    version="1.0"
+=======
+
+   inkscape:version="0.91 r13725"
+
+>>>>>>> Railroad, fix icon image issue and Grid interectiveness
    sodipodi:docbase="/home/mat/Travaux/Inkscape/Gcompris/boardicons"
    sodipodi:docname="railroad.svg">
   <defs
