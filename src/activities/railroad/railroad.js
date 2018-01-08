@@ -56,7 +56,7 @@ function initLevel() {
         backupListModel = [];
         solutionArray = [];
         for(var i = 0; i < currentLevel + 1; i++) {
-            if(i == (currentLevel)) {
+            if(i == currentLevel) {
                 // Selects the last carriage
                 do {
                     index = Math.floor(Math.random() * 9) + 1;

@@ -37,6 +37,7 @@ ActivityBase {
         width: activity.width
         anchors.fill: parent
 
+
         signal start
         signal stop
 
@@ -140,7 +141,8 @@ ActivityBase {
                             id: wagon
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
-                            width: (background.width > background.height) ? background.width / 5.66 : background.height / 6.2
+                            width: (background.width > background.height) ? background.width / (listModel.count > 5 ? 7.2 : 5.66) :
+                                                                            background.height / ((listModel.count > 5) ? 9.2 : 6.2)
 
                             function checkDrop(dragItem) {
                                 // Checks the drop location of this wagon
@@ -270,7 +272,8 @@ ActivityBase {
                 function checkDrop() {
                     // Checks the drop location of this wagon
                     var globalCoordinates = loco.mapToItem(displayList, 0, 0)
-                    if(globalCoordinates.y <= (background.height / 12.5)) {
+                    if(globalCoordinates.y <= (background.height / 12.5) &&
+                            listModel.count <= Activity.currentLevel + 2) {
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
                         Activity.addWagon(uniqueID + 1, dropIndex);
                     }
