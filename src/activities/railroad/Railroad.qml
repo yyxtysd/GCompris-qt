@@ -37,7 +37,6 @@ ActivityBase {
         width: activity.width
         anchors.fill: parent
 
-
         signal start
         signal stop
 
@@ -142,8 +141,8 @@ ActivityBase {
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
                             width: (background.width > background.height) ? background.width / (listModel.count > 5 ? 7.2 : 5.66) :
-                                                                            background.height / ((listModel.count > 5) ? 9.2 : 6.2)
-
+                                                                            background.height / ((listModel.count > 5) ? 8.2 : 6.2)
+                            sourceSize.width: width
                             function checkDrop(dragItem) {
                                 // Checks the drop location of this wagon
                                 var globalCoordinates = dragItem.mapToItem(displayList, 0, 0)
@@ -257,6 +256,7 @@ ActivityBase {
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
                 height: background.height / 7.5
                 width: ((background.width > background.height) ? background.width/5.66 : background.height/6.2)
+                sourceSize.width: width
                 visible: true
 
                 function initDrag() {
@@ -272,6 +272,8 @@ ActivityBase {
                 function checkDrop() {
                     // Checks the drop location of this wagon
                     var globalCoordinates = loco.mapToItem(displayList, 0, 0)
+                    // checks if the wagon is dropped in correct zone and no. of wagons in answer row are less than
+                    //    total no. of wagons in correct answer + 2, before dropping the wagon.
                     if(globalCoordinates.y <= (background.height / 12.5) &&
                             listModel.count <= Activity.currentLevel + 2) {
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)

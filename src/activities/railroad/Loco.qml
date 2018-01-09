@@ -29,7 +29,7 @@ Item {
         id: img
         source: Activity.resourceURL + "loco" + imageIndex + ".svg"
         height: background.height / 8.0
-        width: ((background.width > background.height) ? background.width : background.height) / 5.66
+        sourceSize.width: ActivityInfo.ratio * 100
         Drag.hotSpot.x: width / 2
         Drag.hotSpot.y: height / 2
 

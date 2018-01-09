@@ -64,7 +64,7 @@ function initLevel() {
             } else {
                 // Selects the follow up wagons
                 do {
-                    index = Math.floor(Math.random() * 12) + 10;
+                    index = Math.floor(Math.random() * 11) + 10;
                 } while (solutionArray.indexOf(index) != -1)
             }
             solutionArray.push(index);
