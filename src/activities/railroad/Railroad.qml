@@ -67,19 +67,6 @@ ActivityBase {
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
-        // Swipe message
-        GCText {
-            id: swipe
-            anchors {
-                top: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            text: qsTr("<<== Swipe here ==>>")
-            fontSize: smallSize
-            font.weight: Font.DemiBold
-            color: "black"
-        }
-
         // Countdown timer
         Timer {
             id: timer
@@ -121,9 +108,8 @@ ActivityBase {
                 height: parent.height
                 contentWidth: displayRow.width * 1.2
                 contentHeight: displayRow.height
-                flickableDirection: Flickable.HorizontalFlick
                 anchors.fill: parent
-                interactive: !animateFlow.running
+                interactive: false
 
                 Row {
                     id: displayRow
@@ -141,7 +127,7 @@ ActivityBase {
                             source: Activity.resourceURL + "loco1.svg"
                             height: background.height / 8.0
                             width: (background.width > background.height) ? background.width / (listModel.count > 5 ? 7.2 : 5.66) :
-                                                                            background.height / ((listModel.count > 5) ? 8.2 : 6.2)
+                                                                            background.height / ((listModel.count > 5) ? 8.8 : 6.2)
                             sourceSize.width: width
                             function checkDrop(dragItem) {
                                 // Checks the drop location of this wagon
@@ -318,7 +304,7 @@ ActivityBase {
             model: 4
             Rectangle {
                 x: 0
-                y: sampleList.y + ((index+1) * (background.height / 7.5)) + (index*5)
+                y: sampleList.y + ((index + 1) * (background.height / 7.5)) + (index * 5)
                 z: 1
                 width: background.width
                 height: 6
@@ -335,6 +321,7 @@ ActivityBase {
 
         Score {
             id: score
+            fontSize: background.width > background.height ? (listModel.count > 5 ? 10 : 16) : 8
             anchors.top: parent.top
             anchors.topMargin: 10 * ApplicationInfo.ratio
             anchors.right: parent.right
