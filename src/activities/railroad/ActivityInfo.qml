@@ -24,12 +24,12 @@ ActivityInfo {
   author: "Utkarsh Tiwari &lt;iamutkarshtiwari@kde.org&gt;"
   demo: true
   title: qsTr("Railroad activity")
-  description: qsTr("Rebuild the displayed locomotive at the top of the screen by selecting the appropriate carriages and locomotive. Deselect an item by clicking on it again.")
+  description: qsTr("Rebuild the displayed locomotive at the top of the screen by dragging the appropriate carriages and locomotive. Deselect an item by dragging it down.")
   //intro: "Observe the train and then click on the items to set up a similar train"
   goal: qsTr("Memory training")
   prerequisite: ""
-  manual: qsTr("A train - a locomotive and carriage(s) - is displayed at the top of the main area for a few seconds. Rebuild it at the top of the screen by selecting the appropriate carriages and locomotive. Deselect an item by clicking on it again.")
+  manual: qsTr("A train - a locomotive and carriage(s) - is displayed at the top of the main area for a few seconds. Rebuild it at the top of the screen by dragging the appropriate carriages and locomotive. Deselect an item by dragging it down.")
   credit: ""
   section: "discovery memory"
-  createdInVersion: 8000
+  createdInVersion: 9000
 }
