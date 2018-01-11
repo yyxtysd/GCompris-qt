@@ -90,7 +90,7 @@ ActivityBase {
                 timer.start()
             }
             intro: [
-                qsTr("Swap left-right to view all the carriages outside display area. Memorize them before the timer ends!")
+                qsTr("Observe and remember the train before the timer ends and then drag the items to set up a similar train.")
             ]
         }
 
