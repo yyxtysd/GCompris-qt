@@ -72,7 +72,10 @@ ActivityBase {
             id: timer
             repeat: false
             interval: 4000
-            onTriggered: items.animateFlow.start()
+            onTriggered: {
+                items.animateFlow.start()
+                activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/train.wav')
+            }
         }
 
         // Intro message
@@ -144,6 +147,7 @@ ActivityBase {
                                 }
                                 if(globalCoordinates.y > (background.height / 8)){
                                     // Remove it if dropped in the lower section
+                                    activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                                     listModel.remove(listModel.count - 1)
                                 }
                             }
@@ -262,6 +266,7 @@ ActivityBase {
                     //    total no. of wagons in correct answer + 2, before dropping the wagon.
                     if(globalCoordinates.y <= (background.height / 12.5) &&
                             listModel.count <= Activity.currentLevel + 2) {
+                        activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
                         Activity.addWagon(uniqueID + 1, dropIndex);
                     }
