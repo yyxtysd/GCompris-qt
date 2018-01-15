@@ -74,7 +74,7 @@ ActivityBase {
             interval: 4000
             onTriggered: {
                 items.animateFlow.start()
-                activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/train.wav')
+                activity.audioEffects.play(Activity.resourceURL + 'sounds/train.wav')
             }
         }
 
