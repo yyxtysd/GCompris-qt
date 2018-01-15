@@ -184,7 +184,11 @@ ActivityBase {
                                 }
 
                                 onClicked: {
-                                    bar.hintClicked()
+                                    //skips memorization time.
+                                    if(!items.memoryMode) {
+                                        bar.hintClicked()
+                                    }
+
                                 }
                             }
                             states: State {
