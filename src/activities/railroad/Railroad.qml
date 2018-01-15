@@ -330,7 +330,7 @@ ActivityBase {
 
         Score {
             id: score
-            fontSize: background.width > background.height ? (listModel.count > 5 ? 10 : 16) : 8
+            fontSize: background.width > background.height ? internalTextComponent.smallSize : internalTextComponent.tinySize
             anchors.top: parent.top
             anchors.topMargin: 10 * ApplicationInfo.ratio
             anchors.right: parent.right
