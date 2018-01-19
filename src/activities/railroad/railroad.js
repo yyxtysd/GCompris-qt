@@ -139,30 +139,21 @@ function isAnswer() {
     }
 }
 
-function sum(index) {
-    /* Returns the sum up till the specified index */
-    var total = 0
-    for (var i = 0; i < index; i++)
-        total += noOfCarriages[i];
-    return total;
-}
-
 function addWagon(index, dropIndex) {
     /* Appends wagons to the display area */
-    items.listModel.insert(dropIndex, {"id": index});
-    (items.displayList.itemAt(dropIndex)).source = resourceURL + "loco" + (index) + ".svg";
+    items.listModel.insert(dropIndex, {"id": index, "source": (resourceURL + "loco" + (index) + ".svg")});
 }
 
 function getDropIndex(x) {
     var count = items.listModel.count;
     for (var index = 0; index < count; index++) {
-        var xVal = items.displayList.itemAt(index).x;
-        var itemWidth = items.displayList.itemAt(index).width;
+        var xVal = items.answerZone.cellWidth * index
+        var itemWidth = items.answerZone.cellWidth
         if(x < xVal && index == 0) {
             return 0;
-        } else if((xVal + itemWidth + items.displayRow.spacing) <= x && index == (count - 1)) {
+        } else if((xVal + itemWidth + items.background.width * 0.0025) <= x && index == (count - 1)) {
             return count;
-        } else if(xVal <= x && x < (xVal + itemWidth + items.displayRow.spacing)) {
+        } else if(xVal <= x && x < (xVal + itemWidth + items.background.width * 0.0025)) {
             return index + 1;
         }
     }
