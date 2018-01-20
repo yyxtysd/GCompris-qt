@@ -65,6 +65,9 @@ ActivityBase {
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
+        Keys.enabled: !timer.running && !animateFlow.running
+        Keys.onPressed: (answerZone.keyNavigation) ? answerZone.handleKeys(event) : sampleList.handleKeys(event)
+
 
         // Countdown timer
         Timer {
@@ -116,7 +119,6 @@ ActivityBase {
                 cellHeight: levelCellHeight
                 x: parent.x
                 interactive: false
-                focus: true
                 model: listModel
                 delegate: Image {
                     id: wagon
@@ -214,6 +216,56 @@ ActivityBase {
                     loops: 1
                     onStopped: answerZone.x = 2;
                 }
+
+                function handleKeys(event) {
+                   if(event.key === Qt.Key_Down) {
+                       keyNavigation = false
+                       answerZone.currentIndex = -1
+                       sampleList.currentIndex = 0
+                    }
+                    if(event.key === Qt.Key_Up) {
+                        keyNavigation = false
+                        answerZone.currentIndex = -1
+                        sampleList.currentIndex = 0
+                    }
+                    if(event.key === Qt.Key_Left) {
+                        keyNavigation = true
+                        answerZone.moveCurrentIndexLeft()
+                    }
+                    if(event.key === Qt.Key_Right) {
+                        keyNavigation = true
+                        answerZone.moveCurrentIndexRight()
+                    }
+                }
+
+                property bool keyNavigation: true
+                Keys.enabled: true
+                focus: true
+                keyNavigationWraps: true
+                highlightRangeMode: GridView.ApplyRange
+                highlight: Rectangle {
+                    width: answerZone.cellWidth
+                    height: answerZone.cellHeight
+                    color: "blue"
+                    opacity: 0.8
+                    radius: 5
+                    visible: answerZone.keyNavigation && (!timer.running && !animateFlow.running)
+                    x: (answerZone.currentIndex >= 0) ? answerZone.currentItem.x : 0
+                    y: (answerZone.currentIndex >= 0) ? answerZone.currentItem.y : 0
+                    Behavior on x {
+                        SpringAnimation {
+                            spring: 3
+                            damping: 0.2
+                        }
+                    }
+                    Behavior on y {
+                        SpringAnimation {
+                            spring: 3
+                            damping: 0.2
+                        }
+                    }
+                }
+                highlightFollowsCurrentItem: false
             }
 
             ListModel {
@@ -297,6 +349,61 @@ ActivityBase {
                     }
                 }
             }
+
+            function handleKeys(event) {
+                if(event.key === Qt.Key_Up) {
+                    keyNavigation = true
+                    if(sampleList.currentIndex <= 4 && listModel.count >= 1) {
+                       answerZone.keyNavigation = true
+                       answerZone.currentIndex = 0
+                       sampleList.currentIndex = -1
+                    }
+                    else {
+                        sampleList.moveCurrentIndexUp()
+                    }
+                }
+                if(event.key === Qt.Key_Down) {
+                    keyNavigation = true
+                    sampleList.moveCurrentIndexDown()
+                }
+                if(event.key === Qt.Key_Left) {
+                    keyNavigation = true
+                    sampleList.moveCurrentIndexLeft()
+                }
+                if(event.key === Qt.Key_Right) {
+                    keyNavigation = true
+                    sampleList.moveCurrentIndexRight()
+                }
+            }
+
+            property bool keyNavigation: !answerZone.keyNavigation
+            Keys.enabled: true
+            focus: true
+            keyNavigationWraps: true
+            highlightRangeMode: GridView.ApplyRange
+            highlight: Rectangle {
+                width: sampleList.cellWidth
+                height: sampleList.cellHeight
+                color: "#AA41AAC4"
+                opacity: 0.8
+                radius: 5
+                visible: sampleList.keyNavigation
+                x: (sampleList.currentIndex >= 0) ? sampleList.currentItem.x : 0
+                y: (sampleList.currentIndex >= 0) ? sampleList.currentItem.y : 0
+                Behavior on x {
+                    SpringAnimation {
+                        spring: 3
+                        damping: 0.2
+                    }
+                }
+                Behavior on y {
+                    SpringAnimation {
+                        spring: 3
+                        damping: 0.2
+                    }
+                }
+            }
+            highlightFollowsCurrentItem: false
         }
 
         // Lower level wagons shelves

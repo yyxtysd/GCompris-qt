@@ -51,6 +51,8 @@ function initLevel() {
     items.timer.stop();
     items.animateFlow.stop(); // Stops any previous animations
     items.listModel.clear();
+    items.answerZone.currentIndex = 0;
+    items.sampleList.currentIndex = 0;
     if(isNewLevel) {
         // Initiates a new level
         backupListModel = [];
