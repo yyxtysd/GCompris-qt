@@ -250,8 +250,8 @@ ActivityBase {
                     opacity: 0.8
                     radius: 5
                     visible: answerZone.keyNavigation && (!timer.running && !animateFlow.running)
-                    x: (answerZone.currentIndex >= 0) ? answerZone.currentItem.x : 0
-                    y: (answerZone.currentIndex >= 0) ? answerZone.currentItem.y : 0
+                    x: visible ? answerZone.currentItem.x : 0
+                    y: visible ? answerZone.currentItem.y : 0
                     Behavior on x {
                         SpringAnimation {
                             spring: 3
