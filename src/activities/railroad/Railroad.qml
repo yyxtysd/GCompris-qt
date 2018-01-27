@@ -61,12 +61,13 @@ ActivityBase {
             property alias introMessage: introMessage
             property bool memoryMode: false
             property bool mouseEnabled: true
+            property var currentKeyZone: "sampleGrid"
         }
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
         Keys.enabled: !timer.running && !animateFlow.running
-        Keys.onPressed: (answerZone.keyNavigation) ? answerZone.handleKeys(event) : sampleList.handleKeys(event)
+        Keys.onPressed: (items.currentKeyZone === "answerRow") ? answerZone.handleKeys(event) : sampleList.handleKeys(event)
 
 
         // Countdown timer
@@ -182,6 +183,10 @@ ActivityBase {
                             if(!items.memoryMode) {
                                 bar.hintClicked()
                             }
+                            else {
+                                items.currentKeyZone = "answerRow"
+                                answerZone.currentIndex = index
+                            }
 
                         }
                     }
@@ -219,26 +224,25 @@ ActivityBase {
 
                 function handleKeys(event) {
                     if(event.key === Qt.Key_Down) {
-                        keyNavigation = false
+                        items.currentKeyZone = "sampleGrid"
                         answerZone.currentIndex = -1
                         sampleList.currentIndex = 0
                     }
                     if(event.key === Qt.Key_Up) {
-                        keyNavigation = false
+                        items.currentKeyZone = "sampleGrid"
                         answerZone.currentIndex = -1
                         sampleList.currentIndex = 0
                     }
                     if(event.key === Qt.Key_Left) {
-                        keyNavigation = true
+                        items.currentKeyZone = "answerRow"
                         answerZone.moveCurrentIndexLeft()
                     }
                     if(event.key === Qt.Key_Right) {
-                        keyNavigation = true
+                        items.currentKeyZone = "answerRow"
                         answerZone.moveCurrentIndexRight()
                     }
                 }
 
-                property bool keyNavigation: true
                 Keys.enabled: true
                 focus: true
                 keyNavigationWraps: true
@@ -249,7 +253,7 @@ ActivityBase {
                     color: "blue"
                     opacity: 0.8
                     radius: 5
-                    visible: answerZone.keyNavigation && (!timer.running && !animateFlow.running)
+                    visible: (items.currentKeyZone === "answerRow") && (!timer.running && !animateFlow.running)
                     x: visible ? answerZone.currentItem.x : 0
                     y: visible ? answerZone.currentItem.y : 0
                     Behavior on x {
@@ -286,6 +290,7 @@ ActivityBase {
             cellHeight: background.height / 7
             model: 20
             interactive: false
+            readonly property int wagonsInEachRow: 5
             delegate: Image {
                 id: loco
                 readonly property int uniqueID: index
@@ -328,6 +333,10 @@ ActivityBase {
                     drag.target: parent
                     drag.axis: (parent.y >= 0 && parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
                     enabled: items.mouseEnabled
+                    onClicked: {
+                        items.currentKeyZone = "sampleGrid"
+                        sampleList.currentIndex = index
+                    }
                     onPressed: {
                         parent.initDrag()
                     }
@@ -352,9 +361,10 @@ ActivityBase {
 
             function handleKeys(event) {
                 if(event.key === Qt.Key_Up) {
-                    keyNavigation = true
-                    if(sampleList.currentIndex <= 4 && listModel.count >= 1) {
-                        answerZone.keyNavigation = true
+                    items.currentKeyZone = "sampleGrid"
+                    // Checks if current highlighted element is in first row of the grid.
+                    if(sampleList.currentIndex < wagonsInEachRow && listModel.count > 0) {
+                        items.currentKeyZone = "answerRow"
                         answerZone.currentIndex = 0
                         sampleList.currentIndex = -1
                     }
@@ -363,20 +373,19 @@ ActivityBase {
                     }
                 }
                 if(event.key === Qt.Key_Down) {
-                    keyNavigation = true
+                    items.currentKeyZone = "sampleGrid"
                     sampleList.moveCurrentIndexDown()
                 }
                 if(event.key === Qt.Key_Left) {
-                    keyNavigation = true
+                    items.currentKeyZone = "sampleGrid"
                     sampleList.moveCurrentIndexLeft()
                 }
                 if(event.key === Qt.Key_Right) {
-                    keyNavigation = true
+                    items.currentKeyZone = "sampleGrid"
                     sampleList.moveCurrentIndexRight()
                 }
             }
 
-            property bool keyNavigation: !answerZone.keyNavigation
             Keys.enabled: true
             focus: true
             keyNavigationWraps: true
@@ -387,7 +396,7 @@ ActivityBase {
                 color: "#AA41AAC4"
                 opacity: 0.8
                 radius: 5
-                visible: sampleList.keyNavigation
+                visible: items.currentKeyZone === "sampleGrid"
                 x: (sampleList.currentIndex >= 0) ? sampleList.currentItem.x : 0
                 y: (sampleList.currentIndex >= 0) ? sampleList.currentItem.y : 0
                 Behavior on x {
