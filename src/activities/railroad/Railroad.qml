@@ -111,7 +111,7 @@ ActivityBase {
             GridView {
                 id: answerZone
                 readonly property int levelCellWidth: (background.width > background.height) ? background.width / (listModel.count > 5 ? 7.2 : 5.66) :
-                                                                                      background.height / ((listModel.count > 5) ? 8.8 : 6.2)
+                                                                                               background.height / ((listModel.count > 5) ? 8.8 : 6.2)
                 readonly property int levelCellHeight: background.height / 8
                 width: parent.width
                 height: background.height / 8
@@ -122,7 +122,7 @@ ActivityBase {
                 model: listModel
                 delegate: Image {
                     id: wagon
-                    source: listModel.get(index).source
+                    source: Activity.resourceURL + "loco" + (modelData) + ".svg"
                     height: answerZone.levelCellHeight
                     width: answerZone.levelCellWidth
                     sourceSize.width: width
@@ -218,10 +218,10 @@ ActivityBase {
                 }
 
                 function handleKeys(event) {
-                   if(event.key === Qt.Key_Down) {
-                       keyNavigation = false
-                       answerZone.currentIndex = -1
-                       sampleList.currentIndex = 0
+                    if(event.key === Qt.Key_Down) {
+                        keyNavigation = false
+                        answerZone.currentIndex = -1
+                        sampleList.currentIndex = 0
                     }
                     if(event.key === Qt.Key_Up) {
                         keyNavigation = false
@@ -354,9 +354,9 @@ ActivityBase {
                 if(event.key === Qt.Key_Up) {
                     keyNavigation = true
                     if(sampleList.currentIndex <= 4 && listModel.count >= 1) {
-                       answerZone.keyNavigation = true
-                       answerZone.currentIndex = 0
-                       sampleList.currentIndex = -1
+                        answerZone.keyNavigation = true
+                        answerZone.currentIndex = 0
+                        sampleList.currentIndex = -1
                     }
                     else {
                         sampleList.moveCurrentIndexUp()

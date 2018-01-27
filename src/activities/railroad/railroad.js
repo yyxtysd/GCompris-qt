@@ -143,7 +143,7 @@ function isAnswer() {
 
 function addWagon(index, dropIndex) {
     /* Appends wagons to the display area */
-    items.listModel.insert(dropIndex, {"id": index, "source": (resourceURL + "loco" + (index) + ".svg")});
+    items.listModel.insert(dropIndex, {"id": index});
 }
 
 function getDropIndex(x) {
