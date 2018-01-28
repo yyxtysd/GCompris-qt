@@ -223,6 +223,11 @@ ActivityBase {
                 }
 
                 function handleKeys(event) {
+                    if(event.key === Qt.Key_Tab) {
+                        items.currentKeyZone = "sampleGrid"
+                        sampleList.currentIndex = 0
+                        answerZone.currentIndex = -1
+                    }
                     if(event.key === Qt.Key_Down) {
                         items.currentKeyZone = "sampleGrid"
                         answerZone.currentIndex = -1
@@ -360,6 +365,13 @@ ActivityBase {
             }
 
             function handleKeys(event) {
+                if(event.key === Qt.Key_Tab) {
+                    if(listModel.count > 0) {
+                        items.currentKeyZone = "answerRow"
+                        sampleList.currentIndex = -1
+                        answerZone.currentIndex = 0
+                    }
+                }
                 if(event.key === Qt.Key_Up) {
                     items.currentKeyZone = "sampleGrid"
                     // Checks if current highlighted element is in first row of the grid.
@@ -383,6 +395,13 @@ ActivityBase {
                 if(event.key === Qt.Key_Right) {
                     items.currentKeyZone = "sampleGrid"
                     sampleList.moveCurrentIndexRight()
+                }
+                if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
+                    // At most (current level + 2) wagons are allowed in answer row at a time.
+                    if(listModel.count <= Activity.currentLevel + 2) {
+                        activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
+                        Activity.addWagon(sampleList.currentIndex + 1, listModel.count);
+                    }
                 }
             }
 
