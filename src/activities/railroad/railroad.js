@@ -53,6 +53,7 @@ function initLevel() {
     items.listModel.clear();
     items.answerZone.currentIndex = 0;
     items.sampleList.currentIndex = 0;
+    items.answerZone.swapMode = false;
     if(isNewLevel) {
         // Initiates a new level
         backupListModel = [];

@@ -61,7 +61,7 @@ ActivityBase {
             property alias introMessage: introMessage
             property bool memoryMode: false
             property bool mouseEnabled: true
-            property var currentKeyZone: "sampleGrid"
+            property string currentKeyZone: "sampleGrid"
         }
 
         onStart: { Activity.start(items) }
@@ -223,6 +223,7 @@ ActivityBase {
                 }
 
                 function handleKeys(event) {
+                    // Switch zones via tab key.
                     if(event.key === Qt.Key_Tab) {
                         items.currentKeyZone = "sampleGrid"
                         sampleList.currentIndex = 0
@@ -246,7 +247,40 @@ ActivityBase {
                         items.currentKeyZone = "answerRow"
                         answerZone.moveCurrentIndexRight()
                     }
+                    // Remove a wagon via Delete/Return key.
+                    if(event.key === Qt.Key_Delete || event.key === Qt.Key_Return) {
+                        activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
+                        listModel.remove(answerZone.currentIndex)
+                        Activity.isAnswer();
+                    }
+                    // Swaps two wagons with help of Space/Enter keys.
+                    if(event.key === Qt.Key_Space || event.key === Qt.Key_Enter && listModel.count > 1) {
+                        if(swapMode === false) {
+                            swapIndex1 = answerZone.currentIndex;
+                            swapHighlight.x = answerZone.currentItem.x;
+                            swapHighlight.y = answerZone.currentItem.y;
+                            swapHighlight.visible = true;
+                            swapMode = true;
+                        }
+                        else {
+                            swapIndex2 = answerZone.currentIndex;
+                            var min = Math.min(swapIndex1, swapIndex2);
+                            var max = Math.max(swapIndex1, swapIndex2);
+                            listModel.move(min, max, 1);
+                            listModel.move(max-1, min, 1);
+                            swapMode = false;
+                            swapHighlight.visible = false;
+                            Activity.isAnswer();
+                        }
+                    }
                 }
+                // variables for storing the index of wagons to be swaped via key navigations.
+                property int swapIndex1: 0
+                property int swapIndex2: 0
+
+                // Boolean for checking whether swaping wagons via key navigation is in progress or not.
+                //     Set to true when one of the wagon is already selected for swapping.
+                property bool swapMode: false
 
                 Keys.enabled: true
                 focus: true
@@ -256,7 +290,7 @@ ActivityBase {
                     width: answerZone.cellWidth
                     height: answerZone.cellHeight
                     color: "blue"
-                    opacity: 0.8
+                    opacity: 0.3
                     radius: 5
                     visible: (items.currentKeyZone === "answerRow") && (!timer.running && !animateFlow.running)
                     x: visible ? answerZone.currentItem.x : 0
@@ -275,6 +309,17 @@ ActivityBase {
                     }
                 }
                 highlightFollowsCurrentItem: false
+            }
+
+            // Used to highlight a wagon selected for swaping via key navigations.
+            Rectangle {
+                id: swapHighlight
+                width: answerZone.cellWidth
+                height: answerZone.cellHeight
+                visible: false
+                color: "#AA41AAC4"
+                opacity: 0.8
+                radius: 5
             }
 
             ListModel {
@@ -401,6 +446,7 @@ ActivityBase {
                     if(listModel.count <= Activity.currentLevel + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         Activity.addWagon(sampleList.currentIndex + 1, listModel.count);
+                        Activity.isAnswer();
                     }
                 }
             }
