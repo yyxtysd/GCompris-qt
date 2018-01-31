@@ -61,13 +61,13 @@ ActivityBase {
             property alias introMessage: introMessage
             property bool memoryMode: false
             property bool mouseEnabled: true
-            property string currentKeyZone: "sampleGrid"
+            property var currentKeyZone: sampleList
         }
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
         Keys.enabled: !timer.running && !animateFlow.running
-        Keys.onPressed: (items.currentKeyZone === "answerRow") ? answerZone.handleKeys(event) : sampleList.handleKeys(event)
+        Keys.onPressed: (items.currentKeyZone === answerZone) ? answerZone.handleKeys(event) : sampleList.handleKeys(event)
 
 
         // Countdown timer
@@ -184,7 +184,7 @@ ActivityBase {
                                 bar.hintClicked()
                             }
                             else {
-                                items.currentKeyZone = "answerRow"
+                                items.currentKeyZone = answerZone
                                 answerZone.currentIndex = index
                             }
 
@@ -225,26 +225,26 @@ ActivityBase {
                 function handleKeys(event) {
                     // Switch zones via tab key.
                     if(event.key === Qt.Key_Tab) {
-                        items.currentKeyZone = "sampleGrid"
+                        items.currentKeyZone = sampleList
                         sampleList.currentIndex = 0
                         answerZone.currentIndex = -1
                     }
                     if(event.key === Qt.Key_Down) {
-                        items.currentKeyZone = "sampleGrid"
+                        items.currentKeyZone = sampleList
                         answerZone.currentIndex = -1
                         sampleList.currentIndex = 0
                     }
                     if(event.key === Qt.Key_Up) {
-                        items.currentKeyZone = "sampleGrid"
+                        items.currentKeyZone = sampleList
                         answerZone.currentIndex = -1
                         sampleList.currentIndex = 0
                     }
                     if(event.key === Qt.Key_Left) {
-                        items.currentKeyZone = "answerRow"
+                        items.currentKeyZone = answerZone
                         answerZone.moveCurrentIndexLeft()
                     }
                     if(event.key === Qt.Key_Right) {
-                        items.currentKeyZone = "answerRow"
+                        items.currentKeyZone = answerZone
                         answerZone.moveCurrentIndexRight()
                     }
                     // Remove a wagon via Delete/Return key.
@@ -292,7 +292,7 @@ ActivityBase {
                     color: "blue"
                     opacity: 0.3
                     radius: 5
-                    visible: (items.currentKeyZone === "answerRow") && (!timer.running && !animateFlow.running)
+                    visible: (items.currentKeyZone === answerZone) && (!timer.running && !animateFlow.running)
                     x: visible ? answerZone.currentItem.x : 0
                     y: visible ? answerZone.currentItem.y : 0
                     Behavior on x {
@@ -336,11 +336,13 @@ ActivityBase {
             width: background.width
             height: background.height - topDisplayArea.height
             anchors.margins: 20
-            cellWidth: width / 5
+            cellWidth: width / columnCount
             cellHeight: background.height / 7
             model: 20
             interactive: false
-            readonly property int wagonsInEachRow: 5
+
+            // No. of wagons in a row
+            readonly property int columnCount: 5
             delegate: Image {
                 id: loco
                 readonly property int uniqueID: index
@@ -384,7 +386,7 @@ ActivityBase {
                     drag.axis: (parent.y >= 0 && parent.y <= background.height / 7.5) ? Drag.YAxis : Drag.XAndYAxis
                     enabled: items.mouseEnabled
                     onClicked: {
-                        items.currentKeyZone = "sampleGrid"
+                        items.currentKeyZone = sampleList
                         sampleList.currentIndex = index
                     }
                     onPressed: {
@@ -412,16 +414,16 @@ ActivityBase {
             function handleKeys(event) {
                 if(event.key === Qt.Key_Tab) {
                     if(listModel.count > 0) {
-                        items.currentKeyZone = "answerRow"
+                        items.currentKeyZone = answerZone
                         sampleList.currentIndex = -1
                         answerZone.currentIndex = 0
                     }
                 }
                 if(event.key === Qt.Key_Up) {
-                    items.currentKeyZone = "sampleGrid"
+                    items.currentKeyZone = sampleList
                     // Checks if current highlighted element is in first row of the grid.
-                    if(sampleList.currentIndex < wagonsInEachRow && listModel.count > 0) {
-                        items.currentKeyZone = "answerRow"
+                    if(sampleList.currentIndex < columnCount && listModel.count > 0) {
+                        items.currentKeyZone = answerZone
                         answerZone.currentIndex = 0
                         sampleList.currentIndex = -1
                     }
@@ -430,15 +432,15 @@ ActivityBase {
                     }
                 }
                 if(event.key === Qt.Key_Down) {
-                    items.currentKeyZone = "sampleGrid"
+                    items.currentKeyZone = sampleList
                     sampleList.moveCurrentIndexDown()
                 }
                 if(event.key === Qt.Key_Left) {
-                    items.currentKeyZone = "sampleGrid"
+                    items.currentKeyZone = sampleList
                     sampleList.moveCurrentIndexLeft()
                 }
                 if(event.key === Qt.Key_Right) {
-                    items.currentKeyZone = "sampleGrid"
+                    items.currentKeyZone = sampleList
                     sampleList.moveCurrentIndexRight()
                 }
                 if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
@@ -461,7 +463,7 @@ ActivityBase {
                 color: "#AA41AAC4"
                 opacity: 0.8
                 radius: 5
-                visible: items.currentKeyZone === "sampleGrid"
+                visible: items.currentKeyZone === sampleList
                 x: (sampleList.currentIndex >= 0) ? sampleList.currentItem.x : 0
                 y: (sampleList.currentIndex >= 0) ? sampleList.currentItem.y : 0
                 Behavior on x {
