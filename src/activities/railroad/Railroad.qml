@@ -67,8 +67,10 @@ ActivityBase {
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
         Keys.enabled: !timer.running && !animateFlow.running
-        Keys.onPressed: (items.currentKeyZone === answerZone) ? answerZone.handleKeys(event) : sampleList.handleKeys(event)
-
+        Keys.onPressed:  {
+            (items.currentKeyZone === answerZone) ? answerZone.handleKeys(event) : sampleList.handleKeys(event);
+            activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav');
+        }
 
         // Countdown timer
         Timer {
