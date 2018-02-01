@@ -68,7 +68,7 @@ ActivityBase {
         onStop: { Activity.stop() }
         Keys.enabled: !timer.running && !animateFlow.running
         Keys.onPressed:  {
-            (items.currentKeyZone === answerZone) ? answerZone.handleKeys(event) : sampleList.handleKeys(event);
+            items.currentKeyZone.handleKeys(event)
             activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav');
         }
 
@@ -169,6 +169,8 @@ ActivityBase {
                                 parent.opacity = 0
                                 listModel.move(index, listModel.count - 1, 1)
                             }
+                            answerZone.swapMode = false;
+                            swapHighlight.visible = false;
                         }
                         onReleased: {
                             if(items.memoryMode == true) {
@@ -189,7 +191,8 @@ ActivityBase {
                                 items.currentKeyZone = answerZone
                                 answerZone.currentIndex = index
                             }
-
+                            answerZone.swapMode = false;
+                            swapHighlight.visible = false;
                         }
                     }
                     states: State {
@@ -253,11 +256,15 @@ ActivityBase {
                     if(event.key === Qt.Key_Delete || event.key === Qt.Key_Return) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         listModel.remove(answerZone.currentIndex)
+                        if(listModel.count < 2) {
+                            answerZone.swapMode = false;
+                            swapHighlight.visible = false;
+                        }
                         Activity.isAnswer();
                     }
                     // Swaps two wagons with help of Space/Enter keys.
                     if(event.key === Qt.Key_Space || event.key === Qt.Key_Enter && listModel.count > 1) {
-                        if(swapMode === false) {
+                        if(swapMode === false && listModel.count > 1) {
                             swapIndex1 = answerZone.currentIndex;
                             swapHighlight.x = answerZone.currentItem.x;
                             swapHighlight.y = answerZone.currentItem.y;
