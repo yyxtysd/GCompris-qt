@@ -169,8 +169,7 @@ ActivityBase {
                                 parent.opacity = 0
                                 listModel.move(index, listModel.count - 1, 1)
                             }
-                            answerZone.swapMode = false;
-                            swapHighlight.visible = false;
+                            answerZone.selectedSwapIndex = -1;
                         }
                         onReleased: {
                             if(items.memoryMode == true) {
@@ -191,8 +190,7 @@ ActivityBase {
                                 items.currentKeyZone = answerZone
                                 answerZone.currentIndex = index
                             }
-                            answerZone.swapMode = false;
-                            swapHighlight.visible = false;
+                            answerZone.selectedSwapIndex = -1;
                         }
                     }
                     states: State {
@@ -257,39 +255,32 @@ ActivityBase {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         listModel.remove(answerZone.currentIndex)
                         if(listModel.count < 2) {
-                            answerZone.swapMode = false;
-                            swapHighlight.visible = false;
+                            answerZone.selectedSwapIndex = -1;
                         }
                         Activity.isAnswer();
                     }
                     // Swaps two wagons with help of Space/Enter keys.
-                    if(event.key === Qt.Key_Space || event.key === Qt.Key_Enter && listModel.count > 1) {
-                        if(swapMode === false && listModel.count > 1) {
-                            swapIndex1 = answerZone.currentIndex;
+                    if(event.key === Qt.Key_Space || event.key === Qt.Key_Enter) {
+                        if(selectedSwapIndex === -1 && listModel.count > 1) {
+                            answerZone.selectedSwapIndex = answerZone.currentIndex;
                             swapHighlight.x = answerZone.currentItem.x;
                             swapHighlight.y = answerZone.currentItem.y;
-                            swapHighlight.visible = true;
-                            swapMode = true;
                         }
-                        else {
-                            swapIndex2 = answerZone.currentIndex;
-                            var min = Math.min(swapIndex1, swapIndex2);
-                            var max = Math.max(swapIndex1, swapIndex2);
+                        else if(answerZone.currentIndex != selectedSwapIndex && listModel.count > 1){
+                            var min = Math.min(selectedSwapIndex, answerZone.currentIndex);
+                            var max = Math.max(selectedSwapIndex, answerZone.currentIndex);
                             listModel.move(min, max, 1);
                             listModel.move(max-1, min, 1);
-                            swapMode = false;
-                            swapHighlight.visible = false;
+                            answerZone.selectedSwapIndex = -1;
                             Activity.isAnswer();
                         }
                     }
                 }
-                // variables for storing the index of wagons to be swaped via key navigations.
-                property int swapIndex1: 0
-                property int swapIndex2: 0
+                // variable for storing the index of wagons to be swaped via key navigations.
+                property int selectedSwapIndex: -1
 
                 // Boolean for checking whether swaping wagons via key navigation is in progress or not.
                 //     Set to true when one of the wagon is already selected for swapping.
-                property bool swapMode: false
 
                 Keys.enabled: true
                 focus: true
@@ -325,7 +316,7 @@ ActivityBase {
                 id: swapHighlight
                 width: answerZone.cellWidth
                 height: answerZone.cellHeight
-                visible: false
+                visible: answerZone.selectedSwapIndex != -1 ? true : false
                 color: "#AA41AAC4"
                 opacity: 0.8
                 radius: 5
