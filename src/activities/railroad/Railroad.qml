@@ -342,14 +342,14 @@ ActivityBase {
             anchors.margins: 20
             cellWidth: width / columnCount
             cellHeight: background.height / 7
-            model: 20
+            model: bar.level % 2 == 0 ? 20 : 12
             interactive: false
 
             // No. of wagons in a row
             readonly property int columnCount: 5
             delegate: Image {
                 id: loco
-                readonly property int uniqueID: index
+                readonly property int uniqueID: (bar.level %2 == 0) ? index : ((index < 4) ? index : index + 6)
                 property real originX
                 property real originY
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
@@ -374,7 +374,7 @@ ActivityBase {
                     // checks if the wagon is dropped in correct zone and no. of wagons in answer row are less than
                     //    total no. of wagons in correct answer + 2, before dropping the wagon.
                     if(globalCoordinates.y <= (background.height / 12.5) &&
-                            listModel.count <= Activity.currentLevel + 2) {
+                            listModel.count <= Math.floor(bar.level / 2) + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
                         Activity.addWagon(uniqueID + 1, dropIndex);
@@ -450,10 +450,11 @@ ActivityBase {
                     sampleList.moveCurrentIndexRight()
                 }
                 if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
+                    var imageId = (bar.level % 2 == 0 || sampleList.currentIndex < 4) ? sampleList.currentIndex : sampleList.currentIndex + 6
                     // At most (current level + 2) wagons are allowed in answer row at a time.
-                    if(listModel.count <= Activity.currentLevel + 2) {
+                    if(listModel.count <= Math.ceil(bar.level / 2) + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
-                        Activity.addWagon(sampleList.currentIndex + 1, listModel.count);
+                        Activity.addWagon(imageId + 1, listModel.count);
                         Activity.isAnswer();
                     }
                 }

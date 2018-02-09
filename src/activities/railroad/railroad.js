@@ -24,10 +24,10 @@
 .import GCompris 1.0 as GCompris
 
 var currentLevel = 0
-var numberOfLevel = 5
+var numberOfLevel = 10
 var solutionArray = []
 var backupListModel = []
-var memoryTime = [4, 6, 7, 8, 10]
+var memoryTime = [4, 4, 6, 6, 7, 7, 8, 8, 10, 10]
 var isNewLevel = true
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var numberOfSubLevels = 3
@@ -58,16 +58,26 @@ function initLevel() {
         // Initiates a new level
         backupListModel = [];
         solutionArray = [];
-        for(var i = 0; i < currentLevel + 1; i++) {
+        for(var i = 0; i < Math.ceil((currentLevel+1) / 2); i++) {
             if(i == currentLevel) {
                 // Selects the last carriage
                 do {
-                    index = Math.floor(Math.random() * 9) + 1;
+                    if(currentLevel % 2 == 0) {
+                        index = Math.floor(Math.random() * 4) + 1;
+                    }
+                    else {
+                        index = Math.floor(Math.random() * 9) + 1;
+                    }
                 } while (solutionArray.indexOf(index) != -1) // Ensures non-repeative wagons setup
             } else {
                 // Selects the follow up wagons
                 do {
-                    index = Math.floor(Math.random() * 11) + 10;
+                    if(currentLevel % 2 == 0) {
+                        index = Math.floor(Math.random() * 8) + 11;
+                    }
+                    else {
+                        index = Math.floor(Math.random() * 11) + 10;
+                    }
                 } while (solutionArray.indexOf(index) != -1)
             }
             solutionArray.push(index);
