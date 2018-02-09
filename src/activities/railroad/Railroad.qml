@@ -62,13 +62,15 @@ ActivityBase {
             property bool memoryMode: false
             property bool mouseEnabled: true
             property var currentKeyZone: sampleList
+            property bool keyNavigationMode: false
         }
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
         Keys.enabled: !timer.running && !animateFlow.running
         Keys.onPressed:  {
-            items.currentKeyZone.handleKeys(event)
+            items.keyNavigationMode = true;
+            items.currentKeyZone.handleKeys(event);
             activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav');
         }
 
@@ -188,7 +190,9 @@ ActivityBase {
                             }
                             else {
                                 items.currentKeyZone = answerZone
-                                answerZone.currentIndex = index
+                                if(items.keyNavigationMode) {
+                                    answerZone.currentIndex = index
+                                }
                             }
                             answerZone.selectedSwapIndex = -1;
                         }
@@ -292,7 +296,7 @@ ActivityBase {
                     color: "blue"
                     opacity: 0.3
                     radius: 5
-                    visible: (items.currentKeyZone === answerZone) && (!timer.running && !animateFlow.running)
+                    visible: (items.currentKeyZone === answerZone) && (!timer.running && !animateFlow.running) && items.keyNavigationMode
                     x: visible ? answerZone.currentItem.x : 0
                     y: visible ? answerZone.currentItem.y : 0
                     Behavior on x {
@@ -387,7 +391,9 @@ ActivityBase {
                     enabled: items.mouseEnabled
                     onClicked: {
                         items.currentKeyZone = sampleList
-                        sampleList.currentIndex = index
+                        if(items.keyNavigationMode) {
+                            sampleList.currentIndex = index
+                        }
                     }
                     onPressed: {
                         parent.initDrag()
@@ -463,7 +469,7 @@ ActivityBase {
                 color: "#AA41AAC4"
                 opacity: 0.8
                 radius: 5
-                visible: items.currentKeyZone === sampleList
+                visible: items.currentKeyZone === sampleList && items.keyNavigationMode
                 x: (sampleList.currentIndex >= 0) ? sampleList.currentItem.x : 0
                 y: (sampleList.currentIndex >= 0) ? sampleList.currentItem.y : 0
                 Behavior on x {
