@@ -353,9 +353,9 @@ ActivityBase {
                 property real originX
                 property real originY
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
-                height: background.height / 7.5
                 width: ((background.width > background.height) ? background.width/5.66 : background.height/6.2)
                 sourceSize.width: width
+                fillMode: Image.PreserveAspectFit
                 visible: true
 
                 function initDrag() {
