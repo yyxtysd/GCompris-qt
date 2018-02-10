@@ -255,7 +255,7 @@ ActivityBase {
                         answerZone.moveCurrentIndexRight()
                     }
                     // Remove a wagon via Delete/Return key.
-                    if(event.key === Qt.Key_Delete || event.key === Qt.Key_Return) {
+                    if(event.key === Qt.Key_Delete || event.key === Qt.Key_Return && listModel.count > 0) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         listModel.remove(answerZone.currentIndex)
                         if(listModel.count < 2) {
@@ -282,9 +282,6 @@ ActivityBase {
                 }
                 // variable for storing the index of wagons to be swaped via key navigations.
                 property int selectedSwapIndex: -1
-
-                // Boolean for checking whether swaping wagons via key navigation is in progress or not.
-                //     Set to true when one of the wagon is already selected for swapping.
 
                 Keys.enabled: true
                 focus: true
@@ -342,14 +339,21 @@ ActivityBase {
             anchors.margins: 20
             cellWidth: width / columnCount
             cellHeight: background.height / 7
-            model: bar.level % 2 == 0 ? 20 : 12
+            model: Activity.dataset["noOfSampleWagons"][bar.level - 1]
             interactive: false
 
             // No. of wagons in a row
             readonly property int columnCount: 5
             delegate: Image {
                 id: loco
-                readonly property int uniqueID: (bar.level %2 == 0) ? index : ((index < 4) ? index : index + 6)
+
+                /** uniqueID stores image no. by which it is stored in resources/
+                  * When there are 20 wagons in sample list(i.e. all images are shown) then uniqueID: index
+                  * in case 12 wagons are displyed then image no 5-10 are ignored(railroad/resources/loco+"uniqueId".svg)
+                  * to skip these wagons uniqueID: index + 6 and first four wagons are same for all levels.
+                  */
+                readonly property int uniqueID: (Activity.dataset["noOfSampleWagons"][bar.level - 1] === 20 || index < 4) ? index : index + 6
+
                 property real originX
                 property real originY
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
@@ -374,7 +378,7 @@ ActivityBase {
                     // checks if the wagon is dropped in correct zone and no. of wagons in answer row are less than
                     //    total no. of wagons in correct answer + 2, before dropping the wagon.
                     if(globalCoordinates.y <= (background.height / 12.5) &&
-                            listModel.count <= Math.floor(bar.level / 2) + 2) {
+                            listModel.count < Activity.dataset["WagonsInCorrectAnswers"][bar.level - 1] + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
                         Activity.addWagon(uniqueID + 1, dropIndex);
@@ -452,7 +456,7 @@ ActivityBase {
                 if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
                     var imageId = (bar.level % 2 == 0 || sampleList.currentIndex < 4) ? sampleList.currentIndex : sampleList.currentIndex + 6
                     // At most (current level + 2) wagons are allowed in answer row at a time.
-                    if(listModel.count <= Math.ceil(bar.level / 2) + 2) {
+                    if(listModel.count < Activity.dataset["WagonsInCorrectAnswers"][bar.level - 1] + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         Activity.addWagon(imageId + 1, listModel.count);
                         Activity.isAnswer();

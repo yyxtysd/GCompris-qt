@@ -27,16 +27,28 @@ var currentLevel = 0
 var numberOfLevel = 10
 var solutionArray = []
 var backupListModel = []
-var memoryTime = [4, 4, 6, 6, 7, 7, 8, 8, 10, 10]
 var isNewLevel = true
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
-var numberOfSubLevels = 3
 var items
+
+/**
+* Stores configuration for each level.
+* 'noOfSampleWagons' contains no. of wagons to display in the sample zone(items.answerZone.model).
+* 'WagonsInCorrectAnswers' contains no. of wagons in correct answer.
+* 'memoryTime' contains time(in seconds) for memorizing the wagons.
+* 'numberOfSubLevels' contains no. of sublevels in each level.
+*/
+var dataset = {
+    "noOfSampleWagons": [12, 20, 12, 20, 12, 20, 12, 20, 12, 20],
+    "WagonsInCorrectAnswers": [1, 1, 2, 2, 3, 3, 4, 4, 5, 5],
+    "memoryTime": [4, 4, 6, 6, 7, 7, 8, 8, 10, 10],
+    "numberOfSubLevels": 3
+}
 
 function start(items_) {
     items = items_
     currentLevel = 0
-    items.score.numberOfSubLevels = numberOfSubLevels;
+    items.score.numberOfSubLevels = dataset["numberOfSubLevels"];
     items.score.currentSubLevel = 1;
     initLevel()
 }
@@ -90,11 +102,11 @@ function initLevel() {
             addWagon(solutionArray[i], i);
         }
     }
-    if(items.introMessage.visible == false && isNewLevel) {
+    if(items.introMessage.visible === false && isNewLevel) {
         items.timer.start()
     }
     items.bar.level = currentLevel + 1;
-    items.timer.interval = memoryTime[currentLevel] * 1000
+    items.timer.interval = dataset["memoryTime"][currentLevel] * 1000
 }
 
 function nextLevel() {
@@ -127,7 +139,7 @@ function restoreLevel() {
 function nextSubLevel() {
     /* Sets up the next sublevel */
     items.score.currentSubLevel ++;
-    if(items.score.currentSubLevel > numberOfSubLevels) {
+    if(items.score.currentSubLevel > dataset["numberOfSubLevels"]) {
         nextLevel();
     } else {
         isNewLevel = true;
