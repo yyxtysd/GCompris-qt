@@ -116,7 +116,7 @@ ActivityBase {
             GridView {
                 id: answerZone
                 readonly property int levelCellWidth: (background.width > background.height) ? background.width / (listModel.count > 5 ? 7.2 : 5.66) :
-                                                                                               background.height / ((listModel.count > 5) ? 8.8 : 6.2)
+                                                                                               background.width / ((listModel.count > 5) ? 8.8 : 6.2)
                 readonly property int levelCellHeight: background.height / 8
                 width: parent.width
                 height: background.height / 8
@@ -255,7 +255,7 @@ ActivityBase {
                         answerZone.moveCurrentIndexRight()
                     }
                     // Remove a wagon via Delete/Return key.
-                    if(event.key === Qt.Key_Delete || event.key === Qt.Key_Return && listModel.count > 0) {
+                    if((event.key === Qt.Key_Delete || event.key === Qt.Key_Return) && listModel.count > 0) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         listModel.remove(answerZone.currentIndex)
                         if(listModel.count < 2) {
@@ -357,7 +357,7 @@ ActivityBase {
                 property real originX
                 property real originY
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
-                width: ((background.width > background.height) ? background.width/5.66 : background.height/6.2)
+                width: ((background.width > background.height) ? background.width / 5.66 : background.width / 6.2)
                 sourceSize.width: width
                 fillMode: Image.PreserveAspectFit
                 visible: true
