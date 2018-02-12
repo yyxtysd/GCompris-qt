@@ -30,6 +30,7 @@ var backupListModel = []
 var isNewLevel = true
 var resourceURL = "qrc:/gcompris/src/activities/railroad/resource/"
 var items
+var uniqueId = []
 
 /**
 * Stores configuration for each level.
@@ -57,6 +58,7 @@ function stop() {
 }
 
 function initLevel() {
+    generateUniqueId();
     var index = 0;
     items.mouseEnabled = true;
     items.memoryMode = false;
@@ -183,4 +185,18 @@ function getDropIndex(x) {
         }
     }
     return 0;
+}
+
+/** uniqueID stores image no. of wagons in sample region by which it is stored in resources/
+  * When there are 20 wagons in sample list(i.e. all images are shown) then uniqueID.push(index)
+  * in case 12 wagons are displyed then image no 5-10 are ignored(railroad/resources/loco+"uniqueId[index]".svg)
+  * to skip these wagons uniqueID.push(index + 6) and first four wagons are same for all levels.
+  */
+function generateUniqueId() {
+    uniqueId = [];
+    var noOfWagons = dataset["noOfSampleWagons"][currentLevel];
+    for(var index = 0; index < noOfWagons; index++) {
+        var imageId = (noOfWagons === 20 || index < 4) ? index : index + 6;
+        uniqueId.push(imageId);
+    }
 }

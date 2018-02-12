@@ -346,14 +346,7 @@ ActivityBase {
             readonly property int columnCount: 5
             delegate: Image {
                 id: loco
-
-                /** uniqueID stores image no. by which it is stored in resources/
-                  * When there are 20 wagons in sample list(i.e. all images are shown) then uniqueID: index
-                  * in case 12 wagons are displyed then image no 5-10 are ignored(railroad/resources/loco+"uniqueId".svg)
-                  * to skip these wagons uniqueID: index + 6 and first four wagons are same for all levels.
-                  */
-                readonly property int uniqueID: (Activity.dataset["noOfSampleWagons"][bar.level - 1] === 20 || index < 4) ? index : index + 6
-
+                readonly property int uniqueID: Activity.uniqueId[index]
                 property real originX
                 property real originY
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
@@ -454,7 +447,7 @@ ActivityBase {
                     sampleList.moveCurrentIndexRight()
                 }
                 if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
-                    var imageId = (bar.level % 2 == 0 || sampleList.currentIndex < 4) ? sampleList.currentIndex : sampleList.currentIndex + 6
+                    var imageId = Activity.uniqueId[sampleList.currentIndex]
                     // At most (current level + 2) wagons are allowed in answer row at a time.
                     if(listModel.count < Activity.dataset["WagonsInCorrectAnswers"][bar.level - 1] + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
