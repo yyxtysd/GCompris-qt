@@ -34,25 +34,22 @@ var uniqueId = []
 
 /**
 * Stores configuration for each level.
-* 'noOfSampleWagons' contains no. of wagons to display in the sample zone(items.answerZone.model).
 * 'WagonsInCorrectAnswers' contains no. of wagons in correct answer.
 * 'memoryTime' contains time(in seconds) for memorizing the wagons.
 * 'numberOfSubLevels' contains no. of sublevels in each level.
 * 'columnsInHorizontalMode' contains no. of columns in a row of sampleZone in horizontal mode.
 * 'columnsInVerticalMode' contains no. of columns in a row of sampleZone in vertical mode.
-* 'imageId' stores various wagons and locos image id collection to display in sampleZone.
+* 'noOfLocos' stores no. of locos to be displayed in sampleZone.
+* 'noOfWagons' stores no. of wagons to be displayed in sampleZone.
 */
 var dataset = {
-    "noOfSampleWagons": [12, 20, 12, 20, 12, 20, 12, 20, 12, 20],
     "WagonsInCorrectAnswers": [1, 1, 2, 2, 3, 3, 4, 4, 5, 5],
     "memoryTime": [4, 4, 6, 6, 7, 7, 8, 8, 10, 10],
     "numberOfSubLevels": 3,
     "columnsInHorizontalMode": [3, 5, 3, 5, 3, 5, 3, 5, 3, 5],
     "columsInVerticalMode": [3, 4, 3, 4, 3, 4, 3, 4, 3, 4],
-    "imageId": {
-        "easyModeCollection": [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], //contains total 12 wagons & locomotives
-        "hardModeCollection": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] //contains total 20 wagons & locomotives
-    }
+    "noOfLocos": [4, 9, 4, 9, 4, 9, 4, 9, 4, 9],
+    "noOfWagons": [8, 11, 8, 11, 8, 11, 8, 11, 8, 11]
 }
 
 function start(items_) {
@@ -68,7 +65,7 @@ function stop() {
 
 function initLevel() {
     generateUniqueId();
-    var index = 0;
+    var uniqueId = 0;
     items.mouseEnabled = true;
     items.memoryMode = false;
     items.timer.stop();
@@ -85,27 +82,16 @@ function initLevel() {
             if(i == currentLevel) {
                 // Selects the last carriage
                 do {
-                    if(currentLevel % 2 == 0) {
-                        index = Math.floor(Math.random() * 4) + 1;
-                    }
-                    else {
-                        index = Math.floor(Math.random() * 9) + 1;
-                    }
-                } while (solutionArray.indexOf(index) != -1) // Ensures non-repeative wagons setup
+                    uniqueId = "loco" + Math.floor(Math.random() * dataset["noOfLocos"][currentLevel])
+                } while (solutionArray.indexOf(uniqueId) != -1) // Ensures non-repeative wagons setup
             } else {
                 // Selects the follow up wagons
                 do {
-                    if(currentLevel % 2 == 0) {
-                        index = Math.floor(Math.random() * 8) + 11;
-                    }
-                    else {
-                        index = Math.floor(Math.random() * 11) + 10;
-                    }
-                } while (solutionArray.indexOf(index) != -1)
+                    uniqueId = "wagon" + Math.floor(Math.random() * dataset["noOfWagons"][currentLevel])
+                } while (solutionArray.indexOf(uniqueId) != -1)
             }
-            solutionArray.push(index);
-            
-            addWagon(index, i);
+            solutionArray.push(uniqueId);
+            addWagon(uniqueId, i);
         }
     } else {
         // Re-setup the same level
@@ -163,7 +149,7 @@ function isAnswer() {
     if(items.listModel.count === solutionArray.length) {
         var isSolution = true;
         for (var index = 0; index < items.listModel.count; index++) {
-            if(items.listModel.get(index).id != solutionArray[index]) {
+            if(items.listModel.get(index).id !== solutionArray[index]) {
                 isSolution = false;
                 break;
             }
@@ -175,9 +161,9 @@ function isAnswer() {
     }
 }
 
-function addWagon(index, dropIndex) {
+function addWagon(uniqueID, dropIndex) {
     /* Appends wagons to the display area */
-    items.listModel.insert(dropIndex, {"id": index});
+    items.listModel.insert(dropIndex, {"id": uniqueID});
 }
 
 function getDropIndex(x) {
@@ -198,7 +184,11 @@ function getDropIndex(x) {
 
 function generateUniqueId() {
     uniqueId = [];
-    var noOfWagons = dataset["noOfSampleWagons"][currentLevel];
-    uniqueId = (dataset["noOfSampleWagons"][currentLevel] === 12) ? dataset["imageId"]["easyModeCollection"] :
-                                                                    dataset["imageId"]["hardModeCollection"]
+    var index;
+    for(index = 0; index < dataset["noOfLocos"][currentLevel]; index++) {
+        uniqueId.push("loco"+index)
+    }
+    for(index = 0; index < dataset["noOfWagons"][currentLevel]; index++) {
+        uniqueId.push("wagon"+index)
+    }
 }

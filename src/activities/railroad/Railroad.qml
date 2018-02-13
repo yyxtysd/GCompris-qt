@@ -127,7 +127,7 @@ ActivityBase {
                 model: listModel
                 delegate: Image {
                     id: wagon
-                    source: Activity.resourceURL + "loco" + (modelData) + ".svg"
+                    source: Activity.resourceURL + modelData + ".svg"
                     height: answerZone.levelCellHeight
                     width: answerZone.levelCellWidth
                     sourceSize.width: width
@@ -154,7 +154,7 @@ ActivityBase {
                     function createNewItem() {
                         var component = Qt.createComponent("Loco.qml");
                         if(component.status === Component.Ready) {
-                            var newItem = component.createObject(parent, {"x":x, "y":y, "z": 10 ,"imageIndex": listModel.get(index).id});
+                            var newItem = component.createObject(parent, {"x": x, "y": y, "z": 10, "imageIndex": listModel.get(index).id});
                         }
                         return newItem
                     }
@@ -339,18 +339,19 @@ ActivityBase {
             anchors.margins: 20
             cellWidth: width / columnCount
             cellHeight: (background.width > background.height) ? background.height / 7 : background.height / 7.5
-            model: Activity.dataset["noOfSampleWagons"][bar.level - 1]
+            model: Activity.dataset["noOfLocos"][bar.level - 1] + Activity.dataset["noOfWagons"][bar.level - 1]
             interactive: false
 
             // No. of wagons in a row
-            readonly property int columnCount: (background.width > background.height) ? Activity.dataset["columnsInHorizontalMode"][bar.level - 1] : Activity.dataset["columsInVerticalMode"][bar.level - 1]
+            readonly property int columnCount: (background.width > background.height) ? Activity.dataset["columnsInHorizontalMode"][bar.level - 1] :
+                                                                                        Activity.dataset["columsInVerticalMode"][bar.level - 1]
             readonly property int rowCount: model / columnCount
             delegate: Image {
                 id: loco
-                readonly property int uniqueID: Activity.uniqueId[index]
+                readonly property string uniqueID: Activity.uniqueId[index]
                 property real originX
                 property real originY
-                source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
+                source: Activity.resourceURL + uniqueID + ".svg"
                 width: ((background.width > background.height) ? background.width / 5.66 : background.width / 4.2)
                 sourceSize.width: width
                 fillMode: Image.PreserveAspectFit
@@ -375,7 +376,7 @@ ActivityBase {
                             listModel.count < Activity.dataset["WagonsInCorrectAnswers"][bar.level - 1] + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
-                        Activity.addWagon(uniqueID + 1, dropIndex);
+                        Activity.addWagon(uniqueID, dropIndex);
                     }
                     Activity.isAnswer()
                 }
@@ -452,7 +453,7 @@ ActivityBase {
                     // At most (current level + 2) wagons are allowed in answer row at a time.
                     if(listModel.count < Activity.dataset["WagonsInCorrectAnswers"][bar.level - 1] + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
-                        Activity.addWagon(imageId + 1, listModel.count);
+                        Activity.addWagon(imageId, listModel.count);
                         Activity.isAnswer();
                     }
                 }
@@ -463,7 +464,7 @@ ActivityBase {
             keyNavigationWraps: true
             highlightRangeMode: GridView.ApplyRange
             highlight: Rectangle {
-                width: ((background.width > background.height) ? background.width / 5.66 : background.width / 4.2)
+                width: (background.width > background.height) ? background.width / 5.66 : background.width / 4.2
                 height: sampleList.cellHeight
                 color: "#AA41AAC4"
                 opacity: 0.8
