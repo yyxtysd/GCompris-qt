@@ -463,7 +463,7 @@ ActivityBase {
             keyNavigationWraps: true
             highlightRangeMode: GridView.ApplyRange
             highlight: Rectangle {
-                width: sampleList.cellWidth
+                width: ((background.width > background.height) ? background.width / 5.66 : background.width / 4.2)
                 height: sampleList.cellHeight
                 color: "#AA41AAC4"
                 opacity: 0.8
