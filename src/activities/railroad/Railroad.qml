@@ -494,7 +494,7 @@ ActivityBase {
             Rectangle {
                 x: 0
                 y: (background.width > background.height) ? sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 10 :
-                                                     sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 25
+                                                            sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 25
                 z: 1
                 width: background.width
                 height: (background.width > background.height) ? 6 : 3

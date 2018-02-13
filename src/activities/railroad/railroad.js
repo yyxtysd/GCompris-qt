@@ -40,6 +40,7 @@ var uniqueId = []
 * 'numberOfSubLevels' contains no. of sublevels in each level.
 * 'columnsInHorizontalMode' contains no. of columns in a row of sampleZone in horizontal mode.
 * 'columnsInVerticalMode' contains no. of columns in a row of sampleZone in vertical mode.
+* 'imageId' stores various wagons and locos image id collection to display in sampleZone.
 */
 var dataset = {
     "noOfSampleWagons": [12, 20, 12, 20, 12, 20, 12, 20, 12, 20],
@@ -47,7 +48,11 @@ var dataset = {
     "memoryTime": [4, 4, 6, 6, 7, 7, 8, 8, 10, 10],
     "numberOfSubLevels": 3,
     "columnsInHorizontalMode": [3, 5, 3, 5, 3, 5, 3, 5, 3, 5],
-    "columsInVerticalMode": [3, 4, 3, 4, 3, 4, 3, 4, 3, 4]
+    "columsInVerticalMode": [3, 4, 3, 4, 3, 4, 3, 4, 3, 4],
+    "imageId": {
+        "easyModeCollection": [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], //contains total 12 wagons & locomotives
+        "hardModeCollection": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] //contains total 20 wagons & locomotives
+    }
 }
 
 function start(items_) {
@@ -191,16 +196,8 @@ function getDropIndex(x) {
     return 0;
 }
 
-/** uniqueID stores image no. of wagons in sample region by which it is stored in resources/
-  * When there are 20 wagons in sample list(i.e. all images are shown) then uniqueID.push(index)
-  * in case 12 wagons are displayed then image no 5-10 are ignored(railroad/resources/loco+"uniqueId[index]".svg)
-  * to skip these wagons uniqueID.push(index + 6) and first four wagons are same for all levels.
-  */
 function generateUniqueId() {
     uniqueId = [];
     var noOfWagons = dataset["noOfSampleWagons"][currentLevel];
-    for(var index = 0; index < noOfWagons; index++) {
-        var imageId = (noOfWagons === 20 || index < 4) ? index : index + 6;
-        uniqueId.push(imageId);
-    }
+    uniqueId = (dataset["noOfSampleWagons"][currentLevel] === 12) ? dataset["imageId"]["easyModeCollection"] :
 }
