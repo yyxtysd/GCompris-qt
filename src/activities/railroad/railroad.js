@@ -200,4 +200,5 @@ function generateUniqueId() {
     uniqueId = [];
     var noOfWagons = dataset["noOfSampleWagons"][currentLevel];
     uniqueId = (dataset["noOfSampleWagons"][currentLevel] === 12) ? dataset["imageId"]["easyModeCollection"] :
+                                                                    dataset["imageId"]["hardModeCollection"]
 }
