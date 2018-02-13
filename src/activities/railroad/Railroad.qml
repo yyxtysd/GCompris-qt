@@ -338,19 +338,20 @@ ActivityBase {
             height: background.height - topDisplayArea.height
             anchors.margins: 20
             cellWidth: width / columnCount
-            cellHeight: background.height / 7
+            cellHeight: (background.width > background.height) ? background.height / 7 : background.height / 7.5
             model: Activity.dataset["noOfSampleWagons"][bar.level - 1]
             interactive: false
 
             // No. of wagons in a row
-            readonly property int columnCount: 5
+            readonly property int columnCount: (background.width > background.height) ? Activity.dataset["columnsInHorizontalMode"][bar.level - 1] : Activity.dataset["columsInVerticalMode"][bar.level - 1]
+            readonly property int rowCount: model / columnCount
             delegate: Image {
                 id: loco
                 readonly property int uniqueID: Activity.uniqueId[index]
                 property real originX
                 property real originY
                 source: Activity.resourceURL + "loco" + (uniqueID + 1) + ".svg"
-                width: ((background.width > background.height) ? background.width / 5.66 : background.width / 6.2)
+                width: ((background.width > background.height) ? background.width / 5.66 : background.width / 4.2)
                 sourceSize.width: width
                 fillMode: Image.PreserveAspectFit
                 visible: true
@@ -489,10 +490,12 @@ ActivityBase {
         // Lower level wagons shelves
         Repeater {
             id: railSupporter
-            model: 4
+            model: sampleList.rowCount
             Rectangle {
                 x: 0
-                y: sampleList.y + ((index + 1) * (background.height / 7.5)) + (index * 5)
+                // TODO - Fix y position of bars for both vertical and horizontal mode.
+                y: sampleList.y + (sampleList.cellHeight * 0.75) * (index + 1) //background.width > background.height ? sampleList.y + ((index + 1) * (background.height / 8)) + (index * 11) :
+                // sampleList.y + ((index + 1) * (background.height / 8)) + (index * 11)
                 z: 1
                 width: background.width
                 height: 6

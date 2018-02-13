@@ -38,12 +38,16 @@ var uniqueId = []
 * 'WagonsInCorrectAnswers' contains no. of wagons in correct answer.
 * 'memoryTime' contains time(in seconds) for memorizing the wagons.
 * 'numberOfSubLevels' contains no. of sublevels in each level.
+* 'columnsInHorizontalMode' contains no. of columns in a row of sampleZone in horizontal mode.
+* 'columnsInVerticalMode' contains no. of columns in a row of sampleZone in vertical mode.
 */
 var dataset = {
     "noOfSampleWagons": [12, 20, 12, 20, 12, 20, 12, 20, 12, 20],
     "WagonsInCorrectAnswers": [1, 1, 2, 2, 3, 3, 4, 4, 5, 5],
     "memoryTime": [4, 4, 6, 6, 7, 7, 8, 8, 10, 10],
-    "numberOfSubLevels": 3
+    "numberOfSubLevels": 3,
+    "columnsInHorizontalMode": [3, 5, 3, 5, 3, 5, 3, 5, 3, 5],
+    "columsInVerticalMode": [3, 4, 3, 4, 3, 4, 3, 4, 3, 4]
 }
 
 function start(items_) {
@@ -189,7 +193,7 @@ function getDropIndex(x) {
 
 /** uniqueID stores image no. of wagons in sample region by which it is stored in resources/
   * When there are 20 wagons in sample list(i.e. all images are shown) then uniqueID.push(index)
-  * in case 12 wagons are displyed then image no 5-10 are ignored(railroad/resources/loco+"uniqueId[index]".svg)
+  * in case 12 wagons are displayed then image no 5-10 are ignored(railroad/resources/loco+"uniqueId[index]".svg)
   * to skip these wagons uniqueID.push(index + 6) and first four wagons are same for all levels.
   */
 function generateUniqueId() {
