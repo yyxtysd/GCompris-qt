@@ -493,12 +493,11 @@ ActivityBase {
             model: sampleList.rowCount
             Rectangle {
                 x: 0
-                // TODO - Fix y position of bars for both vertical and horizontal mode.
-                y: sampleList.y + (sampleList.cellHeight * 0.75) * (index + 1) //background.width > background.height ? sampleList.y + ((index + 1) * (background.height / 8)) + (index * 11) :
-                // sampleList.y + ((index + 1) * (background.height / 8)) + (index * 11)
+                y: (background.width > background.height) ? sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 10 :
+                                                     sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 25
                 z: 1
                 width: background.width
-                height: 6
+                height: (background.width > background.height) ? 6 : 3
                 border.color: "#808180"
                 color: "transparent"
                 border.width: 4
