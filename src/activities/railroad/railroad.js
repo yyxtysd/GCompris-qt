@@ -65,7 +65,7 @@ function stop() {
 
 function initLevel() {
     generateUniqueId();
-    var uniqueId = 0;
+    var uniqueId;
     items.mouseEnabled = true;
     items.memoryMode = false;
     items.timer.stop();
@@ -78,21 +78,20 @@ function initLevel() {
         // Initiates a new level
         backupListModel = [];
         solutionArray = [];
-        for(var i = 0; i < dataset["WagonsInCorrectAnswers"][currentLevel]; i++) {
-            if(i == currentLevel) {
-                // Selects the last carriage
-                do {
-                    uniqueId = "loco" + Math.floor(Math.random() * dataset["noOfLocos"][currentLevel])
-                } while (solutionArray.indexOf(uniqueId) != -1) // Ensures non-repeative wagons setup
-            } else {
-                // Selects the follow up wagons
-                do {
-                    uniqueId = "wagon" + Math.floor(Math.random() * dataset["noOfWagons"][currentLevel])
-                } while (solutionArray.indexOf(uniqueId) != -1)
-            }
+        //Adds wagons to display in answerZone.
+        for(var i = 0; i < dataset["WagonsInCorrectAnswers"][currentLevel] - 1; i++) {
+            do {
+                uniqueId = "wagon" + Math.floor(Math.random() * dataset["noOfWagons"][currentLevel])
+            } while (solutionArray.indexOf(uniqueId) != -1)
             solutionArray.push(uniqueId);
             addWagon(uniqueId, i);
         }
+
+        // Adds a loco at the beginning.
+        uniqueId = "loco" + Math.floor(Math.random() * dataset["noOfLocos"][currentLevel])
+        solutionArray.push(uniqueId);
+        addWagon(uniqueId, items.listModel.length);
+
     } else {
         // Re-setup the same level
         for(var i = 0; i < solutionArray.length; i++) {
