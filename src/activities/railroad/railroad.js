@@ -78,7 +78,7 @@ function initLevel() {
         // Initiates a new level
         backupListModel = [];
         solutionArray = [];
-        for(var i = 0; i < Math.ceil((currentLevel+1) / 2); i++) {
+        for(var i = 0; i < dataset["WagonsInCorrectAnswers"][currentLevel]; i++) {
             if(i == currentLevel) {
                 // Selects the last carriage
                 do {
