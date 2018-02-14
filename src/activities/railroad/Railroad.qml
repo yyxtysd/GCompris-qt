@@ -95,7 +95,7 @@ ActivityBase {
                 left: parent.left
                 leftMargin: 5
             }
-            z: 100
+            z: score.z + 1
             onIntroDone: {
                 timer.start()
             }
