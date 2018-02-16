@@ -345,7 +345,7 @@ ActivityBase {
             // No. of wagons in a row
             readonly property int columnCount: (background.width > background.height) ? Activity.dataset["columnsInHorizontalMode"][bar.level - 1] :
                                                                                         Activity.dataset["columsInVerticalMode"][bar.level - 1]
-            readonly property int rowCount: model / columnCount
+            readonly property int rowCount: columnCount > 0 ? model / columnCount : 0
             delegate: Image {
                 id: loco
                 readonly property string uniqueID: Activity.uniqueId[index]
