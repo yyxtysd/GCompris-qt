@@ -116,13 +116,14 @@ ActivityBase {
             GridView {
                 id: answerZone
                 readonly property int levelCellWidth: (background.width > background.height) ? background.width / (listModel.count > 5 ? 7.2 : 5.66) :
-                                                                                               background.width / ((listModel.count > 5) ? 8.8 : 6.2)
-                readonly property int levelCellHeight: background.height / 8
+                                                                                               background.width / ((listModel.count > 5) ? 7.1 : 5)
+                readonly property int levelCellHeight: background.width > background.height ? topDisplayArea.height / 2 : topDisplayArea.height / 3
                 width: parent.width
                 height: background.height / 8
                 cellWidth: levelCellWidth
                 cellHeight: levelCellHeight
                 x: parent.x
+                y: background.width > background.height ? sampleList.y - height * 1.55 : sampleList.y - height * 1.29
                 interactive: false
                 model: listModel
                 delegate: Image {
@@ -465,7 +466,7 @@ ActivityBase {
             highlightRangeMode: GridView.ApplyRange
             highlight: Rectangle {
                 width: (background.width > background.height) ? background.width / 5.66 : background.width / 4.2
-                height: sampleList.cellHeight
+                height: background.width > background.height ? sampleList.cellHeight : sampleList.cellHeight / 1.65
                 color: "#AA41AAC4"
                 opacity: 0.8
                 radius: 5
