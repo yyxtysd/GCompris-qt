@@ -506,6 +506,35 @@ ActivityBase {
             }
         }
 
+        // Answer Submission button.
+        BarButton {
+            id: okButton
+            source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
+            width: height
+            height: score.height
+            sourceSize.width: width
+            sourceSize.height: height
+            y: score.y
+            z: score.z
+            anchors {
+                right: score.left
+                rightMargin: 10
+            }
+            ParticleSystemStarLoader {
+                id: okButtonParticles
+                clip: false
+            }
+            MouseArea {
+                id: okButtonMouseArea
+                anchors.fill: parent
+                onClicked: {
+                    if(!timer.running && !animateFlow.running) {
+                        Activity.isAnswer()
+                    }
+                }
+            }
+        }
+
         DialogHelp {
             id: dialogHelp
             onClose: home()
