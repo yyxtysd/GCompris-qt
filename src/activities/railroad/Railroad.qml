@@ -180,7 +180,6 @@ ActivityBase {
                                 parent.checkDrop(dragItem)
                                 dragItem.destroy();
                                 parent.Drag.cancel()
-                                Activity.isAnswer()
                             }
                         }
 
@@ -256,16 +255,20 @@ ActivityBase {
                         answerZone.moveCurrentIndexRight()
                     }
                     // Remove a wagon via Delete/Return key.
-                    if((event.key === Qt.Key_Delete || event.key === Qt.Key_Return) && listModel.count > 0) {
+                    if(event.key === Qt.Key_Delete && listModel.count > 0) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         listModel.remove(answerZone.currentIndex)
                         if(listModel.count < 2) {
                             answerZone.selectedSwapIndex = -1;
                         }
+                    }
+                    // Checks answer.
+                    if(event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                        items.currentKeyZone = answerZone
                         Activity.isAnswer();
                     }
                     // Swaps two wagons with help of Space/Enter keys.
-                    if(event.key === Qt.Key_Space || event.key === Qt.Key_Enter) {
+                    if(event.key === Qt.Key_Space ) {
                         if(selectedSwapIndex === -1 && listModel.count > 1) {
                             answerZone.selectedSwapIndex = answerZone.currentIndex;
                             swapHighlight.x = answerZone.currentItem.x;
@@ -277,7 +280,6 @@ ActivityBase {
                             listModel.move(min, max, 1);
                             listModel.move(max-1, min, 1);
                             answerZone.selectedSwapIndex = -1;
-                            Activity.isAnswer();
                         }
                     }
                 }
@@ -379,7 +381,6 @@ ActivityBase {
                         var dropIndex = Activity.getDropIndex(globalCoordinates.x)
                         Activity.addWagon(uniqueID, dropIndex);
                     }
-                    Activity.isAnswer()
                 }
 
                 MouseArea {
@@ -449,14 +450,17 @@ ActivityBase {
                     items.currentKeyZone = sampleList
                     sampleList.moveCurrentIndexRight()
                 }
-                if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
+                if(event.key === Qt.Key_Space) {
                     var imageId = Activity.uniqueId[sampleList.currentIndex]
                     // At most (current level + 2) wagons are allowed in answer row at a time.
                     if(listModel.count < Activity.dataset["WagonsInCorrectAnswers"][bar.level - 1] + 2) {
                         activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                         Activity.addWagon(imageId, listModel.count);
-                        Activity.isAnswer();
                     }
+                }
+                if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && listModel.count > 0) {
+                    items.currentKeyZone = sampleList
+                    Activity.isAnswer();
                 }
             }
 
@@ -528,7 +532,7 @@ ActivityBase {
                 id: okButtonMouseArea
                 anchors.fill: parent
                 onClicked: {
-                    if(!timer.running && !animateFlow.running) {
+                    if((!timer.running && !animateFlow.running) && listModel.count > 0) {
                         Activity.isAnswer()
                     }
                 }

@@ -157,6 +157,9 @@ function isAnswer() {
             items.mouseEnabled = false; // Disables the touch
             items.bonus.good("flower");
         }
+        else {
+            items.bonus.bad("flower");
+        }
     }
 }
 
