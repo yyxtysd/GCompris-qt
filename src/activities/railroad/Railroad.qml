@@ -272,7 +272,7 @@ ActivityBase {
                         if(selectedSwapIndex === -1 && listModel.count > 1) {
                             answerZone.selectedSwapIndex = answerZone.currentIndex;
                             swapHighlight.x = answerZone.currentItem.x;
-                            swapHighlight.y = answerZone.currentItem.y;
+                            swapHighlight.anchors.top = answerZone.top;
                         }
                         else if(answerZone.currentIndex != selectedSwapIndex && listModel.count > 1){
                             var min = Math.min(selectedSwapIndex, answerZone.currentIndex);
