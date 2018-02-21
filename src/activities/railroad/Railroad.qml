@@ -268,7 +268,7 @@ ActivityBase {
                         Activity.isAnswer();
                     }
                     // Swaps two wagons with help of Space/Enter keys.
-                    if(event.key === Qt.Key_Space ) {
+                    if(event.key === Qt.Key_Space) {
                         if(selectedSwapIndex === -1 && listModel.count > 1) {
                             answerZone.selectedSwapIndex = answerZone.currentIndex;
                             swapHighlight.x = answerZone.currentItem.x;
