@@ -518,7 +518,7 @@ ActivityBase {
             height: score.height
             sourceSize.width: width
             sourceSize.height: height
-            y: score.y
+            anchors.top: score.top
             z: score.z
             anchors {
                 right: score.left
