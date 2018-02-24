@@ -63,6 +63,7 @@ ActivityBase {
             property bool mouseEnabled: true
             property var currentKeyZone: sampleList
             property bool keyNavigationMode: false
+            property int sampleImageHeight: 0 //Stores height of sampleGrid images to set rail bar support position.
         }
 
         onStart: { Activity.start(items) }
@@ -349,6 +350,7 @@ ActivityBase {
             readonly property int columnCount: (background.width > background.height) ? Activity.dataset["columnsInHorizontalMode"][bar.level - 1] :
                                                                                         Activity.dataset["columsInVerticalMode"][bar.level - 1]
             readonly property int rowCount: columnCount > 0 ? model / columnCount : 0
+
             delegate: Image {
                 id: loco
                 readonly property string uniqueID: Activity.uniqueId[index]
@@ -359,7 +361,8 @@ ActivityBase {
                 sourceSize.width: width
                 fillMode: Image.PreserveAspectFit
                 visible: true
-
+                onHeightChanged: items.sampleImageHeight = height
+                onVisibleChanged: items.sampleImageHeight = height
                 function initDrag() {
                     originX = x
                     originY = y
@@ -499,8 +502,7 @@ ActivityBase {
             model: sampleList.rowCount
             Rectangle {
                 x: 0
-                y: (background.width > background.height) ? sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 10 :
-                                                            sampleList.y + (sampleList.cellHeight) * (index + 1) - ApplicationInfo.ratio * 25
+                y: sampleList.y + (sampleList.cellHeight * (index + 1)) - (sampleList.cellHeight - items.sampleImageHeight)
                 z: 1
                 width: background.width
                 height: (background.width > background.height) ? 6 : 3
