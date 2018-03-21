@@ -68,8 +68,8 @@ ActivityBase {
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
-        Keys.enabled: !timer.running && !animateFlow.running
-        Keys.onPressed:  {
+        Keys.enabled: !timer.running && !animateFlow.running && !introMessage.visible
+        Keys.onPressed: {
             items.keyNavigationMode = true;
             items.currentKeyZone.handleKeys(event);
             activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav');
@@ -89,7 +89,7 @@ ActivityBase {
         // Intro message
         IntroMessage {
             id: introMessage
-            y: (background.height / 4.7)
+            y: background.height / 4.7
             anchors {
                 right: parent.right
                 rightMargin: 5
@@ -101,7 +101,8 @@ ActivityBase {
                 timer.start()
             }
             intro: [
-                qsTr("Observe and remember the train before the timer ends and then drag the items to set up a similar train.")
+                qsTr("Observe and remember the train before the timer ends and then drag the items to set up a similar train."),
+                qsTr("If you forget the positions, you can click on the Hint button to view them again.")
             ]
         }
 
@@ -146,7 +147,7 @@ ActivityBase {
                             listModel.move(listModel.count - 1, dropIndex, 1)
                             opacity = 1
                         }
-                        if(globalCoordinates.y > (background.height / 8)){
+                        if(globalCoordinates.y > (background.height / 8)) {
                             // Remove it if dropped in the lower section
                             activity.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/smudge.wav')
                             listModel.remove(listModel.count - 1)
@@ -185,7 +186,7 @@ ActivityBase {
                         }
 
                         onClicked: {
-                            //skips memorization time.
+                            // skips memorization time.
                             if(!items.memoryMode) {
                                 bar.hintClicked()
                             }
@@ -336,7 +337,7 @@ ActivityBase {
         GridView {
             id: sampleList
             visible: items.memoryMode
-            y: (background.height / 4.7)
+            y: background.height / 4.7
             z: 5
             width: background.width
             height: background.height - topDisplayArea.height

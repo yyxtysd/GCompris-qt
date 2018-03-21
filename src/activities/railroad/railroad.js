@@ -1,10 +1,12 @@
 /* GCompris - railroad.js
  *
  * Copyright (C) 2016 Utkarsh Tiwari <iamutkarshtiwari@kde.org>
+ * Copyright (C) 2018 Amit Sagtani <asagtani06@gmail.com>
  *
  * Authors:
  *   <Pascal Georges> (GTK+ version)
- *   "Utkarsh Tiwari" <iamutkarshtiwari@kde.org> (Qt Quick port)
+ *   Utkarsh Tiwari <iamutkarshtiwari@kde.org> (Qt Quick port)
+ *   Amit Sagtani <asagtani06@gmail.com> (Qt Quick port)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -161,6 +163,9 @@ function isAnswer() {
             items.bonus.bad("flower");
         }
     }
+    else {
+        items.bonus.bad("flower");
+    }
 }
 
 function addWagon(uniqueID, dropIndex) {
@@ -188,9 +193,9 @@ function generateUniqueId() {
     uniqueId = [];
     var index;
     for(index = 0; index < dataset["noOfLocos"][currentLevel]; index++) {
-        uniqueId.push("loco"+index)
+        uniqueId.push("loco" + index)
     }
     for(index = 0; index < dataset["noOfWagons"][currentLevel]; index++) {
-        uniqueId.push("wagon"+index)
+        uniqueId.push("wagon" + index)
     }
 }

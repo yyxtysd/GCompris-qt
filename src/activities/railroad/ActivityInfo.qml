@@ -1,6 +1,7 @@
 /* GCompris - ActivityInfo.qml
  *
  * Copyright (C) 2017 Utkarsh Tiwari <iamutkarshtiwari@kde.org>
+ * Copyright (C) 2018 Amit Sagtani <asagtani06@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,5 +32,5 @@ ActivityInfo {
   manual: qsTr("A train - a locomotive and carriage(s) - is displayed at the top of the main area for a few seconds. Rebuild it at the top of the screen by dragging the appropriate carriages and locomotive. Deselect an item by dragging it down.")
   credit: ""
   section: "discovery memory"
-  createdInVersion: 9000
+  createdInVersion: 9500
 }
