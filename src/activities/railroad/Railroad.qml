@@ -577,8 +577,10 @@ ActivityBase {
                             Activity.addWagon(Activity.backupListModel[index], index);
                         }
                         items.memoryMode = true;
+                        okButton.visible = true;
                     } else {
                         Activity.restoreLevel();
+                        okButton.visible = false;
                     }
                 }
             }
