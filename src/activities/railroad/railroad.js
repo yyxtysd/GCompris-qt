@@ -93,6 +93,7 @@ function initLevel() {
         uniqueId = "loco" + Math.floor(Math.random() * dataset["noOfLocos"][currentLevel])
         solutionArray.push(uniqueId);
         addWagon(uniqueId, items.listModel.length);
+        solutionArray.reverse();
 
     } else {
         // Re-setup the same level

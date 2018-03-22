@@ -157,7 +157,7 @@ ActivityBase {
                     function createNewItem() {
                         var component = Qt.createComponent("Loco.qml");
                         if(component.status === Component.Ready) {
-                            var newItem = component.createObject(parent, {"x": x, "y": y, "z": 10, "imageIndex": listModel.get(index).id});
+                            var newItem = component.createObject(parent, {"x": x, "y": y, "z": 10, "imageURL": source});
                         }
                         return newItem
                     }

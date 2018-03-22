@@ -25,10 +25,10 @@ import "railroad.js" as Activity
 
 Item {
     id: draggedItem
-    property int imageIndex
+    property string imageURL
     Image {
         id: img
-        source: Activity.resourceURL + "loco" + imageIndex + ".svg"
+        source: imageURL
         height: background.height / 8.0
         width: ((background.width > background.height) ? background.width : background.height) / 5.66
         Drag.hotSpot.x: width / 2
