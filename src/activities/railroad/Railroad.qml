@@ -565,6 +565,7 @@ ActivityBase {
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
+            z: introMessage.z
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
