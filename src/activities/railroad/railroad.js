@@ -50,8 +50,8 @@ var dataset = {
     "numberOfSubLevels": 3,
     "columnsInHorizontalMode": [3, 5, 3, 5, 3, 5, 3, 5, 3, 5],
     "columsInVerticalMode": [3, 4, 3, 4, 3, 4, 3, 4, 3, 4],
-    "noOfLocos": [6, 9, 4, 9, 4, 9, 4, 9, 4, 9],
-    "noOfWagons": [6, 11, 8, 11, 8, 11, 8, 11, 8, 11]
+    "noOfLocos": [8, 9, 4, 9, 4, 9, 4, 9, 4, 9],
+    "noOfWagons": [4, 11, 8, 11, 8, 11, 8, 11, 8, 11]
 }
 
 function start(items_) {
