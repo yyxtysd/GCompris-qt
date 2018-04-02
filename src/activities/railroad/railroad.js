@@ -148,7 +148,7 @@ function nextSubLevel() {
     }
 }
 
-function isAnswer() {
+function checkAnswer() {
     /* Checks if the top level setup equals the solutions */
     if(items.listModel.count === solutionArray.length) {
         var isSolution = true;

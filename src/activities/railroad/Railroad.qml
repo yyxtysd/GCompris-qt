@@ -266,9 +266,9 @@ ActivityBase {
                         }
                     }
                     // Checks answer.
-                    if(event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                    if((event.key === Qt.Key_Return || event.key === Qt.Key_Enter) && items.mouseEnabled) {
                         items.currentKeyZone = answerZone
-                        Activity.isAnswer();
+                        Activity.checkAnswer();
                     }
                     // Swaps two wagons with help of Space/Enter keys.
                     if(event.key === Qt.Key_Space) {
@@ -463,9 +463,9 @@ ActivityBase {
                         Activity.addWagon(imageId, listModel.count);
                     }
                 }
-                if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && listModel.count > 0) {
+                if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && listModel.count > 0 && items.mouseEnabled) {
                     items.currentKeyZone = sampleList
-                    Activity.isAnswer();
+                    Activity.checkAnswer()
                 }
             }
 
@@ -535,11 +535,8 @@ ActivityBase {
             MouseArea {
                 id: okButtonMouseArea
                 anchors.fill: parent
-                onClicked: {
-                    if((!trainAnimationTimer.running && !animateFlow.running) && listModel.count > 0) {
-                        Activity.isAnswer()
-                    }
-                }
+                enabled: !trainAnimationTimer.running && !animateFlow.running && listModel.count > 0 && items.mouseEnabled
+                onClicked: Activity.checkAnswer()
             }
         }
 
