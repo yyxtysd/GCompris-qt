@@ -24,8 +24,6 @@ import QtSensors 5.0
 import QtGraphicalEffects 1.0
 import GCompris 1.0
 import Box2D 2.0
-import QtQuick.Controls 1.5
-
 
 import "../../core"
 import "editor/"
@@ -62,7 +60,7 @@ ActivityBase {
     Keys.onReleased: Activity.processKeyRelease(event.key)
 
     pageComponent: Image {
-        id: background
+        id: backgroundActivity
         source: Activity.baseUrl + "/maze_bg.svg"
         sourceSize.width: parent.width
         anchors.fill: parent
@@ -118,7 +116,7 @@ ActivityBase {
             property string filePath: activity.loadedFilePath
             property var testLevel: activity.testLevel
             property Item main: activity.main
-            property alias background: background
+            property alias background: backgroundActivity
             property alias bar: bar
             property alias bonus: bonus
             property alias tilt: tilt
@@ -166,8 +164,8 @@ ActivityBase {
             property double margin: 20
             property int columns: 0
             property int rows: 0
-            property double length: Math.min(background.height -
-                    2*mapWrapper.margin, background.width - 2*mapWrapper.margin);
+            property double length: Math.min(backgroundActivity.height -
+                    2*mapWrapper.margin, backgroundActivity.width - 2*mapWrapper.margin);
 
             color: "#E3DEDB"
 
@@ -461,7 +459,7 @@ ActivityBase {
                                     Activity.nextLevel()
             onHomeClicked: {
                 if (activity.mode == "test")
-                    background.startEditor();
+                    backgroundActivity.startEditor();
                 else
                     activity.home()
             }
@@ -533,18 +531,16 @@ ActivityBase {
 
                         Column {
                             spacing: 5
-                            Button {
+                            GCButton {
                                 id: editorButton
-                                style:  GCButtonStyle {}
                                 height: levelsBox.height
                                 text: qsTr("Start Editor")
                                 visible: levelsBox.currentIndex == 1
-                                onClicked: background.startEditor()
+                                onClicked: backgroundActivity.startEditor()
                             }
 
-                            Button {
+                            GCButton {
                                 id: loadButton
-                                style:  GCButtonStyle {}
                                 height: levelsBox.height
                                 text: qsTr("Load saved levels")
                                 visible: levelsBox.currentIndex == 1

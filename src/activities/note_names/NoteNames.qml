@@ -19,7 +19,6 @@
  *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
 import GCompris 1.0
 
 import "../../core"
@@ -222,7 +221,7 @@ ActivityBase {
             }
         }
 
-        ProgressBar {
+        GCProgressBar {
             id: progressBar
             height: 20 * ApplicationInfo.ratio
             width: parent.width / 4
@@ -230,23 +229,14 @@ ActivityBase {
             property int percentage: 0
 
             value: percentage
-            maximumValue: 100
+            to: 100
             visible: !items.isTutorialMode
+            message: qsTr("%1%").arg(value)
             anchors {
                 top: parent.top
                 topMargin: 10
                 right: parent.right
                 rightMargin: 10
-            }
-
-            GCText {
-                anchors.centerIn: parent
-                fontSize: mediumSize
-                font.bold: true
-                color: "black"
-                //: The following translation represents percentage.
-                text: qsTr("%1%").arg(parent.value)
-                z: 2
             }
         }
 

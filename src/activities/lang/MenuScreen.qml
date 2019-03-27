@@ -24,7 +24,6 @@
 import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.5
 
 import "../../core"
 import "lang.js" as Activity
@@ -158,17 +157,17 @@ Image {
                     wrapMode: Text.WordWrap
                     text: Activity.items.categoriesTranslations[name]
                 }
-                ProgressBar {
+                GCProgressBar {
                     id: progressLang
                     anchors.top: title.bottom
                     anchors.topMargin: ApplicationInfo.ratio * 4
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: activityBackground.width
                     height: 14 * ApplicationInfo.ratio
-                    maximumValue: wordCount
-                    minimumValue: 0
+                    from: 0
+                    to: wordCount
                     value: progress
-                    orientation: Qt.Horizontal
+                    displayText: false
                 }
             }
 

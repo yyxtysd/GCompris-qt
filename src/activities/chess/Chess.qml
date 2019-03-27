@@ -20,8 +20,6 @@
  *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
-import QtQuick.Controls.Styles 1.4
 import GCompris 1.0
 
 import "../../core"
@@ -141,12 +139,12 @@ ActivityBase {
                     horizontalItemAlignment: Grid.AlignHCenter
                     verticalItemAlignment: Grid.AlignVCenter
 
-                    Button {
+                    GCButton {
                         id: undo
                         height: 30 * ApplicationInfo.ratio
                         width: height
                         text: "";
-                        style: GCButtonStyle { theme: "light" }
+                        theme: "light"
                         onClicked: Activity.undo()
                         enabled: items.history.length > 0 ? 1 : 0
                         opacity: enabled
@@ -165,12 +163,12 @@ ActivityBase {
                         }
                     }
 
-                    Button {
+                    GCButton {
                         id: redo
                         height: undo.height
                         width: undo.height
-                        text: "";
-                        style: GCButtonStyle { theme: "light" }
+                        text: ""
+                        theme: "light"
                         onClicked: {
                             if (!twoPlayers) {
                                 acceptClick = false;
@@ -196,11 +194,11 @@ ActivityBase {
                         }
                     }
 
-                    Button {
+                    GCButton {
                         height: undo.height
                         width: undo.height
-                        text: "";
-                        style: GCButtonStyle { theme: "light" }
+                        text: ""
+                        theme: "light"
                         enabled: items.twoPlayer
                         opacity: enabled
                         Image {

@@ -21,7 +21,6 @@
  */
 import QtQuick 2.6
 import GCompris 1.0
-import QtQuick.Controls 1.5
 
 import "../../core"
 
@@ -68,20 +67,20 @@ ActivityBase {
             }
             spacing: 10
 
-            Button {
-                style: GCButtonStyle { textSize: "title"}
+            GCButton {
+                textSize: "title"
                 text: qsTr("Title")
                 width: parent.width
                 onClicked: edit.formatLineWith('h2')
             }
-            Button {
-                style: GCButtonStyle { textSize: "subtitle"}
+            GCButton {
+                textSize: "subtitle"
                 text: qsTr("Subtitle")
                 width: parent.width
                 onClicked: edit.formatLineWith('h3')
             }
-            Button {
-                style: GCButtonStyle { textSize: "regular"}
+            GCButton {
+                textSize: "regular"
                 width: parent.width
                 text: qsTr("Paragraph")
                 onClicked: edit.formatLineWith('p')
@@ -105,18 +104,18 @@ ActivityBase {
             }
             spacing: 10
 
-            Button {
+            GCButton {
                 id: loadButton
-                style: GCButtonStyle { textSize: "regular"}
+                textSize: "regular"
                 width: parent.width
                 text: qsTr("Load")
                 onClicked: {
                     creationHandler.loadWindow()
                 }
             }
-            Button {
+            GCButton {
                 id: saveButton
-                style: GCButtonStyle { textSize: "regular"}
+                textSize: "regular"
                 width: parent.width
                 text: qsTr("Save")
                 onClicked: {

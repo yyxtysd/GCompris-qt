@@ -19,7 +19,7 @@
  *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 import GCompris 1.0
 
 /**

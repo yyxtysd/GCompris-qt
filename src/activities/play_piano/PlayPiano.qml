@@ -20,7 +20,7 @@
  * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 import GCompris 1.0
 
 import "../../core"
@@ -244,8 +244,8 @@ ActivityBase {
             onUndoButtonClicked: Activity.undoPreviousAnswer()
         }
 
-        ExclusiveGroup {
-            id: configOptions
+        ButtonGroup {
+            id: childGroup
         }
 
         DialogActivityConfig {
@@ -264,8 +264,8 @@ ActivityBase {
                         id: coloredNotesModeBox
                         width: column.width - 50
                         text: qsTr("Display colored notes.")
+                        ButtonGroup.group: childGroup
                         checked: items.mode === "coloredNotes"
-                        exclusiveGroup: configOptions
                         onCheckedChanged: {
                             if(coloredNotesModeBox.checked) {
                                 items.mode = "coloredNotes"
@@ -276,9 +276,9 @@ ActivityBase {
                     GCDialogCheckBox {
                         id: colorlessNotesModeBox
                         width: coloredNotesModeBox.width
+                        ButtonGroup.group: childGroup
                         text: qsTr("Display colorless notes.")
                         checked: items.mode === "colorlessNotes"
-                        exclusiveGroup: configOptions
                         onCheckedChanged: {
                             if(colorlessNotesModeBox.checked) {
                                 items.mode = "colorlessNotes"

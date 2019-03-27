@@ -21,7 +21,7 @@
 import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 
 import "../../core"
 import "solar_system.js" as Activity
@@ -242,7 +242,7 @@ Item {
         readonly property string message: qsTr("%1%").arg(value)
 
         value: Math.round(percentage * 10) / 10
-        maximumValue: 100
+        to: 100
 
         visible: items.assessmentMode
         y: parent.height - bar.height - height - 10 * ApplicationInfo.ratio

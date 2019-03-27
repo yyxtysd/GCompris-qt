@@ -21,7 +21,7 @@
 import QtQuick 2.6
 import GCompris 1.0
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 import "qrc:/gcompris/src/core/core.js" as Core
 
 /**
@@ -192,15 +192,17 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             Layout.rowSpan: 1
             Layout.fillWidth: true
-            minimumValue: 0
-            maximumValue: 100
+            from: 0
+            to: 100
             value: 0
         }
 
-        Button {
+        GCButton {
             id: backgroundButton
             width: parent.width
             height: 60 * ApplicationInfo.ratio
+            fixedFontSize: downloadDialog.fixedFontSize
+            theme: "highContrast"
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: downloadDialogProgress.bottom
@@ -208,15 +210,11 @@ Item {
             }
             //: Run this task in background
             text: qsTr("Background")
-            style: GCButtonStyle {
-                fixedFontSize: downloadDialog.fixedFontSize
-                theme: "highContrast"
-            }
             visible: true
             onClicked: downloadDialog.shutdown();
         }
 
-        Button {
+        GCButton {
             id: abortButton
             width: parent.width
             height: 60 * ApplicationInfo.ratio
@@ -226,10 +224,8 @@ Item {
                 topMargin: 10
             }
             text: qsTr("Abort")
-            style: GCButtonStyle {
-                fixedFontSize: downloadDialog.fixedFontSize
-                theme: "highContrast"
-            }
+            fixedFontSize: downloadDialog.fixedFontSize
+            theme: "highContrast"
             visible: true
             onClicked: {
                 if (DownloadManager.downloadIsRunning())

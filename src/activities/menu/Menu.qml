@@ -23,8 +23,7 @@ import "../../core"
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 import "qrc:/gcompris/src/core/core.js" as Core
-import QtQuick.Controls 1.5
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.0
 
 /**
  * GCompris' top level menu screen.
@@ -584,7 +583,7 @@ ActivityBase {
             TextField {
                 id: searchTextField
                 width: parent.width
-                textColor: "black"
+                color: "black"
                 font.pointSize: 16
                 font.bold: true
                 horizontalAlignment: TextInput.AlignHCenter
@@ -607,10 +606,6 @@ ActivityBase {
                     if (ApplicationInfo.isMobile && !ApplicationSettings.isVirtualKeyboard)
                         Qt.inputMethod.hide();
                     activity.focus = true;
-                }
-
-                style: TextFieldStyle {
-                    placeholderTextColor: "black"
                 }
 
                 placeholderText: qsTr("Search specific activities")

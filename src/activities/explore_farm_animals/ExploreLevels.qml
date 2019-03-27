@@ -24,7 +24,6 @@
 
 import QtQuick 2.6
 import GCompris 1.0
-import QtQuick.Controls 1.5
 
 import "../../core"
 import "explore-level.js" as Activity
@@ -167,28 +166,16 @@ ActivityBase {
             anchors.bottom: bar.top
             anchors.right: parent.right
             anchors.margins: 10 * ApplicationInfo.ratio
-            ProgressBar {
+            GCProgressBar {
                 id: progressbar
-                height: progressbarText.height
                 width: bar.width
-                property string message
-                onValueChanged: message = value + "/" + maximumValue
-                onMaximumValueChanged:  message = value + "/" + maximumValue
-
-                GCText {
-                    id: progressbarText
-                    anchors.centerIn: parent
-                    fontSize: mediumSize
-                    font.bold: true
-                    color: "black"
-                    text: progressbar.message
-                }
+                message: value + "/" + to
             }
         }
 
         Image {
             id: ok
-            visible: progressbar.value === progressbar.maximumValue
+            visible: progressbar.value === progressbar.to
             source:"qrc:/gcompris/src/core/resource/bar_ok.svg"
             sourceSize.width: questionText.height * 2
             fillMode: Image.PreserveAspectFit

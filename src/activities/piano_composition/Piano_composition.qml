@@ -23,7 +23,6 @@
  *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
 import GCompris 1.0
 
 import "../../core"
@@ -434,7 +433,7 @@ ActivityBase {
                         fontSizeMode: mediumSize
                     }
 
-                    Button {
+                    GCButton {
                         text: qsTr("Pre-defined melodies")
                         onClicked: {
                             melodyList.melodiesModel.clear()
@@ -449,12 +448,10 @@ ActivityBase {
                         }
                         width: 150 * ApplicationInfo.ratio
                         height: 60 * ApplicationInfo.ratio
-                        style: GCButtonStyle {
-                            theme: "dark"
-                        }
+                        theme: "dark"
                     }
 
-                    Button {
+                    GCButton {
                         text: qsTr("Your saved melodies")
                         onClicked: {
                             creationHandler.loadWindow()
@@ -462,9 +459,7 @@ ActivityBase {
                         }
                         width: 150 * ApplicationInfo.ratio
                         height: 60 * ApplicationInfo.ratio
-                        style: GCButtonStyle {
-                            theme: "dark"
-                        }
+                        theme: "dark"
                     }
                 }
             }

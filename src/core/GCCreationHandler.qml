@@ -20,9 +20,8 @@
  */
 
 import QtQuick 2.6
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 import GCompris 1.0
-import QtQuick.Controls.Styles 1.4
 import "qrc:/gcompris/src/core/core.js" as Core
 
 Rectangle {
@@ -195,25 +194,21 @@ Rectangle {
             if(!creationHandler.isSaveMode)
                 searchFiles()
         }
-        style: TextFieldStyle {
-            textColor: "black"
-            background: Rectangle {
-                border.color: "black"
-                border.width: 1
-                radius: fileNameInput.height / 4
-            }
+        color: "black"
+        background: Rectangle {
+            border.color: "black"
+            border.width: 1
+            radius: fileNameInput.height / 4
         }
     }
 
-    Button {
+    GCButton {
         id: saveButton
         width: 70 * ApplicationInfo.ratio
         height: Math.min(creationHandler.height / 15, cancelButton.height)
         visible: creationHandler.isSaveMode
         text: qsTr("Save")
-        style: GCButtonStyle {
-            theme: "highContrast"
-        }
+        theme: "highContrast"
         anchors.verticalCenter: cancelButton.verticalCenter
         anchors.left: fileNameInput.right
         anchors.leftMargin: 20
@@ -312,27 +307,23 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
         visible: !creationHandler.isSaveMode
-        Button {
+        GCButton {
             id: loadButton
             width: 70 * ApplicationInfo.ratio
             height: creationHandler.height / 15
             text: qsTr("Load")
             enabled: viewContainer.selectedFileIndex != -1
-            style: GCButtonStyle {
-                theme: "highContrast"
-            }
+            theme: "highContrast"
             onClicked: creationHandler.loadFile()
         }
 
-        Button {
+        GCButton {
             id: deleteButton
             width: 70 * ApplicationInfo.ratio
             height: creationHandler.height / 15
             text: qsTr("Delete")
             enabled: viewContainer.selectedFileIndex != -1
-            style: GCButtonStyle {
-                theme: "highContrast"
-            }
+            theme: "highContrast"
             onClicked: deleteFile()
         }
     }

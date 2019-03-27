@@ -20,8 +20,7 @@
  */
 
 import QtQuick 2.6
-import QtQuick.Controls 1.5
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.0
 import GCompris 1.0
 
 import "../../core"
@@ -68,7 +67,8 @@ Item {
                 }
             }
 
-            Button {
+            GCButton {
+				id: control
                 width: parent.parent.width - 50 * ApplicationInfo.ratio - 10 * 2
                 height: parent.height
                 enabled: ApplicationSettings.isDemoMode
@@ -76,26 +76,24 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 text: demoModeBox.checked ? qsTr("You have the full version") :
                 qsTr("Buy the full version").toUpperCase()
-                style: ButtonStyle {
-                    background: Rectangle {
-                        implicitWidth: 100
-                        implicitHeight: 25
-                        border.width: control.activeFocus ? 4 : 2
-                        border.color: "black"
-                        radius: 10
-                        gradient: Gradient {
-                            GradientStop { position: 0 ; color: control.pressed ? "#87ff5c" :
-                                ApplicationSettings.isDemoMode ? "#ffe85c" : "#EEEEEE"}
-                            GradientStop { position: 1 ; color: control.pressed ? "#44ff00" :
-                                ApplicationSettings.isDemoMode ? "#f8d600" : "#AAAAAA"}
-                        }
+                background: Rectangle {
+                    implicitWidth: 100
+                    implicitHeight: 25
+                    border.width: activeFocus ? 4 : 2
+                    border.color: "black"
+                    radius: 10
+                    gradient: Gradient {
+                        GradientStop { position: 0 ; color: control.pressed ? "#87ff5c" :
+                            ApplicationSettings.isDemoMode ? "#ffe85c" : "#EEEEEE"}
+                        GradientStop { position: 1 ; color: control.pressed ? "#44ff00" :
+                            ApplicationSettings.isDemoMode ? "#f8d600" : "#AAAAAA"}
                     }
-                    label: GCText {
-                        text: control.text
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        wrapMode: Text.WordWrap
-                    }
+                }
+                contentItem: GCText {
+                    text: control.text
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
                 }
 
                 onClicked: {
@@ -281,11 +279,11 @@ Item {
             GCSlider {
                 id: baseFontSizeSlider
                 width: 250 * ApplicationInfo.ratio
-                maximumValue: ApplicationSettings.baseFontSizeMax
-                minimumValue: ApplicationSettings.baseFontSizeMin
+                from: ApplicationSettings.baseFontSizeMin
+                to: ApplicationSettings.baseFontSizeMax
                 value: baseFontSize
                 onValueChanged: ApplicationSettings.baseFontSize = value;
-                scrollEnabled: false
+                wheelEnabled: false
             }
             GCText {
                 id: baseFontSizeText
@@ -293,10 +291,9 @@ Item {
                 fontSize: mediumSize
                 wrapMode: Text.WordWrap
             }
-            Button {
+            GCButton {
                 height: 30 * ApplicationInfo.ratio
                 text: qsTr("Default");
-                style: GCButtonStyle {}
                 onClicked: baseFontSizeSlider.value = 0.0
             }
         }
@@ -316,11 +313,11 @@ Item {
             GCSlider {
                 id: fontLetterSpacingSlider
                 width: 250 * ApplicationInfo.ratio
-                maximumValue: ApplicationSettings.fontLetterSpacingMax
-                minimumValue: ApplicationSettings.fontLetterSpacingMin
+                from: ApplicationSettings.fontLetterSpacingMin
+                to: ApplicationSettings.fontLetterSpacingMax
                 value: fontLetterSpacing
                 onValueChanged: ApplicationSettings.fontLetterSpacing = value;
-                scrollEnabled: false
+                wheelEnabled: false
             }
             GCText {
                 id: fontLetterSpacingText
@@ -328,10 +325,9 @@ Item {
                 fontSize: mediumSize
                 wrapMode: Text.WordWrap
             }
-            Button {
+            GCButton {
                 height: 30 * ApplicationInfo.ratio
                 text: qsTr("Default");
-                style: GCButtonStyle {}
                 onClicked: fontLetterSpacingSlider.value = ApplicationSettings.fontLetterSpacingMin
             }
         }
@@ -382,13 +378,12 @@ Item {
                 "qrc:/gcompris/src/core/resource/cancel.svg"
             }
 
-            Button {
+            GCButton {
                 id: voicesButton
                 height: 30 * ApplicationInfo.ratio
                 visible: ApplicationInfo.isDownloadAllowed
                 text: voicesRow.haveLocalResource ? qsTr("Check for updates") :
                 qsTr("Download")
-                style: GCButtonStyle {}
 
                 onClicked: {
                     if (DownloadManager.downloadResource(

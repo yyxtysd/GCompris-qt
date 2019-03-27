@@ -21,7 +21,7 @@
 import QtQuick 2.6
 import QtGraphicalEffects 1.0
 import GCompris 1.0
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 
 import "../../../core"
 import ".."
@@ -119,7 +119,7 @@ Item {
     }
 
     Rectangle {
-        id: background
+        id: backgroundEditor
         anchors.fill: parent
 
         File {
@@ -140,31 +140,28 @@ Item {
             anchors.leftMargin: 10 * ApplicationInfo.ratio
             anchors.topMargin: 20 * ApplicationInfo.ratio
             spacing: 5 * ApplicationInfo.ratio
-            width: (background.width - mapWrapper.width - props.wallSize - 20 * ApplicationInfo.ratio) / 2
+            width: (backgroundEditor.width - mapWrapper.width - props.wallSize - 20 * ApplicationInfo.ratio) / 2
             height: parent.height
 //            anchors.topMargin: 20
 
-            Button {
+            GCButton {
                 id: loadButton
                 width: parent.width
                 height: props.cellSize
-                style: GCButtonStyle {}
                 text: qsTr("Load")
                 onClicked: creationHandler.loadWindow()
             }
-            Button {
+            GCButton {
                 id: saveButton
                 width: parent.width
                 height: props.cellSize
-                style: GCButtonStyle {}
                 text: qsTr("Save")
                 onClicked: creationHandler.saveWindow(Activity.saveModel())
             }
-            Button {
+            GCButton {
                 id: testButton
                 width: parent.width
                 height: props.cellSize
-                style: GCButtonStyle {}
                 text: qsTr("Test")
                 onClicked: editor.startTesting();
             }
@@ -366,10 +363,8 @@ Item {
                         width: contact.width * 2
                         height: contact.height
                         value: props.contactValue
-                        maximumValue: 99
-                        minimumValue: 1
-                        decimals: 0
-                        horizontalAlignment: Qt.AlignHCenter
+                        from: 1
+                        to: 99
                         font.family: GCSingletonFontLoader.fontLoader.name
                         font.pixelSize: height / 2
                         onValueChanged: if (value != props.contactValue) props.contactValue = value;
@@ -403,8 +398,8 @@ Item {
             property double margin: 20
             property int columns: props.columns
             property int rows: props.rows
-            property double length: Math.min(background.height -
-                    2*mapWrapper.margin, background.width - 2*mapWrapper.margin);
+            property double length: Math.min(backgroundEditor.height -
+                    2*mapWrapper.margin, backgroundEditor.width - 2*mapWrapper.margin);
 
             color: "#E3DEDB"
 

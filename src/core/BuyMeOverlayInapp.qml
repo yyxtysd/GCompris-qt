@@ -19,7 +19,6 @@
  *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
 import GCompris 1.0
 
 Item {
@@ -77,7 +76,7 @@ Item {
             }
         }
 
-        Button {
+        GCButton {
             width: instructionsArea.width * 0.9
             height: 60 * ApplicationInfo.ratio
             anchors {
@@ -86,9 +85,7 @@ Item {
                 topMargin: 10
             }
             text: qsTr("Buy the full version").toUpperCase()
-            style: GCButtonStyle {
-                 theme: "highContrast"
-           }
+            theme: "highContrast"
 
             onClicked: {
                 if(ApplicationSettings.isDemoMode)

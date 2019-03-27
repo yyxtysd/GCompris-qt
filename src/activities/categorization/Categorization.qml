@@ -20,7 +20,7 @@
 */
 
 import QtQuick 2.6
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 import GCompris 1.0
 
 import "../../core"
@@ -111,8 +111,8 @@ ActivityBase {
             id: categoryReview
         }
 
-        ExclusiveGroup {
-            id: configOptions
+        ButtonGroup {
+            id: childGroup
         }
 
         DialogActivityConfig {
@@ -132,7 +132,7 @@ ActivityBase {
                         width: column.width - 50
                         text: qsTr("Put together all the elements from a category (with score)")
                         checked: (items.mode == "easy") ? true : false
-                        exclusiveGroup: configOptions
+                        ButtonGroup.group: childGroup
                         onCheckedChanged: {
                             if(easyModeBox.checked) {
                                 items.mode = "easy"
@@ -146,7 +146,7 @@ ActivityBase {
                         width: easyModeBox.width
                         text: qsTr("Put together all the elements from a category (without score)")
                         checked: (items.mode == "medium") ? true : false
-                        exclusiveGroup: configOptions
+                        ButtonGroup.group: childGroup
                         onCheckedChanged: {
                             if(mediumModeBox.checked) {
                                 items.mode = "medium"
@@ -160,7 +160,7 @@ ActivityBase {
                         width: easyModeBox.width
                         text: qsTr("Discover a category, grouping elements together")
                         checked: (items.mode == "expert") ? true : false
-                        exclusiveGroup: configOptions
+                        ButtonGroup.group: childGroup
                         onCheckedChanged: {
                             if(expertModeBox.checked) {
                                 items.mode = "expert"

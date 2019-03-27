@@ -1,9 +1,9 @@
-/* GCompris - GCButtonStyle.qml
+/* GCompris - GCButton.qml
  *
- * Copyright (C) 2014 Bruno Coudoin <bruno.coudoin@gcompris.net>
+ * Copyright (C) 2019 Johnny Jazeix <jazeix@gmail.com>
  *
  * Authors:
- *   Bruno Coudoin <bruno.coudoin@gcompris.net>
+ *   Johnny Jazeix <jazeix@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,17 +19,18 @@
  *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.6
-import QtQuick.Controls 1.5
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.0
 import GCompris 1.0
 
 /**
- * Provides styling for GCompris' Buttons.
+ * A QML component representing GCompris' buttons.
  * @ingroup components
  *
- * @inherit QtQuick.Controls.Styles.ButtonStyle
+ * @inherit QtQuick.Button
  */
-ButtonStyle {
+Button {
+    id: control
+
     /**
      * type:real
      * Fixed font size of the label in pt.
@@ -101,6 +102,8 @@ ButtonStyle {
             fontBold: true
         }
     }
+
+    focusPolicy: Qt.NoFocus
     
     background: Rectangle {
         border.width: control.activeFocus ? 4 : 2
@@ -111,7 +114,7 @@ ButtonStyle {
             GradientStop { position: 1 ; color: control.pressed ? themes[theme].selectedColorGradient1 : themes[theme].backgroundColorGradient1 }
         }
     }
-    label: Item {
+    contentItem: Item {
         id: labelItem
         anchors.fill: parent
         implicitWidth: labelText.implicitWidth

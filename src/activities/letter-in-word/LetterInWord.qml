@@ -24,7 +24,7 @@
 
 import QtQuick 2.6
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.0
 import GCompris 1.0
 import "../../core"
 import "letter-in-word.js" as Activity
@@ -97,8 +97,8 @@ ActivityBase {
                 animateX.restart();
         }
 
-        ExclusiveGroup {
-            id: configOptions
+        ButtonGroup {
+            id: childGroup
         }
 
         DialogActivityConfig {
@@ -129,7 +129,7 @@ ActivityBase {
                             width: column.width - 50
                             text: qsTr("All words")
                             checked: (items.currentMode === items.normalModeWordCount) ? true : false
-                            exclusiveGroup: configOptions
+                            ButtonGroup.group: childGroup
                         }
 
                         GCDialogCheckBox {
@@ -137,7 +137,7 @@ ActivityBase {
                             width: column.width - 50
                             text: qsTr("Only 5 words")
                             checked: (items.currentMode === items.easyModeWordCount) ? true : false
-                            exclusiveGroup: configOptions
+                            ButtonGroup.group: childGroup
                         }
 
                         Flow {
