@@ -72,7 +72,7 @@ elseif(CMAKE_HOST_APPLE)
   set_source_files_properties(${gcompris_RES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
-set(used_qt_modules Qt5::Qml Qt5::Quick Qt5::Gui Qt5::Multimedia Qt5::Core Qt5::Svg Qt5::Xml Qt5::XmlPatterns Qt5::Sensors)
+set(used_qt_modules Qt5::Qml Qt5::Quick Qt5::Gui Qt5::Multimedia Qt5::Core Qt5::Svg Qt5::Xml Qt5::XmlPatterns Qt5::Sensors Qt5::QuickControls2)
 
 if(ANDROID)
   add_library(${GCOMPRIS_EXECUTABLE_NAME} SHARED ${gcompris_SRCS})
@@ -155,6 +155,7 @@ if(BUILD_STANDALONE)
   if(NOT SAILFISHOS)
     list(APPEND _qml_plugins
       QtQuick/Controls/${_lib_prefix}qtquickcontrolsplugin
+      QtQuick/Controls.2/${_lib_prefix}qtquickcontrols2plugin
       QtQuick/Layouts/${_lib_prefix}qquicklayoutsplugin)
   endif()
 
@@ -210,13 +211,6 @@ if(BUILD_STANDALONE)
     list(APPEND GCOMPRIS_OTHER_LIBS ${_lib})
   endforeach()
 
-  ## install QtGraphicalEffects (which is not a lib but only qml files)
-  # BUT, actually there are some libs in it, and this does not work on APPLE. Moved to _qml_plugins instead
-  #
-  #set(_qml_subdir QtGraphicalEffects)
-  #getQtQmlPath(_qt_qml_path)
-  #install(DIRECTORY ${_qt_qml_path}/QtGraphicalEffects DESTINATION ${_qt_qml_destdir})
-
   # Fix for Linux 'make package' that fails to link with libicu; also package OpenSSL libs from system
   if(UNIX AND NOT APPLE AND NOT SAILFISHOS AND NOT ANDROID)
     add_library( libicudata SHARED IMPORTED )
@@ -266,9 +260,6 @@ if(BUILD_STANDALONE)
   endif()
 
 endif(BUILD_STANDALONE)
-
-# Hack: do not fixup Qt and Qml plugins on Windows because fixup_bundle takes ages (cmake bug ?) -> Johnny : we need this even if it takes time because some required dependencies are pulled here
-#if(WIN32) set(GCOMPRIS_OTHER_LIBS "") endif()
 
 # install fixup_bundle script to resolve and fixup runtime dependencies
 if(BUILD_STANDALONE AND NOT ANDROID)

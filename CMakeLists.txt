@@ -63,9 +63,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL Android)
   set(ANDROID 1)
   # TODO: possibly should be setup by toolchain one day
   set(QT_QMAKE_EXECUTABLE "${_qt5Core_install_prefix}/bin/qmake")
-  if(ECM_VERSION VERSION_GREATER "5.55.0")
-    set(QT_REQUIRED_VERSION 5.12.0)
-  endif()
 
   # workaround until this fix is in released ECM
   if(ECM_VERSION VERSION_LESS "5.15.0")
@@ -98,7 +95,7 @@ if("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 endif("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 
 find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED
-    Qml Quick Gui Multimedia Core Svg Xml XmlPatterns LinguistTools Sensors)
+    Qml Quick Gui Multimedia Core Svg Xml XmlPatterns LinguistTools Sensors QuickControls2)
 
 if(ANDROID)
     find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED AndroidExtras)
