@@ -23,6 +23,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.0
 import GCompris 1.0
+import QtMultimedia 5.0
 
 import "../../core"
 import "qrc:/gcompris/src/core/core.js" as Core
@@ -212,12 +213,61 @@ Item {
             }
         }
 
-	GCDialogCheckBox {
+	    GCDialogCheckBox {
            id: enableBackgroundMusicBox
             text: qsTr("Enable background music")
             checked: isBackgroundMusicEnabled
             onCheckedChanged: {
                 isBackgroundMusicEnabled = checked;
+            }
+        }
+        
+        Flow {
+            width: parent.width
+            spacing: 5 * ApplicationInfo.ratio
+
+            GCText {
+                text: qsTr("Background Music")
+                fontSize: mediumSize
+                height: 50 * ApplicationInfo.ratio
+            }
+
+            // Padding
+            Item {
+                height: 1
+                width: 10 * ApplicationInfo.ratio
+            }
+            
+            Button {
+                id: backgroundMusicName
+                height: 30 * ApplicationInfo.ratio
+                text: {
+                    if(backgroundMusic.playbackState != Audio.PlayingState)
+                        return qsTr("Not playing")
+                    var musicDirectoryPath = ApplicationInfo.getAudioFilePath("backgroundMusic/")
+                    var musicName = String(backgroundMusic.source)
+                    musicName = musicName.slice(musicDirectoryPath.length, musicName.length)
+                    print("Music name: " + musicName)
+                    return musicName.slice(0, musicName.lastIndexOf('.'))
+                }
+                style: GCButtonStyle {}
+            }
+            
+            // Padding
+            Item {
+                height: 1
+                width: 10 * ApplicationInfo.ratio
+            }
+            
+            Image {
+                source: "qrc:/gcompris/src/core/resource/bar_next.svg"
+                sourceSize.height: Math.min(50 * ApplicationInfo.ratio, parent.width / 8)
+
+                MouseArea {
+                    anchors.fill: parent
+                    enabled: (backgroundMusic.playbackState == Audio.PlayingState && !backgroundMusic.muted)
+                    onClicked: backgroundMusic.nextAudio()
+                }
             }
         }
 

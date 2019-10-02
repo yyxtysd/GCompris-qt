@@ -74,6 +74,13 @@ Item {
      * Detailed error message in case of playback errors.
      */
     property alias errorString: audio.errorString
+    
+    /**
+     * Trigger this signal externally to play the next audio in the "files". This, in turn, stops the currently playing audio and check the necessary
+     * conditions (see onStopped signal in "audio" element) and decides what needs to be done for the next audio.
+     */
+    signal nextAudio()
+    onNextAudio: audio.stop()
 
     /**
      * type:var
@@ -206,7 +213,7 @@ Item {
 
     function _playNextFile() {
         var nextFile = files.shift()
-        if(!nextFile || 0 === nextFile.length) {
+        if(nextFile.length === 0) {
             audio.source = ""
             gcaudio.done()
         } else {

@@ -135,7 +135,7 @@ Window {
         volume: backgroundMusicVolume
 
         onMutedChanged: {
-            if(!hasAudio && !delayedbackgroundMusic.running) {
+            if(!hasAudio && !delayedbackgroundMusic.running && !files.length) {
                 delayedbackgroundMusic.playBackgroundMusic()
             }
         }
@@ -329,7 +329,8 @@ Window {
             "properties": {
                 'audioVoices': audioVoices,
                 'audioEffects': audioEffects,
-                'loading': loading
+                'loading': loading,
+                'backgroundMusic': backgroundMusic
             }
         }
 
