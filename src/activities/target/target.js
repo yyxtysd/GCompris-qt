@@ -17,20 +17,20 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 
 var url = "qrc:/gcompris/src/activities/target/resource/"
 
 var colors = [
-            "#ff1b00",
-            "#7edee2",
-            "#f1f500",
-            "#3dff00",
-            "#b7d2d4",
-            "#6db5ba"
+            "#ee7f7f",
+            "#eebf7f",
+            "#e0ee7f",
+            "#7fee8f",
+            "#7fcbee",
+            "#b8c8f6"
         ]
 
 var levels = [

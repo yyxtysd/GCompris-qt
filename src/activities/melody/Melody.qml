@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -29,6 +29,7 @@ ActivityBase {
 
     onStart: focus = true
     onStop: {}
+    isMusicalActivity: true
 
     isMusicalActivity: true
 
@@ -56,6 +57,7 @@ ActivityBase {
             property var answer
             property alias questionInterval: questionPlayer.interval
             property int numberOfLevel: 10
+            property bool running: false
         }
 
         onStart: {
@@ -63,10 +65,13 @@ ActivityBase {
             score.numberOfSubLevels = 5
             score.currentSubLevel = 1
             initLevel()
+            items.running = true
         }
 
         onStop: {
+            knock.stop()
             questionPlayer.stop()
+            items.running = false
         }
 
         Image {
@@ -85,7 +90,6 @@ ActivityBase {
             model: 4
             Image {
                 id: part
-                parent: xylofon
                 source: items.url + 'xylofon_part' + (index + 1) + '.svg'
                 rotation: - 80
                 anchors.horizontalCenter: xylofon.horizontalCenter
@@ -130,9 +134,18 @@ ActivityBase {
 
         function playNote(index) {
             activity.audioEffects.play(ApplicationInfo.getAudioFilePath(items.url +
-                                       'xylofon_son' + (index + 1) + '.$CA'))
+                                       'xylofon_son' + (index + 1) + ".wav"))
         }
 
+        Timer {
+            id: knock
+            interval: 1000
+            repeat: false
+            onTriggered: {
+                questionPlayer.start()
+            }
+        }
+        
         Timer {
             id: questionPlayer
             onTriggered: {
@@ -177,7 +190,6 @@ ActivityBase {
                 parent.repeat()
             }
             onLoose: parent.repeat()
-            interval: 1000
         }
 
         Score {
@@ -201,7 +213,7 @@ ActivityBase {
             for(var i = 0; i < bar.level + 2; ++i) {
                 items.question.push(Math.floor(Math.random() * numberOfParts))
             }
-            items.questionInterval = 1000 - Math.min(500, 100 * bar.level)
+            items.questionInterval = 1200 - Math.min(500, 100 * bar.level)
             items.answer = []
         }
 
@@ -225,10 +237,13 @@ ActivityBase {
         }
 
         function repeat() {
-            activity.audioEffects.play(ApplicationInfo.getAudioFilePath(items.url + 'xylofon_melody.$CA'))
-            items.questionToPlay = items.question.slice()
-            items.answer = []
-            questionPlayer.start()
+            if(items.running == true) {
+                questionPlayer.stop()
+                activity.audioEffects.play(ApplicationInfo.getAudioFilePath(items.url + 'knock.wav'))
+                items.questionToPlay = items.question.slice()
+                items.answer = []
+                knock.start()
+            }
         }
 
         function checkAnswer() {

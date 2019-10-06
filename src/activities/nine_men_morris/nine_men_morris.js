@@ -16,10 +16,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 
 var currentLevel = 0
 var numberOfLevel = 5
@@ -35,13 +35,32 @@ var numberOfSecondPieces
 var numberOfPieces
 var numberOfDragPoints
 var depthMax
+var tutorialInstructions = [
+            {
+                "instruction": qsTr("You and Tux start with 9 pieces each, and take turns to place your pieces on to the empty spots (by clicking on the spots) on the board."),
+                "instructionImage" : "qrc:/gcompris/src/activities/nine_men_morris/resource/tutorial1.svg"
+            },
+            {
+                "instruction": qsTr("If you form a mill (line of 3 pieces), then select a piece of Tux, and remove it. Pieces of formed mill can not be removed unless no other pieces are left on board."),
+                "instructionImage": "qrc:/gcompris/src/activities/nine_men_morris/resource/tutorial2.svg"
+            },
+            {
+                "instruction": qsTr("After all the pieces are placed, you and Tux will take turns to move them. Click on one of your pieces, and then on the adjacent empty spot to move it there. Green color spot indicates where you can move."),
+                "instructionImage": "qrc:/gcompris/src/activities/nine_men_morris/resource/tutorial3.svg"
+            },
+            {
+                "instruction":  qsTr("If you are left with 3 pieces, your pieces will gain the ability to 'fly' and can be moved to any vacant spot on the board."),
+                "instructionImage": "qrc:/gcompris/src/activities/nine_men_morris/resource/tutorial4.svg"
+            },
+            {
+                "instruction": qsTr("If you immobilize the computer or leave it with less than 3 pieces, then you win the game."),
+                "instructionImage": "qrc:/gcompris/src/activities/nine_men_morris/resource/tutorial5.svg"
+            }
+        ]
 
 function start(items_, twoPlayer_) {
-
     items = items_
     currentLevel = 1
-    items.player1_score = 0
-    items.player2_score = 0
     twoPlayer = twoPlayer_
     numberOfLevel = 6
     numberOfPieces = 9
@@ -232,17 +251,16 @@ function start(items_, twoPlayer_) {
     items.dragPoints.itemAt(23).lowerPoint = items.dragPoints.itemAt(14)
     // End assigning upper and lower piece
 
-    if(!twoPlayer)
-        tutorial()
-    else
+    if(twoPlayer) {
+	items.tutorialSection.visible = false
         initLevel()
+    }
 }
 
 function stop() {
 }
 
 function initLevel() {
-
     items.bar.level = currentLevel
     items.turn = 0
     items.gameDone = false
@@ -283,49 +301,6 @@ function initLevel() {
         initiatePlayer1()
 }
 
-function tutorial() {
-    items.isTutorial = true
-    setTutorial(1)
-}
-
-function setTutorial(tutNum) {
-
-    if(tutNum == 1) {
-        items.tutorialTxt = qsTr("You and Tux start with 9 pieces each, and take turns to place " +
-                                 "your pieces on to the empty spots (by clicking on the spots) on the board.")
-    }
-    else if(tutNum == 2) {
-        items.tutorialTxt = qsTr("If you form a mill (line of 3 pieces), then select a piece of Tux, and remove " +
-                                 "it. Pieces of formed mill can not be removed unless no other pieces are left on board.")
-    }
-    else if(tutNum == 3) {
-        items.tutorialTxt = qsTr("After all the pieces are placed, you and Tux will take turns to move them. " +
-                                 "Click on one of your pieces, and then on the adjacent empty spot to move " +
-                                 "it there. Green color spot indicates where you can move.")
-    }
-    else if(tutNum == 4) {
-        items.tutorialTxt = qsTr("If you are left with 3 pieces, your pieces will gain the ability to 'fly' " +
-                                 "and can be moved to any vacant spot on the board.")
-    }
-    else if(tutNum == 5) {
-        items.tutorialTxt = qsTr("If you immobilize the computer or leave it with less than 3 pieces, then " +
-                                 "you win the game.")
-    }
-}
-
-function tutorialNext() {
-    setTutorial(++items.tutNum)
-}
-
-function tutorialPrevious() {
-    setTutorial(--items.tutNum)
-}
-
-function tutorialSkip() {
-    items.isTutorial = false
-    initLevel()
-}
-
 function nextLevel() {
     if(numberOfLevel <= ++currentLevel) {
         currentLevel = 1
@@ -341,72 +316,65 @@ function previousLevel() {
 }
 
 function reset() {
-    stopper = true
-    stopAnimations()
-    items.player1image.rotation = 0
-    items.player2image.rotation = 0
+    items.trigTuxMove.stop();
+    stopper = true;
+    shouldComputerPlay();
+    items.player2score.endTurn();
+    items.player1score.beginTurn();
     items.playSecond = !items.playSecond
     initLevel()
 }
 
-function stopAnimations() {
-    items.player1turn.stop()
-    items.player2turn.stop()
-    items.player1shrink.stop()
-    items.player2shrink.stop()
-    items.rotateKonqi.stop()
-    items.rotateTux.stop()
-}
-
 //Initial values at the start of game when its player 1 turn
 function initiatePlayer1() {
-    items.changeScalePlayer1.scale = 1.4
-    items.changeScalePlayer2.scale = 1.0
-    items.player1.state = "first"
-    items.player2.state = "second"
+    items.player2score.endTurn();
+    items.player1score.beginTurn();
 
     items.firstInitial.anchors.right = undefined
-    items.firstInitial.anchors.top = items.player1.bottom
-    items.firstInitial.anchors.left = items.player1.left
+    items.firstInitial.anchors.top = items.player1score.bottom
+    items.firstInitial.anchors.left = items.player1score.left
 
     items.secondInitial.anchors.left = undefined
-    items.secondInitial.anchors.right = items.player2.right
-    items.secondInitial.anchors.top = items.player2.bottom
-
-    items.rotateKonqi.start()
+    items.secondInitial.anchors.right = items.player2score.right
+    items.secondInitial.anchors.top = items.player2score.bottom
 }
 
 //Initial values at the start of game when its player 1 turn
 function initiatePlayer2() {
-    items.changeScalePlayer1.scale = 1.0
-    items.changeScalePlayer2.scale = 1.4
-    items.player1.state = "second"
-    items.player2.state = "first"
+
+    items.player1score.endTurn();
+    items.player2score.beginTurn();
 
     items.secondInitial.anchors.right = undefined
-    items.secondInitial.anchors.top = items.player1.bottom
-    items.secondInitial.anchors.left = items.player1.left
+    items.secondInitial.anchors.top = items.player1score.bottom
+    items.secondInitial.anchors.left = items.player1score.left
 
     items.firstInitial.anchors.left = undefined
-    items.firstInitial.anchors.right = items.player2.right
-    items.firstInitial.anchors.top = items.player2.bottom
-
-    items.rotateTux.start()
+    items.firstInitial.anchors.right = items.player2score.right
+    items.firstInitial.anchors.top = items.player2score.bottom
 }
 
 //Change scale of score boxes according to turns
 function changeScale() {
    if(items.playSecond) {
-        if(items.turn % 2 == 0)
-            items.player2turn.start()
-        else
-            items.player1turn.start()
+        if(items.turn % 2 == 0){
+            items.player2score.beginTurn();
+            items.player1score.endTurn();
+        }
+        else {
+            items.player1score.beginTurn();
+            items.player2score.endTurn();
+        }
     }
     else {
-        if(items.turn % 2 == 0)
-            items.player1turn.start()
-        else
-            items.player2turn.start()
+        if(items.turn % 2 == 0) {
+            items.player1score.beginTurn();
+            items.player2score.endTurn();
+        }
+        else {
+            items.player2score.beginTurn();
+            items.player1score.endTurn();
+        }
     }
 }
 
@@ -490,10 +458,12 @@ function movePiece(index) {
 
 function shouldComputerPlay() {
     if(!twoPlayer) {
-        if(items.turn % 2 && items.playSecond == false && stopper == false)
-            doMove()
-        else if((items.turn % 2 == 0) && items.playSecond && stopper == false)
-            doMove()
+        if(items.turn % 2 && items.playSecond == false && stopper == false) {
+            items.trigTuxMove.start()
+        }
+        else if((items.turn % 2 == 0) && items.playSecond && stopper == false) {
+            items.trigTuxMove.start()
+        }
         else
             items.pieceBeingMoved = false
     }
@@ -908,6 +878,7 @@ function continueGame() {
         otherRepeater = items.secondPlayerPieces
     }
     changeScale()
+    shouldComputerPlay();
 }
 
 // position value is only used when checkMill is called by setSecondPhaseMove or getSecondPhaseRemoveIndex function
@@ -1161,25 +1132,23 @@ function checkGameWon() {
     if(((numberOfSecondPieces < 3 && !items.playSecond) || (numberOfFirstPieces < 3 && items.playSecond)) ||
        (flag && ((currentPiece.state == "1" && !items.playSecond) || (currentPiece.state == "2" && items.playSecond)))) {
         items.gameDone = true
-        items.player1_score++
-        items.player1.state = "win"
+        items.player1score.win();
+        items.player2score.endTurn();
         items.instructionTxt = qsTr("Congratulations")
         items.bonus.good("flower")
         if(twoPlayer) {
             items.instructionTxt = qsTr("Congratulations Player 1")
-            items.bonus.isWin = false
         }
     }
     else if(((numberOfFirstPieces < 3 && !items.playSecond) || (numberOfSecondPieces < 3 && items.playSecond)) ||
             (flag && ((currentPiece.state == "2" && !items.playSecond) ||
             (currentPiece.state == "1" && items.playSecond)))) {
         items.gameDone = true
-        items.player2_score++
-        items.player2.state = "win"
+        items.player2score.win();
+        items.player1score.endTurn();
         if(twoPlayer) {
             items.bonus.good("flower")
             items.instructionTxt = qsTr("Congratulations Player 2")
-            items.bonus.isWin = false
         }
         else {
             items.instructionTxt = qsTr("Try again")
@@ -1747,3 +1716,5 @@ function generateMove(board, state, index, firstPhase) {
     }
     return moves
 }
+
+

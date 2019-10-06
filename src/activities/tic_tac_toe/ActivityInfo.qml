@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -26,11 +26,16 @@ ActivityInfo {
   icon: "tic_tac_toe/tic_tac_toe.svg"
   author: "Pulkit Gupta &lt;pulkitgenius@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Tic Tac Toe (against Tux)")
+  //: Help title
   description: qsTr("Place three marks in a row")
 //  intro: "Click on the square which you wish to mark and try to mark 3 consecutive squares before Tux."
+  //: Help goal
   goal: qsTr("Place three respective marks in any horizontal, vertical, or diagonal row to win the game")
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: qsTr("Play with the computer. Take turns to click on the square which you want to mark. First player to create a line of 3 marks wins")
   credit: ""
   section: "strategy"

@@ -1,6 +1,6 @@
 /* GCompris - ActivityInfo.qml
  *
- * Copyright (C) 2016 Your Name <yy@zz.org>
+ * Copyright (C) 2018 Your Name <yy@zz.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,11 +23,16 @@ ActivityInfo {
   icon: "template/template.svg"
   author: "Your Name &lt;yy@zz.org&gt;"
   demo: true
+  //: Activity title
   title: "Template activity"
+  //: Help title
   description: ""
   //intro: "put here in comment the text for the intro voice"
+  //: Help goal
   goal: ""
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: ""
   credit: ""
   section: "fun"

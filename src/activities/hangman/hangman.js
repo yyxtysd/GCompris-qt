@@ -17,11 +17,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris
 .import "qrc:/gcompris/src/core/core.js" as Core
 .import "qrc:/gcompris/src/activities/lang/lang_api.js" as Lang
@@ -116,14 +116,10 @@ function initLevel() {
         row++;
     }
     items.keyboard.layout = layout;
-
 }
 
-
-
 function processKeyPress(text) {
-
-    if(items.remainingLife === 0)
+    if(items.remainingLife === 0 || items.bonus.isPlaying)
         return
 
     text = text.toLocaleLowerCase()
@@ -167,6 +163,7 @@ function processKeyPress(text) {
 
     // If no more '_' in the word to find, we have found all letters, show bonus
     if(items.hidden.text.indexOf("_") === -1) {
+        items.maskThreshold = 0;
         items.playWord()
         items.bonus.good("lion");
     }

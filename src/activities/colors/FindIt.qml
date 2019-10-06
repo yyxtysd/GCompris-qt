@@ -16,10 +16,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import QtGraphicalEffects 1.0
 import GCompris 1.0
 
@@ -202,7 +202,7 @@ ActivityBase {
             z: bar.z + 1
             visible: items.audioOk
             anchors {
-                bottom: parent.bottom
+                bottom: bar.top
                 right: parent.right
                 margins: 10 * ApplicationInfo.ratio
             }
@@ -212,10 +212,12 @@ ActivityBase {
 
         Score {
             id: score
-            anchors.bottom: repeatItem.top
-            anchors.right: repeatItem.right
-            anchors.bottomMargin: 30
-            anchors.margins: 0
+            anchors.bottom: bar.top
+            anchors.right: bar.right
+            anchors.left: parent.left
+            anchors.bottomMargin: 10 * ApplicationInfo.ratio
+            anchors.leftMargin: 10 * ApplicationInfo.ratio
+            anchors.rightMargin: 0
         }
 
         Bonus {

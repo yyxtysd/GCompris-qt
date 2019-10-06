@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 import GCompris 1.0
@@ -27,13 +27,18 @@ ActivityInfo {
   icon: "geography/geography.svg"
   author: "Pulkit Gupta &lt;pulkitgenius@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Locate the countries")
+  //: Help title
   description: qsTr("Drag and Drop the items to redraw the whole map")
-//  intro: "Slide the countries to redraw the whole map"
+//  intro: "Drag and drop the objects to complete the map."
+  //: Help goal
   goal: ""
+  //: Help prerequisite
   prerequisite: ""
-  manual: ""
+  //: Help manual
+  manual: qsTr("Drag and drop the map pieces to correct locations to redraw the whole map.")
   credit: ""
-  section: "discovery"
+  section: "sciences geography"
   createdInVersion: 4000
 }

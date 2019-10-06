@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,11 +23,16 @@ ActivityInfo {
   icon: "mining/mining.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Mining for gold")
+  //: Help title
   description: qsTr("Use the mousewheel to approach the rockwall and look for gold nuggets.")
-  //intro: "Looking at the rockwall, you can see a sparkle somewhere. Move the mouse cursor next to this sparkle and use the mousewheel or the zoom gesture  to zoom in."
+  //intro: "Looking at the rockwall, you can see a sparkle somewhere. Move the mouse cursor next to this sparkle and use the mousewheel or the zoom gesture to zoom in."
+  //: Help goal
   goal: qsTr("Learn to use the mousewheel or the zoom / pinch gesture to zoom in and out.")
+  //: Help prerequisite
   prerequisite: qsTr("You should be familiar with moving the mouse and clicking.")
+  //: Help manual
   manual: qsTr("Looking at the rockwall, you can see a sparkle somewhere. Move next to this sparkle and use the mousewheel or the zoom gesture to zoom in. If you zoomed in at maximum, a gold nugget will appear at the position of the sparkle. Click on the gold nugget to collect it.
 
 Having collected the nugget, use the mousewheel or the pinch gesture to zoom out again. If you zoomed out at maximum, another sparkle will appear, showing the next gold nugget to collect. Collect enough nuggets to complete the level.
@@ -37,4 +42,5 @@ The truck in the lower, right corner of the screen will tell you the number of a
 - realrainbow.ogg - used when a new gold nugget appears
 - metalpaint.wav - remixed and used when a gold nugget is collected")
   section: "computer mouse"
+  createdInVersion: 0
 }

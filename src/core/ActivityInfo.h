@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 #ifndef ACTIVITYINFO_H
 #define ACTIVITYINFO_H
@@ -63,7 +63,7 @@ class ActivityInfo : public QObject
      *
      * A difficulty level from 1 (easiest) to 6 (most difficult).
      */
-	Q_PROPERTY(int difficulty READ difficulty WRITE setDifficulty NOTIFY difficultyChanged)
+	Q_PROPERTY(quint32 difficulty READ difficulty WRITE setDifficulty NOTIFY difficultyChanged)
 
     /**
      * Relative path to the icon of the activity.
@@ -133,7 +133,7 @@ public:
 	QString section() const;
 	void setSection(const QString &);
         quint32 difficulty() const;
-	void setDifficulty(const int &);
+	void setDifficulty(const quint32 &);
 	QString icon() const;
 	void setIcon(const QString &);
 	QString author() const;
@@ -159,11 +159,8 @@ public:
         int createdInVersion() const;
         void setCreatedInVersion(const int);
 
-	QStringList getSectionPath();
-
 signals:
 	void nameChanged();
-	void typeChanged();
 	void sectionChanged();
 	void difficultyChanged();
 	void iconChanged();
@@ -182,9 +179,8 @@ signals:
 	/// @endcond
 private:
 	QString m_name;
-	QString m_type;
 	QString m_section;
-	int m_difficulty;
+	quint32 m_difficulty;
 	QString m_icon;
 	QString m_author;
 	bool m_demo;

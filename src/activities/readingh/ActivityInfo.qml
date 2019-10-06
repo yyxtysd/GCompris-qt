@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,14 +23,18 @@ ActivityInfo {
   icon: "readingh/readingh.svg"
   author: "Johnny Jazeix &lt;jazeix@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Horizontal reading practice")
+  //: Help title
   description: qsTr("Read a list of words and work out if a given word is in it.")
-//  intro: "Read a list of words and work out if a given word is in it."
+//  intro: "Read a list of words and say if a given word is in it."
+  //: Help goal
   goal: qsTr("Reading training in a limited time")
+  //: Help prerequisite
   prerequisite: qsTr("Reading")
-  manual: qsTr("A word is shown at the top right of the board. A list of words will appear and disappear on the left. Does the given word belong to the list?")
+  //: Help manual
+  manual: qsTr("A word is shown on the board. A list of words, displayed horizontally, will appear and disappear. Does the given word belong to the list?")
   credit: ""
-  section: "reading"
+  section: "reading words"
   createdInVersion: 5000
 }
-

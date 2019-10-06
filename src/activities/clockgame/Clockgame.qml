@@ -17,9 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.1
+import QtQuick 2.6
 import QtGraphicalEffects 1.0
 import GCompris 1.0
 
@@ -73,12 +73,13 @@ ActivityBase {
 
         Score {
             anchors {
-                bottom: parent.bottom
+                bottom: bar.top
                 bottomMargin: 10 * ApplicationInfo.ratio
-                right: parent.right
+                right: bar.right
                 rightMargin: 10 * ApplicationInfo.ratio
+                left: parent.left
+                leftMargin: 10 * ApplicationInfo.ratio
                 top: undefined
-                left: undefined
             }
             numberOfSubLevels: items.numberOfTry
             currentSubLevel: items.currentTry + 1

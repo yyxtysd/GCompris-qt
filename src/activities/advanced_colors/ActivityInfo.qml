@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "advanced_colors/advanced_colors.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Advanced colors")
+  //: Help title
   description: qsTr("Select the butterfly of the correct color")
-  //intro: "find the dancing butterfly having the requested color"
+  //intro: "click on the required color"
+  //: Help goal
   goal: qsTr("Learn to recognize unusual colors.")
+  //: Help prerequisite
   prerequisite: qsTr("Can read")
+  //: Help manual
   manual: qsTr("You will see dancing butterflies of different colors and a question. You have to find the correct butterfly and touch it.")
   credit: ""
-  section: "discovery colors"
+  section: "reading colors vocabulary"
+  createdInVersion: 0
 }

@@ -19,9 +19,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -44,7 +44,7 @@ Image {
     property string question
     property string audio
 
-    signal displayDescription(variant animal)
+    signal displayDescription(var animal)
 
     SequentialAnimation {
         id: anim
@@ -62,11 +62,9 @@ Image {
 
     Image {
         id: star
-
         x: animalImg.width / 2.5
         y: animalImg.height * 0.8
         visible: false
-
         source:"qrc:/gcompris/src/core/resource/star.png"
     }
 
@@ -77,19 +75,25 @@ Image {
         width: Math.max(parent.width, 55 * ApplicationInfo.ratio)
         height: Math.max(parent.height, 55 * ApplicationInfo.ratio)
         touchPoints: [ TouchPoint { id: point1 } ]
-        mouseEnabled: true
+        mouseEnabled: progressbar.value != progressbar.maximumValue && !items.bonus.isPlaying
 
         onPressed: {
+            if(items.progressbar.value >= progressbar.maximumValue) {
+                return
+            }
             var questionTargetId = items.questionOrder[Activity.items.progressbar.value]
             Activity.items.instruction.visible = false
-            if (Activity.items.score.currentSubLevel == 1) {
-                audioVoices.play(animalImg.audio);
+            if (Activity.items.score.currentSubLevel === 1) {
+                if(animalImg.audio) {
+                    audioVoices.play(animalImg.audio);
+                }
                 displayDescription(animalImg)
                 star.visible = true;
             } else {
                 if (questionId === questionTargetId) {
                     animWin.start();
                     items.progressbar.value ++;
+                    items.audioEffects.play("qrc:/gcompris/src/core/resource/sounds/completetask.wav");
                     Activity.nextSubSubLevel();
                 } else {
                     items.bonus.bad("smiley")

@@ -18,9 +18,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 import QtGraphicalEffects 1.0
 import GCompris 1.0
 
@@ -36,8 +36,9 @@ Item {
     /// index into text.split("") where next typed match should occur
     property int unmatchedIndex: 0;
     property string text
-    property variant dominoValues
+    property var dominoValues
     property bool wonState: false
+    property string mode: "dot"
 
     signal won
 
@@ -49,7 +50,7 @@ Item {
 
     Component.onCompleted: {
         // make sure our word is completely visible
-        if (x + width > parent.width)
+        if (x + width >= parent.width)
             x = parent.width - width;
     }
 
@@ -70,7 +71,7 @@ Item {
             return
 
         var chars = text.split("");
-        if (chars[unmatchedIndex] == c) {
+        if (chars[unmatchedIndex] === c) {
             unmatchedIndex++;
             return true;
         } else {
@@ -94,6 +95,7 @@ Item {
         id: domino
         width: 120 * ApplicationInfo.ratio
         height: width / 2
+        mode: word.mode
         visible: dominoValues.length != 0
         value1: dominoValues[0]
         value2: dominoValues[1]

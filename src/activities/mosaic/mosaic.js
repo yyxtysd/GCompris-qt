@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import "qrc:/gcompris/src/core/core.js" as Core
 
 var images = [
@@ -84,6 +84,8 @@ function stop() {
 
 function initLevel() {
     items.bar.level = currentLevel + 1
+    items.background.areaWithKeyboardFocus = items.selector
+    items.selectedItem = ""
 
     if(currentLevel < 4) {
         items.nbItems = 8

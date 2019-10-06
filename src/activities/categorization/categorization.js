@@ -16,10 +16,10 @@
     *   GNU General Public License for more details.
     *
     *   You should have received a copy of the GNU General Public License
-    *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+    *   along with this program; if not, see <https://www.gnu.org/licenses/>.
     */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris
 .import "qrc:/gcompris/src/core/core.js" as Core
 
@@ -35,6 +35,7 @@ var numberOfLevel
 var index
 var imagesData = []
 var categoriesData = []
+var expertCategories = []
 var boardsUrl
 var answerTable = {}
 var totalImages
@@ -52,7 +53,8 @@ function start() {
     items.categoryReview.stop()
 
     var isEmbeddedMode = items.file.exists(fileName) ? true : false
-    items.categoriesFallback = isEmbeddedMode
+
+    items.categoriesFallback = !isEmbeddedMode
 
     var categoriesFilename;
     var categoryDataset = items.categoryReview.categoryDataset
@@ -189,7 +191,7 @@ function allPlaced() {
                 items.categoryReview.score.currentSubLevel ++
         }
     }
-    if(items.categoryReview.score.currentSubLevel == totalImages)
+    if(items.categoryReview.score.currentSubLevel === totalImages)
         items.bonus.good("flower")
     else
         items.bonus.bad("flower")
@@ -211,9 +213,9 @@ function getCategoryLevels() {
     }
     // If expert mode is selected, select a random level (selectedLevel) from a random category (selectedCategory)
     else if(items.mode === "expert") {
-        var selectedCategory = Math.floor(Math.random() * lessons.length)
+        var selectedCategory = Math.floor(Math.random() * expertCategories.length)
         var selectedLevel = []
-        selectedLevel[0] = lessons[selectedCategory][Math.floor(Math.random() * lessons[selectedCategory].length)]
+        selectedLevel[0] = expertCategories[selectedCategory][Math.floor(Math.random() * expertCategories[selectedCategory].length)]
         items.details = selectedLevel.map(function(ele) {
             return { "instructions": ele.instructions,  "image": ele.image,
                 "numberOfGood": ele.maxNumberOfGood, "numberofBad": ele.maxNumberOfBad,
@@ -270,6 +272,9 @@ function getAllLessons(dataset) {
     var lessons = []
     for(var c = 0; c < dataset.length; c++) {
         lessons.push(dataset[c].levels[0].content)
+        if(dataset[c].allowExpertMode) {
+            expertCategories.push(dataset[c].levels[0].content)
+        }
     }
     return lessons
 }
@@ -293,8 +298,8 @@ function isDragInRightArea(rightAreaLeftBorderPos, elementLeftPos) {
 }
 
 function dropControl(sourcePosition, destinationPosition, image, index) {
-    var destinationZone = destinationPosition == "left" ? items.categoryReview.leftZone : destinationPosition == "right" ? items.categoryReview.rightZone : items.categoryReview.middleZone
-    var sourceZone = sourcePosition == "left" ? items.categoryReview.leftZone : sourcePosition == "right" ? items.categoryReview.rightZone : items.categoryReview.middleZone
+    var destinationZone = destinationPosition === "left" ? items.categoryReview.leftZone : destinationPosition === "right" ? items.categoryReview.rightZone : items.categoryReview.middleZone
+    var sourceZone = sourcePosition === "left" ? items.categoryReview.leftZone : sourcePosition === "right" ? items.categoryReview.rightZone : items.categoryReview.middleZone
     destinationZone.append({"name": image, "droppedZone": destinationPosition})
     sourceZone.remove(index)
 }

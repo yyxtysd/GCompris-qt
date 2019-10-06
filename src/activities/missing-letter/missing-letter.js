@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import "qrc:/gcompris/src/core/core.js" as Core
 .import GCompris 1.0 as GCompris //for ApplicationInfo
 .import "qrc:/gcompris/src/activities/lang/lang_api.js" as Lang
@@ -199,6 +199,8 @@ function showQuestion() {
     items.answers.model = question.choices
     items.questionText.text = question.maskedQuestion
     items.questionImage.source = question.image
+    items.isGoodAnswer = false
+    items.buttonsBlocked = false
 }
 
 function nextLevel() {
@@ -211,11 +213,11 @@ function nextLevel() {
 function nextSubLevel() {
     var question = getCurrentQuestion()
 
-    if(++items.score.currentSubLevel > questions[currentLevel].length) {
+    if(items.score.currentSubLevel >= questions[currentLevel].length) {
         items.bonus.good('flower')
-        nextLevel()
         return
     }
+    items.score.currentSubLevel ++;
     showQuestion()
 }
 
@@ -229,6 +231,7 @@ function previousLevel() {
 function showAnswer() {
     var question = getCurrentQuestion()
     playLetter(question.answer)
+    items.isGoodAnswer = true
     items.questionText.text = question.clearQuestion
 }
 

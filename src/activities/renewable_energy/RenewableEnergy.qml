@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import "../../core"
 
@@ -30,7 +30,7 @@ ActivityBase {
     onStop: {}
 
     property string url: "qrc:/gcompris/src/activities/renewable_energy/resource/"
-    property variant barAtStart
+    property var barAtStart
 
     property int oldWidth: width
     onWidthChanged: {
@@ -62,7 +62,7 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
             property int currentLevel
             property int numberOfLevel: 3
             property bool sunIsUp
@@ -93,14 +93,14 @@ ActivityBase {
         }
 
         function nextLevel() {
-            if(items.numberOfLevel <= ++items.currentLevel ) {
+            if(items.numberOfLevel <= ++items.currentLevel) {
                 // Stay on the last level
                 items.currentLevel = items.numberOfLevel - 1
             }
         }
 
         function previousLevel() {
-            if(--items.currentLevel < 0 ) {
+            if(--items.currentLevel < 0) {
                 items.currentLevel = items.numberOfLevel - 1
             }
         }
@@ -146,6 +146,7 @@ ActivityBase {
         IntroMessage {
             id: message
             opacity: items.currentLevel == 0 ? 1 : start()
+            z: 100
             anchors {
                 top: parent.top
                 topMargin: 10
@@ -161,7 +162,7 @@ ActivityBase {
             intro: [
                 qsTr("Tux has come back from fishing on his boat. " +
                      "Bring the electrical system back up so he can have light in his home."),
-                qsTr("Click on different active elements : sun, cloud, dam, solar array, " +
+                qsTr("Click on different active elements: sun, cloud, dam, solar array, " +
                      "wind farm and transformers, in order to reactivate the entire electrical system."),
                 qsTr("When the system is back up and Tux is in his home, push the light button for him. " +
                      "To win you must switch on all the consumers while all the producers are up."),
@@ -189,7 +190,7 @@ ActivityBase {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 text: qsTr( "It is not possible to consume more electricity " +
-                           "than what is produced. This is a key limitation in the " +
+                           "than what is produced. There is a key limitation in the " +
                            "distribution of electricity, with minor exceptions, " +
                            "electrical energy cannot be stored, and therefore it " +
                            "must be generated as it is needed. A sophisticated " +
@@ -310,7 +311,6 @@ ActivityBase {
                 leftMargin: parent.width * 0.05
             }
 
-
             Rectangle {
                 id: consumeMeter
                 width: stepdown_info.width * 1.1
@@ -370,6 +370,16 @@ ActivityBase {
                     checkForNextLevel()
                 }
             }
+        }
+
+
+        Image {
+            id: tuxHouseOn
+            source: activity.url + "tux_house_on.svg"
+            sourceSize.width: parent.width
+            sourceSize.height: parent.height
+            anchors.fill: parent
+            visible: tuxSwitch.on
         }
 
         Image {

@@ -19,11 +19,12 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 1.5
 import GCompris 1.0
 import "../../core"
 import "letter-in-word.js" as Activity
@@ -65,6 +66,10 @@ ActivityBase {
             property alias bar: bar
             property alias background: background
             property alias wordsModel: wordsModel
+            property int currentLetterCase: ApplicationSettings.fontCapitalization
+            property int currentMode: normalModeWordCount
+            readonly property int easyModeWordCount: 5
+            readonly property int normalModeWordCount: 11
             property GCAudio audioVoices: activity.audioVoices
             property alias parser: parser
             property alias animateX: animateX
@@ -72,6 +77,7 @@ ActivityBase {
             property alias score: score
             property alias bonus: bonus
             property alias locale: background.locale
+            property alias questionItem: questionItem
             property alias englishFallbackDialog: englishFallbackDialog
             property string question
         }
@@ -91,15 +97,23 @@ ActivityBase {
                 animateX.restart();
         }
 
+        ExclusiveGroup {
+            id: configOptions
+        }
+
         DialogActivityConfig {
             id: dialogActivityConfig
             currentActivity: activity
             content: Component {
                 Item {
                     property alias localeBox: localeBox
+                    property alias easyModeConfig: easyModeConfig
+                    property alias normalModeConfig: normalModeConfig
+                    property alias letterCaseBox: letterCaseBox
                     height: column.height
 
                     property alias availableLangs: langs.languages
+
                     LanguageList {
                         id: langs
                     }
@@ -107,7 +121,41 @@ ActivityBase {
                     Column {
                         id: column
                         spacing: 10
-                        width: parent.width
+                        width: dialogActivityConfig.width
+                        height: dialogActivityConfig.height
+
+                        GCDialogCheckBox {
+                            id: normalModeConfig
+                            width: column.width - 50
+                            text: qsTr("All words")
+                            checked: (items.currentMode === items.normalModeWordCount) ? true : false
+                            exclusiveGroup: configOptions
+                        }
+
+                        GCDialogCheckBox {
+                            id: easyModeConfig
+                            width: column.width - 50
+                            text: qsTr("Only 5 words")
+                            checked: (items.currentMode === items.easyModeWordCount) ? true : false
+                            exclusiveGroup: configOptions
+                        }
+
+                        Flow {
+                            spacing: 5
+                            width: dialogActivityConfig.width
+                            GCComboBox {
+                                id: letterCaseBox
+                                label: qsTr("Select case for letter to be searched")
+                                background: dialogActivityConfig
+                                model: [
+                                    {"text": qsTr("Mixed Case"), "value": Font.MixedCase},
+                                    {"text": qsTr("Upper Case"), "value": Font.AllUppercase},
+                                    {"text": qsTr("Lower Case"), "value": Font.AllLowercase}
+                                ]
+                                currentText: model[items.currentLetterCase].text
+                                currentIndex: items.currentLetterCase
+                            }
+                        }
 
                         Flow {
                             spacing: 5
@@ -125,6 +173,14 @@ ActivityBase {
 
             onClose: home()
             onLoadData: {
+                if(dataToSave && dataToSave["savedMode"]) {
+                    items.currentMode = dataToSave["savedMode"] === "5" ? items.easyModeWordCount : items.normalModeWordCount
+                }
+
+                if(dataToSave && dataToSave["savedLetterCase"]) {
+                    items.currentLetterCase = dataToSave["savedLetterCase"]
+                }
+
                 if(dataToSave && dataToSave["locale"]) {
                     background.locale = dataToSave["locale"];
                 }
@@ -137,12 +193,19 @@ ActivityBase {
                 if(newLocale.indexOf('.') != -1) {
                     newLocale = newLocale.substring(0, newLocale.indexOf('.'))
                 }
-                dataToSave = {"locale": newLocale }
+
+                var oldMode = items.currentMode
+                items.currentMode = dialogActivityConfig.loader.item.easyModeConfig.checked ? items.easyModeWordCount : items.normalModeWordCount
+
+                var oldLetterCase = items.currentLetterCase
+                items.currentLetterCase = dialogActivityConfig.loader.item.letterCaseBox.model[dialogActivityConfig.loader.item.letterCaseBox.currentIndex].value
+
+                dataToSave = {"locale": newLocale, "savedMode": items.currentMode, "savedLetterCase": items.currentLetterCase}
 
                 background.locale = newLocale;
 
                 // Restart the activity with new information
-                if(oldLocale !== newLocale) {
+                if(oldLocale !== newLocale || oldMode !== items.currentMode || oldLetterCase !== items.currentLetterCase) {
                     background.stop();
                     background.start();
                 }
@@ -199,7 +262,6 @@ ActivityBase {
             interval: 100
             Component.onCompleted: {
                 win.connect(Activity.nextSubLevel);
-                loose.connect(Activity.incorrectSelection);
             }
         }
 
@@ -221,10 +283,13 @@ ActivityBase {
 
             GCText {
                 id: questionItem
-                anchors.right: planeText.right
-                anchors.rightMargin: 2 * plane.width / 3
-                anchors.verticalCenter: planeText.verticalCenter
-                anchors.bottomMargin: 10 * ApplicationInfo.ratio
+
+                anchors {
+                    right: planeText.right
+                    rightMargin: 2 * plane.width / 3
+                    verticalCenter: planeText.verticalCenter
+                    bottomMargin: 10 * ApplicationInfo.ratio
+                }
                 fontSize: hugeSize
                 font.weight: Font.DemiBold
                 color: "#2a2a2a"
@@ -292,8 +357,8 @@ ActivityBase {
             anchors.leftMargin: 15 * ApplicationInfo.ratio
             anchors.rightMargin: 15 * ApplicationInfo.ratio
             anchors.bottomMargin: 10 * ApplicationInfo.ratio
-            cellWidth: itemWidth + 25*ApplicationInfo.ratio
-            cellHeight: itemHeight + 15*ApplicationInfo.ratio
+            cellWidth: itemWidth + 25 * ApplicationInfo.ratio
+            cellHeight: itemHeight + 15 * ApplicationInfo.ratio
             clip: false
             interactive: false
             //verticalLayoutDirection: GridView.BottomToTop
@@ -326,6 +391,25 @@ ActivityBase {
             }
         }
 
+        BarButton {
+            id: ok
+            source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
+            width: wordsView.cellWidth*0.8
+            height: width
+            sourceSize.width: wordsView.cellWidth
+            anchors {
+                right: parent.right
+                rightMargin: 3 * ApplicationInfo.ratio
+                bottom: wordsView.bottom
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    Activity.checkAnswer();
+                }
+            }
+        }
+
         JsonParser {
             id: parser
             onError: console.error("Click_on_letter: Error parsing JSON: " + msg);
@@ -336,7 +420,7 @@ ActivityBase {
             sourceComponent: GCDialog {
                 parent: activity.main
                 message: qsTr("We are sorry, we don't have yet a translation for your language.") + " " +
-                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("http://l10n.kde.org/") +
+                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("https://l10n.kde.org/") +
                          "<br /> <br />" +
                          qsTr("We switched to English for this activity but you can select another language in the configuration dialog.")
                 onClose: background.englishFallback = false

@@ -17,13 +17,13 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 
 QtObject {
    property string instruction: qsTr("Drag and Drop each item onto its name")
-   property variant levels: [
+   property var levels: [
       {
           "pixmapfile": "images/postpoint.svg",
           "x": "0.2",

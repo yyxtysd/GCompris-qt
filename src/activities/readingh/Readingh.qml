@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -32,6 +32,7 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
+    property int speedSetting: 5
     /* mode of the activity, "readingh" (horizontal) or "readingv" (vertical):*/
     property string mode: "readingh"
 
@@ -70,6 +71,7 @@ ActivityBase {
             property alias wordDisplayRepeater: wordDisplayRepeater
             property string textToFind
             property int currentIndex
+            property bool buttonsBlocked: false
         }
 
         onStart: { Activity.start(items, mode) }
@@ -81,6 +83,7 @@ ActivityBase {
             content: Component {
                 Item {
                     property alias localeBox: localeBox
+                    property alias speedSlider: speedSlider
                     height: column.height
 
                     property alias availableLangs: langs.languages
@@ -104,6 +107,24 @@ ActivityBase {
                                 label: qsTr("Select your locale")
                             }
                         }
+                         Flow {
+                            width: dialogActivityConfig.width
+                            spacing: 5
+                            GCSlider {
+                                id: speedSlider
+                                width: 250 * ApplicationInfo.ratio
+                                value: activity.speedSetting
+                                maximumValue: 5
+                                minimumValue: 1
+                                scrollEnabled: false
+                            }
+                            GCText {
+                                id: speedSliderText
+                                text: qsTr("Speed")
+                                fontSize: mediumSize
+                                wrapMode: Text.WordWrap
+                            }
+                        }
                     }
                 }
             }
@@ -115,12 +136,17 @@ ActivityBase {
                         background.locale = dataToSave["locale"];
                     }
                 }
+                 if(dataToSave) {
+                     if(dataToSave["speedSetting"]) {
+                    activity.speedSetting = dataToSave["speedSetting"];
+                     }
+                }
             }
             onSaveData: {
                 var oldLocale = background.locale;
                 var newLocale = dialogActivityConfig.configItem.availableLangs[dialogActivityConfig.loader.item.localeBox.currentIndex].locale;
                 // Remove .UTF-8
-                if(newLocale.indexOf('.') != -1) {
+                if(newLocale.indexOf('.') !== -1) {
                     newLocale = newLocale.substring(0, newLocale.indexOf('.'))
                 }
                 dataToSave = {
@@ -132,6 +158,13 @@ ActivityBase {
                 if(oldLocale !== newLocale) {
                     background.stop();
                     wordDisplayList.layoutDirection = Core.isLeftToRightLocale(background.locale) ? Qt.LeftToRight : Qt.RightToLeft;
+                    background.start();
+                }
+                var oldSpeed = activity.speedSetting
+                activity.speedSetting = dialogActivityConfig.configItem.speedSlider.value
+                if(oldSpeed != activity.speedSetting) {
+                    dataToSave = {"speedSetting": activity.speedSetting};
+                    background.stop();
                     background.start();
                 }
             }
@@ -180,13 +213,9 @@ ActivityBase {
                 loose.connect(resetClickInProgress)
             }
         }
-        // used to know if we already click on "Yes" or "No"
-        property bool isClickInProgress: false
-        // used to avoid multiple clicks between the begin and end of bonus play
-        property bool isClickInProgress2: false
+
         function resetClickInProgress() {
-            isClickInProgress = false;
-            isClickInProgress2 = false;
+            items.buttonsBlocked = false
             Activity.initLevel()
         }
 
@@ -194,9 +223,9 @@ ActivityBase {
             id: wordDisplayList
             spacing: 20
             x: 70/800*parent.width
-            y: 100/600*parent.height
+            y: 100/600*parent.height - 40 * ApplicationInfo.ratio
             width: 350/800*parent.width-x
-            height: 520/600*parent.height-y
+            height: 520/600*parent.height-y - 40 * ApplicationInfo.ratio
             flow: mode == "readingh" ? Flow.LeftToRight : Flow.TopToBottom
             layoutDirection: Core.isLeftToRightLocale(locale) ? Qt.LeftToRight : Qt.RightToLeft
 
@@ -231,7 +260,7 @@ ActivityBase {
             id: wordToFindBox
             x: 430/800*parent.width
             y: 90/600*parent.height
-            text: qsTr("<font color=\"#373737\">Check if the word<br/><b><font color=\"#315AAA\">%1</font></b><br/><font color=\"#373737\">is displayed").arg(items.textToFind)
+            text: qsTr("<font color=\"#373737\">Check if the word<br/></font><b><font color=\"#315AAA\">%1</font></b><br/><font color=\"#373737\">is displayed</font>").arg(items.textToFind)
             color: "#373737"
             horizontalAlignment: Text.AlignHCenter
             width: background.width/3
@@ -259,12 +288,11 @@ ActivityBase {
                 height: 60 * ApplicationInfo.ratio
                 textLabel: qsTr("Yes, I saw it!")
                 isCorrectAnswer: Activity.words ? Activity.words.indexOf(items.textToFind) != -1 : false
-                onCorrectlyPressed: if(isClickInProgress && !isClickInProgress2) { bonus.good("flower"); isClickInProgress2 = true }
-                onIncorrectlyPressed: if(isClickInProgress && !isClickInProgress2) { bonus.bad("flower"); isClickInProgress2 = true }
+                onCorrectlyPressed: bonus.good("flower")
+                onIncorrectlyPressed: bonus.bad("flower")
+                blockAllButtonClicks: items.buttonsBlocked
                 onPressed: {
-                    if(!isClickInProgress) {
-                        isClickInProgress = true
-                    }
+                    items.buttonsBlocked = true
                 }
             }
 
@@ -274,13 +302,11 @@ ActivityBase {
                 height: 60 * ApplicationInfo.ratio
                 textLabel: qsTr("No, it was not there!")
                 isCorrectAnswer: !answerButtonFound.isCorrectAnswer
-                onCorrectlyPressed: if(isClickInProgress && !isClickInProgress2) { bonus.good("flower"); isClickInProgress2 = true }
-                onIncorrectlyPressed: if(isClickInProgress && !isClickInProgress2) { bonus.bad("flower"); isClickInProgress2 = true }
-
+                onCorrectlyPressed: bonus.good("flower")
+                onIncorrectlyPressed: bonus.bad("flower")
+                blockAllButtonClicks: items.buttonsBlocked
                 onPressed: {
-                     if(!isClickInProgress) {
-                        isClickInProgress = true
-                    }
+                    items.buttonsBlocked = true
                 }
             }
         }
@@ -299,7 +325,7 @@ ActivityBase {
         Timer {
             id: wordDropTimer
             repeat: true
-            interval: 1000
+            interval: items.currentIndex == -1 ? 100 : 5000 / speedSetting;
             onTriggered: Activity.dropWord();
         }
 

@@ -17,10 +17,10 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 .pragma library
-.import QtQuick 2.2 as Quick
+.import QtQuick 2.6 as Quick
 
 var _currentLevel = 0
 var _numberOfLevel = 14
@@ -227,15 +227,15 @@ function fillAllGrid() {
         }
     } else if (_type == "primes") {
         for (var it = 0; it < 36; it++) {
-            _modelCells.append({"number1": genPrime(), "show": true});
+            _modelCells.append({"number1": genPrime(), "number2": -1, "show": true});
         }
     } else if (_type == "factors") {
         for (var it = 0; it < 36; it++) {
-            _modelCells.append({"number1": genFactor(), "show": true});
+            _modelCells.append({"number1": genFactor(), "number2": -1, "show": true});
         }
     } else if (_type == "multiples") {
         for (var it = 0; it < 36; it++) {
-            _modelCells.append({"number1": genMultiple(), "show": true});
+            _modelCells.append({"number1": genMultiple(), "number2": -1, "show": true});
         }
     }
 }

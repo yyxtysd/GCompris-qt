@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,11 +23,16 @@ ActivityInfo {
   icon: "bargame/bargame.svg"
   author: "Utkarsh Tiwari &lt;iamutkarshtiwari@kde.org&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Bargame (against Tux)")
+  //: Help title
   description: qsTr("Click the number of balls you wish to place in the holes and then click the OK button. The winner is the one who hasn't put a ball in the red hole.")
   // intro: "Click the number of balls you wish to place in the holes and then click the OK button. The winner is the one who hasn't put a ball in the red hole."
-  goal: qsTr("Don't use the last ball")
+  //: Help goal
+  goal: qsTr("Don't put the ball in the last hole")
+  //: Help prerequisite
   prerequisite: qsTr("Ability to count")
+  //: Help manual
   manual: qsTr("Place balls in the holes. You win if the computer has to place the last ball. If you want Tux to begin, just click on him")
   credit: ""
   section: "strategy"

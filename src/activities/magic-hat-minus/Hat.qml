@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 
 import "../../core"
 import "magic-hat.js" as Activity
@@ -30,7 +30,7 @@ Item {
     property alias state: hatImg.state
     property alias target: offStar
     property int starsSize
-    property GCAudio audioEffects
+    property GCSfx audioEffects
 
     function getTarget() {
         return offStar

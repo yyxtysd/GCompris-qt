@@ -17,11 +17,12 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import "qrc:/gcompris/src/core/core.js" as Core
+.import GCompris 1.0 as GCompris
 
 var levels = [{showGrid: 1, noOfItems: 2, inLine: true, columns: 4, rows: 3 },
               {showGrid: 1, noOfItems: 3, inLine: true, columns: 5, rows: 4 },
@@ -48,13 +49,11 @@ var allNames = ["bulb.svg","letter-a.svg","letter-b.svg",
                 "tux.svg","water_drop1.svg","water_drop2.svg",
                 "water_spot1.svg","water_spot2.svg"]
 
+var currentLocale
 
-var words3Letters = ["cat","dog","win","red","yes","big","box","air","arm",
-                     "car","bus","fun","day","eat","hat","leg","ice","old","egg"]
-var words4Letters = ["blue","best","good","area","bell","coat","easy","farm",
-                     "food","else","girl","give","hero","help","hour","sand","song"]
-var words5Letters = ["happy","child","white","apple","brown","truth","fresh",
-                     "green","horse","hotel","house","paper","shape","shirt","study"]
+var words3Letters = []
+var words4Letters = []
+var words5Letters = []
 
 var alreadyUsed3 = []
 var alreadyUsed4 = []
@@ -67,6 +66,29 @@ var good = []
 function start(items_) {
     items = items_
     currentLevel = 0
+    currentLocale = GCompris.ApplicationInfo.getVoicesLocale(GCompris.ApplicationSettings.locale)
+
+    /*: Translators: NOTE: Word list for crane activity.
+        Translate this into a list of 15–25 simple 3-letter
+        words separated by semi-colons. The words can only contain
+        lowercase ASCII letters (a–z). Example: cat;dog;win;red;yes
+    */
+    words3Letters = qsTr("cat;dog;win;red;yes;big;box;air;arm;car;bus;fun;day;eat;hat;leg;ice;old;egg").split(';')
+    
+    /*: Translators: NOTE: Word list for crane activity.
+        Translate this into a list of 10–20 simple 4-letter
+        words separated by semi-colons. The words can only contain
+        lowercase ASCII letters (a–z). Example: blue;best;good;area
+    */
+    words4Letters = qsTr("blue;best;good;area;bell;coat;easy;farm;food;else;girl;give;hero;help;hour;sand;song").split(';')
+
+    /*: Translators: NOTE: Word list for crane activity.
+      Translate this into a list of 10–20 simple 5-letter
+      words separated by semi-colons. The words can only contain
+      lowercase ASCII letters (a–z). Example: happy;child;white;apple
+    */
+    words5Letters = qsTr("happy;child;white;apple;brown;truth;fresh;green;horse;hotel;house;paper;shape;shirt;study").split(';')
+
     alreadyUsed3 = []
     alreadyUsed4 = []
     alreadyUsed5 = []
@@ -314,7 +336,7 @@ function gesture(deltax, deltay) {
             move("up")
 }
 
-//depeding on the command, make a move to left/right/up/down or select next item
+//depending on the command, make a move to left/right/up/down or select next item
 function move(command) {
     if (items.ok && !items.gameFinished && !items.pieceIsMoving) {
         var item = items.repeater.itemAt(items.selected)
@@ -382,3 +404,4 @@ function previousLevel() {
     }
     initLevel();
 }
+

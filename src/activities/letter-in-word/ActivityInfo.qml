@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,13 +23,18 @@ ActivityInfo {
   icon: "letter-in-word/letter-in-word.svg"
   author: "Akshat Tandon &lt;akshat.tandon@research.iiit.ac.ins&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Letter in which word")
+  //: Help title
   description: qsTr("A letter is written and/or spoken. Some words are displayed, the children must find the word or the words in which this letter appears.")
   //intro: "Click on all the words containing the wanted letter."
+  //: Help goal
   goal: qsTr("Select all the words which contain the spoken letter.")
+  //: Help prerequisite
   prerequisite: qsTr("spellings, letter recognition")
-  manual: ""
+  //: Help manual
+  manual: qsTr("A letter is displayed on the flag attached to the plane, select all the words or the objects in which the letter appears and then press OK.")
   credit: ""
-  section: "reading"
+  section: "reading words"
   createdInVersion: 7000
 }

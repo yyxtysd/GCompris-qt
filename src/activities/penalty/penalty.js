@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 
 var currentLevel = 0
 var numberOfLevel = 9
@@ -54,13 +54,14 @@ function initLevel() {
 
 function resetLevel() {
     items.ball.state = "INITIAL"
+    items.saveBallState = "INITIAL"
     items.progressRight.ratio = 0
     items.progressLeft.ratio = 0
     items.progressTop.ratio = 0
 }
 
 function nextLevel() {
-    if(numberOfLevel <= ++currentLevel ) {
+    if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
     initLevel();

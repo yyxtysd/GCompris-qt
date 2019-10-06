@@ -17,9 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import "../../core"
 import "."
@@ -36,13 +36,17 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
-    pageComponent: Item {
+    pageComponent: Image {
         id: background
         anchors.fill: parent
+        source: "qrc:/gcompris/src/activities/checkers/resource/background-wood.svg"
+        sourceSize.width: parent.width
+        sourceSize.height: parent.height
         signal start
         signal stop
 
         Component.onCompleted: {
+            dialogActivityConfig.getInitialConfiguration()
             activity.start.connect(start)
             activity.stop.connect(stop)
         }
@@ -54,13 +58,14 @@ ActivityBase {
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
             property GCAudio audioVoices: activity.audioVoices
             property alias pointImageRepeater: pointImageRepeater
             property alias segmentsRepeater: segmentsRepeater
             property alias imageBack: imageBack
             property alias imageBack2: imageBack2
             property int pointIndexToClick
+            property int mode: 1
         }
 
         onStart: { Activity.start(items,mode,dataset,url) }
@@ -69,15 +74,20 @@ ActivityBase {
         Image {
             id: imageBack
             anchors.top: parent.top
-            width: background.width
-            height: background.height
+            anchors.horizontalCenter: background.horizontalCenter
+            width: Math.min((background.height - bar.height * 1.5), background.width)
+            height: imageBack.width
+            sourceSize.width: imageBack.width
+            sourceSize.height: imageBack.height
         }
 
         Image {
             id: imageBack2
-            anchors.top: imageBack.top
-            width: background.width
-            height: background.height
+            anchors.centerIn: imageBack
+            width: imageBack.width
+            height: imageBack.height
+            sourceSize.width: imageBack2.width
+            sourceSize.height: imageBack2.height
         }
 
         Repeater {
@@ -86,12 +96,12 @@ ActivityBase {
             Rectangle {
                 id: line
                 opacity: 0
-                color: "black"
+                color: "#373737"
                 transformOrigin: Item.TopLeft
-                x: modelData[0] * background.width / 800
-                y: modelData[1] * background.height / 520
-                property var x2: modelData[2] * background.width / 800
-                property var y2: modelData[3] * background.height / 520
+                x: imageBack.x + modelData[0] * imageBack.width / 520
+                y: modelData[1] * imageBack.height / 520
+                property double x2: imageBack.x + modelData[2] * imageBack.width / 520
+                property double y2: modelData[3] * imageBack.height / 520
                 width: Math.sqrt(Math.pow(x - x2, 2) + Math.pow(y- y2, 2))
                 height: 3 * ApplicationInfo.ratio
                 rotation: (Math.atan((y2 - y)/(x2-x)) * 180 / Math.PI) + (((y2-y) < 0 && (x2-x) < 0) * 180) + (((y2-y) >= 0 && (x2-x) < 0) * 180)
@@ -111,9 +121,9 @@ ActivityBase {
                     source: Activity.url + (highlight ?
                             (pointImageOpacity ? "bluepoint.svg" : "bluepointHighlight.svg") :
                             markedAsPointInternal ? "blackpoint.svg" : "greenpoint.svg")
-                    sourceSize.height: background.height / 25  //to change the size of dots
-                    x: modelData[0] * background.width / 801 - sourceSize.height/2
-                    y: modelData[1] * background.height / 521 - sourceSize.height/2
+                    sourceSize.height: bar.height / 4  //to change the size of dots
+                    x: imageBack.x + modelData[0] * imageBack.width / 520 - sourceSize.height/2
+                    y: modelData[1] * imageBack.height / 520 - sourceSize.height/2
                     z: items.pointIndexToClick == index ? 1000 : index
 
                     // only hide last point for clickanddraw and number_sequence
@@ -225,7 +235,6 @@ ActivityBase {
 
             onPressed: {
                 checkPoints(touchPoints)
-                items.audioEffects.play('qrc:/gcompris/src/activities/drawnletters/resource/buttonclick.wav')
             }
             onTouchUpdated: {
                 checkPoints(touchPoints)
@@ -236,21 +245,83 @@ ActivityBase {
             id: dialogHelp
             onClose: home()
         }
+        
+        DialogActivityConfig {
+            id: dialogActivityConfig
+            currentActivity: activity
+            content: Component {
+                Item {
+                    property alias modeBox: modeBox
+
+                    property var availableModes: [
+                        { "text": qsTr("Automatic"), "value": 1 },
+                        { "text": qsTr("Manual"), "value": 2 }
+                    ]
+
+                    Flow {
+                        id: flow
+                        spacing: 5
+                        width: dialogActivityConfig.width
+                        GCComboBox {
+                            id: modeBox
+                            model: availableModes
+                            background: dialogActivityConfig
+                            label: qsTr("Go to next level")
+                        }
+                    }
+                }
+            }
+
+            onClose: home()
+
+            onLoadData: {
+                if(dataToSave && dataToSave["mode"]) {
+                    items.mode = dataToSave["mode"];
+                }
+            }
+            onSaveData: {
+                var newMode = dialogActivityConfig.configItem.availableModes[dialogActivityConfig.configItem.modeBox.currentIndex].value;
+                if (newMode !== items.mode) {
+                    items.mode = newMode;
+                    dataToSave = {"mode": items.mode};
+                }
+                if (items.mode == 1) {
+                    bonus.win.connect(Activity.nextLevel)
+                } else {
+                    bonus.win.disconnect(Activity.nextLevel)
+                }
+                Activity.initLevel();
+            }
+            function setDefaultValues() {
+                for(var i = 0 ; i < dialogActivityConfig.configItem.availableModes.length ; i++) {
+                    if(dialogActivityConfig.configItem.availableModes[i].value === items.mode) {
+                        dialogActivityConfig.configItem.modeBox.currentIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level }
+            content: BarEnumContent { value: help | home | level | config }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: activity.home()
+            onConfigClicked: {
+                dialogActivityConfig.active = true
+                // Set default values
+                dialogActivityConfig.setDefaultValues();
+                displayDialog(dialogActivityConfig)
+            }
         }
 
         Bonus {
             id: bonus
-            Component.onCompleted: win.connect(Activity.nextLevel)
+            Component.onCompleted: items.mode == 1 ? win.connect(Activity.nextLevel) : win.disconnect(Activity.nextLevel)
         }
     }
 }

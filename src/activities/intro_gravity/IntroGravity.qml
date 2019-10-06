@@ -17,9 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -78,7 +78,7 @@ ActivityBase {
             property alias timer: timer
             property alias arrow: arrow
             property alias asteroidCreation: asteroidCreation
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
             property double distLeft: Math.abs(spaceshipX / ApplicationInfo.ratio)
             property double distRight: Math.abs((background.width - spaceshipX) / ApplicationInfo.ratio)
             property double forceLeft: (Math.pow(scaleLeft, 2) / Math.pow(distLeft, 2)) * Math.pow(10, 6)
@@ -221,7 +221,7 @@ ActivityBase {
             running: false
             repeat: true
             onTriggered: {
-                Activity.movespaceship()
+                Activity.moveSpaceship()
                 Activity.handleCollisionWithAsteroid()
             }
         }

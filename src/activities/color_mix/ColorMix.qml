@@ -17,9 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -79,7 +79,7 @@ ActivityBase {
 
         Rectangle {
             id: target
-            height: width / 2
+            height: width / 2.5
             width: parent.width / 5
             radius: height / 10
             anchors {
@@ -95,10 +95,10 @@ ActivityBase {
 
         GCText {
             text: qsTr("Match the color")
-            fontSize: 18
             color: "#2a2a2a"
             horizontalAlignment: Text.AlignRight
             wrapMode: Text.WordWrap
+            fontSizeMode: Text.Fit
             anchors {
                 top: target.top
                 right: target.left
@@ -110,7 +110,7 @@ ActivityBase {
         GCText {
             id: helpMessage
             text: ""
-            fontSize: mediumSize
+            fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             anchors {
@@ -118,17 +118,19 @@ ActivityBase {
                 left: target.right
                 right: parent.right
                 leftMargin: items.margins
+                bottom: result.top
             }
         }
         Rectangle {
             id: result
             height: width
-            width: target.width * 0.75
+            width: Math.min(target.width * 0.75, 90 * ApplicationInfo.ratio)
             radius: height / 2
+
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: target.bottom
-                topMargin: (background.height - items.chooserHeight * 4) / 2
+                topMargin: (background.height - items.chooserHeight * 4) / 3
             }
             border.color: "#2a2a2a"
             border.width: 0
@@ -138,7 +140,7 @@ ActivityBase {
 
         ColorChooser {
             id: color1
-            hue: activity.modeRGB ? 0 : 300 / 360 /* red / magenta */
+            brushHue: activity.modeRGB ? "-r" : "-m" /* red / magenta */
             source: Activity.url + (activity.modeRGB ? "flashlight-red.svg" : "tube-magenta.svg")
             sourceSize.height: items.chooserHeight
             maxSteps: items.maxSteps
@@ -151,7 +153,7 @@ ActivityBase {
 
         ColorChooser {
             id: color2
-            hue: activity.modeRGB ? 120 / 360 : 60 / 360 /* green / yellow */
+            brushHue: activity.modeRGB ? "-g" : "-y" /* green / yellow */
             source: Activity.url + (activity.modeRGB ? "flashlight-green.svg" : "tube-yellow.svg")
             sourceSize.height: items.chooserHeight
             maxSteps: items.maxSteps
@@ -165,7 +167,7 @@ ActivityBase {
 
         ColorChooser {
             id: color3
-            hue: activity.modeRGB ? 240 / 360 : 180 / 360 /* blue / cyan */
+            brushHue: activity.modeRGB ? "-b" : "-c" /* blue / cyan */
             source: Activity.url + (activity.modeRGB ? "flashlight-blue.svg" : "tube-cyan.svg")
             sourceSize.height: items.chooserHeight
             maxSteps: items.maxSteps
@@ -179,8 +181,8 @@ ActivityBase {
 
         Score {
             id: score
-            x: parent.width * 0.25
             y: parent.height * 0.65
+            anchors.left: parent.left
             anchors.right: undefined
             anchors.bottom: undefined
             currentSubLevel: 0

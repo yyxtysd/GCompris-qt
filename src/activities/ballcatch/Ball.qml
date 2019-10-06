@@ -15,21 +15,24 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program; if not, see <http://www.gnu.org/licenses/>.
+ along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.1
+import QtQuick 2.6
 import "ballcatch.js" as Activity
 import GCompris 1.0
 
 Image {
     id: ball
+
+    property bool isVertical: background.width <= background.height    // To check if in Vertical mode
+
     source: "qrc:/gcompris/src/activities/ballcatch/resource/ball.svg"
-    sourceSize.height: 200 * ApplicationInfo.ratio
+    sourceSize.height: background.isVertical ? 175 * Application.ratio : 200 * ApplicationInfo.ratio
     z: 3
 
     readonly property real initScale: 1.0
 
-    // If won, ball goes on tux, if loose, depends on the side clicked first
+    // If won, ball goes on tux, if lose, depends on the side clicked first
     property int finishX
 
     readonly property int finishY: tux.y + tux.height / 4
@@ -52,15 +55,19 @@ Image {
         NumberAnimation { target: ball; property: "rotation";
                           to: 360; duration: 1000
                           easing.type: Easing.InOutQuad }
+        onStarted: {
+            items.background.playSound("brick")
+        }
 
         onStopped: {
             // We are done with the ballon move
             if(Activity.gameWon) {
                 // This is a win
+                items.background.playSound("completetask")
                 bonus.good("tux")
             }
             else {
-                // This is a loose
+                // This is a lose
                 bonus.bad("tux")
             }
         }

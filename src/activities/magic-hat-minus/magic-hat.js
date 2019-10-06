@@ -16,10 +16,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 
 var url = "qrc:/gcompris/src/activities/magic-hat-minus/resource/"
 
@@ -54,7 +54,7 @@ function initLevel() {
     nbStarsToCount = new Array(0, 0, 0)
     animationCount = 0
     
-    if(currentLevel > 0) {
+    if(currentLevel > 0) {
         items.introductionText.visible = false
     } else {
         items.introductionText.visible = true

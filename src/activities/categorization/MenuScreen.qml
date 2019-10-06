@@ -19,12 +19,12 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.5
 
 import "../../core"
 import "categorization.js" as Activity
@@ -33,7 +33,7 @@ Image {
     id: menuScreen
     anchors.fill: parent
     fillMode: Image.PreserveAspectCrop
-    source: "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg"
+    source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
     sourceSize.width: Math.max(parent.width, parent.height)
     opacity: 0
 
@@ -62,7 +62,7 @@ Image {
         home()
     }
 
-    Keys.enabled : (items.mode == "expert") ? false : true
+    Keys.enabled: (items.mode == "expert") ? false : true
     Keys.onPressed: {
         if(event.key === Qt.Key_Space) {
             menuGrid.currentItem.selectCurrentItem()
@@ -104,7 +104,7 @@ Image {
     property int iconHeight: 180 * ApplicationInfo.ratio
 
     property int levelCellWidth: background.width / Math.floor(background.width / iconWidth )
-    property int levelCellHeight: iconHeight * 1.4
+    property int levelCellHeight: iconHeight * 1.2
 
     ListModel {
         id: menuModel
@@ -112,7 +112,6 @@ Image {
 
     GridView {
         id: menuGrid
-        layer.enabled: true
         anchors {
             fill: parent
             bottomMargin: bar.height
@@ -148,28 +147,33 @@ Image {
                 color: "white"
                 opacity: 0.5
             }
+
             Image {
                 id: containerImage
                 source: image
                 anchors.top: activityBackground.top
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: iconWidth
-                height: iconHeight
+                height: activityBackground.height*0.8 - 6
+                width: height
                 anchors.margins: 5
+                sourceSize.height: height
+                fillMode: Image.PreserveAspectCrop
+                clip: true
+            }
 
-                GCText {
-                    id: categoryName
-                    anchors.top: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    width: activityBackground.width
-                    fontSizeMode: Text.Fit
-                    elide: Text.ElideRight
-                    maximumLineCount: 2
-                    wrapMode: Text.WordWrap
-                    text: name
-                    opacity: (items.mode == "expert") ? 0 : 1
-                }
+            GCText {
+                id: categoryName
+                anchors.top: containerImage.bottom
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: activityBackground.width
+                height: activityBackground.height*0.2 - 6
+                fontSizeMode: Text.Fit
+                elide: Text.ElideRight
+                maximumLineCount: 2
+                wrapMode: Text.WordWrap
+                text: name
+                opacity: (items.mode == "expert") ? 0 : 1
             }
 
             ParticleSystemStarLoader {
@@ -232,7 +236,8 @@ Image {
                 GradientStop { position: 0.96; color: "#00FFFFFF" }
             }
         }
-
+        
+        layer.enabled: ApplicationInfo.useOpenGL
         layer.effect: OpacityMask {
             id: activitiesOpacity
             source: menuGrid

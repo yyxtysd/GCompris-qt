@@ -17,14 +17,14 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 
 QtObject {
    property int numberOfSubLevel: 1
    property string instruction: qsTr("Pierre-Auguste Renoir, Girls At The Piano - 1892")
-   property variant levels : [
+   property var levels : [
       {
          "pixmapfile" : "image/bg.svg",
          "type" : "SHAPE_BACKGROUND_IMAGE",

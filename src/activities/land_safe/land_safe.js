@@ -17,7 +17,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 /* ToDo:
@@ -40,7 +40,7 @@
  */
 
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris
 
 var levels = [
@@ -75,7 +75,7 @@ var levels = [
                 "accelSteps": 3,            "alt": 100.0,       "mode": "rotation",
                 "fuel" : -1 },
             {   "planet": qsTr("Titan"),    "gravity": 1.352,   "maxAccel": 0.406,
-                "accelSteps": 3,            "alt": 100.0,       "mode": "simple",
+                "accelSteps": 3,            "alt": 100.0,       "mode": "rotation",
                 "fuel" : -1 },
             {   "planet": qsTr("Moon"),     "gravity":  1.62,   "maxAccel": 0.324,
                 "accelSteps": 4,            "alt": 150.0,       "mode": "rotation",
@@ -123,6 +123,7 @@ var zoomStack = new Array;
 function start(items_) {
     items = items_;
     currentLevel = 0;
+    lastLevel = -1;
     numberOfLevel = levels.length;
     barAtStart = GCompris.ApplicationSettings.isBarHidden;
     GCompris.ApplicationSettings.isBarHidden = true;
@@ -171,7 +172,7 @@ function initLevel() {
     min = items.onScreenControls ? items.leftRightControl.width : items.bar.fullButton * items.bar.barZoom;
     max = items.onScreenControls ? items.background.width - items.upDownControl.width - items.landing.width : max;
     items.landing.anchors.leftMargin = Math.random() * (max- min) + min;
-    items.landing.overlayColor = "#8000ff00";
+    items.landing.overlayColor = "-g";
 
     // initialize world:
     items.world.pixelsPerMeter = pxYToAltitude(items.rocket.y) / startingAltitudeReal;

@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 import "qrc:/gcompris/src/core/core.js" as Core
 
@@ -46,7 +46,7 @@ import "qrc:/gcompris/src/core/core.js" as Core
  * Cf. Template.qml for a sample skeleton activity.
  *
  * Cf.
- * [the wiki](http://gcompris.net/wiki/Qt_Quick_development_process#Adding_a_new_activity)
+ * [the wiki](https://gcompris.net/wiki/Qt_Quick_development_process#Adding_a_new_activity)
  * for further information about creating a new activity.
  *
  * @inherit QtQuick.Item
@@ -100,18 +100,18 @@ Item {
      *
      * Instead append to this global object to play your voices after the
      * intro music.
-     * @sa GCAudio audioEffects
+     * @sa GCAudio audioVoices
      */
     property GCAudio audioVoices
 
     /**
-     * type:GCAudio
+     * type:GCSfx
      * The global audio item for audio effects.
      *
-     * Append to it to play your effects.
-     * @sa GCAudio audioEffects
+     * Use it to play your effects.
+     * @sa GCSfx audioEffects
      */
-    property GCAudio audioEffects
+    property GCSfx audioEffects
 
     /**
      * type:GCAudio
@@ -123,9 +123,11 @@ Item {
 
     /**
      * type: bool
-     * It tells whether the activity is a musical activity or not(if the activity contains it's own audio effects).
+     * It tells whether the activity is a musical activity or not (if the activity contains its own audio effects).
      *
      * If the activity is a musical activity, on starting it the background music pauses and when the activity is quit, background music resumes.
+     *
+     * If it is a musical activity and the audioEffects is disabled, we temporarily unmute the GCSfx audioEffects for that activity and mute again on exiting it in main.qml.
      *
      * Set it as true if the activity is musical.
      */

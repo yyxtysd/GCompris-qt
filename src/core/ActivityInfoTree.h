@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 #ifndef ACTIVITYINFOTREE_H
 #define ACTIVITYINFOTREE_H
@@ -41,7 +41,6 @@ public:
     ActivityInfo *menuTree(int) const;
     void setCurrentActivity(ActivityInfo *currentActivity);
     ActivityInfo *getCurrentActivity() const;
-    ActivityInfo *getParentActivity(ActivityInfo *root, ActivityInfo *menu);
     void menuTreeAppend(ActivityInfo *menu);
     void menuTreeAppend(QQmlEngine *engine,
                         const QDir &menuDir, const QString &menuFile);
@@ -50,14 +49,14 @@ public:
     QVariantList allCharacters();
 
 protected Q_SLOTS:
-    Q_INVOKABLE void filterByTag(const QString &tag, bool emitChanged = true);
+    Q_INVOKABLE void filterByTag(const QString &tag, const QString &category = "", bool emitChanged = true);
     Q_INVOKABLE void filterLockedActivities(bool emitChanged = true);
     Q_INVOKABLE void filterEnabledActivities(bool emitChanged = true);
     // create a tree from the whole list of activities with the activities created between the two versions
     Q_INVOKABLE void filterCreatedWithinVersions(int firstVersion, int lastVersion,
                                                  bool emitChanged = true);
     Q_INVOKABLE void filterBySearch(const QString& text);
-    Q_INVOKABLE void filterByDifficulty(int levelMin, int levelMax);
+    Q_INVOKABLE void filterByDifficulty(quint32 levelMin, quint32 levelMax);
 
 signals:
     void menuTreeChanged();
@@ -92,7 +91,7 @@ private:
 	};
 
 public:
-    static void init();
+    static void registerResources();
     static QObject *menuTreeProvider(QQmlEngine *engine, QJSEngine *scriptEngine);
     void exportAsSQL();
 };

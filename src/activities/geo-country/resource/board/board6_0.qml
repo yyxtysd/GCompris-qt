@@ -17,13 +17,13 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 
 QtObject {
    property string instruction: qsTr("Counties of Norway")
-   property variant levels: [
+   property var levels: [
       {
          "pixmapfile" : "norway/norway.png",
          "type" : "SHAPE_BACKGROUND_IMAGE"
@@ -59,10 +59,10 @@ QtObject {
          "y" : "0.862"
       },
       {
-         "pixmapfile" : "norway/sor-trondelag.png",
-         "toolTipText" : "Sør-Trøndelag",
-         "x" : "0.3",
-         "y" : "0.601"
+         "pixmapfile" : "norway/trondelag.png",
+         "toolTipText" : "Trøndelag",
+         "x" : "0.338",
+         "y" : "0.58"
       },
       {
          "pixmapfile" : "norway/oslo.png",
@@ -123,12 +123,6 @@ QtObject {
          "toolTipText" : "Rogaland",
          "x" : "0.114",
          "y" : "0.868"
-      },
-      {
-         "pixmapfile" : "norway/nord-trondelag.png",
-         "toolTipText" : "Nord-Trøndelag",
-         "x" : "0.372",
-         "y" : "0.549"
       },
       {
          "pixmapfile" : "norway/hedmark.png",

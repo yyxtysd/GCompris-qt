@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "gletters/gletters.svg"
   author: "Holger Kaelberer &lt;holger.k@elberer.de&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Simple Letters")
+  //: Help title
   description: qsTr("Type the falling letters before they reach the ground")
 //  intro: "Type the letters on your keyboard before they reach the ground."
+  //: Help goal
   goal: qsTr("Letter association between the screen and the keyboard")
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: qsTr("Type the falling letters before they reach the ground")
   credit: ""
-  section: "computer keyboard reading"
+  section: "computer keyboard reading letters"
+  createdInVersion: 0
 }

@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -26,11 +26,16 @@ ActivityInfo {
   icon: "balancebox/balancebox.svg"
   author: "Holger Kaelberer &lt;holger.k@elberer.de&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Balance Box")
+  //: Help title
   description: qsTr("Navigate the ball to the door by tilting the box.")
-//  intro: "Click on the word matching the picture."
+//  intro: "Tilt the box to navigate the ball to the door."
+  //: Help goal
   goal: qsTr("Practice fine motor skills and basic counting.")
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: qsTr("Navigate the ball to the door. Be careful not to make it fall into the holes. Numbered-contact buttons in the box need to be touched in the correct order to unlock the door. You can move the ball by tilting your mobile device. On desktop platforms use the arrow keys to simulate tilting.
 
 In the <b>configuration dialog</b> you can choose between the default 'Built-in' level set and one that you can define yourself ('User'). A user-defined level set can be created by choosing the 'user' level set and start the level editor by clicking on the corresponding button.
@@ -50,6 +55,6 @@ When your level is finished you can save it to the user level file by clicking o
 To return to the configuration dialog click on the home-button on the bar or press Escape on your keyboard or the back button on your mobile device.")
   credit: ""
   section: "mobile fun"
-  enabled: !ApplicationInfo.isMobile || ApplicationInfo.sensorIsSupported("QTiltSensor")
+  enabled: ApplicationInfo.isBox2DInstalled && (!ApplicationInfo.isMobile || ApplicationInfo.sensorIsSupported("QTiltSensor"))
   createdInVersion: 5000
 }

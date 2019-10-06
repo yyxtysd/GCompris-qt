@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,15 +23,21 @@ ActivityInfo {
   icon: "penalty/penalty.svg"
   author: "Stephane Mankowski &lt;stephane@mankowski.fr&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Penalty kick")
-  description: qsTr("Double click or double tap on the ball to score a goal.")
-//  intro: "Double click or double tap on the ball to score a goal."
+  //: Help title
+  description: qsTr("Double click or double tap on any side of the goal in order to score.")
+  // intro: "Double click or double tap on the goal, in order to score."
+  //: Help goal
   goal: ""
+  //: Help prerequisite
   prerequisite: ""
-  manual: qsTr("Double click or double tap on the ball to kick it. " +
+  //: Help manual
+  manual: qsTr("Double click or double tap on a side of the goal to kick the ball. " +
                "You can double click the left right or middle mouse button. " +
-               "If you lose, Tux catches the ball. You must click on it to " +
-               "bring it back to its former position")
+               "If you do not click fast enough, Tux catches the ball. " +
+               "You must click on it to bring it back to its former position.")
   credit: ""
   section: "computer mouse"
+  createdInVersion: 0
 }

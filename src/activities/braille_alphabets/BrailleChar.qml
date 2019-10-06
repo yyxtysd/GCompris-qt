@@ -17,10 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
-import QtMultimedia 5.0
+import QtQuick 2.6
 import "braille_alphabets.js" as Activity
 import "../../core"
 import GCompris 1.0
@@ -35,7 +34,7 @@ Item {
     property alias circles: circles
     property bool clickable
     property bool isLetter: brailleChar >= 'A' && brailleChar <= 'Z'
-    property variant brailleCodesLetter: {
+    property var brailleCodesLetter: {
         // For ASCII each letter, this represent the active dots in Braille.
         "A": [1], "B": [1, 2], "C": [1, 4], "D": [1, 4, 5], "E": [1, 5],
         "F": [1, 2, 4], "G": [1, 2, 4, 5], "H": [1, 2, 5], "I": [2, 4],
@@ -45,14 +44,14 @@ Item {
         "V": [1, 2, 3, 6], "W": [2, 4, 5, 6], "X": [1, 3, 4, 6], "Y": [1, 3, 4, 5, 6],
         "Z": [1, 3, 5, 6]
     }
-    property variant brailleCodesNumber: {
+    property var brailleCodesNumber: {
         // For ASCII each letter, this represent the active dots in Braille.
-        "+" : [3,4,6], "-": [3,6], "*" : [1,6], "/" : [3,4],
-        "#" : [3,4,5,6],1: [1],2 :[1, 2], "3" : [1, 4], "4": [1, 4, 5], "5" : [1, 5],
-        "6" : [1, 2, 4], "7" : [1, 2, 4, 5], "8" : [1, 2, 5], "9" : [2, 4], "0" :[3, 5, 6]
+        "+": [3, 4, 6], "-": [3, 6], "*": [1, 6], "/": [3, 4],
+        "#": [3, 4, 5, 6], "1": [1], "2" :[1, 2], "3": [1, 4], "4": [1, 4, 5],
+        "5": [1, 5], "6": [1, 2, 4], "7": [1, 2, 4, 5], "8": [1, 2, 5],
+        "9": [2, 4], "0" :[3, 5, 6]
     }
-    property variant brailleCodes: isLetter ? brailleCodesLetter : brailleCodesNumber
-    property GCAudio audioEffects
+    property var brailleCodes: isLetter ? brailleCodesLetter : brailleCodesNumber
 
     function updateDotsFromBrailleChar() {
         var dots = []
@@ -63,11 +62,11 @@ Item {
         }
 
         // Clear all the dots
-        for( var i = 0; i < 6; i++) {
+        for(var i = 0; i < 6; i++) {
             circles.itemAt(i).state = "off"
         }
 
-        for( var i in dots) {
+        for(var i in dots) {
             circles.itemAt(i).state = "on"
         }
     }
@@ -79,8 +78,9 @@ Item {
                 dots.push(i + 1)
         }
 
+        var stringifiedDots = JSON.stringify(dots)
         for(var car in brailleCodes) {
-            if(JSON.stringify(brailleCodes[car]) === JSON.stringify(dots)) {
+            if(JSON.stringify(brailleCodes[car]) === stringifiedDots) {
                 brailleChar = car
                 return
             }
@@ -122,10 +122,11 @@ Item {
                 property bool on: clickable ? false : click_on_off()
 
                 function click_on_off() {
-                    if(!brailleCodes[brailleChar])
+                    var code = brailleCodes[brailleChar]
+                    if(!code)
                         return false
-                    for( var i  = 0; i < brailleCodes[brailleChar].length; i++) {
-                        if(brailleCodes[brailleChar][i] === index + 1) {
+                    for(var i = 0; i < code.length; i++) {
+                        if(code[i] === index + 1) {
                             return true
                         }
                     }
@@ -153,30 +154,24 @@ Item {
 
                 GCText {
                     id: numtext
-                    text: (clickable) ? modelData : ""
-                    anchors.left: alignment()
+                    text: clickable ? modelData+1 : ""
+                    anchors.left: index >= 3 ? incircle1.right : undefined
+                    anchors.right: index < 3 ? incircle1.left : undefined
+                    anchors.verticalCenter: incircle1.verticalCenter
                     font.weight: Font.DemiBold
-                    font.pointSize: NaN  // need to clear font.pointSize explicitly
+                    font.pointSize: NaN // need to clear font.pointSize explicitly
                     font.pixelSize: Math.min(30 * ApplicationInfo.ratio,
                                              Math.max(parent.height, 20))
                     anchors.margins: 10
-
-                    function alignment() {
-                        if(index < 3) {
-                            anchors.right = incircle1.left
-                        } else {
-                            anchors.left = incircle1.right
-                        }
-                    }
                 }
 
                 MouseArea {
                     id : mouse1
-                    enabled:  clickable ? true : false
+                    enabled: clickable ? true : false
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: incircle1.border.width = 4 * ApplicationInfo.ratio
-                    onExited : incircle1.border.width = 2 * ApplicationInfo.ratio
+                    onExited: incircle1.border.width = 2 * ApplicationInfo.ratio
                     onClicked: {
                         incircle1.switchState();
                     }

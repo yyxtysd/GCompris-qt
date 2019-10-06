@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 
 var currentLevel
 var numberOfLevel
@@ -43,8 +43,6 @@ var randomMiss
 function start(items_, twoPlayer_) {
     items = items_
     currentLevel = 0
-    items.player1_score = 0
-    items.player2_score = 0
     twoPlayer = twoPlayer_
     initLevel()
 }
@@ -53,12 +51,23 @@ function stop() {
 }
 
 function initLevel() {
-
     numberOfLevel = twoPlayer ? 1 : weight.length
 
     items.bar.level = currentLevel + 1
 
-    items.counter = 0
+    items.counter = items.nextPlayerStart+1
+
+    if(items.nextPlayerStart === 1) {
+        items.player2score.endTurn();
+        items.player1score.beginTurn();
+    }
+    else {
+        items.player1score.endTurn();
+        items.player2score.beginTurn();
+        if(!twoPlayer) {
+            items.trigTuxMove.start();
+        }
+    }
 
     items.gameDone = false
     items.pieces.clear()
@@ -74,7 +83,6 @@ function initLevel() {
     else
         depthMax = 4
 
-
     if(currentLevel < 2)
         randomMiss = 1
     else if(currentLevel < 4)
@@ -86,7 +94,7 @@ function initLevel() {
 }
 
 function nextLevel() {
-    if(numberOfLevel <= ++currentLevel ) {
+    if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
     initLevel();
@@ -100,6 +108,12 @@ function previousLevel() {
 }
 
 function reset() {
+    // If the previous game is not won, we switch the starting player
+    // Else, the next player is the one who lost (set in continueGame())
+    if(!items.gameDone) {
+        items.nextPlayerStart = (items.nextPlayerStart == 1) ? 2 : 1;
+    }
+    items.trigTuxMove.stop();
     items.drop.stop()    // stop animation
     items.pieces.clear() // Clear the board
     initLevel()
@@ -140,7 +154,7 @@ function moveCurrentIndexLeft() {
 
 function isModelEmpty(model) {
     var state = model.stateTemp
-    return (state == "1" || state == "2") ? false : true
+    return (state === "1" || state === "2") ? false : true
 }
 
 function getPieceAt(col, row) {
@@ -165,7 +179,6 @@ function handleDrop(column) {
         currentPiece = nextFreeStop * items.columns + column
         items.drop.start()
     }
-
 }
 
 function setPieceState(col, row, state) {
@@ -187,9 +200,7 @@ function getBoardFromModel() {
         }
         board.push(temp)
     }
-
     return board
-
 }
 
 function getFreeStopFromBoard(column, board) {
@@ -203,7 +214,6 @@ function getFreeStopFromBoard(column, board) {
 
 
 function alphabeta(depth, alpha, beta, player, board) {
-
     var value = evaluateBoard(player, player % 2 ? 2 : 1, board)
 
     if(depth === 0 || value === 100000 || value < -100000) {
@@ -211,7 +221,6 @@ function alphabeta(depth, alpha, beta, player, board) {
     }
 
     if(player === 2) {
-
         var scores = [];
 
         for(var c = 0; c < items.columns; c++) {
@@ -240,7 +249,6 @@ function alphabeta(depth, alpha, beta, player, board) {
         }
 
         return alpha;
-
     } else {
         for(var c = 0; c < items.columns; c++) {
 
@@ -261,7 +269,6 @@ function alphabeta(depth, alpha, beta, player, board) {
 }
 
 function doMove() {
-
     var board = getBoardFromModel()
 
     alphabeta(depthMax, -10000, 10000, 2, board)
@@ -372,7 +379,6 @@ function evaluateBoard(player1, player2, board) {
                        board[3][5], board[2][6]);
 
     return score
-
 }
 
 function checkGameWon(currentPieceRow, currentPieceColumn) {
@@ -464,7 +470,6 @@ function checkGameWon(currentPieceRow, currentPieceColumn) {
 }
 
 function continueGame() {
-
     items.pieces.set(currentPiece, {"stateTemp": items.counter++ % 2 ? "2": "1"})
 
     /* Update score if game won */
@@ -473,33 +478,53 @@ function continueGame() {
                         parseInt(currentPiece % items.columns))) {
             items.gameDone = true
             if(currentPlayer === "1") {
-                items.player1_score++
+                items.player1score.win();
+                items.player2score.endTurn();
+                items.nextPlayerStart = 2;
             } else {
-                items.player2_score++
+                items.player2score.win();
+                items.player1score.endTurn();
+                items.nextPlayerStart = 1;
             }
             items.bonus.good("flower")
-            items.bonus.isWin = false
         }
-
+        else {
+            if(currentPlayer === "2") {
+                items.player1score.beginTurn();
+                items.player2score.endTurn();
+            } else {
+                items.player2score.beginTurn();
+                items.player1score.endTurn();
+            }
+        }
     } else {
         if(checkGameWon(parseInt(currentPiece / items.columns),
                         parseInt(currentPiece % items.columns))) {
             items.gameDone = true
             if(currentPlayer === "1") {
-                items.player1_score++
+                items.player1score.win()
+                items.player2score.endTurn()
                 items.bonus.good("flower")
-                items.bonus.isWin = false
                 items.counter--
+                items.nextPlayerStart = 2;
             } else {
-                items.player2_score++
+                items.player2score.win()
+                items.player1score.endTurn()
                 items.bonus.bad("flower")
+                items.nextPlayerStart = 1;
             }
         }
         if(items.counter % 2) {
-            doMove()
+            items.player1score.endTurn()
+            items.player2score.beginTurn()
+            items.trigTuxMove.start()
         }
     }
     if(items.counter === 42) {
+        items.player1score.endTurn()
+        items.player2score.endTurn()
         items.bonus.bad("flower")
+        items.nextPlayerStart = (items.nextPlayerStart == 1) ? 2 : 1;
     }
 }
+

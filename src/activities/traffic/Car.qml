@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 import "../../core"
@@ -64,7 +64,7 @@ Item {
     property real effY: car.yPos * car.blockSize
     property real effWidth: (mode == "COLOR" || car.isHorizontal) ? car.width : car.height
     property real effHeight: (mode == "COLOR" || car.isHorizontal) ? car.height : car.width
-    property GCAudio audioEffects
+    property GCSfx audioEffects
 
     width: (mode == "IMAGE" || isHorizontal) ? (size * blockSize) : blockSize
     height: (mode == "IMAGE" || isHorizontal) ? blockSize : (size * blockSize)

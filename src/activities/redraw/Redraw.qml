@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 
@@ -41,7 +41,7 @@ ActivityBase {
         fillMode: Image.PreserveAspectCrop
         sourceSize.width: Math.max(parent.width, parent.height)
 
-        property bool landscape: width > height
+        property bool landscape: width >= height
 
         signal start
         signal stop
@@ -64,7 +64,7 @@ ActivityBase {
             property int numberOfColor
             property int numberOfLine: targetModelData.length / numberOfColumn
             property alias targetModel: targetModel
-            property variant targetModelData
+            property var targetModelData
         }
 
         onStart: { Activity.start(items) }
@@ -74,7 +74,7 @@ ActivityBase {
             if(event.key >= Qt.Key_0 && event.key < Qt.Key_0 + items.numberOfColor)
                 items.colorSelector = event.key - Qt.Key_0
 
-            if(event.key == Qt.Key_Backspace)
+            if(event.key === Qt.Key_Backspace)
                 userModel.clearCurrentItem()
         }
         Keys.onEnterPressed: userModel.paintCurrentItem()

@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 
@@ -46,7 +46,7 @@ ActivityBase {
 
     pageComponent: Image {
         id: background
-        source: activity.dataSetUrl+"background.svg"
+        source: activity.dataSetUrl + "background.svg"
         fillMode: Image.PreserveAspectCrop
         anchors.fill: parent
         sourceSize.width: Math.max(parent.width, parent.height)
@@ -83,7 +83,8 @@ ActivityBase {
             property alias locale: background.locale
             property alias ok: ok
             property int remainingLife
-            property variant goodWord
+            property double maskThreshold
+            property var goodWord
             property int goodWordIndex
             property bool easyMode: false
             property alias englishFallbackDialog: englishFallbackDialog
@@ -97,6 +98,7 @@ ActivityBase {
                     bonus.interval = 500
             }
             onRemainingLifeChanged: {
+                maskThreshold = 0.15 * remainingLife
                 if(remainingLife == 3) {
                     playWord();
                 }
@@ -118,18 +120,16 @@ ActivityBase {
             fontSize: largeSize
             color: "#4d4d4d"
             font.letterSpacing: 0.5
-            width: parent.width * 0.9
-            wrapMode: Text.WordWrap
+            width: parent.width * 0.90 - score.width
+            fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             anchors {
-                horizontalCenter: parent.horizontalCenter
+                right: score.left
                 bottom: bar.top
-                bottomMargin: 5 * ApplicationInfo.ratio
-
+                bottomMargin: 10 * ApplicationInfo.ratio
             }
             z: 11
         }
-
 
         GCText {
             id: guessedText
@@ -137,7 +137,7 @@ ActivityBase {
             color: "#FFFFFF"
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
-            width: parent.width - 2*clock.width
+            width: parent.width - 2.1 * clock.width
             anchors {
                 horizontalCenter: parent.horizontalCenter
             }
@@ -238,7 +238,7 @@ ActivityBase {
                 maskSource: threshmask
                 spread: 0.4
                 // remainingLife between 0 and 6 => threshold between 0 and 0.9
-                threshold: 0.15 * items.remainingLife
+                threshold: items.maskThreshold
             }
         }
 
@@ -352,24 +352,27 @@ ActivityBase {
 
         Score {
             id: score
-            anchors.top: undefined
-            anchors.topMargin: 10 * ApplicationInfo.ratio
-            anchors.right: parent.right
-            anchors.rightMargin: 10 * ApplicationInfo.ratio
-            anchors.bottom: keyboard.top
+            height: 1.2 * internalTextComponent.height
+            width: 1.3 * internalTextComponent.width
+            anchors {
+                bottom: keyboard.enabled ? keyboard.top : parent.bottom
+                bottomMargin: keyboard.enabled ? 1.2 * bar.height : 0.55 * parent.height
+                right: parent.right
+                rightMargin: 0.025 * parent.width
+            }
         }
 
         BarButton {
-		  id: ok
-		  source: "qrc:/gcompris/src/core/resource/bar_ok.svg";
-		  sourceSize.width: 75 * ApplicationInfo.ratio
-		  visible: false
-          anchors {
-              bottom: score.top
-              horizontalCenter: score.horizontalCenter
-              bottomMargin: 10 * ApplicationInfo.ratio
-          }
-          onClicked: Activity.nextSubLevel()
+            id: ok
+            source: "qrc:/gcompris/src/core/resource/bar_ok.svg";
+            sourceSize.width: Math.min(score.width, clock.width)
+            visible: false
+            anchors {
+                bottom: score.top
+                horizontalCenter: score.horizontalCenter
+                bottomMargin: 5 * ApplicationInfo.ratio
+            }
+            onClicked: Activity.nextSubLevel()
         }
 
         JsonParser {
@@ -440,7 +443,7 @@ ActivityBase {
             sourceComponent: GCDialog {
                 parent: activity.main
                 message: qsTr("We are sorry, we don't have yet a translation for your language.") + " " +
-                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("http://l10n.kde.org/") +
+                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("https://l10n.kde.org/") +
                          "<br /> <br />" +
                          qsTr("We switched to English for this activity but you can select another language in the configuration dialog.")
                 onClose: background.englishFallback = false

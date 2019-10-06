@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import "qrc:/gcompris/src/core/core.js" as Core
 
 var url = "qrc:/gcompris/src/activities/braille_alphabets/resource/"
@@ -113,6 +113,7 @@ function initLevel() {
 
     items.playableChar.isLetter = currentDataSet[0].letter >= "A" && currentDataSet[0].letter <= "Z"
     // Trig the next question
+    items.questionItem.opacity = 0.1
     items.questionItem.opacity = 0
 }
 
@@ -131,13 +132,14 @@ function previousLevel() {
 }
 
 function nextQuestion() {
-    if(currentDataSet.length <= ++currentQuestion ) {
+    if(currentDataSet.length <= ++currentQuestion) {
         items.bonus.good("flower")
     } else {
-        // Let'not change the question immediately to let the
+        // Let's not change the question immediately to let the
         // children see his answer.
         // We just set the opacity to 0, the questionItem will then grab
         // the new question by itself
+        items.questionItem.opacity = 0.1
         items.questionItem.opacity = 0
         items.score.currentSubLevel ++
     }

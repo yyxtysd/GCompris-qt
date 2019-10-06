@@ -16,10 +16,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 import "../../core"
@@ -27,20 +27,30 @@ import "letter-in-word.js" as Activity
 
 Item {
     id: cardItem
-    //width: cardImage.width
     height: wordPic.height + cardImage.height - 30 * ApplicationInfo.ratio
     property bool mouseActive: true
 
     Image {
         id: wordPic
-        sourceSize.width: cardItem.width -6
-        sourceSize.height: cardItem.width -5
+        sourceSize.width: cardItem.width - 6
+        sourceSize.height: cardItem.width - 5
         fillMode: Image.PreserveAspectFit
         source: imgurl
         z: -5
-        //visible: index % 2 != 0 ? false : true
     }
 
+    Image {
+        id: tick
+        source: "qrc:/gcompris/src/core/resource/apply.svg"
+        sourceSize.width: cardImage.width / 3
+        sourceSize.height: cardImage.width / 3
+        visible: false
+
+        anchors {
+            leftMargin: cardItem.right - 0.01
+            bottomMargin: parent.top - 10
+        }
+    }
     Image {
         id: cardImage
         anchors.top: wordPic.bottom
@@ -48,8 +58,7 @@ Item {
         sourceSize.width: cardItem.width - 10
         fillMode: Image.PreserveAspectFit
         source: Activity.resUrl2 + "cloud.svg"
-        z: (state == 'scaled') ? 1 : -1
-        //visible: index % 2 != 0 ? false : true
+        z: (state == 'marked') ? 1 : -1
 
         GCText {
             id: textItem
@@ -70,24 +79,14 @@ Item {
             styleColor: "white"
         }
 
-        ParticleSystemStarLoader {
-            id: particle
-            clip: false
-        }
-
         states:
             State {
-                name: "scaled"; when: mouseArea.containsMouse && mouseActive
+                name: "marked"; when: selected && mouseActive
                 PropertyChanges {
-                    target: cardItem
-                    scale: /*carriageImage.scale * */ 1.2
-                    z: 2
+                    target: tick
+                    visible: true
                 }
             }
-
-        transitions: Transition {
-            NumberAnimation { properties: "scale"; easing.type: Easing.OutCubic }
-        }
 
         SequentialAnimation {
             id: successAnimation
@@ -115,14 +114,9 @@ Item {
         SequentialAnimation {
             id: failureAnimation
             NumberAnimation {
-                target: colorCardImage
+                target: cardImage
                 property: "opacity"
                 to: 1; duration: 400
-            }
-            NumberAnimation {
-                target: colorCardImage
-                property: "opacity"
-                to: 0; duration: 200
             }
         }
 
@@ -133,18 +127,9 @@ Item {
             property: "rotation"
             to: 0
             duration: 500
-            easing.type: Easing.InOutQuad
+            easing.type: Easing.Linear
         }
-    }
 
-    Colorize {
-        id: colorCardImage
-        z: 5
-        anchors.fill: cardImage
-        source: cardImage
-        hue: 0.0
-        saturation: 1
-        opacity: 0
     }
 
     MouseArea {
@@ -166,9 +151,8 @@ Item {
         if(mouseActive && !successAnimation.running) {
             if (Activity.checkWord(index)) {
                 successAnimation.restart();
-                particle.burst(30);
-                textItem.textFound = spelling.replace(RegExp(Activity.currentLetter, "g"), "<font color=\"#00FF00\">"+Activity.currentLetter+"</font>");
-                playWord();
+                if(selected)
+                    playWord();
             }
             else {
                 failureAnimation.restart()

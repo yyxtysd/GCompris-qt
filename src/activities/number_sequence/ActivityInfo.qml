@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "number_sequence/number_sequence.svg"
   author: "Emmanuel Charruau &lt;echarruau@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Number sequence")
+  //: Help title
   description: qsTr("Touch the numbers in the right sequence.")
-//  intro: "Draw the picture by touching each number in the right sequence."
+  // intro: "Draw the picture by touching the numbers in ascending order."
+  //: Help goal
   goal: qsTr("Can count from 1 to 50.")
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: qsTr("Draw the picture by touching each number in the right sequence, or sliding your finger or dragging the mouse through the numbers in the correct sequence.")
   credit: ""
   section: "math numeration"
+  createdInVersion: 0
 }

@@ -17,9 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.2
+import QtQuick 2.6
 
 import "gnumch-equality.js" as Activity
 
@@ -30,7 +30,7 @@ Creature {
     property var player
 
     function checkCell() {
-        if (index == player.index) {
+        if (index === player.index) {
             player.getCaught(-1)
             eating = true
         }

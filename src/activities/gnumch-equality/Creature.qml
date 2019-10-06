@@ -17,9 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 import "../../core"
 
@@ -34,7 +34,7 @@ Item {
     property int frames
     property int frameW
     property real widthRatio
-    property GCAudio audioEffects
+    property GCSfx audioEffects
 
     function moveTo(direction) {
         if (!movable)
@@ -114,7 +114,7 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width / parent.height < widthRatio ? parent.width * 0.85 : parent.height * 0.85 * widthRatio
+        width: parent.width / parent.height <= widthRatio ? parent.width * 0.85 : parent.height * 0.85 * widthRatio
         height: width * (1/widthRatio)
         source: "qrc:/gcompris/src/activities/gnumch-equality/resource/"
                 + monsterType + ".png"

@@ -13,13 +13,15 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program; if not, see <http://www.gnu.org/licenses/>.
+ along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.0
+import QtQuick 2.6
 import "../planegame"
 
 Planegame {
+
+    showTutorial: true
 
     dataset: [
         {
@@ -39,4 +41,42 @@ Planegame {
             showNext: false
         }
     ]
+
+    tutorialInstructions: [
+                {
+                    "instruction": qsTr("This activity teaches about even and odd numbers."),
+                    "instructionQml": ""
+                },
+                {
+                    "instruction": qsTr("Even numbers are numbers which leave remainder 0 when divided by 2."),
+                    "instructionQml": ""
+                },
+
+                {
+                    "instruction": qsTr("What is meant by remainder of a number?"),
+                    "instructionQml" : "qrc:/gcompris/src/activities/numbers-odd-even/resource/Tutorial1.qml"
+                },
+
+                {
+                    "instruction": qsTr("Even numbers are numbers which leave remainder 0 when divided by 2."),
+                    "instructionQml" : "qrc:/gcompris/src/activities/numbers-odd-even/resource/Tutorial2.qml"
+                },
+                {
+                    "instruction": qsTr("Odd numbers are numbers which do not leave remainder 0 when divided by 2."),
+                    "instructionQml": "qrc:/gcompris/src/activities/numbers-odd-even/resource/Tutorial3.qml"
+                },
+                {
+                    "instruction": qsTr("Exercise to test your understanding."),
+                    "instructionQml": "qrc:/gcompris/src/activities/numbers-odd-even/resource/Tutorial4.qml"
+                },
+                {
+                    "instruction": qsTr("Exercise to test your understanding."),
+                    "instructionQml": "qrc:/gcompris/src/activities/numbers-odd-even/resource/Tutorial5.qml"
+                },
+                {
+                    "instruction":  qsTr("Exercise to test your understanding."),
+                    "instructionQml": "qrc:/gcompris/src/activities/numbers-odd-even/resource/Tutorial6.qml"
+                }
+
+            ]
 }

@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -146,12 +146,13 @@ Image {
             color: model.color
             radius: width / 2
             border.width: 1 * ApplicationInfo.ratio
-            border.color: "black"
+            border.color: "#40000000"
             
             GCText {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
                 text: score
+                color: "#A0000000"
             }
             
         }

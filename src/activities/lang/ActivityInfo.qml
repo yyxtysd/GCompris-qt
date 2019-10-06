@@ -19,7 +19,7 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 import GCompris 1.0
 
@@ -29,15 +29,20 @@ ActivityInfo {
   icon: "lang/lang.svg"
   author: "siddhesh suthar &lt;siddhesh.it@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Enrich your vocabulary")
+  //: Help title
   description: qsTr("Complete language learning activities.")
+  // intro: "Select the language you want to learn then review the words before doing the exercises."
+  //: Help goal
   goal: qsTr("Enrich your vocabulary in your native language or in a foreign one.")
+  //: Help prerequisite
   prerequisite: qsTr("Reading")
+  //: Help manual
   manual: qsTr("Review a set of words. Each word is shown with a voice, a text and an image.<br/>"
            + "When done, you are suggested an exercise in which, given the voice, "
            + "you must find the right word. In the configuration, you can select the language you want to learn.")
-  credit: qsTr("The images and voices come from the Art4Apps project: http://www.art4apps.org/.<br>"
-           + "You can also access this activity online on http://gcompris.net/activity/lang.")
-  section: "reading"
+  credit: qsTr("The images and voices come from the Art4Apps project: http://www.art4apps.org/.")
+  section: "reading vocabulary"
   createdInVersion: 5000
 }

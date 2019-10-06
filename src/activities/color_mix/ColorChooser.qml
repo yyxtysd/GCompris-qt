@@ -17,11 +17,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.0
-import QtGraphicalEffects 1.0
-
+import QtQuick 2.6
 import GCompris 1.0
 
 import "colormix.js" as Activity
@@ -33,50 +31,22 @@ Image {
 
     property int maxSteps: 10
     property int currentStep: 0
-    property real hue
+    property string brushHue
 
     Image {
         id: intensityScreen
-        source: Activity.url + "flashlight2.svg"
+        source: activity.modeRGB ? Activity.url + "flashlight2" + brushHue + ".svg" : "qrc:/gcompris/src/core/resource/empty.svg"
         sourceSize.height: parent.sourceSize.height
+        sourceSize.width: parent.sourceSize.width
         z: 2
-        visible: false
-    }
-
-    Colorize {
-        anchors.fill: intensityScreen
-        source: intensityScreen
-        hue: chooser.hue
-        lightness: -(maxSteps - currentStep) / maxSteps
-        saturation: 1
-        visible: activity.modeRGB ? true : false
-    }
-
-    Image {
-        id: intensityLight
-        source: Activity.url + "light.svg"
-        sourceSize.height: intensityScreen.sourceSize.height / 2
-        visible: false
-        anchors {
-            left: intensityScreen.right
-            leftMargin: -20 * ApplicationInfo.ratio
-            verticalCenter: intensityScreen.verticalCenter
-        }
         opacity: currentStep / maxSteps
-    }
-
-    Colorize {
-        anchors.fill: intensityLight
-        source: intensityLight
-        hue: chooser.hue
-        lightness: -(maxSteps - currentStep) / maxSteps
-        saturation: 1
-        visible: intensityScreen.visible
+        visible: activity.modeRGB
     }
 
     Image {
         id: intensityBrush
-        source: Activity.url + (activity.modeRGB ? "light.svg" : "brush.svg")
+        source: Activity.url + (activity.modeRGB ? 
+                    "light" + brushHue + ".svg" : "brush" + brushHue + ".svg")
         sourceSize.height: parent.sourceSize.height * 0.25 + currentStep / maxSteps * 15
         z: 2
         anchors {
@@ -84,17 +54,9 @@ Image {
             leftMargin: activity.modeRGB ? -20 * ApplicationInfo.ratio : 0
             verticalCenter: parent.verticalCenter
         }
-        visible: false
-        fillMode: Image.PreserveAspectFit        
-    }
-
-    Colorize {
-        anchors.fill: intensityBrush
-        source: intensityBrush
-        hue: chooser.hue
-        lightness: 0
-        saturation: 1
+        opacity: activity.modeRGB ? currentStep / maxSteps * 2 : 1
         visible: currentStep > 0
+        fillMode: Image.PreserveAspectFit        
     }
 
     ColorButton {
@@ -102,8 +64,9 @@ Image {
         anchors {
             verticalCenter: parent.verticalCenter
             right: parent.right
-            rightMargin: parent.width * 0.2
+            rightMargin: parent.width * 0.25
         }
+        onClicked: currentStep = Math.min(currentStep+1, maxSteps)
     }
 
     ColorButton {
@@ -111,32 +74,8 @@ Image {
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
-            leftMargin: parent.width * 0.3
+            leftMargin: parent.width * 0.4
         }
+        onClicked: currentStep = Math.max(currentStep-1, 0)
     }
-
-    MultiPointTouchArea {
-        anchors.fill: parent
-        touchPoints: [ TouchPoint { id: point1 } ]
-        z: 4
-        property real startX
-        property int initialStep: 0
-
-        onPressed: {
-            startX = point1.x
-            if(startX > parent.width / 2)
-                currentStep = Math.max(currentStep + 1, 0)
-            else
-                currentStep = Math.max(currentStep - 1, 0)
-            initialStep = currentStep
-        }
-
-        onTouchUpdated: {
-            currentStep = initialStep + (point1.x - startX) / (20 * ApplicationInfo.ratio)
-            currentStep = Math.min(currentStep, maxSteps)
-            currentStep = Math.max(currentStep, 0)
-            activity.audioEffects.play('qrc:/gcompris/src/activities/redraw/resource/brush.wav')
-        }
-    }
-
 }

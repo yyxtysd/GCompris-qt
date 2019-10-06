@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -40,13 +40,15 @@ Repeater {
     
     Rectangle {
         id: arrow
-        width: 30 * ApplicationInfo.ratio
-        height: 30 * ApplicationInfo.ratio
+        width: 15 * ApplicationInfo.ratio
+        height: 15 * ApplicationInfo.ratio
         radius: width / 2
         anchors.centerIn: parent
         border.width: 1 * ApplicationInfo.ratio
-        border.color: "black"
+        border.color: "#60000000"
         opacity: 0
+        color: "#d6d6d6"
+        scale: 2
         
         Behavior on scale {
             id: scale

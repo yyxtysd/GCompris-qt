@@ -16,11 +16,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick 2.6
+import QtQuick.Controls 1.5
+import QtQuick.Controls.Styles 1.4
 import GCompris 1.0
 
 /**
@@ -30,6 +30,7 @@ import GCompris 1.0
  * @inherit QtQuick.Controls.Styles.ButtonStyle
  */
 ButtonStyle {
+    id: buttonStyle
     /**
      * type:real
      * Fixed font size of the label in pt.
@@ -45,19 +46,27 @@ ButtonStyle {
      * theme of the button. For now, three themes are accepted: "light" and "dark" and "highContrast"
      *
      * Default is dark.
-    */
+     */
     property string theme: "dark"
+    
+    /**
+     * type:bool
+     * if there is an icon on the right, we need to add a rightMargin for the text label
+     * 
+     * Default is false.
+     */
+    property bool haveIconRight: false
 
     /**
-     * type:variant
+     * type:var
      * existing themes for the button.
      * A theme is composed of:
      *   the colors of the button when selected: selectedColorGradient0 and selectedColorGradient1.
      *   the colors of the button when not selected: backgroundColorGradient0 and backgroundColorGradient1.
      *   the button's border color
      *   the text color
-    */
-    property variant themes: {
+     */
+    property var themes: {
         "dark": {
             backgroundColorGradient0: "#23373737",
             selectedColorGradient0: "#C03ACAFF",
@@ -80,14 +89,24 @@ ButtonStyle {
             backgroundColorGradient1: "#AAFFFFFF",
             selectedColorGradient1: "#803ACAFF",
             borderColor: "white",
-            textColor: "373737"
+            textColor: "#FF373737"
             
+        },
+        "categories": {
+            backgroundColorGradient0: "#80F6FBFC",
+            selectedColorGradient0: "#FFF6FBFC",
+            backgroundColorGradient1: "#80F6FBFC",
+            selectedColorGradient1: "#FFF6FBFC",
+            borderColor: "#FF87A6DD",
+            textColor: "#FF373737"
         }
     }
 
+    property bool selected: false
+
     property string textSize: "regular"
     
-    property variant textSizes: {
+    property var textSizes: {
         "regular": {
             fontSize: 14,
             fontBold: false
@@ -107,13 +126,19 @@ ButtonStyle {
         border.color: themes[theme].borderColor
         radius: 10
         gradient: Gradient {
-            GradientStop { position: 0 ; color: control.pressed ? themes[theme].selectedColorGradient0 : themes[theme].backgroundColorGradient0 }
-            GradientStop { position: 1 ; color: control.pressed ? themes[theme].selectedColorGradient1 : themes[theme].backgroundColorGradient1 }
+            GradientStop { position: 0 ; color: (control.pressed || buttonStyle.selected) ? themes[theme].selectedColorGradient0 : themes[theme].backgroundColorGradient0 }
+            GradientStop { position: 1 ; color: (control.pressed || buttonStyle.selected) ? themes[theme].selectedColorGradient1 : themes[theme].backgroundColorGradient1 }
         }
     }
     label: Item {
         id: labelItem
-        anchors.fill: parent
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+            rightMargin: haveIconRight ? parent.height : 0
+        }
         implicitWidth: labelText.implicitWidth
         implicitHeight: labelText.implicitHeight
 
@@ -123,9 +148,11 @@ ButtonStyle {
             text: control.text
             fontSize: textSizes[textSize].fontSize
             font.bold: textSizes[textSize].fontBold
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
+            fontSizeMode: Text.Fit
 
             Component.onCompleted: {
                 if (fixedFontSize > 0) {

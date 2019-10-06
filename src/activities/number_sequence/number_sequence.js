@@ -17,10 +17,10 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 .pragma library
-.import QtQuick 2.2 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris //for ApplicationInfo
 .import "qrc:/gcompris/src/core/core.js" as Core
 
@@ -72,7 +72,7 @@ function previousLevel() {
     initLevel();
 }
 
-//function to play the sound of chararcter at start & end
+//function to play the sound of character at start & end
 function playLetterSound(sound) {
     // first we clear the queue in case other voices are there, then we append the new number
     // if we play directly, we don't have the bonus sound (or it is truncated)
@@ -95,6 +95,7 @@ function drawSegment(pointIndex) {
         if (mode == "clickanddraw" || mode == "drawletters" || mode == "drawnumbers") {
             if (pointIndex < items.pointImageRepeater.count-1) {
                 items.pointImageRepeater.itemAt(pointIndex+1).highlight = true
+                items.audioEffects.play('qrc:/gcompris/src/core/resource/sounds/audioclick.wav')
             }
         }
 

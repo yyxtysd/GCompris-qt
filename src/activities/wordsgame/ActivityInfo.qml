@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "wordsgame/wordsgame.svg"
   author: "Holger Kaelberer &lt;holger.k@elberer.de&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Falling Words")
+  //: Help title
   description: qsTr("Type the falling words before they reach the ground")
 //  intro: "Type the words on your keyboard before they reach the ground."
+  //: Help goal
   goal: qsTr("Keyboard training")
+  //: Help prerequisite
   prerequisite: qsTr("Keyboard manipulation")
+  //: Help manual
   manual: qsTr("Type the complete word as it falls, before it reaches the ground")
   credit: ""
-  section: "computer keyboard reading"
+  section: "computer keyboard reading words"
+  createdInVersion: 0
 }

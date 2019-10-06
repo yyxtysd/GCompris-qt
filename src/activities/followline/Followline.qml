@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -49,8 +49,9 @@ ActivityBase {
         QtObject {
             id: items
             property alias background: background
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
             property alias fireman: fireman
+            property alias fire: fire
             property alias bar: bar
             property alias bonus: bonus
             property int currentLock: 0
@@ -69,23 +70,23 @@ ActivityBase {
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
-                verticalCenterOffset: height / 4
+                verticalCenterOffset: - height / 10
             }
         }
 
         Image {
             id: fire
             source: Activity.url + "fire.svg"
-            sourceSize.width: 126 * ApplicationInfo.ratio
+            sourceSize.width: 90 * ApplicationInfo.ratio
             anchors {
                 right: parent.right
-                bottom: parent.bottom
+                bottom: bar.top
             }
 
             Image {
                 id: fireflame
                 source: Activity.url + "fire_flame.svg"
-                sourceSize.width: 126 * ApplicationInfo.ratio
+                sourceSize.width: 90 * ApplicationInfo.ratio
                 anchors {
                     fill: parent
                 }

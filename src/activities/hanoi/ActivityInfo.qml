@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,13 +23,18 @@ ActivityInfo {
   icon: "hanoi/hanoi.svg"
   author: "Johnny Jazeix &lt;jazeix@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Simplified Tower of Hanoi")
+  //: Help title
   description: qsTr("Reproduce the given tower")
   //intro: "Rebuild the same tower in the empty area as the one you see on the right hand side."
+  //: Help goal
   goal: qsTr("Reproduce the tower on the right in the empty space on the left")
+  //: Help prerequisite
   prerequisite: qsTr("Mouse-manipulation")
-  manual: qsTr("Drag and Drop one top piece at a time, from one peg to another, to reproduce the tower on the right in the empty space on the left.")
+  //: Help manual
+  manual: qsTr("Drag and Drop one top piece at a time, from one peg to another, to reproduce the tower on the right in the empty space on its left.")
   credit: qsTr("Concept taken from EPI games.")
-  section: "puzzle"
+  section: "discovery logic"
   createdInVersion: 4000
 }

@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "hangman/hangman.svg"
   author: "Rajdeep kaur &lt;rajdeep1994@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("The classic hangman game")
+  //: Help title
   description: qsTr("Guess the letters of the given word. To help you, on every wrong try, a part of the image representing the word will be revealed.")
+  //: Help goal
   goal: qsTr("This is a good exercise to improve reading and spelling skills.")
+  //: Help prerequisite
   prerequisite: ""
+  // intro: "A word is hidden, you must discover it letter by letter."
+  //: Help manual
   manual: qsTr("You can enter the letters using the virtual keyboard on the screen or with the real keyboard.")
   credit: ""
-  section: "keyboard reading"
+  section: "keyboard reading words"
   createdInVersion: 5000
 }

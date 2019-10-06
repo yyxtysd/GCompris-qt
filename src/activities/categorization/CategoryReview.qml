@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -34,7 +34,7 @@ Item {
     property bool leftAreaContainsDrag: false
     property bool rightAreaContainsDrag: false
     property bool started: rootItem.opacity == 1
-    property bool horizontalLayout: categoryBackground.width > categoryBackground.height
+    property bool horizontalLayout: categoryBackground.width >= categoryBackground.height
     property alias leftZone: leftZone.model
     property alias rightZone: rightZone.model
     property alias middleZone: middleZone.model
@@ -55,11 +55,11 @@ Item {
         sourceSize.width:parent.width
 
         Zone {
-            id:leftZone
-            x: 0.015 * parent.width
+            id: leftZone
+            x: 0.012 * middleScreen.width
             z: 2
             y: 0.05 * parent.height
-           // anchors.topMargin: 0.2 * categoryBackground.height
+            spacing: x
         }
 
         Rectangle {
@@ -67,13 +67,16 @@ Item {
             width: parent.width/3
             height: parent.height
             x: 0
-            color: leftAreaContainsDrag ? "#9933FF" : "red"
-            opacity: 0.52
+            color: leftAreaContainsDrag ? "#F9F8B4" : "#F9B4B4"
+            border.width: 5
+            border.color: "#EC1313"
+            opacity: 0.5
         }
 
         Zone {
             id: rightZone
-            x: leftScreen.width + middleScreen.width + 0.01 * parent.width
+            spacing: leftZone.x
+            x: leftScreen.width + middleScreen.width + spacing 
             z: 2
             anchors.top: categoryBackground.top
             anchors.topMargin: items.mode != "expert" ? rootItem.categoryImage.height + 0.027 * rightScreen.height : 0.05 * categoryBackground.height
@@ -84,8 +87,10 @@ Item {
             width: parent.width/3
             height: parent.height
             x: leftScreen.width + middleScreen.width
-            color: rightAreaContainsDrag ? "#FFCC00" : "green"
-            opacity: 0.52
+            color: rightAreaContainsDrag ? "#F9F8B4" : "#B4F9C5"
+            border.width: 5
+            border.color: "#13EC52"
+            opacity: 0.5
         }
 
         Rectangle {
@@ -145,9 +150,11 @@ Item {
 
         Image {
             id: categoryImage
+            fillMode: Image.PreserveAspectFit
             source: items.details && items.details[bar.level-1] && items.details[bar.level-1].image ? items.details[bar.level-1].image : ""
-            width: horizontalLayout ? rightZone.width * 0.35 : rightZone.width * 0.35
-            height: horizontalLayout ? rightZone.height * 0.18 : rightZone.height * 0.15
+            sourceSize.width: horizontalLayout ? rightZone.width * 0.35 : rightZone.width * 0.35
+            width: sourceSize.width
+            height: sourceSize.width
             y: 0.015*parent.height
             visible: items.categoryImageChecked
             anchors {
@@ -160,7 +167,9 @@ Item {
             id: validate
             source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
             width: horizontalLayout ? rightZone.width * 0.20 : rightZone.width * 0.35
-            height: horizontalLayout ? rightZone.width * 0.20 : rightZone.width * 0.35
+            height: width
+            sourceSize.width: width
+            sourceSize.height: height
             y: parent.height*0.8
             z: 2
             anchors {
@@ -190,17 +199,17 @@ Item {
             id: dialogHelp
             onClose: home()
         }
-
+        
         Score {
             id: score
-            fontSize: horizontalLayout ? 0.013 * parent.width : 0.02 * parent.width
             visible: items.scoreChecked
-            height: horizontalLayout ? 0.1 * parent.height : 0.06 * parent.height
-            width: horizontalLayout ? 0.015 * parent.width : parent.width
+            width: rightZone.width * 0.4
+            height: width * 0.6
+            margins: 10 * ApplicationInfo.ratio
             anchors {
                 top: parent.top
-                right: categoryBackground.right
-                left: categoryImage.right
+                right: parent.right
+                left: undefined
                 bottom: undefined
             }
         }

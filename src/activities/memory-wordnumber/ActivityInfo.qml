@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "memory-wordnumber/memory-wordnumber.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Wordnumber memory game")
+  //: Help title
   description: qsTr("Turn the cards over to match the number with the word matching it.")
 //  intro: "Match the numeric with the word."
+  //: Help goal
   goal: qsTr("Reading numbers, memory.")
+  //: Help prerequisite
   prerequisite: qsTr("Reading")
+  //: Help manual
   manual: qsTr("You can see some cards, but you can't see what's on the other side of them. Each card is hiding the numeral form of a number, or the word to write it.")
   credit: ""
-  section: "reading"
+  section: "math numeration"
+  createdInVersion: 0
 }

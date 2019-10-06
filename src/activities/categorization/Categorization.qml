@@ -16,11 +16,11 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.1
-import QtQuick.Controls 1.1
+import QtQuick 2.6
+import QtQuick.Controls 1.5
 import GCompris 1.0
 
 import "../../core"
@@ -35,11 +35,12 @@ ActivityBase {
     onStop: {}
 
     property string boardsUrl: ":/gcompris/src/activities/categorization/resource/board/"
-    property bool vert: background.width < background.height
+    property bool vert: background.width <= background.height
+    property var barAtStart
 
     pageComponent: Image {
         id: background
-        source: "qrc:/gcompris/src/activities/lang/resource/imageid-bg.svg"
+        source: "qrc:/gcompris/src/activities/guesscount/resource/backgroundW01.svg"
         anchors.fill: parent
         sourceSize.width: parent.width
         signal start
@@ -64,7 +65,7 @@ ActivityBase {
             property string mode: "easy"
             property bool instructionsVisible: true
             property bool categoryImageChecked: (mode === "easy" || mode === "medium")
-            property bool scoreChecked: (mode === "easy")
+            property bool scoreChecked: (mode === "easy" || mode === "expert")
             property bool iAmReadyChecked: (mode === "expert")
             property bool displayUpdateDialogAtStart: true
             property var details
@@ -73,16 +74,26 @@ ActivityBase {
             property var categories: directory.getFiles(boardsUrl)
         }
 
+        function hideBar() {
+            barAtStart = ApplicationSettings.isBarHidden;
+            if(categoryReview.width >= categoryReview.height)
+                ApplicationSettings.isBarHidden = false;
+            else 
+                ApplicationSettings.isBarHidden = true;
+        }
+        
         onStart: {
             Activity.init(items, boardsUrl)
             dialogActivityConfig.getInitialConfiguration()
             Activity.start()
+            hideBar()
         }
 
         onStop: {
             dialogActivityConfig.saveDatainConfiguration()
+            ApplicationSettings.isBarHidden = barAtStart;
         }
-
+        
         MenuScreen {
             id: menuScreen
 
@@ -119,7 +130,7 @@ ActivityBase {
                     GCDialogCheckBox {
                         id: easyModeBox
                         width: column.width - 50
-                        text: qsTr("Instructions and score visible")
+                        text: qsTr("Put together all the elements from a category (with score)")
                         checked: (items.mode == "easy") ? true : false
                         exclusiveGroup: configOptions
                         onCheckedChanged: {
@@ -133,7 +144,7 @@ ActivityBase {
                     GCDialogCheckBox {
                         id: mediumModeBox
                         width: easyModeBox.width
-                        text: qsTr("Instructions visible and score invisible")
+                        text: qsTr("Put together all the elements from a category (without score)")
                         checked: (items.mode == "medium") ? true : false
                         exclusiveGroup: configOptions
                         onCheckedChanged: {
@@ -147,7 +158,7 @@ ActivityBase {
                     GCDialogCheckBox {
                         id: expertModeBox
                         width: easyModeBox.width
-                        text: qsTr("Instructions and score invisible")
+                        text: qsTr("Discover a category, grouping elements together")
                         checked: (items.mode == "expert") ? true : false
                         exclusiveGroup: configOptions
                         onCheckedChanged: {
@@ -178,7 +189,7 @@ ActivityBase {
             id: dialogHelp
             onClose: home()
         }
-
+        
         Bar {
             id: bar
             content: menuScreen.started ? withConfig : withoutConfig

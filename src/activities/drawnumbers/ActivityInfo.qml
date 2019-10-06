@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,10 +23,16 @@ ActivityInfo {
   icon: "drawnumbers/drawnumbers.svg"
   author: "Nitish Chauhan &lt;nitish.nc18@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Draw Numbers")
+  //: Help title
   description: qsTr("Connect the dots to draw numbers from 0 to 9")
-  goal: qsTr("Children will learn how to draw different numbers in a fun way.")
+  // intro: "Draw the numbers by connecting the dots in the correct order."
+  //: Help goal
+  goal: qsTr("Learning how to draw the numbers in a funny way.")
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: qsTr("Draw the numbers by connecting the dots in the correct order")
   credit: ""
   section: "math numeration"

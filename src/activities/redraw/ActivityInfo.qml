@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,13 +23,18 @@ ActivityInfo {
   icon: "redraw/redraw.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Redraw the given image")
+  //: Help title
   description: qsTr("Draw perfectly the given image on the empty grid.")
-  //intro: "Use the drawing tools to reproduce a symmetrical figure on the right hand side."
+  //intro: "Use the drawing tools to build an identical pattern on the right."
+  //: Help goal
   goal: ""
+  //: Help prerequisite
   prerequisite: ""
-  manual: qsTr("First, select the proper color from the toolbar. Then drag to paint.") + " " +
-          qsTr("At the first level a hint is provided to show that no symmetry is requested.")
+  //: Help manual
+  manual: qsTr("First, select the proper color from the toolbar. Then click on the grid and drag to paint, then release the click to stop painting.")
   credit: ""
-  section: "math geometry puzzle"
+  section: "puzzle"
+  createdInVersion: 0
 }

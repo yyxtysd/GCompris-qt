@@ -18,11 +18,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris //for ApplicationInfo
 .import "qrc:/gcompris/src/core/core.js" as Core
 .import "qrc:/gcompris/src/activities/lang/lang_api.js" as Lang
@@ -89,8 +89,8 @@ function initLevel() {
         var level = levels[currentLevel];
         words = Lang.getLessonWords(dataset, level);
         Core.shuffle(words);
-        var limit = Math.min(11, words.length)
-        words = words.slice(0, limit)
+        var limit = Math.min(items.currentMode, words.length);
+        words = words.slice(0, limit);
         frequency = calculateFrequency();
         var tempQuestions = generateQuestions();
         maxSubLevel = tempQuestions.length;
@@ -118,8 +118,15 @@ function initLevel() {
     }
 
     currentLetter = questions[currentSubLevel];
-    items.question = currentLetter
+    items.question = currentLetter;
     items.animateX.restart();
+
+    if(items.currentLetterCase == Quick.Font.MixedCase) {
+        items.questionItem.font.capitalization = (Math.floor(Math.random() * 2) < 1) ? Quick.Font.AllLowercase : Quick.Font.AllUppercase
+    }
+    else {
+        items.questionItem.font.capitalization = items.currentLetterCase
+    }
 
     if (GCompris.ApplicationSettings.isAudioVoicesEnabled &&
             GCompris.DownloadManager.haveLocalResource(
@@ -131,7 +138,7 @@ function initLevel() {
 
 function calculateFrequency() {
     var freq = [];
-    //regex pattern to detect whether the character is an english alphabet or some accented latin chacarcter
+    //regex pattern to detect whether the character is an english alphabet or some accented latin character
     var pattern = /[A-Za-z\u00C0-\u017F]/;
     for(var i = 0; i < words.length; i++) {
         var currentWord = words[i].translatedTxt;
@@ -200,37 +207,31 @@ function nextSubLevel() {
 }
 
 function checkAnswer() {
-    var hasWordNotFound = false;
+    var allCorrectSelected = true
     var modelEntry;
+    var letterIndex;
     for(var i = 0; i < words.length; i++) {
         modelEntry = items.wordsModel.get(i);
-        if(modelEntry.spelling.indexOf(currentLetter) != -1 && modelEntry.selected == false) {
-            hasWordNotFound = true;
+        letterIndex = modelEntry.spelling.indexOf(currentLetter);
+        if(letterIndex != -1 && modelEntry.selected == false) {
+            allCorrectSelected = false;
+            break;
+        }
+        if(letterIndex == -1 && modelEntry.selected == true) {
+            allCorrectSelected = false;
             break;
         }
     }
-    if(hasWordNotFound == false) {
+    if(allCorrectSelected == true) {
         items.bonus.good("flower");
     }
+    else {
+        items.bonus.bad("flower");
+   }
 }
 
 function checkWord(index) {
     var modelEntry = items.wordsModel.get(index);
-    if(modelEntry.spelling.indexOf(currentLetter) != -1) {
-        items.wordsModel.setProperty(index, "selected", true);
-        checkAnswer();
-        return true;
-    }
-    else {
-        items.bonus.bad("flower");
-        return false;
-    }
-}
-
-function incorrectSelection() {
-    incorrectFlag = true;
-    var quesLen = questions.length;
-    questions = questions.slice(0, currentSubLevel) + questions.slice(currentSubLevel+1, quesLen) + questions.charAt(currentSubLevel);
-    currentSubLevel--;
-    nextSubLevel();
+    items.wordsModel.setProperty(index, "selected", !modelEntry.selected);
+    return modelEntry.selected;
 }

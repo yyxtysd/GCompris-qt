@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "erase_clic/erase_clic.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Click or tap")
+  //: Help title
   description: qsTr("Click or tap to erase the area and discover the background")
 //  intro: "Click or tap on the transparent bricks and discover the hidden picture."
+  //: Help goal
   goal: qsTr("Motor-coordination")
+  //: Help prerequisite
   prerequisite: qsTr("Mouse-manipulation")
+  //: Help manual
   manual: qsTr("Click or tap on the blocks all of them disappear.")
   credit: ""
   section: "computer mouse"
+  createdInVersion: 0
 }

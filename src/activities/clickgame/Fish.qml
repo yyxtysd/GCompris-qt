@@ -1,4 +1,4 @@
-/* GCompris - Clickgame.qml
+/* GCompris - Fish.qml
  *
  * Copyright (C) 2014 Bruno Coudoin <bruno.coudoin@gcompris.net>
  *
@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import QtQuick.Particles 2.0
 import "clickgame.js" as Activity
 import "../../core"
@@ -69,13 +69,16 @@ AnimatedSprite {
     }
 
     onXChanged: {
+        var minY = Activity.items.score.y + Activity.items.score.height
+        var maxY = bar.y - fish.height
         if( (x > background.width - fish.width && rotate.angle == 0) ||
             (x == targetX && rotate.angle == 0) ) {
             rotateLeftAnimation.start()
             targetX = 0
             x = targetX
+            var barHeight = ApplicationSettings.isBarHidden ? bar.height / 2 : bar.height
             y = Activity.currentLevel > 0
-                    ? bar.height + Math.random() * (background.height - bar.height - fish.height)
+                    ? (Math.random() * (maxY - minY + 1)) + minY
                     : y
         } else if(x == 0 && rotate.angle == 180) {
             rotateRightAnimation.start()
@@ -128,12 +131,11 @@ AnimatedSprite {
                 sizeVariation: 8
             }
 
-        ImageParticle {
-            source: "qrc:/gcompris/src/activities/clickgame/resource/bubble.png"
+            ImageParticle {
+                source: "qrc:/gcompris/src/activities/clickgame/resource/bubble.png"
+            }
         }
     }
-}
-
 
     ParticleSystemStarLoader {
         id: particles

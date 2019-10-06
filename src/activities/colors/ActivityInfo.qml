@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "colors/colors.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Colors")
+  //: Help title
   description: qsTr("Click on the right color")
 //  intro: "Click on the right color"
+  //: Help goal
   goal: qsTr("This activity teaches you to recognize different colors. When you hear the name of the color, touch the duck wearing it.")
+  //: Help prerequisite
   prerequisite: qsTr("Identifying colours")
+  //: Help manual
   manual: qsTr("Listen to the color and touch the matching duck.")
   credit: ""
-  section: "discovery color"
+  section: "reading color vocabulary"
+  createdInVersion: 0
 }

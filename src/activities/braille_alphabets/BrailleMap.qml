@@ -17,26 +17,22 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 import "../../core"
 import "braille_alphabets.js" as Activity
 
 Rectangle {
-    id: dialogBackground
+    id: brailleMap
     color: "#808080"
     border.color: "black"
     border.width: 1
     z: 1000
     property bool isDialog: true
-    property string title
-    property string content
     signal close
     signal start
-    signal pause
-    signal play
     signal stop
 
     Flickable {
@@ -66,7 +62,7 @@ Rectangle {
                 ]
 
                 Column {
-                    width:  (grid1.width - grid1.spacing * 10) / 10
+                    width: (grid1.width - grid1.spacing * 10) / 10
 
                     Rectangle {
                         id: rect1
@@ -178,7 +174,8 @@ Rectangle {
                     property: "rotation"
                     from: 10; to: -10
                     duration: 500
-                    easing.type: Easing.InOutQuad }
+                    easing.type: Easing.InOutQuad
+                }
             }
             MouseArea {
                 anchors.fill: parent

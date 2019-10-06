@@ -17,7 +17,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 import GCompris 1.0
@@ -28,11 +28,16 @@ ActivityInfo {
   icon: "crane/crane.svg"
   author: "Stefan Toncu &lt;stefan.toncu29@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Build the same model")
+  //: Help title
   description: qsTr("Drive the crane and copy the model")
-  //intro: " Click on each item in turn in the left frame and move them to mirror their position in the right frame."
+  //intro: " Click on each item in turn, in the left frame, and move them to reproduce the pattern from the right frame."
+  //: Help goal
   goal: qsTr("Motor-coordination")
+  //: Help prerequisite
   prerequisite: qsTr("Mouse/keyboard manipulation")
+  //: Help manual
   manual: qsTr("Move the items in the left frame to copy their position in the right model. Next to the crane itself, you will find four arrows that let you move the items. To select the item to move, just click on it. If you prefer, you can use the arrow keys and the space or tab key instead. On a mobile version, you can also swipe up/down/left/right to move the items in the left frame.")
   credit: ""
   section: "puzzle"

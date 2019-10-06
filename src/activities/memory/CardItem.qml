@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -28,7 +28,7 @@ import "memory.js" as Activity
 Flipable {
     id: card
 
-    property variant pairData
+    property var pairData
     property bool isBack: true
     property bool isShown: false
     property bool isFound: false
@@ -36,7 +36,7 @@ Flipable {
     property bool tuxTurn
 
     property GCAudio audioVoices
-    property GCAudio audioEffects
+    property GCSfx audioEffects
 
     onIsFoundChanged: {
         opacity = 0
@@ -58,7 +58,7 @@ Flipable {
 
     Timer {
         id: animationTimer
-        interval: items.tuxTurn ? 1500 : 750
+        interval: 1500
         running: false
         repeat: false
         onTriggered: selectionReady()
@@ -71,16 +71,18 @@ Flipable {
         anchors.centerIn: parent
         anchors.fill: parent
         Image {
+            id: contentImage
             source: card.pairData.image
-            sourceSize.width: parent.width
-            anchors.fill: parent
+            width: parent.paintedWidth * 0.9
+            height: parent.paintedHeight * 0.9
+            sourceSize.width: contentImage.width
+            sourceSize.height: contentImage.height
             anchors.centerIn: parent
-            anchors.margins: 6 * ApplicationInfo.ratio
             fillMode: Image.PreserveAspectFit
         }
         GCText {
             anchors.centerIn: parent
-            fontSize: largeSize
+            fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: "black"
@@ -140,7 +142,7 @@ Flipable {
 
     Behavior on opacity { NumberAnimation { duration: 1000 } }
 
-    states : [
+    states: [
         State {
             name: "front"
             PropertyChanges { target: rotation; angle: 180 }

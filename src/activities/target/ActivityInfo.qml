@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "target/target.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Practice addition with a target game")
+  //: Help title
   description: qsTr("Hit the target and count your points")
-//  intro: "Click on the target to launch darts, then count your score!"
+  // intro: "Click on the target to launch darts, then count your final score!"
+  //: Help goal
   goal: qsTr("Throw darts at a target and count your score.")
+  //: Help prerequisite
   prerequisite: qsTr("Can move the mouse, can read numbers and count up to 15 for the first level")
+  //: Help manual
   manual: qsTr("Check the speed and direction of the target, and then click on it to launch a dart. When all your darts are thrown, you are asked to count your score. Enter the score with the keyboard.")
   credit: ""
-  section: "math addition"
+  section: "math addition arithmetic"
+  createdInVersion: 0
 }

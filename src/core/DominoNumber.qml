@@ -16,21 +16,103 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
+/**
+ * A QML component to display integers(0-9) on Domino.
+ * Numbers are displayed in the form of specified representation.
+ *
+ * @inherit QtQuick.Item
+ */
 Item {
     id: item
+
+    /**
+     * type:int
+     * Integer to display on the domino
+     */
     property int value
+
+    /**
+     * type:string
+     * String to specify representation of Domino
+     */
+    property string mode
+
+    /**
+     * type:int
+     * Highest number visible on domino.
+     */
     property int valueMax
+
+    /**
+     * type:color
+     * color of the dots to display an integer.
+     */
     property color color
+
+    /**
+     * type:color
+     * Border color of the dots to display an integer.
+     */
     property color borderColor
+
+    /**
+     * type:int
+     * Border width of the dots to display an integer.
+     */
     property int borderWidth
+
+    /**
+     * type:int
+     * Radius of the dots to display an integer.
+     */
     property int radius
+
+    /**
+     * type:boolean
+     * Set false to disable mouse/touch inputs on domino.
+     */
     property bool isClickable: true // Default value
-    property GCAudio audioEffects
+
+    /**
+     * type:GCAudio
+     * To play sound and audio effects.
+     */
+    property GCSfx audioEffects
+
+    /**
+     * type:string
+     * String to specify the source folder for the image mode
+     */
+    property string source
+
+    readonly property variant romans : ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"]
+
+    GCText {
+        id: numberText
+        visible: (item.mode == "number" || item.mode == "roman")
+        fontSize: ((item.mode == "number") ? 30 : (item.value == 8) ? 20 : (item.value == 7 || item.value == 3) ? 25 : 30)
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        color: item.color
+        anchors.margins: ApplicationInfo.ratio * 5
+        text: (mode == "number") ? item.value : romans[item.value]
+    }
+
+    Image {
+        id: imageText
+        visible: (item.mode == "image")
+        height: parent.height
+        fillMode: Image.PreserveAspectFit
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.margins: ApplicationInfo.ratio * 5
+        source: item.source + item.value + ".svg"
+    }
 
     function isVisible(index) {
         var value = item.value
@@ -71,6 +153,7 @@ Item {
     Grid {
         columns: 3
         spacing: 3
+        visible: (item.mode == "dot")
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         horizontalItemAlignment: Grid.AlignHCenter
@@ -92,6 +175,7 @@ Item {
         }
     }
 
+    // Increase the displayed integer value by one.
     function up() {
         audioEffects.play('qrc:/gcompris/src/core/resource/sounds/scroll.wav')
         if(item.value == item.valueMax)
@@ -100,6 +184,7 @@ Item {
             item.value++
     }
 
+    // Decrease the displayed integer by one.
     function down() {
         audioEffects.play('qrc:/gcompris/src/core/resource/sounds/scroll.wav')
         if(item.value == 0)
@@ -120,6 +205,10 @@ Item {
         }
     }
 
+    /**
+     * type:boolean
+     * To check on touch devices to increase or decrease the integer value.
+     */
     property bool goUp
     Timer {
         id: timer
@@ -128,8 +217,7 @@ Item {
         onTriggered: goUp ? up() : down()
     }
 
-    MultiPointTouchArea
-    {
+    MultiPointTouchArea {
         enabled: ApplicationInfo.isMobile && item.isClickable
         anchors.fill: parent
         maximumTouchPoints: 1

@@ -17,11 +17,11 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program; if not, see <http://www.gnu.org/licenses/>.
+ along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 
 .pragma library
-.import QtQuick 2.2 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris //for ApplicationInfo
 .import "qrc:/gcompris/src/core/core.js" as Core
 
@@ -52,7 +52,9 @@ function start(items_, dataset_) {
     dataset = dataset_
     numberOfLevel = dataset.length
     currentLevel = 0
-    initLevel()
+    if(items.showTutorial === false) {
+      initLevel()
+    }
 }
 
 function stop() {
@@ -80,8 +82,8 @@ function initLevel() {
     items.movePlaneTimer.stop();
     items.cloudCreation.stop()
 
-    items.score.visible = dataset[currentLevel].showNext
     items.score.message = dataset[currentLevel].data[currentSubLevel]
+    items.score.visible = dataset[currentLevel].showNext
 
     upPressed = false
     downPressed = false
@@ -96,7 +98,8 @@ function initLevel() {
     items.movePlaneTimer.interval = 1000
     items.movePlaneTimer.start();
     items.cloudCreation.start()
-    // Inject the first cloud now
+
+    //Inject the first cloud now
     createCloud()
 }
 
@@ -104,7 +107,6 @@ function nextLevel() {
     if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
-
     initLevel();
 }
 
@@ -251,8 +253,8 @@ function planeMove() {
     if(items.plane.y < 0) {
         items.plane.y = 0;
     }
-    if(items.plane.y + items.plane.height > items.background.height) {
-        items.plane.y = items.background.height - items.plane.height;
+    if(items.plane.y + items.plane.height > items.background.height - items.bar.height) {
+        items.plane.y = items.background.height - (items.plane.height + items.bar.height);
     }
 
 }

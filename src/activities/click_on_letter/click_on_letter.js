@@ -18,11 +18,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris //for ApplicationInfo
 .import "qrc:/gcompris/src/core/core.js" as Core
 
@@ -130,7 +130,7 @@ function initLevel() {
         level = levels[currentLevel];
         maxSubLevel = level.questions.length;
         items.score.numberOfSubLevels = maxSubLevel;
-        items.score.currentSubLevel = "1";
+        items.score.currentSubLevel = 1;
         questions = shuffleString(level.questions);
         answers = shuffleString(level.answers);
 
@@ -150,7 +150,7 @@ function initLevel() {
     if (GCompris.ApplicationSettings.isAudioVoicesEnabled &&
             GCompris.DownloadManager.haveLocalResource(
                 GCompris.DownloadManager.getVoicesResourceForLocale(locale))) {
-        items.audioVoices.append(GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/"+locale+"/misc/click_on_letter.$CA"));
+        items.audioVoices.append(GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/"+locale+"/misc/click_on_letter.$CA"))
         items.audioVoices.silence(100)
         playLetter(currentLetter)
         items.questionItem.visible = false
@@ -172,7 +172,7 @@ function playLetter(letter) {
 
 function nextLevel() {
     items.audioVoices.clearQueue()
-    if(maxLevel <= ++currentLevel ) {
+    if(maxLevel <= ++currentLevel) {
         currentLevel = 0
     }
     currentSubLevel = 0;
@@ -189,7 +189,8 @@ function previousLevel() {
 }
 
 function nextSubLevel() {
-    if( ++currentSubLevel >= maxSubLevel) {
+    items.audioVoices.clearQueue()
+    if(++currentSubLevel >= maxSubLevel) {
         currentSubLevel = 0
         nextLevel()
     }
@@ -199,7 +200,7 @@ function nextSubLevel() {
 function checkAnswer(index)
 {
     var modelEntry = items.trainModel.get(index);
-    if (modelEntry.letter == currentLetter) {
+    if (modelEntry.letter === currentLetter) {
         playLetter(modelEntry.letter);
         items.bonus.good("flower");
         return true

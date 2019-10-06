@@ -16,24 +16,93 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
+/**
+* A QML component providing an on screen numpad.
+*
+* Numpad displays integers from 0 to 9 that can be used
+* in applications that need numerical inputs from the user.
+* By default it shows integer 0 - 4 in a column on left and
+* integers 5 - 9 on right in a column.
+* It also contains the backspace button to remove the last input value.
+* It is also only displayed when the "virtual keyboard" is enabled in the options.
+*
+* @inherit QtQuick.Item
+*/
 Item {
 
     id: containerPanel
     anchors.fill: parent
 
-    property variant colours: ["#ea7025", "#67c111", "#00bde3", "#bde300","#e3004c"]
-    property variant numbers: [0,1,2,3,4]
+    /**
+     * type:list
+     *
+     * Default keys-rectangle color used unless the user provides another.
+     */
+    property var colours: ["#ea7025", "#67c111", "#00bde3", "#bde300","#e3004c"]
+
+    /**
+     * type:list
+     *
+     * Default sequence of numbers displayed unless the user provides another.
+     */
+    property var numbers: [0, 1, 2, 3, 4]
+
+    /**
+     * type:string
+     *
+     * String containing the numbers selected by user.
+     */
     property string answer: ""
+
+    /**
+     * type:bool
+     *
+     * Set to true when good answer is submitted and to
+     * avoid the inputs until required.
+     */
     property bool answerFlag: false
+
+    /**
+     * type:var
+     *
+     * Column containing containing first half integers i.e.
+     * 0 - 4, displayed at the left edge of the activity window.
+     */
     property var leftPanelComponent: leftPanel
+
+    /**
+     * type:var
+     *
+     * Column containing containing second half integers i.e.
+     * 5 - 9, displayed at the right edge of the activity window.
+     */
     property var rightPanelComponent: rightPanel
-    property var backspaceButtonComponent:backspaceButton
+
+    /**
+     * type:var
+     *
+     * Button for displaying backSpace key.
+     * Removes last input from answer on clicked or pressed.
+     */
+    property var backspaceButtonComponent: backspaceButton
+
+    /**
+     * type:int
+     *
+     * Stores the maximum length of the correct answer.
+     */
     property int maxDigit: 2
+
+    /**
+     * type:int
+     *
+     * Stores the width of each key container.
+     */
     property int columnWidth: 80 * ApplicationInfo.ratio
 
     signal answer
@@ -47,14 +116,14 @@ Item {
         opacity: 0.8
 
         Repeater {
-            model:5
+            model: 5
 
             Rectangle{
                 width: parent.width
                 height: parent.height/5
                 color: colours[index]
                 border.color: Qt.darker(color)
-                border.width:2
+                border.width: 2
 
                 GCText {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -62,11 +131,10 @@ Item {
                     text: numbers[index]
                     fontSize: 28
                     font.bold: true
-
                 }
 
                 MouseArea {
-                    // Create an bigger area than the top rectangle to suit fingers
+                    // Create a bigger area than the top rectangle to suit fingers
                     anchors {
                         left: parent.left
                         top: parent.top
@@ -76,7 +144,7 @@ Item {
                     enabled: ApplicationSettings.isVirtualKeyboard &&
                              containerPanel.opacity > 0
 
-                    onClicked :{
+                    onClicked: {
                         if(answer.length < maxDigit)
                             answer += numbers[index]
                     }
@@ -90,10 +158,8 @@ Item {
                     }
                 }
             }
-
         }
     }
-
 
     Column {
         id: rightPanel
@@ -118,10 +184,9 @@ Item {
                     text: numbers[index] + 5
                     fontSize: 28
                     font.bold: true
-
                 }
                 MouseArea {
-                    // Create an bigger area than the top rectangle to suit fingers
+                    // Create a bigger area than the top rectangle to suit fingers
                     anchors {
                         right: parent.right
                         top: parent.top
@@ -146,13 +211,14 @@ Item {
                 }
             }
         }
+
         Rectangle {
             id: backspaceButton
             width: parent.width
             height: containerPanel.height - rightPanel.height
             color: "white"
             border.color: "black"
-            border.width:2
+            border.width: 2
 
             GCText {
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -183,12 +249,11 @@ Item {
         }
     }
 
-    function resetText()
-    {
+    function resetText() {
         answer = ""
     }
 
-    function updateAnswer(key, isKeyPressed){
+    function updateAnswer(key, isKeyPressed) {
         var keyValue;
 
         switch(key)
@@ -231,7 +296,6 @@ Item {
         {
             if(keyValue < 5 && answer.length < maxDigit)
             {
-
                 answer += keyValue;
                 leftPanel.children[keyValue].color = Qt.lighter(colours[keyValue])
                 leftPanel.children[keyValue].border.width = 5
@@ -253,13 +317,13 @@ Item {
         {
             if(keyValue < 5)
             {
-                leftPanel.children[keyValue].color =  colours[keyValue]
+                leftPanel.children[keyValue].color = colours[keyValue]
                 leftPanel.children[keyValue].border.width = 2
             }
             else if(keyValue < 10)
             {
 
-                rightPanel.children[keyValue - 5].color =  colours[keyValue - 5]
+                rightPanel.children[keyValue - 5].color = colours[keyValue - 5]
                 rightPanel.children[keyValue - 5].border.width = 2
             }
             else if(keyValue === 10)
@@ -268,7 +332,6 @@ Item {
                 backspaceButton.border.width = 2
             }
         }
-
     }
 }
 

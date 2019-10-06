@@ -16,37 +16,47 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 Rectangle {
-    
-    
-    property string theme: "dark"
+    id: iAmReady
 
     /**
-     * type:variant
-     * existing themes for the button.
+     * type: var
+     * Existing themes for the button.
      * A theme is composed of:
-     *   the button's border color
-     *   the text color
-    */
-    property variant themes: {
+     *   The button's border color
+     *   The text color
+     */
+    property var themes: {
         "dark": {
-            borderColor: "#FF373737",
-            textColor: "#FF373737"
+            borderColor: "#373737",
+            fillColor: "#FFFFFF",
+            textColor: "#373737"
         },
         "light": {
             borderColor: "white",
+            fillColor: "#373737",
             textColor: "white"
         }
     }
 
-    
-    
-    id: iamReady
+    /**
+     * type: string
+     * Defines the theme of the ReadyButton - dark or light.
+     *
+     * Default theme is dark.
+     */
+    property string theme: "dark"
+
+    /**
+     * Emitted when the ReadyButton is clicked
+     */
+    signal clicked
+
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
     border.color: themes[theme].borderColor
@@ -54,23 +64,19 @@ Rectangle {
     radius: 10
     smooth: true
     border.width: 4
-    width: iamReadyText.width + 50 * ApplicationInfo.ratio
-    height: iamReadyText.height + 50 * ApplicationInfo.ratio
-    gradient: Gradient {
-            GradientStop { position: 0 ; color: "#42FFFFFF" }
-            GradientStop { position: 1 ; color: "#23FFFFFF" }
-        }
-    signal clicked
+    width: iAmReadyText.width + 50 * ApplicationInfo.ratio
+    height: iAmReadyText.height + 50 * ApplicationInfo.ratio
+    color: themes[theme].fillColor
 
     GCText {
-        id: iamReadyText
+        id: iAmReadyText
         color: themes[theme].textColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         font.bold: true
         fontSize: mediumSize
         text: qsTr("I am Ready")
-        visible: iamReady.visible
+        visible: iAmReady.visible
     }
 
     MouseArea {
@@ -79,16 +85,16 @@ Rectangle {
         hoverEnabled: true
 
         onClicked: {
-            iamReady.visible = false
-            iamReady.clicked()
+            iAmReady.visible = false
+            iAmReady.clicked()
         }
     }
 
     states: [
         State {
-            name: "notclicked"
+            name: "notClicked"
             PropertyChanges {
-                target: iamReady
+                target: iAmReady
                 scale: 1.0
             }
         },
@@ -96,7 +102,7 @@ Rectangle {
             name: "clicked"
             when: mouseArea.pressed
             PropertyChanges {
-                target: iamReady
+                target: iAmReady
                 scale: 0.9
             }
         },
@@ -104,7 +110,7 @@ Rectangle {
             name: "hover"
             when: mouseArea.containsMouse
             PropertyChanges {
-                target: iamReady
+                target: iAmReady
                 scale: 1.1
             }
         }

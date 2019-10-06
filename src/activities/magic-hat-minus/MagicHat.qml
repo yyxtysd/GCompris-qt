@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -41,12 +41,12 @@ ActivityBase {
         sourceSize.width: Math.max(parent.width, parent.height)
         fillMode: Image.PreserveAspectCrop
         property int starSize: Math.min(rightLayout.width / 12,
-                                        background.height / 16)
+                                        background.height / 21)
         signal start
         signal stop
 
-        property var starColors : ["yellow", "red", "blue"]
-
+        property var starColors : ["1", "2", "3"]
+        
         Component.onCompleted: {
             activity.start.connect(start)
             activity.stop.connect(stop)
@@ -55,12 +55,14 @@ ActivityBase {
         onStart: Activity.start(items, mode)
         onStop: Activity.stop()
 
+        property bool vert: background.width >= (background.height - okButton.height)
+
         // Add here the QML items you need to access in javascript
         QtObject {
             id: items
             property Item main: activity.main
             property alias background: background
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
             property alias bar: bar
             property alias bonus: bonus
             property alias hat: theHat
@@ -101,7 +103,7 @@ ActivityBase {
 
             GCText {
                 //: The math operation
-                text: mode == "minus" ? qsTr("-") : qsTr("+")
+                text: mode == "minus" ? qsTr("−") : qsTr("+")
                 anchors.right: mainlayout.right
                 anchors.rightMargin: 10
                 y: secondRow.y
@@ -116,8 +118,8 @@ ActivityBase {
             id: rightLayout
             anchors {
                 left: mainlayout.right
-                right: background.right
-                rightMargin: 10
+                right: background.vert ? okButton.left : background.right
+                rightMargin: background.vert ? 0 : 10
                 verticalCenter: background.verticalCenter
                 verticalCenterOffset: background.height/8
             }
@@ -215,20 +217,17 @@ ActivityBase {
         }
 
         BarButton {
-          id: okButton
-          source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
-          sourceSize.width: 66 * bar.barZoom
-          anchors {
-              right: parent.right
-              rightMargin: 10 * ApplicationInfo.ratio
-              bottom: parent.bottom
-              bottomMargin: parent.width > 420 * ApplicationInfo.ratio ? 10 : bar.height
-          }
-          width: 66 * ApplicationInfo.ratio
-          height: 66 * ApplicationInfo.ratio
-          onClicked: {
-            Activity.verifyAnswer()
-          }
+            id: okButton
+            anchors {
+                bottom: bar.top
+                right: parent.right
+                rightMargin: 10 * ApplicationInfo.ratio
+                bottomMargin: 10 * ApplicationInfo.ratio
+            }
+            source: "qrc:/gcompris/src/core/resource/bar_ok.svg"
+            sourceSize.width: 60 * ApplicationInfo.ratio
+
+            onClicked: Activity.verifyAnswer()
         }
 
         Bonus {

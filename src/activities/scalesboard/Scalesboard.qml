@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -29,7 +29,7 @@ import "."
 ActivityBase {
     id: activity
 
-    property variant dataset
+    property var dataset
 
     onStart: focus = true
     onStop: {}
@@ -61,7 +61,7 @@ ActivityBase {
             property int numberOfSubLevels
             property int currentSubLevel
             property int giftWeight
-            property variant dataset: activity.dataset
+            property var dataset: activity.dataset
             property alias masseAreaCenter: masseAreaCenter
             property alias masseAreaLeft: masseAreaLeft
             property alias masseAreaRight: masseAreaRight
@@ -73,6 +73,8 @@ ActivityBase {
 
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
+
+        property bool vert: background.width > background.height
 
         onScaleHeightChanged: Activity.initCompleted && scaleHeight == 0 && question.hasText == "" ?
                                   bonus.good("flower") :
@@ -147,7 +149,6 @@ ActivityBase {
                 masseAreaLeft: masseAreaLeft
                 masseAreaRight: masseAreaRight
                 nbColumns: 3
-                dropEnabled: true
                 audioEffects: activity.audioEffects
 
                 Behavior on anchors.verticalCenterOffset {
@@ -194,7 +195,7 @@ ActivityBase {
                 masseAreaLeft: masseAreaLeft
                 masseAreaRight: masseAreaRight
                 nbColumns: 3
-                dropEnabled: items.dataset[bar.level - 1].rightDrop
+                dropEnabledForThisLevel: items.dataset[bar.level - 1].rightDrop
                 audioEffects: activity.audioEffects
 
                 Behavior on anchors.verticalCenterOffset {
@@ -217,7 +218,6 @@ ActivityBase {
             masseAreaLeft: masseAreaLeft
             masseAreaRight: masseAreaRight
             nbColumns: masseModel.count
-            dropEnabled: true
             audioEffects: activity.audioEffects
         }
 
@@ -268,6 +268,11 @@ ActivityBase {
 
         Score {
             id: score
+            anchors {
+                bottom: background.vert ? background.bottom : bar.top
+                right: parent.right
+                bottomMargin: 10 * ApplicationInfo.ratio
+            }
 
             numberOfSubLevels: items.numberOfSubLevels
             currentSubLevel: items.currentSubLevel
@@ -283,11 +288,15 @@ ActivityBase {
         }
 
         Keys.onPressed: {
-            numpad.updateAnswer(event.key, true);
+            if(question.displayed) {
+                numpad.updateAnswer(event.key, true);
+            }
         }
 
         Keys.onReleased: {
-            numpad.updateAnswer(event.key, false);
+            if(question.displayed) {
+                numpad.updateAnswer(event.key, false);
+            }
         }
 
         Bonus {

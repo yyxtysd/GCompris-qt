@@ -17,14 +17,14 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 
 QtObject {
    property int numberOfSubLevel: 4
    property string instruction: qsTr("Paul Gauguin, Arearea - 1892")
-   property variant levels: [
+   property var levels: [
 	  {
           "pixmapfile" : "image/Paul_Gauguin_006_background.png",
           "type" : "SHAPE_BACKGROUND_IMAGE"

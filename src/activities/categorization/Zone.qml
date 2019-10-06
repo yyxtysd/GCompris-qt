@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -40,13 +40,15 @@ Flow {
         model: zoneModel
         Item {
             id: item
-            width: middleScreen.width*0.32
-            height: categoryBackground.height * 0.2
+            width: horizontalLayout ? middleZone.width * 0.32 : middleZone.width * 0.48
+            height: horizontalLayout ? categoryBackground.height * 0.2 : categoryBackground.height * 0.15
             opacity: 1
             Image {
                 id: image
-                width: middleScreen.width*0.28
-                height: categoryBackground.height * 0.15
+                fillMode: Image.PreserveAspectFit
+                sourceSize.width: horizontalLayout ? middleZone.width * 0.32 : middleZone.width * 0.48
+                width: sourceSize.width
+                height: sourceSize.width
                 source: name
                 MultiPointTouchArea {
                     id: dragArea
@@ -95,6 +97,8 @@ Flow {
                         else if(rightAreaContainsDrag)
                             droppedPosition = "right"
 
+                        Activity.setValues()
+
                         // If we drop on same zone, we move it at its initial place
                         if(currPosition == droppedPosition) {
                             image.x = 0
@@ -105,7 +109,6 @@ Flow {
                             image.source = ""
                         }
 
-                        Activity.setValues()
                         lastX = point1.x
                         lastY = point1.y
                     }

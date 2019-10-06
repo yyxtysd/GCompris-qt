@@ -13,9 +13,9 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 
 /*
     Numbers of kids are not given anymore in the left widget.
@@ -23,9 +23,9 @@ import QtQuick 2.0
 */
 
 QtObject {
-    property variant levels : [
+    property var levels : [
         {
-            "instruction": qsTr("Charles wants to share his 8 candies with 3 of his friends: one boy and two girls. Can he split the candies equally?"),
+            "instruction": qsTr("Charles wants to share his 8 pieces of candy with 3 of his friends: one boy and two girls. Can he split the pieces of candy equally?"),
             "totalBoys": 1,
             "totalGirls": 2,
             "totalCandies": 8,
@@ -35,7 +35,7 @@ QtObject {
             "placedInBoys": 0
         },
         {
-            "instruction": qsTr("For her birthday, Elizabeth has 12 candies to share with 4 of her friends: two girls and two boys. How should she split the candies to her friends?"),
+            "instruction": qsTr("For her birthday, Elizabeth has 12 pieces of candy to share with 4 of her friends: two girls and two boys. How should she split the pieces of candy to her friends?"),
             "totalBoys": 2,
             "totalGirls": 2,
             "totalCandies": 12,
@@ -45,7 +45,7 @@ QtObject {
             "placedInBoys": 0
         },
         {
-            "instruction": qsTr("Jason's father gave him 14 candies to share with his friends: two boys and three girls. Help him give the candies to his friends!"),
+            "instruction": qsTr("Jason's father gave him 14 pieces of candy to share with his friends: two boys and three girls. Help him give the pieces of candy to his friends!"),
             "totalBoys": 2,
             "totalGirls": 3,
             "totalCandies": 14,

@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 /**
@@ -36,7 +36,7 @@ import GCompris 1.0
  * For an example have a look at Menu.qml.
  *
  * For more details on how to add configuration to an activity cf.
- * [the wiki](http://gcompris.net/wiki/Qt_Quick_development_process#Adding_a_configuration_for_a_specific_activity)
+ * [the wiki](https://gcompris.net/wiki/Qt_Quick_development_process#Adding_a_configuration_for_a_specific_activity)
  *
  * @sa ApplicationSettings
  * @inherit QtQuick.Item
@@ -163,33 +163,37 @@ Rectangle {
                 border.color: "black"
                 border.width: 2
 
-                Image {
-                    id: titleIcon
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        margins: 4 * ApplicationInfo.ratio
+                Row {
+                    spacing: 2
+                    padding: 8
+                    Image {
+                        id: titleIcon
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            margins: 4 * ApplicationInfo.ratio
+                        }
+                    }
+
+                    GCText {
+                        id: title
+                        text: dialogActivityContent.title
+                        width: dialogActivityContent.width - (30 + cancel.width)
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "black"
+                        fontSize: 20
+                        font.weight: Font.DemiBold
+                        wrapMode: Text.WordWrap
                     }
                 }
-
-                GCText {
-                    id: title
-                    text: dialogActivityContent.title
-                    width: dialogActivityContent.width - 30
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    color: "black"
-                    fontSize: 20
-                    font.weight: Font.DemiBold
-                    wrapMode: Text.WordWrap
-                }
             }
-            
+
             Rectangle {
                 color: "#e6e6e6"
                 radius: 6.0
                 width: dialogActivityContent.width - 30
-                height: dialogActivityContent.height - 100
+                height: dialogActivityContent.height - (30 + title.height * 1.2)
                 border.color: "black"
                 border.width: 2
                 anchors.margins: 100
@@ -207,18 +211,18 @@ Rectangle {
                         sourceComponent: dialogActivityContent.content
                         property alias rootItem: dialogActivityContent
                     }
-                } 
-                
+                }
+
                 // The scroll buttons
                 GCButtonScroll {
                     anchors.right: parent.right
                     anchors.rightMargin: 5 * ApplicationInfo.ratio
                     anchors.bottom: flick.bottom
-                    anchors.bottomMargin: 30 * ApplicationInfo.ratio
+                    anchors.bottomMargin: 5 * ApplicationInfo.ratio
                     onUp: flick.flick(0, 1400)
                     onDown: flick.flick(0, -1400)
                     upVisible: flick.visibleArea.yPosition <= 0 ? false : true
-                    downVisible: flick.visibleArea.yPosition >= 1 ? false : true
+                    downVisible: flick.visibleArea.yPosition + flick.visibleArea.heightRatio >= 1 ? false : true
                 }
             }
 
@@ -228,15 +232,17 @@ Rectangle {
 
     // The cancel button
     GCButtonCancel {
+        id: cancel
         onClose: {
             if (dialogActivityContent.dataValidationFunc && !
                     dialogActivityContent.dataValidationFunc()) {
                 console.log("Configuration data is invalid, not saving!");
                 return;
             }
-
             saveData()
-            ApplicationSettings.saveActivityConfiguration(activityName, dataToSave)
+            if(activityName != "") {
+                ApplicationSettings.saveActivityConfiguration(activityName, dataToSave)
+            }
             parent.close()
         }
     }

@@ -17,11 +17,12 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import QtGraphicalEffects 1.0
+import GCompris 1.0
 
 import "../../core"
 import "crane.js" as Activity
@@ -77,7 +78,7 @@ ActivityBase {
         onStart: { Activity.start(items) }
         onStop: { Activity.stop() }
 
-        property bool portrait: height > width ? true : false
+        property bool portrait: height >= width ? true : false
         property bool inLine: true
 
         Keys.onPressed: {
@@ -151,11 +152,10 @@ ActivityBase {
             rows: items.rows
             z: 1
             anchors.fill: board
-            layer.enabled: true
+            layer.enabled: ApplicationInfo.useOpenGL
             layer.effect: OpacityMask {
                 maskSource: board
-            }
-            
+            }  
             Repeater {
                 id: gridRepeater
 
@@ -305,10 +305,10 @@ ActivityBase {
             z: 1
             opacity: showGrid1.opacity
             anchors.fill: modelBoard
-            layer.enabled: true
+            layer.enabled: ApplicationInfo.useOpenGL
             layer.effect: OpacityMask {
                 maskSource: modelBoard
-            }
+            } 
             Repeater {
                 id: gridRepeater2
                 model: gridRepeater.model

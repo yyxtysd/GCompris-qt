@@ -17,7 +17,7 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 import GCompris 1.0
 
@@ -27,10 +27,16 @@ ActivityInfo {
   icon: "explore_world_animals/explore_world_animals.svg"
   author: "Johnny Jazeix &lt;jazeix@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Explore World Animals")
+  //: Help title
   description: qsTr("Learn about world animals, interesting facts and their location on a map.")
+  // intro: "Learn about world animals and locate them on a map."
+  //: Help goal
   goal: ""
+  //: Help prerequisite
   prerequisite: ""
+  //: Help manual
   manual: qsTr("There are two levels in this game.
 
 In level one, players enjoy exploring each animal on the screen. Click on the question mark, and learn about the animal, what it's name is, and what it looks like. Study well this information, because you will be tested in level 2!
@@ -38,5 +44,6 @@ In level one, players enjoy exploring each animal on the screen. Click on the qu
 In level two, a random text prompt is displayed and you must click on the animal that matches the text. When you have matched all texts correctly, you win!
 ")
   credit: ""
-  section: "discovery miscellaneous"
+  section: "sciences experiment"
+  createdInVersion: 0
 }

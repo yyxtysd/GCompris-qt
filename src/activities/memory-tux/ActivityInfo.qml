@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "memory-tux/memory-tux.svg"
   author: "JB BUTET &lt;ashashiwa@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Memory Game with images against Tux")
+  //: Help title
   description: qsTr("Flip the cards to find the matching pairs against Tux")
-//  intro: "Take turns competing against Tux by clicking on a card and finding its double."
+//  intro: "Click on a card and find its double."
+  //: Help goal
   goal: qsTr("Train your memory and remove all the cards")
+  //: Help prerequisite
   prerequisite: qsTr("Mouse-manipulation")
+  //: Help manual
   manual: qsTr("A set of blank cards is shown. Each card has a picture on the other side, and each picture card has a twin exactly the same. Click on a card to see its hidden picture, and try to match the twins. You can only turn over two cards at once, so you need to remember where a picture is, while you look for its twin. When you turn over the twins, they both disappear. Tux teacher do the same.")
   credit: ""
-  section: "discovery memory"
+  section: "fun memory"
+  createdInVersion: 0
 }

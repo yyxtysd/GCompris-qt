@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,13 +23,18 @@ ActivityInfo {
   icon: "share/share.svg"
   author: "Stefan Toncu &lt;stefan.toncu29@gmail.com&gt;"
   demo: true
-  title: qsTr("Share the candies")
-  description: qsTr("Try to split the candies to a given number of children")
-  //intro: "“Share the candies equally among the specified number of children and notice that there may be a rest left”
+  //: Activity title
+  title: qsTr("Share pieces of candy")
+  //: Help title
+  description: qsTr("Try to split the pieces of candy to a given number of children")
+  //intro: "Share the candies equally among the specified number of children and notice that there may be a rest left"
+  //: Help goal
   goal: qsTr("Learn the division of numbers")
+  //: Help prerequisite
   prerequisite: qsTr("Know how to count")
-  manual: qsTr("Follow the instructions shown on the screen: first, drag the given number of boys/girls to the middle, then drag candies to each child's rectangle.")
+  //: Help manual
+  manual: qsTr("Follow the instructions shown on the screen: first, drag the given number of boys/girls to the middle, then drag pieces of candy to each child's rectangle.")
   credit: ""
-  section: "math"
+  section: "math arithmetic"
   createdInVersion: 7000
 }

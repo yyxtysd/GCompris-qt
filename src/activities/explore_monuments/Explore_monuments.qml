@@ -16,10 +16,10 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../explore_farm_animals"
@@ -28,8 +28,6 @@ ExploreLevels {
         id: activity
 
         numberOfLevels: 6
-        url : "qrc:/gcompris/src/activities/explore_monuments/resource/"
+        url: "qrc:/gcompris/src/activities/explore_monuments/resource/"
         hasAudioQuestions: false
 }
-
-

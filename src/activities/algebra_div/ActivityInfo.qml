@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,13 +23,18 @@ ActivityInfo {
       icon: "algebra_div/algebra_div.svg"
       author: "Sayan Biswas &lt;techsayan01@gmail.com&gt;"
       demo: false
+      //: Activity title
       title: qsTr("Division of numbers")
+      //: Help title
       description: qsTr("Practice the division operation")
-    //  intro: "Find the result of the division and type in your answer before the balloon landing"
+    //  intro: "Find the result of the division and type in your answer before the balloon lands in the water"
+      //: Help goal
       goal: qsTr("Find the result of the division within a limited period of time")
+      //: Help prerequisite
       prerequisite: qsTr("Division of small numbers")
-      manual: qsTr("Two numbers are displayed on the screen. Quickly find the result of the division and use your computer's keyboard or the on-screen keypad to type it. You have to be fast and submit the answer before the penguins in their balloon land!")
+      //: Help manual
+      manual: qsTr("A division is displayed on the screen. Quickly find the result and use your computer's keyboard or the on-screen keypad to type it. You have to be fast and submit the answer before the penguins in their balloon land!")
       credit: ""
-      section: "math division"
+      section: "math division arithmetic"
       createdInVersion: 4000
 }

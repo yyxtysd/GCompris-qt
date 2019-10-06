@@ -19,11 +19,12 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
-*/import QtQuick 2.1
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
+*/
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.5
 
 import "../../core"
 import "lang.js" as Activity
@@ -107,7 +108,6 @@ Image {
 
     GridView {
         id: menuGrid
-        layer.enabled: true
 
         anchors {
             fill: parent
@@ -218,7 +218,7 @@ Image {
             Behavior on x { SpringAnimation { spring: 2; damping: 0.2 } }
             Behavior on y { SpringAnimation { spring: 2; damping: 0.2 } }
         }
-
+        
         Rectangle{
             id: menusMask
             visible: false
@@ -230,6 +230,7 @@ Image {
             }
         }
 
+        layer.enabled: ApplicationInfo.useOpenGL
         layer.effect: OpacityMask {
             id: activitiesOpacity
             source: menuGrid

@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,13 +23,18 @@ ActivityInfo {
   icon: "braille_fun/braille_fun.svg"
   author: "Arkit Vora &lt;arkitvora123@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Braille Fun")
+  //: Help title
   description: qsTr("Braille the letters")
   //intro: "Create the Braille cell for the letter."
+  //: Help goal
   goal: ""
+  //: Help prerequisite
   prerequisite: qsTr("Braille Alphabet Codes")
+  //: Help manual
   manual: qsTr("Enter the braille code in the tile for the letters on the banner pulled by Tux in his plane across the screen. Check the braille chart by clicking on the toggle button for help.")
   credit: ""
-  section: "discovery braille"
+  section: "reading braille letters"
   createdInVersion: 4000
 }

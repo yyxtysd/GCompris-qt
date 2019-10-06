@@ -18,9 +18,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 
 import "../../core"
 import "football.js" as Activity
@@ -58,7 +58,7 @@ ActivityBase {
             property alias bar: bar
             property alias bonus: bonus
             property alias timer: timer
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
         }
 
         onStart: { Activity.start(items) }
@@ -139,7 +139,7 @@ ActivityBase {
                 color: "blue"
                 anchors.top: border.top
                 anchors.left: border.right
-                z:10
+                z: 10
                 opacity: 0.3
             }
         }

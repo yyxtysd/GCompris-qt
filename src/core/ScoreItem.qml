@@ -17,24 +17,91 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
+/**
+ * A QML component to visualize number of wins.
+ * @ingroup components
+ *
+ * ScoreItem consists of player score (@ref playerScore)
+ * and player image (@ref playerImageSource).
+ * Mostly used in multi-player activities.
+ *
+ * @inherit QtQuick.Item
+ */
 Item {
     id: scoreItem
 
+    /**
+     * type:int
+     * Id of the player.
+     */
     property int player: 1
+
+    /**
+     * type:string
+     * Source of background image to display.
+     *
+     * @sa backgroundImage.source
+     */
     property string backgroundImageSource
+
+    /**
+     * type:string
+     * Source of player image to display.
+     *
+     * @sa playerImage.source
+     */
     property string playerImageSource
+
+    /**
+     * type:int
+     * Count of score(i.e. number of wins).
+     *
+     * @sa scoreLabel.text
+     */
     property int playerScore
 
+    /**
+     * type:int
+     * Holds the point from which the player image
+     * is scaled on x-axis.
+     *
+     * @sa scaleTransform.origin.x
+     */
     property int playerScaleOriginX
+
+    /**
+     * type:int
+     * Holds the point from which the player image
+     * is scaled on y-axis.
+     *
+     * @sa scaleTransform.origin.y
+     */
     property int playerScaleOriginY
 
+    /**
+     * Emitted when the win animation should be started.
+     *
+     * Triggers scale, rotation animation and increases playerScore count.
+     */
     signal win
+
+    /**
+     * Emitted when the player turn should be started.
+     *
+     * Triggers scale and rotation animation.
+     */
     signal beginTurn
+
+    /**
+     * Emitted when the player turn should be ended.
+     *
+     * Triggers shrink and rotation animation on player image.
+     */
     signal endTurn
 
     onBeginTurn: {
@@ -99,20 +166,23 @@ Item {
     Rectangle {
         id: backgroundRectangle
         anchors.fill: parent
-        radius: 5
+        radius: 15
         state: "second"
 
         Image {
             id: backgroundImage
             source: backgroundImageSource
-            sourceSize.height: parent.height*0.93
-            anchors.centerIn: parent
-            anchors.horizontalCenterOffset: 0.5
+            sourceSize.height: height
+            sourceSize.width: width
+            anchors.fill: parent
+            anchors.margins: parent.height * 0.04
 
             Image {
                 id: playerImage
                 source: playerImageSource
-                sourceSize.height: parent.height*0.8
+                fillMode: Image.PreserveAspectFit
+                height: parent.height*0.8
+                sourceSize.height: height
                 x: parent.width*0.06
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -122,7 +192,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 color: "#2a2a2a"
                 x: parent.width*0.65
-                fontSize: largeSize
+                fontSizeMode: Text.Fit
                 text: playerScore
             }
         }
@@ -130,6 +200,10 @@ Item {
         states: [
         State {
             name: "first"
+            PropertyChanges {
+                target: backgroundRectangle
+                color: "#80ffffff"
+            }
             PropertyChanges {
                 target: playerImage
                 source: playerImageSource
@@ -154,7 +228,7 @@ Item {
             }
             PropertyChanges {
                 target: backgroundRectangle
-                color: "#f7ec5d"
+                color: "#80ffffff"
             }
         }
         ]

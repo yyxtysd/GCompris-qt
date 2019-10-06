@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "ApplicationSettings.h"
@@ -52,7 +52,7 @@ uint ApplicationSettings::checkActivationCode(const QString &code) {
         return 0;
 
     // Check date is under 2 years
-    ok = year * 100 + month + 200 >= atoi(BUILD_DATE);
+    ok = int(year * 100 + month + 200) >= atoi(BUILD_DATE);
     return(ok ? 2 : 1);
 }
 

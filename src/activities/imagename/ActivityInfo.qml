@@ -16,7 +16,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -26,12 +26,17 @@ ActivityInfo {
   icon: "imagename/imagename.svg"
   author: "Pulkit Gupta &lt;pulkitgenius@gmail.com&gt;"
   demo: true
+  //: Activity title
   title: qsTr("Image Name")
+  //: Help title
   description: qsTr("Drag and Drop each item above its name")
-//  intro: "Slide the images on their respective targets"
+//  intro: "Drag and drop each item above its name."
+  //: Help goal
   goal: qsTr("Vocabulary and reading")
+  //: Help prerequisite
   prerequisite: qsTr("Reading")
+  //: Help manual
   manual: qsTr("Drag each image from the (vertical) box on the left to its (corresponding) name on the right. Click the OK button to check your answer.")
-  section: "reading"
+  section: "reading words"
   createdInVersion: 4000
 }

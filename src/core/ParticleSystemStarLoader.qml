@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 /**
@@ -42,8 +42,18 @@ Loader {
      * Cf. Emitter.burst
      */
     function burst(val) {
-        if(active)
+        if(active) {
+            item.start()
             item.emitter.burst(val)
+            stopParticleSystem.restart()
+        }
+    }
+
+    Timer {
+        id: stopParticleSystem
+        interval: item.emitter.lifeSpan + item.emitter.lifeSpanVariation
+        repeat: false
+        onTriggered: item.stop()
     }
     onLoaded: item.clip = clip
     source: "ParticleSystemStar.qml"

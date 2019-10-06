@@ -17,7 +17,7 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -95,7 +95,7 @@ function showMessageDialog(parent, informativeText,
                            closeCallback) {
     //console.debug("Core.showMessageDialog: parent=" + parent + " backtrace="); console.trace();
     var qmlStr =
-          'import QtQuick 2.0\n'
+          'import QtQuick 2.6\n'
         + 'GCDialog {\n'
         + '    message: "' + informativeText + '"\n'
         + '    button1Text: "' + button1Text + '"\n'

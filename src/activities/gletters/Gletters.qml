@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -32,10 +32,12 @@ ActivityBase {
     // Overload this in your activity to change it
     // Put you default-<locale>.json files in it
     property string dataSetUrl: "qrc:/gcompris/src/activities/gletters/resource/"
-    /* no need to display the configuration button for smallnumbers */
-    property bool configurationButtonVisible: true
 
     property bool uppercaseOnly: false
+    
+    property int speedSetting: 10
+
+    property string activityName: "gletters"
 
     /* mode of the activity, "letter" (gletters) or "word" (wordsgame):*/
     property string mode: "letter"
@@ -65,7 +67,7 @@ ActivityBase {
         id: background
         source: activity.dataSetUrl + "background.svg"
         fillMode: Image.PreserveAspectCrop
-        sourceSize.width: Math.max(parent.width, parent.height)
+        sourceSize.height: parent.height
 
         signal start
         signal stop
@@ -91,13 +93,23 @@ ActivityBase {
             property alias score: score
             property alias keyboard: keyboard
             property alias wordDropTimer: wordDropTimer
-            property GCAudio audioEffects: activity.audioEffects
+            property GCSfx audioEffects: activity.audioEffects
             property alias locale: background.locale
             property alias textinput: textinput
         }
 
         onStart: {
-            Activity.start(items, uppercaseOnly, mode);
+            // for smallnumbers and smallnumbers2, we want to have the application locale, not the system one
+            if(activity.activityName !== "gletters") {
+                var overridenLocale = ApplicationSettings.locale
+                // Remove .UTF-8
+                if(overridenLocale.indexOf('.') != -1) {
+                    overridenLocale = overridenLocale.substring(0, overridenLocale.indexOf('.'))
+                }
+                background.locale = overridenLocale
+            }
+
+            Activity.start(items, uppercaseOnly, mode, speedSetting);
             Activity.focusTextInput()
         }
         onStop: { Activity.stop() }
@@ -120,40 +132,75 @@ ActivityBase {
             }
         }
 
+        //created to retrieve available menu modes for domino configurations
+        Domino {
+            id: invisibleDomino
+            visible: false
+        }
+
         DialogActivityConfig {
             id: dialogActivityConfig
             currentActivity: activity
             content: Component {
                 Item {
                     property alias localeBox: localeBox
+                    property alias dominoModeBox: dominoModeBox
                     property alias uppercaseBox: uppercaseBox
+                    property alias speedSlider: speedSlider
                     height: column.height
 
                     property alias availableLangs: langs.languages
                     LanguageList {
                         id: langs
                     }
+                    property var availableModes: invisibleDomino.menuModes
 
                     Column {
                         id: column
                         spacing: 10
                         width: parent.width
-
                         Flow {
                             spacing: 5
                             width: dialogActivityConfig.width
                             GCComboBox {
                                 id: localeBox
+                                visible: (activity.activityName === "gletters")
                                 model: langs.languages
                                 background: dialogActivityConfig
                                 label: qsTr("Select your locale")
                             }
+                            GCComboBox {
+                                id: dominoModeBox
+                                visible: (activity.activityName === "smallnumbers2")
+                                model: availableModes
+                                background: dialogActivityConfig
+                                label: qsTr("Select Domino mode")
+                            }
                         }
                         GCDialogCheckBox {
                             id: uppercaseBox
+                            visible: (activity.activityName === "gletters")
                             width: dialogActivityConfig.width
                             text: qsTr("Uppercase only mode")
                             checked: activity.uppercaseOnly
+                        }
+                        Flow {
+                            width: dialogActivityConfig.width
+                            spacing: 5
+                            GCSlider {
+                                id: speedSlider
+                                width: 250 * ApplicationInfo.ratio
+                                value: activity.speedSetting
+                                maximumValue: 10
+                                minimumValue: 1
+                                scrollEnabled: false
+                            }
+                            GCText {
+                                id: speedSliderText
+                                text: qsTr("Speed")
+                                fontSize: mediumSize
+                                wrapMode: Text.WordWrap
+                            }
                         }
                     }
                 }
@@ -161,42 +208,79 @@ ActivityBase {
 
             onClose: home()
             onLoadData: {
-                if(dataToSave && dataToSave["locale"]) {
-                    background.locale = dataToSave["locale"];
-                    activity.uppercaseOnly = dataToSave["uppercaseMode"] === "true" ? true : false;
+                if (activity.activityName === "gletters") {
+                    if(dataToSave && dataToSave["locale"]) {
+                        background.locale = dataToSave["locale"];
+                        activity.uppercaseOnly = dataToSave["uppercaseMode"] === "true" ? true : false;
+                    }
+                } else if (activity.activityName === "smallnumbers2") {
+                    if(dataToSave && dataToSave["mode"]) {
+                        activity.dominoMode = dataToSave["mode"];
+                    }
+                }
+                if(dataToSave && dataToSave["speedSetting"]) {
+                    activity.speedSetting = dataToSave["speedSetting"];
                 }
             }
             onSaveData: {
-                var oldLocale = background.locale;
-                var newLocale = dialogActivityConfig.configItem.availableLangs[dialogActivityConfig.loader.item.localeBox.currentIndex].locale;
-                // Remove .UTF-8
-                if(newLocale.indexOf('.') != -1) {
-                    newLocale = newLocale.substring(0, newLocale.indexOf('.'))
+                var configHasChanged = false
+                if (activity.activityName === "gletters") {
+                    var oldLocale = background.locale;
+                    var newLocale = dialogActivityConfig.configItem.availableLangs[dialogActivityConfig.loader.item.localeBox.currentIndex].locale;
+                    // Remove .UTF-8
+                    if(newLocale.indexOf('.') != -1) {
+                        newLocale = newLocale.substring(0, newLocale.indexOf('.'))
+                    }
+
+                    var oldUppercaseMode = activity.uppercaseOnly
+                    activity.uppercaseOnly = dialogActivityConfig.configItem.uppercaseBox.checked
+                    dataToSave = {"locale": newLocale, "uppercaseMode": ""+activity.uppercaseOnly}
+
+                    background.locale = newLocale;
+                    if(oldLocale !== newLocale || oldUppercaseMode !== activity.uppercaseOnly) {
+                        configHasChanged = true;
+                    }
+                } else if (activity.activityName === "smallnumbers2") {
+                    var newMode = dialogActivityConfig.configItem.availableModes[dialogActivityConfig.configItem.dominoModeBox.currentIndex].value;
+                    if (newMode !== activity.dominoMode) {
+                        activity.dominoMode = newMode;
+                        dataToSave = {"mode": activity.dominoMode};
+                        configHasChanged = true;
+                    }
                 }
-
-                var oldUppercaseMode = activity.uppercaseOnly
-                activity.uppercaseOnly = dialogActivityConfig.configItem.uppercaseBox.checked
-                dataToSave = {"locale": newLocale, "uppercaseMode": ""+activity.uppercaseOnly}
-
-                background.locale = newLocale;
+                var oldSpeed = activity.speedSetting
+                activity.speedSetting = dialogActivityConfig.configItem.speedSlider.value
+                if(oldSpeed != activity.speedSetting) {
+                    dataToSave = {"speedSetting": activity.speedSetting};
+                    configHasChanged = true;
+                }
+                
                 // Restart the activity with new information
-                if(oldLocale !== newLocale || oldUppercaseMode !== activity.uppercaseOnly) {
+                if(configHasChanged) {
                     background.stop();
                     background.start();
                 }
             }
 
-
             function setDefaultValues() {
-                var localeUtf8 = background.locale;
-                if(background.locale != "system") {
-                    localeUtf8 += ".UTF-8";
-                }
+                if (activity.activityName === "gletters") {
+                    var localeUtf8 = background.locale;
+                    if(background.locale != "system") {
+                        localeUtf8 += ".UTF-8";
+                    }
 
-                for(var i = 0 ; i < dialogActivityConfig.configItem.availableLangs.length ; i ++) {
-                    if(dialogActivityConfig.configItem.availableLangs[i].locale === localeUtf8) {
-                        dialogActivityConfig.loader.item.localeBox.currentIndex = i;
-                        break;
+                    for(var i = 0 ; i < dialogActivityConfig.configItem.availableLangs.length ; i ++) {
+                        if(dialogActivityConfig.configItem.availableLangs[i].locale === localeUtf8) {
+                            dialogActivityConfig.configItem.localeBox.currentIndex = i;
+                            break;
+                        }
+                    }
+                } else if (activity.activityName === "smallnumbers2") {
+                    for(var i = 0 ; i < dialogActivityConfig.configItem.availableModes.length ; i++) {
+                        if(dialogActivityConfig.configItem.availableModes[i].value === activity.dominoMode) {
+                            dialogActivityConfig.configItem.dominoModeBox.currentIndex = i;
+                            break;
+                        }
                     }
                 }
             }
@@ -210,7 +294,7 @@ ActivityBase {
         Bar {
             id: bar
             anchors.bottom: keyboard.top
-            content: BarEnumContent { value: configurationButtonVisible ? (help | home | level | config) : (help | home | level)}
+            content: BarEnumContent { value: (help | home | level | config) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
@@ -232,7 +316,6 @@ ActivityBase {
         
         Score {
             id: score
-
             anchors.top: undefined
             anchors.topMargin: 10 * ApplicationInfo.ratio
             anchors.right: parent.right
@@ -242,13 +325,10 @@ ActivityBase {
         
         VirtualKeyboard {
             id: keyboard
-            
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width
-
             onKeypress: Activity.processKeyPress(text)
-            
             onError: console.log("VirtualKeyboard error: " + msg);
         }
         

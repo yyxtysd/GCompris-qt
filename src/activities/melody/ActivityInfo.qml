@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,11 +23,16 @@ ActivityInfo {
   icon: "melody/melody.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Melody")
+  //: Help title
   description: qsTr("Reproduce a sound sequence")
 // intro: "Listen to the sound sequence played, and reproduce it by clicking on the xylophone's bars"
+  //: Help goal
   goal: qsTr("Ear-training activity")
+  //: Help prerequisite
   prerequisite: qsTr("Move and click the mouse")
+  //: Help manual
   manual: qsTr("Listen to the sound sequence played, and repeat it by clicking on the xylophone's bars. You can listen again by clicking on the repeat button.")
   credit: ""
   section: "discovery memory music"

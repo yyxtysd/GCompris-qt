@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "smallnumbers/smallnumbers.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Numbers With Dice")
+  //: Help title
   description: qsTr("Count the number of dots on dice before they reach the ground")
 //  intro: "Count the number on your dice and type it on your keyboard before it reaches the ground."
+  //: Help goal
   goal: qsTr("In a limited time, count the number of dots")
+  //: Help prerequisite
   prerequisite: qsTr("Counting skills")
+  //: Help manual
   manual: qsTr("With the keyboard, type the number of dots you see on the falling dice.")
   credit: ""
   section: "computer keyboard math numeration"
+  createdInVersion: 0
 }

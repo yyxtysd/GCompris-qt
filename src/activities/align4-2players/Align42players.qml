@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 
 import "../../core"
 import "align4.js" as Activity
@@ -57,17 +57,18 @@ ActivityBase {
             property alias pieces: pieces
             property alias dynamic: dynamic
             property alias drop: drop
-            property alias player1_score: player1_score.text
-            property alias player2_score: player2_score.text
+            property alias player1score: player1score
+            property alias player2score: player2score
             property alias bar: bar
             property alias bonus: bonus
             property alias repeater: repeater
             property alias columns: grid.columns
             property alias rows: grid.rows
-            property int cellSize: Math.min(background.width / (columns + 1),
-                                            background.height / (rows + 3))
+            property alias trigTuxMove: trigTuxMove
+            property int cellSize: background.width <= background.height ? (background.width / (columns + 3)) : (background.height / (rows + 4))
             property bool gameDone
             property int counter
+            property int nextPlayerStart: 1
         }
 
         onStart: { Activity.start(items, twoPlayer) }
@@ -82,12 +83,24 @@ ActivityBase {
             id: pieces
         }
 
+        // Tux move delay
+        Timer {
+            id: trigTuxMove
+            repeat: false
+            interval: 1500
+            onTriggered: {
+                Activity.doMove()
+                items.player2score.endTurn()
+                items.player1score.beginTurn()
+            }
+        }
+
         Grid {
             id: grid
+            z: 2
             anchors.horizontalCenter: parent.horizontalCenter
             anchors {
-                top: parent.top
-                topMargin: items.cellSize + 5 * ApplicationInfo.ratio
+                verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
             }
 
@@ -106,11 +119,13 @@ ActivityBase {
                         color: "#DDAAAAAA";
                         width: items.cellSize
                         height: items.cellSize
+                        radius: width / 2
                         border.color: "#FFFFFFFF"
                         border.width: 0
                         Piece {
                             anchors.fill: parent
                             state: stateTemp
+                            sourceSize.width: items.cellSize
                         }
                     }
                 }
@@ -141,8 +156,8 @@ ActivityBase {
         MouseArea {
             id: dynamic
             anchors.fill: parent
-            enabled: !drop.running && !items.gameDone
-            hoverEnabled: !drop.running && !items.gameDone
+            enabled: hoverEnabled
+            hoverEnabled: (!drop.running && !items.gameDone && (items.counter % 2 == 0 || twoPlayer))
 
             property bool holdMode: true
             function display() {
@@ -163,7 +178,6 @@ ActivityBase {
             }
         }
 
-
         DialogHelp {
             id: dialogHelp
             onClose: home()
@@ -183,49 +197,41 @@ ActivityBase {
             onNextLevelClicked: Activity.nextLevel()
         }
 
-        Image {
-            id: player1
-            source: Activity.url + "score_1.svg"
-            sourceSize.height: bar.height * 1.1
+        ScoreItem {
+            id: player1score
+            z: 1
+            player: 1
+            height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
+            width: height*11/8
             anchors {
-                bottom: parent.width > parent.height ? bar.bottom : bar.top
-                bottomMargin: 10
-                right: parent.right
-                rightMargin: 2 * ApplicationInfo.ratio
+                top: background.top
+                topMargin: 5
+                left: background.left
+                leftMargin: 5
             }
-
-            GCText {
-                id: player1_score
-                anchors.verticalCenter: parent.verticalCenter
-                x: parent.width / 2 + 5
-                color: "white"
-                fontSize: largeSize
-            }
+            playerImageSource: Activity.url + "player_1.svg"
+            backgroundImageSource: Activity.url + "score_1.svg"
         }
 
-        Image {
-            id: player2
-            source: Activity.url + "score_2.svg"
-            sourceSize.height: bar.height * 1.1
+        ScoreItem {
+            id: player2score
+            z: 1
+            player: 2
+            height: Math.min(background.height/7, Math.min(background.width/7, bar.height * 1.05))
+            width: height*11/8
             anchors {
-                bottom: parent.width > parent.height ? bar.bottom : bar.top
-                bottomMargin: 10
-                right: player1.left
-                rightMargin: 2 * ApplicationInfo.ratio
+                top: background.top
+                topMargin: 5
+                right: background.right
+                rightMargin: 5
             }
-
-            GCText {
-                id: player2_score
-                anchors.verticalCenter: parent.verticalCenter
-                color: "white"
-                x: parent.width / 2 + 5
-                fontSize: largeSize
-            }
+            playerImageSource: Activity.url + "player_2.svg"
+            backgroundImageSource: Activity.url + "score_2.svg"
+            playerScaleOriginX: player2score.width
         }
 
         Bonus {
             id: bonus
-            Component.onCompleted: win.connect(Activity.nextLevel)
         }
     }
 }

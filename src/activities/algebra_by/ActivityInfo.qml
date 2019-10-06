@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "algebra_by/algebra_by.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Multiplication of numbers")
+  //: Help title
   description: qsTr("Practice the multiplication operation")
-//  intro: "Multiply the two numbers together and type in your answer before the balloon landing"
+//  intro: "Multiply the two numbers together and type in your answer before the balloon lands in the water"
+  //: Help goal
   goal: qsTr("Learn to multiply numbers within a limited period of time")
+  //: Help prerequisite
   prerequisite: qsTr("Multiplication tables from 1 to 10")
-  manual: qsTr("Two numbers are displayed on the screen. Quickly multiply them and use your computer's keyboard or the on-screen keypad to type the product of the numbers. You have to be fast and submit the answer before the penguins in their balloon land!")
+  //: Help manual
+  manual: qsTr("A multiplication is displayed on the screen. Quickly find the result and use your computer's keyboard or the on-screen keypad to type the product of the numbers. You have to be fast and submit the answer before the penguins in their balloon land!")
   credit: ""
-  section: "math multiplication"
+  section: "math multiplication arithmetic"
+  createdInVersion: 0
 }

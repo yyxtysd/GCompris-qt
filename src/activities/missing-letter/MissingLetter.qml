@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -62,7 +62,7 @@ ActivityBase {
         // Add here the QML items you need to access in javascript
         QtObject {
             id: items
-            property Item  main: activity.main
+            property Item main: activity.main
             property alias background: background
             property alias bar: bar
             property alias bonus: bonus
@@ -76,6 +76,8 @@ ActivityBase {
             property alias locale: background.locale
             property string answer
             property alias textinput: textinput
+            property bool isGoodAnswer: false
+            property bool buttonsBlocked: false
         }
 
         onStart: {
@@ -106,7 +108,7 @@ ActivityBase {
                     else if(ApplicationSettings.fontCapitalization === Font.AllLowercase)
                         typedText = text.toLocaleLowerCase()
 
-                    if(typedText === answerText) {
+                    if(!items.isGoodAnswer && (typedText === answerText)) {
                         questionAnim.start()
                         Activity.showAnswer()
                     }
@@ -134,9 +136,16 @@ ActivityBase {
                     height: (holder.height
                              - buttonHolder.spacing * answers.model.length) / answers.model.length
                     textLabel: modelData
+                    blockAllButtonClicks: items.buttonsBlocked
                     isCorrectAnswer: modelData === items.answer
                     onCorrectlyPressed: questionAnim.start()
-                    onPressed: modelData == items.answer ? Activity.showAnswer() : ''
+                    onPressed: {
+                        items.buttonsBlocked = true
+                        if(!items.isGoodAnswer) {
+                            modelData == items.answer ? Activity.showAnswer() : ''
+                        }
+                    }
+                    onIncorrectlyPressed: items.buttonsBlocked = false
                 }
             }
         }
@@ -336,6 +345,8 @@ ActivityBase {
 
         Bonus {
             id: bonus
+            onStart: items.buttonsBlocked = true
+            onStop: items.buttonsBlocked = false
             Component.onCompleted: win.connect(Activity.nextLevel)
         }
 
@@ -349,7 +360,7 @@ ActivityBase {
             sourceComponent: GCDialog {
                 parent: activity.main
                 message: qsTr("We are sorry, we don't have yet a translation for your language.") + " " +
-                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("http://l10n.kde.org/") +
+                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("https://l10n.kde.org/") +
                          "<br /> <br />" +
                          qsTr("We switched to English for this activity but you can select another language in the configuration dialog.")
                 onClose: background.englishFallback = false

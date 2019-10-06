@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -115,7 +115,7 @@ ActivityBase {
                 items.arrowFlying = true
                 if(items.currentArrow != items.nbArrow) {
                     arrowRepeater.itemAt(items.currentArrow).opacity = 1
-                    arrowRepeater.itemAt(items.currentArrow++).scale = 0.5
+                    arrowRepeater.itemAt(items.currentArrow++).scale = 1
                 }
             }
         }

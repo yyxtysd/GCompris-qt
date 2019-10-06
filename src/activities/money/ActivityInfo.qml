@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "money/money.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Money")
+  //: Help title
   description: qsTr("Practice money usage")
 //  intro: "Click or tap on the money to pay."
+  //: Help goal
   goal: qsTr("You must buy the different items and give the exact price. At higher levels, several items are displayed, and you must first calculate the total price.")
+  //: Help prerequisite
   prerequisite: qsTr("Can count")
+  //: Help manual
   manual: qsTr("Click or tap on the coins or paper money at the bottom of the screen to pay. If you want to remove a coin or note, click or tap on it on the upper screen area.")
   credit: ""
-  section: "math numeration money"
+  section: "math money measures"
+  createdInVersion: 0
 }

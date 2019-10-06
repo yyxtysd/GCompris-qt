@@ -18,10 +18,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 import "../../core"
@@ -63,7 +63,6 @@ Item {
                                         carriageBg.verticalCenter :
                                         parent.verticalCenter
             z: 11
-
             text: letter
             font.pointSize: NaN  // need to clear font.pointSize explicitly
             font.pixelSize: parent.width * 0.65
@@ -84,6 +83,17 @@ Item {
             source: text
         }
 
+        Image {
+            id: softFailure
+            z: 12
+            source: "qrc:/gcompris/src/activities/tic_tac_toe/resource/cross.svg"
+            width: parent.width
+            height: width
+            anchors.centerIn: text
+            opacity: 0
+            visible: ApplicationInfo.useOpenGL ? false : true
+        }
+        
         MouseArea {
             id: mouseArea
             anchors.fill: parent
@@ -109,7 +119,8 @@ Item {
             PropertyChanges {
                 target: carriageItem
                 scale: /*carriageImage.scale * */ 1.2
-                z: 2}
+                z: 2
+            }
         }
 
         transitions: Transition {
@@ -133,32 +144,32 @@ Item {
                 target: carriageImage
                 easing.type: Easing.InOutQuad
                 property: "rotation"
-                to: 0
-                duration: 50 }
+                to: 0; duration: 50
+            }
         }
 
         SequentialAnimation {
             id: failureAnimation
             NumberAnimation {
-                target: color
+                target: ApplicationInfo.useOpenGL ? color : softFailure
                 property: "opacity"
                 to: 1; duration: 400
             }
             NumberAnimation {
-                target: color
+                target: ApplicationInfo.useOpenGL ? color : softFailure
                 property: "opacity"
                 to: 0; duration: 200
             }
         }
     }
-
+    
     Colorize {
-            id: color
-            z: 5
-            anchors.fill: carriageImage
-            source: carriageImage
-            hue: 0.0
-            saturation: 1
-            opacity: 0
-        }
+        id: color
+        z: 5
+        anchors.fill: carriageImage
+        source: carriageImage
+        hue: 0.0
+        saturation: 1
+        opacity: 0
+    }
 }

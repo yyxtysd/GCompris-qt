@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "scalesboard/scalesboard.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Balance the scales properly")
+  //: Help title
   description: qsTr("Drag and Drop weights to balance the scales")
 //  intro: "Drag the weights up to balance the scales."
+  //: Help goal
   goal: qsTr("Mental calculation, arithmetic equality")
+  //: Help prerequisite
   prerequisite: ""
-  manual: qsTr("To balance the scales, move the weights on the left or the right side. The weights can be arranged in any order.")
+  //: Help manual
+  manual: qsTr("To balance the scales, move the weights to the left or the right side (on higher levels). The weights can be arranged in any order.")
   credit:""
-  section: "math"
+  section: "math measures"
+  createdInVersion: 0
 }

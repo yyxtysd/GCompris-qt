@@ -17,13 +17,12 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.3
+import QtQuick 2.6
 import Box2D 2.0
 import QtQuick.Particles 2.0
 import GCompris 1.0
-import QtGraphicalEffects 1.0
 
 import "../../core"
 import "land_safe.js" as Activity
@@ -55,6 +54,7 @@ ActivityBase {
         anchors.centerIn: parent
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
+        sourceSize.height: height
 
         signal start
         signal stop
@@ -140,11 +140,13 @@ ActivityBase {
                 items.velocity = rocket.body.linearVelocity.y;
 
                 if (rocket.body.linearVelocity.y > Activity.maxLandingVelocity)
-                    landing.overlayColor = "#80ff0000"  // redish
+                    landing.overlayColor = "-r"  // redish
+                else if (explosion.visible == true)
+                    landing.overlayColor = "-r"
                 else if (rocket.body.linearVelocity.y > Activity.maxLandingVelocity - 2)
-                    landing.overlayColor = "#80ffff00"  // yellowish
+                    landing.overlayColor = "-y"  // yellowish
                 else
-                    landing.overlayColor = "#8000ff00"  // greenish
+                    landing.overlayColor = "-g"  // greenish
                 items.altitude = Math.max(0, Math.round(Activity.getAltitudeReal()));
 
                 if (Activity.maxFuel != -1) {
@@ -184,8 +186,6 @@ ActivityBase {
             property double leftAccel: 0.0
             property double rightAccel: 0.0
             property alias body: rocketBody
-            property alias leftEngine: leftEngine
-            property alias rightEngine: rightEngine
             
             function show() {
                 opacity = 100;
@@ -293,6 +293,20 @@ ActivityBase {
                 }
             }
 
+            Image {
+                id: softLeftEngine
+                source: Activity.baseUrl + "/engine.svg"
+                rotation: 90
+                anchors.right: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                width:  rocket.leftAccel > 0 ?
+                            rocket.width * 0.2 + rocket.width * rocket.leftAccel : 0
+                height:  width * 2 + width * rocket.leftAccel
+                sourceSize.width: width
+                sourceSize.height: height
+                visible: ApplicationInfo.useOpenGL ? false : true
+            }
+            
             ParticleSystem {
                 id: leftEngine
 
@@ -321,6 +335,20 @@ ActivityBase {
                 }
             }
 
+            Image {
+                id: softRightEngine
+                source: Activity.baseUrl + "/engine.svg"
+                rotation: -90
+                anchors.left: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                width:  rocket.rightAccel > 0 ?
+                            rocket.width * 0.2 + rocket.width * rocket.rightAccel : 0
+                height:  width * 2 + width * rocket.rightAccel
+                sourceSize.width: width
+                sourceSize.height: height
+                visible: ApplicationInfo.useOpenGL ? false : true
+            }
+            
             ParticleSystem {
                 id: rightEngine
 
@@ -349,6 +377,19 @@ ActivityBase {
                 }
             }
 
+            Image {
+                id: softBottomEngine
+                source: Activity.baseUrl + "/engine.svg"
+                anchors.top: parent.bottom
+                anchors.topMargin: -5 * ApplicationInfo.ratio
+                anchors.horizontalCenter: parent.horizontalCenter
+                width:  rocket.width * 0.5 + rocket.width * rocket.accel
+                height: rocket.accel > 0 ? width * 2 : 0
+                sourceSize.width: width
+                sourceSize.height: height
+                visible: ApplicationInfo.useOpenGL ? false : true
+            }
+            
             ParticleSystem {
                 id: bottomEngine
                 anchors.top: parent.bottom
@@ -376,7 +417,7 @@ ActivityBase {
                 }
             }
 
-        }
+         }
         
         ParticleSystem {
             id: explosion
@@ -434,7 +475,9 @@ ActivityBase {
 
             z: 1
             width: parent.width
-//            height: parent.height
+            height: parent.height/7
+            sourceSize.width: width
+            sourceSize.height: height
             source: Activity.baseUrl + "/ground.svg"
             anchors.left: parent.left
             anchors.right: parent.right
@@ -474,10 +517,10 @@ ActivityBase {
 
             readonly property string collisionName: "landing"
             property int surfaceOffset: landing.height * 0.8
-            property alias overlayColor: overlay.color
+            property string overlayColor: "-g"
 
             z: 2
-            source: Activity.baseUrl + "/landing.svg";
+            source: Activity.baseUrl + "/landing" + overlayColor + ".svg";
             anchors.left: ground.left
             anchors.leftMargin: 270
             anchors.top: ground.top
@@ -507,12 +550,6 @@ ActivityBase {
                     y: landing.surfaceOffset
                 }
             }
-        }
-        ColorOverlay {
-            id: overlay
-            anchors.fill: landing
-            source: landing
-            z: 3
         }
 
         Item {

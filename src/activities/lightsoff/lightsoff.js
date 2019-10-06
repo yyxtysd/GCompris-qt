@@ -17,7 +17,7 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 var levels = [[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], // 1
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 1 soluce
@@ -245,6 +245,7 @@ function checkResult() {
     })
 
     if (nb === 0) {
+        items.blockClicks  = true
         items.bonus.good("tux")
     }
 
@@ -259,4 +260,9 @@ function solve() {
 
     /* Refresh the lights */
     refreshModel()
+}
+
+function windowPressed(index) {
+    audioEffects.play('qrc:/gcompris/src/core/resource/sounds/scroll.wav')
+    switchLight(index)
 }

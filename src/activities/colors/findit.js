@@ -13,11 +13,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import "qrc:/gcompris/src/core/core.js" as Core
 
 var url = "qrc:/gcompris/src/activities/colors/resource/"
@@ -32,7 +32,7 @@ var currentQuestion
 var hasWon
 
 function start(items_, dataset_, mode_) {
-    if (mode_ == "Colors")
+    if (mode_ === "Colors")
         Core.checkForVoices(items_.background);
     items = items_
     dataset = dataset_.get()

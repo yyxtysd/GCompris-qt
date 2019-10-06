@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import GCompris 1.0 as GCompris
 
 var url = "qrc:/gcompris/src/activities/followline/resource/"
@@ -67,9 +67,9 @@ function initLevel() {
             direction = - directionStep
         else if(angle < - Math.PI / 4)
             direction = directionStep
-        if(y > items.background.height * 0.6)
+        if(y > items.fire.y-items.fire.height/2)
             direction = - directionStep
-        else if(y < items.background.height * 0.4)
+        else if(y < items.background.height * 0.3)
             direction = directionStep
         createdLineParts[index] =
                 createLinePart(index, x, y, width, height,
@@ -77,12 +77,12 @@ function initLevel() {
         x = newx
         y = newy
         index++
-    } while(x < items.background.width * 0.9)
+    } while(x < (items.fire.x - 10))
     items.lastLock = index - 1
 }
 
 function nextLevel() {
-    if(numberOfLevel <= ++currentLevel ) {
+    if(numberOfLevel <= ++currentLevel) {
         currentLevel = 0
     }
     initLevel();

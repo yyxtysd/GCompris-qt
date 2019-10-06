@@ -16,9 +16,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
+import QtQuick 2.6
+import QtQuick.Controls 1.5
 import GCompris 1.0
 
 /**
@@ -30,21 +32,43 @@ import GCompris 1.0
 DialogBackground {
     visible: false
     title: qsTr("About GCompris")
+    button0Text: qsTr("License")
+    onButton0Hit: { licenseContainer.visible = true }
+
+    File {
+        id: licenseFile
+        name: "qrc:/gcompris/src/core/COPYING"
+        onError: print(msg)
+    }
+    
+    DialogBackground {
+        id: licenseContainer
+        visible: false
+        anchors.fill: parent
+        title: qsTr("License")
+        onVisibleChanged: {
+            if(!content) {
+                content = licenseFile.read()
+            }
+        }
+        onClose: visible = false
+    }
 
     //: Replace this string with your names, one name per line.
     property string translators: qsTr("translator-credits") ===
                                  "translator-credits" ? "" : qsTr("translator-credits") + "<br/>"
     // Let's try to maitain here the contributor list sorted by number of commits
     // git shortlog -se | sort -nr | cut -c8- | sed 's/ <.*>/,/' | xargs
-    property string developers: "Bruno Coudoin, Johnny Jazeix, Holger Kaelberer, Timothée Giet, Rajdeep Kaur, Siddhesh Suthar, Aruna Sankaranarayanan, Stephane Mankowski, Thibaut Romain, Akshat Tandon, Yuri Chornoivan, Manuel Tondeur, Ayush Agrawal, Pulkit Gupta, Stefan Toncu, Bharath M S, Yuri Chornoivan, JB BUTET, Emmanuel Charruau, Arkit Vora, Luigi Toscano, Amit Tomar, Anu Mittal, Chaitanya KS, Imran Tatriev, Sergey Popov, Yask Srivastava, Shashwat Dixit, Sayan Biswas, Artur Puzio, Andrey Cygankov"
+    property string developers: "Bruno Coudoin, Johnny Jazeix, Timothée Giet, Holger Kaelberer, Akshat Tandon, Rajdeep Kaur, siddhesh suthar, Aruna Sankaranarayanan, Aman Kumar Gupta, Stephane Mankowski, Amit Tomar, Yuri Chornoivan, Thibaut ROMAIN, Amit Sagtani, Ilya Bizyaev, Stefan Toncu, SagarC Agarwal, Ganesh Harshan, Divyam Madaan, Ayush Agrawal, Rudra Nil Basu, Harry Mecwan, Pulkit Gupta, Manuel Tondeur, Karl Ove Hufthammer, Burkhard Lück, Horia PELLE, Bharath M S, Per Andersson, JB BUTET, Himanshu Vishwakarma, Emmanuel Charruau, Rohit Das, Arkit Vora, Antoni Bella Pérez, Sergey Popov, Séamus Ó Briain, Nitish Chauhan, Imran Tatriev, Harpreet S, Harald H, Alexis Breton, Aleix Pol, Rajat Asthana, rahul yadav, Aseem Arora, Akshay Kumar, Utkarsh Tiwari, Souradeep Barua, Parth Partani, Paolo Gibellini, Nick Richards, Luigi Toscano, Luciano Montanaro, Chaitanya KS, B.J. Cupps, Anu Mittal, Antos Vaclauski, André Marcelo Alvarenga, Alexander Potashev, Ynon Perek, Yask Srivastava, Stefan Asserhäll, Shashwat Dixit, Sayan Biswas, Rishabh Gupta, Răpițeanu Viorel-Cătălin, Mantas Kriaučiūnas, Łukasz Wojniłowicz, Jose Riha, Jonathan Demeyer, Jiri Bohac, Hannah von Reth, Djalil Mesli, Clément Coudoin, Billy Laws, Artur Puzio, Arnold Dumas, Antoś Vaclaŭski, Andrey Cygankov"
+
     property string gcVersion: ApplicationInfo.GCVersion
     property string qtVersion: ApplicationInfo.QTVersion
     property string gcVersionTxt: qsTr("GCompris %1").arg(gcVersion)
     property string qtVersionTxt: qsTr("Based on Qt %1").arg(qtVersion)
 
     content:
-        "<center><b>" + "<a href='http://gcompris.net'>" +
-        qsTr("GCompris Home Page: http://gcompris.net") + "</a>" +
+        "<center><b>" + "<a href='https://gcompris.net'>" +
+        qsTr("GCompris Home Page: https://gcompris.net") + "</a>" +
         "</b></center>" +
         "<center>" + gcVersionTxt + " " + qtVersionTxt + "</center>" + "<br/>" +
 
@@ -64,8 +88,8 @@ DialogBackground {
              "contribute to KDE, including you.<br /><br />" +
              "Visit <a href=\"%2\">%2</a> for " +
              "more information about the KDE community and the software we produce.")
-        .arg("http://www.gnu.org/philosophy/free-sw.html")
-        .arg("http://www.kde.org/") +
+        .arg("https://www.gnu.org/philosophy/free-sw.html")
+        .arg("https://www.kde.org/") +
 
         "<img align='right' width='" + 138 * ApplicationInfo.ratio +
         "' height='" + 202 * ApplicationInfo.ratio + "' src='qrc:/gcompris/src/core/resource/aboutkde.png'/>" +
@@ -96,8 +120,8 @@ DialogBackground {
              "If you need more information or documentation, then a visit to " +
              "<a href=\"%2\">%2</a> " +
              "will provide you with what you need.")
-        .arg("http://www.kde.org/community/getinvolved/")
-        .arg("http://techbase.kde.org/") +
+        .arg("https://www.kde.org/community/getinvolved/")
+        .arg("https://techbase.kde.org/") +
 
         "<br /> <br />" +
 
@@ -113,8 +137,8 @@ DialogBackground {
              "financial donation, using one of the ways described at " +
              "<a href=\"%2\">%2</a>." +
              "<br /><br />Thank you very much in advance for your support.")
-        .arg("http://ev.kde.org/")
-        .arg("http://www.kde.org/community/donations/") +
+        .arg("https://ev.kde.org/")
+        .arg("https://www.kde.org/community/donations/") +
 
         "<br /> <br />" +
 
@@ -125,5 +149,5 @@ DialogBackground {
         qsTr("<b>A big thanks to the translation team:</b> %1")
         .arg(translators) +
 
-        "<br/><center><b>" + "Copyright 2000-2016 Bruno Coudoin and Others" + "</b></center>" + "<br/>"
+        "<br/><center><b>" + "Copyright 2000-2018 Timothée Giet and Others" + "</b></center>" + "<br/>"
 }

@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -29,8 +29,8 @@ Gletters {
     id: activity
 
     mode: "letter"
+    activityName: "smallnumbers"
     dataSetUrl: "qrc:/gcompris/src/activities/smallnumbers/resource/"
-    configurationButtonVisible: false
 
     function getImage(key) {
         return dataSetUrl + "dice" + key + ".svg"

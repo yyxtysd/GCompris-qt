@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -27,13 +27,18 @@ ActivityInfo {
     icon: "guesscount/guesscount.svg"
     author: "Rahul Yadav &lt;rahulyadav170923@gmail.com&gt;"
     demo: true
+    //: Activity title
     title: qsTr("Guesscount")
+    //: Help title
     description:qsTr("Guess the algebraic expression and drag the tiles to get a result equal to the Guesscount.")
-    //intro: "guesscount activity"
-    goal: qsTr("To teach algebra")
+    //intro: "Use the numbers and operations suggested to find the results proposed above."
+    //: Help goal
+    goal: qsTr("Intuition and practice of algebraic-like calculations.")
+    //: Help prerequisite
     prerequisite: qsTr("knowledge of arithmetic operations")
-    manual: ""
+    //: Help manual
+    manual: qsTr("Drag the appropriate numbers and the operators to the boxes to obtain the number to guess in the instruction.")
     credit: ""
-    section: "math"
-    createdInVersion:7000
+    section: "math arithmetic"
+    createdInVersion: 8000
 }

@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 import "magic-hat.js" as Activity
 
 Item {
@@ -31,7 +31,7 @@ Item {
     property bool authorizeClick: false
     property int starsSize
     property string backgroundColor
-    property string starsColor: "yellow"
+    property string starsColor: "1"
     property Item theHat
     property alias repeaterStars: repeaterStars
 

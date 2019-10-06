@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 import GCompris 1.0
 
@@ -23,12 +23,18 @@ ActivityInfo {
   icon: "scalesboard_weight/scalesboard_weight.svg"
   author: "Bruno Coudoin &lt;bruno.coudoin@gcompris.net&gt;"
   demo: false
+  //: Activity title
   title: qsTr("Balance the scales properly")
+  //: Help title
   description: qsTr("Drag and Drop masses to balance the scales and calculate the weight")
 //  intro: "Drag the weights up to balance the scales."
+  //: Help goal
   goal: qsTr("Mental calculation, arithmetic equality, unit conversion")
+  //: Help prerequisite
   prerequisite: ""
-  manual: qsTr("To balance the scales, move the masses on the left or the right side. They can be arranged in any order. Take care of the weight and the unit of the masses, remember that a kilogram (kg) is 1000 grams (g).")
+  //: Help manual
+  manual: qsTr("To balance the scales, move the masses to the left or the right side (on higher levels). They can be arranged in any order. Take care of the weight and the unit of the masses, remember that a kilogram (kg) is 1000 grams (g).")
   credit: ""
-  section: "math"
+  section: "math measures"
+  createdInVersion: 0
 }

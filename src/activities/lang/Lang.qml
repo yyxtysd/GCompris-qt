@@ -19,9 +19,9 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 import QtGraphicalEffects 1.0
 
@@ -69,7 +69,7 @@ ActivityBase {
             property alias englishFallbackDialog: englishFallbackDialog
             property string locale: 'system'
             property alias dialogActivityConfig: dialogActivityConfig
-            property variant categoriesTranslations: activity.categoriesTranslations
+            property var categoriesTranslations: activity.categoriesTranslations
         }
 
         onStart: {
@@ -141,7 +141,7 @@ ActivityBase {
             sourceComponent: GCDialog {
                 parent: activity.main
                 message: qsTr("We are sorry, we don't have yet a translation for your language.") + " " +
-                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("http://l10n.kde.org/") +
+                         qsTr("GCompris is developed by the KDE community, you can translate GCompris by joining a translation team on <a href=\"%2\">%2</a>").arg("https://l10n.kde.org/") +
                          "<br /> <br />" +
                          qsTr("We switched to English for this activity but you can select another language in the configuration dialog.")
                 onClose: background.englishFallback = false
@@ -237,7 +237,7 @@ ActivityBase {
         }
     }
 
-    property variant categoriesTranslations: {"otherChapter": qsTr("other"),
+    property var categoriesTranslations: {"otherChapter": qsTr("other"),
         "otherLesson": qsTr("other"),
         "action": qsTr("action"), "adjective": qsTr("adjective"),
         "color": qsTr("color"), "number": qsTr("number"),
@@ -249,6 +249,7 @@ ActivityBase {
         "vegetables": qsTr("vegetables"), "object": qsTr("object"),
         "construction": qsTr("construction"),
         "furniture": qsTr("furniture"), "houseware": qsTr("houseware"),
-        "tool": qsTr("tool"), "food": qsTr("food")}
+        "tool": qsTr("tool"), "food": qsTr("food"),
+        "transport": qsTr("transport")}
 
 }

@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -28,13 +28,12 @@ import "photo_hunter.js" as Activity
 Image {
     id: card
 
-    sourceSize.width: background.startedHelp ? background.width :
-                                               background.vert ? background.width : (background.width - 30) / 2
+    sourceSize.width: background.vert ? background.width : (background.width - 30) / 2
     sourceSize.height: background.startedHelp ? background.height - background.barHeight * 1.5 - frame.problemTextHeight - slider.height :
                                                 background.vert ? (background.height - background.barHeight - 40 - frame.problemTextHeight) / 2 :
                                                                   background.height - background.barHeight - 30 - frame.problemTextHeight
 
-    property GCAudio audioEffects: activity.audioEffects
+    property GCSfx audioEffects: activity.audioEffects
     property alias repeater: repeater
     property alias circleRepeater: circleRepeater
     property int good: 0

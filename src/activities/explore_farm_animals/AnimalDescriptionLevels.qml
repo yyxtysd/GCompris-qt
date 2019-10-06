@@ -19,10 +19,10 @@
 *   GNU General Public License for more details.
 *
 *   You should have received a copy of the GNU General Public License
-*   along with this program; if not, see <http://www.gnu.org/licenses/>.
+*   along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -38,14 +38,38 @@ Rectangle {
     height: parent.height
     MouseArea {
         anchors.fill: parent
-        onPressed: parent.close()
+        onPressed: parent.closeDescriptionPanel()
     }
 
     property alias title: heading.text
     property alias description: descriptionText.text
     property alias imageSource: animalImage.source
 
-    property bool horizontalLayout: background.width > background.height
+    property bool horizontalLayout: background.width >= background.height
+
+    signal showDescriptionPanel
+    signal closeDescriptionPanel
+
+    onShowDescriptionPanel: {
+        descriptionPanelCloseAnimation.stop()
+        descriptionPanelAppearAnimation.start()
+    }
+
+    onCloseDescriptionPanel: {
+        descriptionPanelAppearAnimation.stop()
+        close()
+    }
+
+    // animation for appearance of the description panel
+    NumberAnimation {
+        id: descriptionPanelAppearAnimation
+        target: descriptionPanel
+        property: horizontalLayout ? "x" : "y"
+        from: horizontalLayout ? -width : -height
+        to: 0
+        duration: 1200
+        easing.type: Easing.OutBack
+    }
 
     GCText {
         id: heading
@@ -69,7 +93,100 @@ Rectangle {
             top: rectangleDesc.horizontalLayout ? heading.bottom : descriptionText.bottom
             horizontalCenter: rectangleDesc.horizontalLayout ? undefined : parent.horizontalCenter
             left: rectangleDesc.horizontalLayout ? parent.left : undefined
-            leftMargin:  rectangleDesc.horizontalLayout ? 30 * ApplicationInfo.ratio : 0
+            leftMargin: rectangleDesc.horizontalLayout ? 30 * ApplicationInfo.ratio : 0
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: parent.switchImageWithTextOrAlone()
+        }
+
+        state: "zoomedOut"
+
+        // Relative width and height of the image is changed on zooming-in and zooming-out keeping original binding intact
+        states: [
+            State {
+                name: "zoomedIn"
+                PropertyChanges {
+                    target: animalImage
+                    width: rectangleDesc.width / 1.2
+                    height: rectangleDesc.height / 1.2
+                }
+
+                PropertyChanges {
+                    target: descriptionText
+                    visible: false
+                }
+
+                AnchorChanges {
+                    target: animalImage
+                    anchors.top: heading.bottom
+                }
+            },
+            State {
+                name: "zoomedOut"
+                PropertyChanges {
+                    target: animalImage
+                    width: rectangleDesc.horizontalLayout ? parent.width / 2 : parent.width * 0.9
+                    height: rectangleDesc.horizontalLayout ?
+                                       parent.height * 0.8 :
+                                       (parent.height - heading.height - descriptionText.height) * 0.9
+                }
+
+                PropertyChanges {
+                    target: descriptionText
+                    visible: true
+                }
+
+                AnchorChanges {
+                    target: animalImage
+                    anchors.top: rectangleDesc.horizontalLayout ? heading.bottom : descriptionText.bottom
+                }
+            }
+        ]
+
+        // Transition to animate zoom-in and zoom-out
+        transitions: [
+            Transition {
+                from: "zoomedOut"
+                to: "zoomedIn"
+
+                NumberAnimation {
+                    target: animalImage
+                    properties: "width, height"
+                    easing.type: Easing.OutBack
+                    duration: 500
+                }
+
+                AnchorAnimation { duration: 250 }
+            },
+            Transition {
+                from: "zoomedIn"
+                to: "zoomedOut"
+
+                NumberAnimation {
+                    target: animalImage
+                    properties: "width, height"
+                    duration: 250
+                }
+
+                PropertyAnimation {
+                    target: descriptionText
+                    property: "visible"
+                }
+
+                AnchorAnimation { duration: 250 }
+            }
+        ]
+
+        // Changes the state of the image
+        function switchImageWithTextOrAlone() {
+           if(state === "zoomedOut") {
+              state = "zoomedIn";
+           }
+           else {
+              state = "zoomedOut";
+           }
         }
     }
 
@@ -91,18 +208,41 @@ Rectangle {
         wrapMode: Text.WordWrap
     }
 
-    // The cancel button
+    // The close panel button
     GCButtonCancel {
         id: cancelButton
-        onClose: parent.close()
+        onClose: parent.closeDescriptionPanel()
     }
 
     function close() {
-        rectangleDesc.visible = false;
+        if(animalImage.state === "zoomedIn") {
+            animalImage.state = "zoomedOut";
+        }
+        descriptionPanelCloseAnimation.start();
         if (Activity.isComplete()) {
             Activity.items.bonus.good("flower");
             Activity.nextLevel();
         }
     }
+
+    SequentialAnimation {
+        id: descriptionPanelCloseAnimation
+
+        NumberAnimation {
+            id: slideBackDescriptionPanel
+            target: descriptionPanel
+            property: horizontalLayout ? "x" : "y"
+            to: horizontalLayout ? -width : -height
+            duration: 1200
+            easing.type: Easing.InSine
+        }
+
+        PropertyAnimation {
+            id: switchDescriptionPanelInvisible
+            target: descriptionPanel
+            property: "visible"
+            to: false
+        }
+   }
 
 }

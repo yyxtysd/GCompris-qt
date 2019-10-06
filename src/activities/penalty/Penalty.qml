@@ -17,9 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -45,6 +45,36 @@ ActivityBase {
             activity.stop.connect(stop)
         }
 
+        // To enable tapping/clicking on left side of goal
+        GoalZone {
+            id: rectLeft
+            state: "LEFT"
+            progress: progressLeft
+            anchors.right: player.left
+            anchors.leftMargin: parent.width * 0.08
+            anchors.bottomMargin: parent.height * 0.45
+        }
+
+        // To enable tapping/clicking on top of goal
+        GoalZone {
+            id: rectTop
+            state: "CENTER"
+            progress: progressTop
+            anchors.left: player.left
+            anchors.right: player.right
+            anchors.bottom: player.top
+        }
+
+        // To enable tapping/clicking on right side of goal
+        GoalZone {
+            id: rectRight
+            state: "RIGHT"
+            progress: progressRight
+            anchors.left: player.right
+            anchors.rightMargin: parent.width * 0.06
+            anchors.bottomMargin: parent.height * 0.45
+        }
+
         // Add here the QML items you need to access in javascript
         QtObject {
             id: items
@@ -56,8 +86,11 @@ ActivityBase {
             property alias progressRight: progressRight
             property alias progressTop: progressTop
             property alias bonus: bonus
-            property int duration : 0
-            property int progressBarOpacity : 40
+            property int duration: 0
+            property int progressBarOpacity: 40
+            property string saveBallState: "INITIAL"
+            property double ballX: ball.parent.width/2 - ball.width/2
+            property double ballY: ball.parent.height*0.77 - ball.height/2
         }
 
         onStart: { Activity.start(items) }
@@ -108,136 +141,43 @@ ActivityBase {
 
 
         /* The progress bars */
-        Rectangle {
+        Progress {
             id: progressLeft
-            property int ratio: 0
-            property ParallelAnimation anim: animationLeft
-
-            opacity: items.progressBarOpacity
             anchors.left: parent.left
             anchors.leftMargin: parent.width / parent.implicitWidth * 62
-            anchors.top: parent.top
-            anchors.topMargin: parent.height / parent.implicitHeight * 100
-            width: ratio / 100 * parent.width / parent.implicitWidth * 200
-            height: parent.height / parent.implicitHeight * 20
-            ParallelAnimation {
-                id: animationLeft
-                onRunningChanged: {
-                    if (!animationLeft.running) {
-                        timerBonus.start()
-                    }
-                }
-                PropertyAnimation
-                {
-                    target: progressLeft
-                    property: "ratio"
-                    from: 0
-                    to: 100
-                    duration: items.duration
-                }
-                PropertyAnimation
-                {
-                    target: progressLeft
-                    property: "color"
-                    from: "#00FF00"
-                    to: "#FF0000"
-                    duration: items.duration
-                }
-            }
         }
 
-        Rectangle {
+        Progress {
             id: progressRight
-            property int ratio: 0
-            property ParallelAnimation anim: animationRight
-
-            opacity: items.progressBarOpacity
             anchors.right: parent.right
             anchors.rightMargin: parent.width/parent.implicitWidth * 50
-            anchors.top: parent.top
-            anchors.topMargin: parent.height/parent.implicitHeight * 100
-            width: ratio / 100 * parent.width / parent.implicitWidth * 200
-            height: parent.height / parent.implicitHeight * 20
-            ParallelAnimation {
-                id: animationRight
-                onRunningChanged: {
-                    if (!animationRight.running) {
-                        timerBonus.start()
-                    }
-                }
-                PropertyAnimation
-                {
-                    target: progressRight
-                    property: "ratio"
-                    from: 0
-                    to: 100
-                    duration: items.duration
-                }
-                PropertyAnimation
-                {
-                    target: progressRight
-                    property: "color"
-                    from: "#00FF00"
-                    to: "#FF0000"
-                    duration: items.duration
-                }
-            }
         }
 
-        Rectangle {
+        Progress {
             id: progressTop
-            property int ratio: 0
-            property ParallelAnimation anim: animationTop
-
-            opacity: items.progressBarOpacity
-            anchors.top: parent.top
             anchors.topMargin: parent.width / parent.implicitWidth * 40
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.height / parent.implicitHeight * 20
             height: ratio / 100 * parent.width / parent.implicitWidth * 100
-            ParallelAnimation {
-                id: animationTop
-                onRunningChanged: {
-                    if (!animationTop.running) {
-                        timerBonus.start()
-                    }
-                }
-                PropertyAnimation
-                {
-                    target: progressTop
-                    property: "ratio"
-                    from: 0
-                    to: 100
-                    duration: items.duration
-                }
-                PropertyAnimation
-                {
-                    target: progressTop
-                    property: "color"
-                    from: "#00FF00"
-                    to: "#FF0000"
-                    duration: items.duration
-                }
-            }
         }
+
         /* The player */
         Image {
             id: player
             source: Activity.url + "penalty_player.svg"
             fillMode: Image.PreserveAspectFit
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: parent
             sourceSize.width: 154 * ApplicationInfo.ratio
-            x: parent.width/2 - width/2
         }
 
         /* The 2 click icon */
         Image {
             source: Activity.url + "click_icon.svg"
             sourceSize.width: 90 * ApplicationInfo.ratio
-            anchors.bottomMargin: 10
-            anchors.rightMargin: 10
+            anchors.bottom: bar.top
             anchors.right: parent.right
-            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10 * ApplicationInfo.ratio
+            anchors.rightMargin: 10 * ApplicationInfo.ratio
         }
 
         /* The spot under the ball */
@@ -275,24 +215,24 @@ ActivityBase {
                     }
                     PropertyChanges {
                         target: instruction
-                        text: qsTr("Double click or double tap on the ball to kick it.")
+                        text: qsTr("Double click or double tap on the side of the goal you want to put the ball in.")
                     }
                 },
                 State {
                     name: "RIGHT"
                     PropertyChanges {
-                        target: ball;
+                        target: ball
                         sourceSize.width: 75 * ApplicationInfo.ratio
-                        x: background.width * 0.8;
+                        x: background.width * 0.7
                         y: background.height * 0.3
                     }
                 },
                 State {
                     name: "LEFT"
                     PropertyChanges {
-                        target: ball;
+                        target: ball
                         sourceSize.width: 75 * ApplicationInfo.ratio
-                        x: background.width * 0.2;
+                        x: background.width * 0.2
                         y: background.height * 0.3
                     }
                 },
@@ -308,9 +248,9 @@ ActivityBase {
                 State {
                     name: "FAIL"
                     PropertyChanges {
-                        target: ball;
+                        target: ball
                         sourceSize.width: 75 * ApplicationInfo.ratio
-                        x: parent.width/2 - width/2;
+                        x: parent.width/2 - width/2
                         y: player.y + player.height / 2
                     }
                     PropertyChanges {
@@ -324,52 +264,7 @@ ActivityBase {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MidButton
                 onClicked: {
-                    instruction.text = ""
-
-                    if(ball.state === "FAIL") {
-                        Activity.resetLevel()
-                        return
-                    }
-
-                    /* This is a shoot */
-                    var progress = progressTop
-                    if (mouse.button == Qt.LeftButton) {
-                        progress = progressLeft
-                    } else if (mouse.button == Qt.RightButton) {
-                        progress = progressRight
-                    } else if (mouse.button == Qt.MidButton) {
-                        progress = progressTop
-                    }
-
-                    if(progress.ratio > 0) {
-                        /* Second click, stop animation */
-                        progress.anim.running = false;
-
-                        /* Play sound */
-                        activity.audioEffects.play("qrc:/gcompris/src/core/resource/sounds/brick.wav")
-
-                        /* Success or not */
-                        if(progress.ratio < 100) {
-                            /* Success */
-                            if(progress === progressLeft) {
-                                ball.state = "LEFT"
-                            } else if(progress === progressRight) {
-                                ball.state = "RIGHT"
-                            } else {
-                                ball.state = "CENTER"
-                            }
-                        } else {
-                            /* failure */
-                            ball.state = "FAIL"
-                        }
-                        timerBonus.start()
-                    } else {
-                        /* First click, start animation*/
-                        progress.anim.running = true;
-
-                        /* Play sound */
-                        activity.audioEffects.play("qrc:/gcompris/src/core/resource/sounds/flip.wav")
-                    }
+                    Activity.resetLevel()
                 }
             }
         }

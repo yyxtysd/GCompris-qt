@@ -16,11 +16,11 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
-import QtQuick.Controls 1.0
-import QtQuick.Window 2.1
+import QtQuick 2.6
+import QtQuick.Controls 1.5
+import QtQuick.Window 2.2
 import QtQml 2.2
 
 import GCompris 1.0
@@ -53,24 +53,25 @@ Window {
     /// @cond INTERNAL_DOCS
 
     property var applicationState: Qt.application.state
+
     property var rccBackgroundMusic: ApplicationInfo.getBackgroundMusicFromRcc()
     property alias backgroundMusic: backgroundMusic
 
     /**
      * type: bool
-     * It tells whether the background music is enabled for an activity.
+     * It tells whether a musical activity is running.
      *
-     * It changes to false if the started activity is a musical activity and back to true when the activity is closed.
+     * It changes to true if the started activity is a musical activity and back to false when the activity is closed, allowing to play background music.
      */
-    property bool isBackgroundMusicEnabledInActivity: true
+    property bool isMusicalActivityRunning: false
 
     /**
-     * When a musical activity is started, isBackgroundMusicEnabledInActivity changes to false and the backgroundMusic pauses.
+     * When a musical activity is started, the backgroundMusic pauses.
      *
-     * When returning back from the musical activity to menu, isBackgroundMusicEnabledInActivity changes to true and backgroundMusic resumes.
+     * When returning back from the musical activity to menu, backgroundMusic resumes.
      */
-    onIsBackgroundMusicEnabledInActivityChanged: {
-        if(!isBackgroundMusicEnabledInActivity) {
+    onIsMusicalActivityRunningChanged: {
+        if(isMusicalActivityRunning) {
             backgroundMusic.pause()
         }
         else {
@@ -109,7 +110,7 @@ Window {
 
         Component.onCompleted: {
             if(ApplicationSettings.isAudioEffectsEnabled)
-                append(ApplicationInfo.getAudioFilePath("qrc:/gcompris/src/core/resource/intro.$CA"))
+                audioVoices.append(ApplicationInfo.getAudioFilePath("qrc:/gcompris/src/core/resource/intro.$CA"))
 
             if (DownloadManager.areVoicesRegistered())
                 delayedWelcomeTimer.playWelcome();
@@ -121,9 +122,9 @@ Window {
         }
     }
 
-    GCAudio {
+    GCSfx {
         id: audioEffects
-        muted: !ApplicationSettings.isAudioEffectsEnabled
+        muted: !ApplicationSettings.isAudioEffectsEnabled && !main.isMusicalActivityRunning
     }
 
     GCAudio {
@@ -178,7 +179,7 @@ Window {
 
     function playIntroVoice(name) {
         name = name.split("/")[0]
-        audioVoices.append(ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/intro/" + name + ".$CA"))
+        audioVoices.play(ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/intro/" + name + ".$CA"))
     }
 
     function checkWordset() {
@@ -258,7 +259,7 @@ Window {
                     + ", ratio=" + ApplicationInfo.ratio
                     + ", fontRatio=" + ApplicationInfo.fontRatio
                     + ", dpi=" + Math.round(Screen.pixelDensity*25.4)
-                    + ", sharedWritablePath=" + ApplicationInfo.getSharedWritablePath()
+                    + ", userDataPath=" + ApplicationSettings.userDataPath
                     + ")");
         if (ApplicationSettings.exeCount === 1 &&
                 !ApplicationSettings.isKioskMode &&
@@ -303,8 +304,7 @@ Window {
             checkBackgroundMusic()
             if(changelog.isNewerVersion(ApplicationSettings.lastGCVersionRan, ApplicationInfo.GCVersionCode)) {
                 // display log between ApplicationSettings.lastGCVersionRan and ApplicationInfo.GCVersionCode
-                var dialog;
-                dialog = Core.showMessageDialog(
+                Core.showMessageDialog(
                 main,
                 qsTr("GCompris has been updated! Here are the new changes:<br/>") + changelog.getLogBetween(ApplicationSettings.lastGCVersionRan, ApplicationInfo.GCVersionCode),
                 "", null,
@@ -334,7 +334,7 @@ Window {
             }
         }
 
-        focus: ApplicationInfo.QTVersion >= "5.4.0"
+        focus: true
 
         delegate: StackViewDelegate {
             id: root
@@ -355,16 +355,15 @@ Window {
                     if(properties.enterItem.isDialog) {
                         return pushVTransition
                     } else {
-                        if(properties.enterItem.isMusicalActivity) {
-                            isBackgroundMusicEnabledInActivity = false
-                        }
+                        if(properties.enterItem.isMusicalActivity)
+                            main.isMusicalActivityRunning = true
                         return pushHTransition
                     }
                 } else {
                     if(properties.exitItem.isDialog) {
                         return popVTransition
                     } else {
-                        main.isBackgroundMusicEnabledInActivity = true
+                        main.isMusicalActivityRunning = false
                         return popHTransition
                     }
 
@@ -458,6 +457,5 @@ Window {
             property Component replaceTransition: pushHTransition
         }
     }
-
     /// @endcond
 }

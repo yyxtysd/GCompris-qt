@@ -18,9 +18,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 import "../../core"
 import "reversecount.js" as Activity
@@ -33,7 +33,8 @@ Item {
     property alias value1: domino.value1
     property alias value2: domino.value2
     property alias valueMax: domino.valueMax
-    property GCAudio audioEffects
+    property alias mode: domino.mode
+    property GCSfx audioEffects
 
     Row {
         id: barRow

@@ -16,15 +16,15 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import "../../core"
 import GCompris 1.0
-import "qrc:/gcompris/src/core/core.js" as Core
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import "qrc:/gcompris/src/core/core.js" as Core
+import QtQuick.Controls 1.5
+import QtQuick.Controls.Styles 1.4
 
 /**
  * GCompris' top level menu screen.
@@ -76,10 +76,21 @@ ActivityBase {
         pageView.push(toPush);
     }
 
+    Connections {
+        // At the launch of the application, box2d check is performed after we 
+        // first initialize the menu. This connection is to refresh
+        // automatically the menu at start.
+        target: ApplicationInfo
+        onIsBox2DInstalledChanged: {
+            ActivityInfoTree.filterByTag(activity.currentTag, currentCategory)
+            ActivityInfoTree.filterLockedActivities()
+            ActivityInfoTree.filterEnabledActivities()
+        }
+    }
+
     // @cond INTERNAL_DOCS
     property string url: "qrc:/gcompris/src/activities/menu/resource/"
-    property string inputText: ""
-    property variant sections: [
+    property var sections: [
         {
             icon: activity.url + "all.svg",
             tag: "favorite"
@@ -90,11 +101,19 @@ ActivityBase {
         },
         {
             icon: activity.url + "discovery.svg",
-            tag: "discovery"
+            tag: "discovery",
+            categories: [{ "logic": qsTr("Logic") },
+                         { "arts": qsTr("Fine Arts") },
+                         { "music": qsTr("Music") }
+            ]
         },
         {
-            icon: activity.url + "experience.svg",
-            tag: "experiment"
+            icon: activity.url + "sciences.svg",
+            tag: "sciences",
+            categories: [{ "experiment": qsTr("Experiment") },
+                         { "history": qsTr("History") },
+                         { "geography": qsTr("Geography") }
+            ]
         },
         {
             icon: activity.url + "fun.svg",
@@ -102,7 +121,11 @@ ActivityBase {
         },
         {
             icon: activity.url + "math.svg",
-            tag: "math"
+            tag: "math",
+            categories: [{ "numeration": qsTr("Numeration") },
+                         { "arithmetic": qsTr("Arithmetic") },
+                         { "measures": qsTr("Measures") }
+                        ]
         },
         {
             icon: activity.url + "puzzle.svg",
@@ -110,7 +133,11 @@ ActivityBase {
         },
         {
             icon: activity.url + "reading.svg",
-            tag: "reading"
+            tag: "reading",
+            categories: [{ "letters": qsTr("Letters") },
+                         { "words": qsTr("Words") },
+                         { "vocabulary": qsTr("Vocabulary") }
+                        ]
         },
         {
             icon: activity.url + "strategy.svg",
@@ -122,6 +149,8 @@ ActivityBase {
         }
     ]
     property string currentTag: sections[0].tag
+    property var currentTagCategories: []
+    property string currentCategory: ""
     /// @endcond
 
     pageComponent: Image {
@@ -130,6 +159,7 @@ ActivityBase {
         sourceSize.width: Math.max(parent.width, parent.height)
         height: main.height
         fillMode: Image.PreserveAspectCrop
+
         Timer {
             // triggered once at startup to populate the keyboard
             id: keyboardFiller
@@ -165,7 +195,7 @@ ActivityBase {
         }
 
         // Filters
-        property bool horizontal: main.width > main.height
+        property bool horizontal: main.width >= main.height
         property int sectionIconWidth: {
             if(horizontal)
                 return Math.min(100 * ApplicationInfo.ratio, main.width / (sections.length + 1))
@@ -177,6 +207,7 @@ ActivityBase {
         property int sectionIconHeight: sectionIconWidth
         property int sectionCellWidth: sectionIconWidth * 1.1
         property int sectionCellHeight: sectionIconHeight * 1.1
+        property int categoriesHeight: currentCategory == "" ? 0 : sectionCellHeight - 2
 
         property var currentActiveGrid: activitiesGrid
         property bool keyboardMode: false
@@ -201,8 +232,22 @@ ActivityBase {
             keyboardMode = true
             event.accepted = false
         }
-        Keys.onTabPressed: currentActiveGrid = ((currentActiveGrid == activitiesGrid) ?
-                                                    section : activitiesGrid);
+        Keys.onTabPressed: {
+            if(currentActiveGrid == section) {
+                if(currentTagCategories && currentTagCategories.length != 0) {
+                    currentActiveGrid = categoriesGrid;
+                }
+                else {
+                    currentActiveGrid = activitiesGrid;
+                }
+            }
+            else if(currentActiveGrid == categoriesGrid) {
+                currentActiveGrid = activitiesGrid;
+            }
+            else {
+                currentActiveGrid = section;
+            }
+        }
         Keys.onEnterPressed: if(currentActiveGrid.currentItem) currentActiveGrid.currentItem.selectCurrentItem();
         Keys.onReturnPressed: if(currentActiveGrid.currentItem) currentActiveGrid.currentItem.selectCurrentItem();
         Keys.onRightPressed: if(currentActiveGrid.currentItem) currentActiveGrid.moveCurrentIndexRight();
@@ -224,6 +269,7 @@ ActivityBase {
             }
             x: ApplicationSettings.sectionVisible ? section.initialX : -sectionCellWidth
             y: ApplicationSettings.sectionVisible ? section.initialY : -sectionCellHeight
+            visible: ApplicationSettings.sectionVisible
             cellWidth: sectionCellWidth
             cellHeight: sectionCellHeight
             interactive: false
@@ -260,12 +306,19 @@ ActivityBase {
                     function selectCurrentItem() {
                         section.currentIndex = index
                         activity.currentTag = modelData.tag
+                        activity.currentTagCategories = modelData.categories
+                        if(modelData.categories != undefined) {
+                            currentCategory = Object.keys(modelData.categories[0])[0];
+                        }
+                        else {
+                            currentCategory = ""
+                        }
                         particles.burst(10)
                         if(modelData.tag === "search") {
                             ActivityInfoTree.filterBySearch(searchTextField.text);
                         }
                         else {
-                            ActivityInfoTree.filterByTag(modelData.tag)
+                            ActivityInfoTree.filterByTag(modelData.tag, currentCategory)
                             ActivityInfoTree.filterLockedActivities()
                             ActivityInfoTree.filterEnabledActivities()
                         }
@@ -292,11 +345,10 @@ ActivityBase {
 
         // Activities
         property int iconWidth: 120 * ApplicationInfo.ratio
-        property int iconHeight: 120 * ApplicationInfo.ratio
         property int activityCellWidth:
             horizontal ? background.width / Math.floor(background.width / iconWidth) :
                          (background.width - section.width) / Math.floor((background.width - section.width) / iconWidth)
-        property int activityCellHeight: iconHeight * 1.7
+        property int activityCellHeight: iconWidth * 1.7
 
         Loader {
             id: warningOverlay
@@ -342,19 +394,96 @@ ActivityBase {
         }
 
         GridView {
+            id: categoriesGrid
+            model: currentTagCategories
+            anchors.top: horizontal ? section.bottom : parent.top
+            topMargin: 5
+            interactive: false
+            keyNavigationWraps: true
+            width: horizontal ? main.width : main.width - section.width
+            visible: activity.currentTag !== "search"
+            x: {
+                if(currentTagCategories) {
+                    if(horizontal) {
+                        return categoriesGrid.width / (4 * (currentTagCategories.length+1))
+                    }
+                    else {
+                        return categoriesGrid.width / (4 * (currentTagCategories.length+1)) + section.width
+                    }
+                }
+                else {
+                    return 0
+                }
+            }
+
+            cellWidth: currentTagCategories ? categoriesGrid.width / currentTagCategories.length : 0
+            cellHeight: height
+            height: horizontal ? categoriesHeight * 0.5 : categoriesHeight
+
+            delegate: Button {
+                id: button
+                style: GCButtonStyle {
+                    selected: currentCategory === button.category
+                    theme: "categories"
+                    textSize: "regular"
+                    haveIconRight: horizontal
+                }
+                width: categoriesGrid.width / (currentTagCategories.length + 1)
+                height: categoriesGrid.cellHeight
+                text: Object.values(modelData)[0]
+                property string category: Object.keys(modelData)[0]
+                onClicked: {
+                    selectCurrentItem()
+                }
+
+                function selectCurrentItem() {
+                    categoriesGrid.currentIndex = index
+                    currentCategory = Object.keys(modelData)[0]
+                    ActivityInfoTree.filterByTag(currentTag, currentCategory)
+                    ActivityInfoTree.filterLockedActivities()
+                    ActivityInfoTree.filterEnabledActivities()
+                }
+                Image {
+                    visible: horizontal
+                    source: "qrc:/gcompris/src/activities/menu/resource/category-" + button.category + ".svg";
+                    height: Math.round(parent.height * 0.8)
+                    sourceSize.height: height
+                    width: height
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        right: parent.right
+                        rightMargin: parent.height * 0.1
+                    }
+                }
+            }
+            highlight: Rectangle {
+                z: 10
+                width: activityCellWidth - activitiesGrid.spacing
+                height: activityCellHeight - activitiesGrid.spacing
+                color:  "#00FFFFFF"
+                radius: 10
+                border.width: 5
+                border.color: "#FF87A6DD"
+                visible: true
+                Behavior on x { SpringAnimation { spring: 2; damping: 0.2 } }
+                Behavior on y { SpringAnimation { spring: 2; damping: 0.2 } }
+            }
+        }
+
+        GridView {
             id: activitiesGrid
-            layer.enabled: true
 
             anchors {
                 top: {
                     if(activity.currentTag === "search")
                         return searchBar.bottom
                     else
-                        return horizontal ? section.bottom : parent.top
+                        return categoriesGrid.bottom
                 }
                 bottom: bar.top
                 left: horizontal ? parent.left : section.right
                 margins: 4
+                topMargin: currentCategory == "" ? 4 : 10
             }
             width: background.width
             cellWidth: activityCellWidth
@@ -370,8 +499,8 @@ ActivityBase {
                 height: activityCellHeight - activitiesGrid.spacing
                 Rectangle {
                     id: activityBackground
-                    width: activityCellWidth - activitiesGrid.spacing
-                    height: activityCellHeight - activitiesGrid.spacing
+                    width: parent.width
+                    height: parent.height
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: "white"
                     opacity: 0.5
@@ -380,7 +509,10 @@ ActivityBase {
                     source: "qrc:/gcompris/src/activities/" + icon;
                     anchors.top: activityBackground.top
                     anchors.horizontalCenter: parent.horizontalCenter
-                    sourceSize.height: iconHeight
+                    width: iconWidth - activitiesGrid.spacing
+                    height: width
+                    sourceSize.width: width
+                    fillMode: Image.PreserveAspectFit
                     anchors.margins: 5
                     Image {
                         source: "qrc:/gcompris/src/core/resource/difficulty" +
@@ -486,8 +618,8 @@ ActivityBase {
                 Behavior on x { SpringAnimation { spring: 2; damping: 0.2 } }
                 Behavior on y { SpringAnimation { spring: 2; damping: 0.2 } }
             }
-       
-            Rectangle{
+
+            Rectangle {
                 id: activitiesMask
                 visible: false
                 anchors.fill: activitiesGrid
@@ -497,7 +629,7 @@ ActivityBase {
                   GradientStop { position: 0.96; color: "#00FFFFFF"}
                 }
             }
-       
+            layer.enabled: ApplicationInfo.useOpenGL
             layer.effect: OpacityMask {
                 id: activitiesOpacity
                 source: activitiesGrid
@@ -505,11 +637,35 @@ ActivityBase {
                 anchors.fill: activitiesGrid
             }
         }
+        
+        // The scroll buttons
+        GCButtonScroll {
+            visible: !ApplicationInfo.useOpenGL
+            anchors.right: parent.right
+            anchors.rightMargin: 5 * ApplicationInfo.ratio
+            anchors.bottom: activitiesGrid.bottom
+            anchors.bottomMargin: 30 * ApplicationInfo.ratio
+            onUp: activitiesGrid.flick(0, 1127)
+            onDown: activitiesGrid.flick(0, -1127)
+            upVisible: activitiesGrid.visibleArea.yPosition <= 0 ? false : true
+            downVisible: activitiesGrid.visibleArea.yPosition >= 1 ? false : true
+        }
+
+        Rectangle {
+            id: categories
+            width: horizontal ? parent.width : parent.width - (section.width+10)
+            height: searchTextField.height
+            visible: sections[activity.currentTag] === "search"
+            anchors {
+                top: horizontal ? section.bottom : categoriesGrid.top
+                left: horizontal ? undefined : section.right
+            }
+        }
 
         Rectangle {
             id: searchBar
-            width: horizontal ?  parent.width/2 : parent.width - (section.width+10)
-            height: searchTextField.height
+            width: horizontal ? parent.width/2 : parent.width - (section.width+10)
+            height: horizontal ? sectionCellHeight * 0.5 : sectionCellHeight
             visible: activity.currentTag === "search"
             anchors {
                 top: horizontal ? section.bottom : parent.top
@@ -557,9 +713,9 @@ ActivityBase {
             TextField {
                 id: searchTextField
                 width: parent.width
-                text: activity.inputText
+                height: parent.height
                 textColor: "black"
-                font.pointSize: 16
+                font.pointSize: 32
                 font.bold: true
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
@@ -668,41 +824,40 @@ ActivityBase {
                 displayDialog(dialogActivityConfig)
             }
         }
-
-    }
-
-    DialogAbout {
-        id: dialogAbout
-        onClose: home()
-    }
-    DialogHelp {
-        id: dialogHelp
-        onClose: home()
-        activityInfo: ActivityInfoTree.rootMenu
-    }
-
-    DialogActivityConfig {
-        id: dialogActivityConfig
-        currentActivity: activity
-
-        content: Component {
-            ConfigurationItem {
-                id: configItem
-                width: dialogActivityConfig.width - 50 * ApplicationInfo.ratio
+                
+        DialogAbout {
+            id: dialogAbout
+            onClose: home()
             }
+        DialogHelp {
+            id: dialogHelp
+            onClose: home()
+            activityInfo: ActivityInfoTree.rootMenu
         }
 
-        onSaveData: {
-            dialogActivityConfig.configItem.save();
-        }
-        onClose: {
-            if(activity.currentTag != "search") {
-                ActivityInfoTree.filterByTag(activity.currentTag)
-                ActivityInfoTree.filterLockedActivities()
-                ActivityInfoTree.filterEnabledActivities()
-            } else
-                ActivityInfoTree.filterBySearch(activity.inputText);
-            home()
+        DialogActivityConfig {
+            id: dialogActivityConfig
+            currentActivity: activity
+
+            content: Component {
+                ConfigurationItem {
+                    id: configItem
+                    width: dialogActivityConfig.width - 50 * ApplicationInfo.ratio
+                }
+            }
+
+            onSaveData: {
+                dialogActivityConfig.configItem.save();
+            }
+            onClose: {
+                if(activity.currentTag != "search") {
+                    ActivityInfoTree.filterByTag(activity.currentTag, currentCategory)
+                    ActivityInfoTree.filterLockedActivities()
+                    ActivityInfoTree.filterEnabledActivities()
+                } else
+                    ActivityInfoTree.filterBySearch(searchTextField.text);
+                home()
+            }
         }
     }
 }

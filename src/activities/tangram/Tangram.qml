@@ -17,10 +17,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.1
-import QtGraphicalEffects 1.0
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -34,13 +33,16 @@ ActivityBase {
     onStart: focus = true
     onStop: {}
 
+    property var dataset: Dataset
+    property string resourceUrl: "qrc:/gcompris/src/activities/tangram/resource/"
+
     Keys.onPressed: Activity.processPressedKey(event)
 
     pageComponent: Item {
         id: background
         anchors.fill: parent
 
-        property bool horizontalLayout: background.width > background.height
+        property bool horizontalLayout: background.width >= background.height
         property int playX: (activity.width - playWidth) / 2
         property int playY: (activity.height - playHeight) / 2
         property int playWidth: horizontalLayout ? activity.height : activity.width
@@ -56,7 +58,7 @@ ActivityBase {
 
         Image {
             id: bg
-            source: Activity.url + "tangram/background.svg"
+            source: activity.resourceUrl + "tangram/background.svg"
             sourceSize.width: 2000 * ApplicationInfo.ratio
             sourceSize.height: 2000 * ApplicationInfo.ratio
             width: 2000 * background.playRatio
@@ -90,8 +92,8 @@ ActivityBase {
             property alias userList: userList
             property alias userListModel: userList.model
             property Item selectedItem
-            property var currentTans: Dataset.dataset[bar.level - 1]
-            property int numberOfLevel: Dataset.dataset.length
+            property var currentTans: dataset.dataset[bar.level - 1]
+            property int numberOfLevel: dataset.dataset.length
             property bool editionMode: false
         }
 
@@ -102,7 +104,7 @@ ActivityBase {
 
         Image {
             id: bgData
-            source: items.currentTans.bg ? Activity.url + items.currentTans.bg : ''
+            source: items.currentTans.bg ? activity.resourceUrl + items.currentTans.bg : ''
             sourceSize.width: 1000 * background.playRatio
             sourceSize.height: 1000 * background.playRatio
             width: 1000 * background.playRatio
@@ -129,27 +131,13 @@ ActivityBase {
                     id: tansModel
                     x: background.playX + background.playWidth * modelData.x - width / 2
                     y: background.playY + background.playHeight * modelData.y - height / 2
-                    source: Activity.url + modelData.img
+                    source: activity.resourceUrl + "m-" + modelData.img
                     sourceSize.width: modelData.width * background.playWidth
                     sourceSize.height: modelData.height * background.playWidth
                     z: index
-                    visible: false
-                }
-                Rectangle {
-                    id: mask
-                    anchors.fill: tansModel
-                    color: items.currentTans.colorMask
-                    visible: false
-                }
-                OpacityMask {
-                    anchors.fill: tansModel
-                    source: mask
-                    maskSource: tansModel
-                    rotation: modelData.flipping ? 360 - modelData.rotation : modelData.rotation
-                    transform: Scale {
-                        origin.x: modelData.width * background.playWidth / 2
-                        xScale: modelData.flipping ? -1 : 1
-                    }
+                    rotation: modelData.rotation
+                    mirror: modelData.flipping ? true : false
+                    visible: true
                 }
             }
         }
@@ -201,11 +189,9 @@ ActivityBase {
                 Image {
                     id: tans
                     mirror: !items.editionMode ? modelData.initFlipping : modelData.flipping
-                    source: Activity.url + modelData.img
+                    source: activity.resourceUrl + modelData.img
                     sourceSize.width: modelData.width * background.playWidth
                     sourceSize.height: modelData.height * background.playWidth
-                    // without this, the colorOverlay is not well displayed when flipping image (https://bugreports.qt.io/browse/QTBUG-33482)
-                    layer.enabled: true
                 }
                 // Manage to return a base rotation as it was provided in the model
                 function rotationToTans() {
@@ -297,16 +283,6 @@ ActivityBase {
                     }
                 }
 
-                Colorize {
-                    id: color
-                    anchors.fill: tans
-                    source: tans
-                    hue: 0.6
-                    lightness: -0.2
-                    saturation: 0.5
-                    opacity: tansItem.selected ? 1 : 0
-                }
-
                 Behavior on x {
                     PropertyAnimation  {
                         duration: animDuration
@@ -330,7 +306,7 @@ ActivityBase {
             }
         }
 
-        // We use a timere here because we have to check only once the potential
+        // We use a timer here because we have to check only once the potential
         // animation are over
         Timer {
             id: checkWinTimer

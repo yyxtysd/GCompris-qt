@@ -16,9 +16,9 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.6
 import GCompris 1.0
 
 /**
@@ -45,6 +45,20 @@ Rectangle {
     property alias fontSize: subLevelText.fontSize
 
     /**
+     * type:string
+     * Define how text size is determined
+     *
+     * @sa GCFont.fontSizeMode.
+     */
+    property alias fontSizeMode: subLevelText.fontSizeMode
+    
+    /**
+     * type:real
+     * Define margins
+     */
+    property real margins: 30
+    
+    /**
      * type:int
      * Total number of sub-levels to show.
      *
@@ -68,13 +82,25 @@ Rectangle {
      */
     property string message
 
+    /**
+     * Alias for external reference of subLevelText.
+     */
+    readonly property alias internalTextComponent: subLevelText
+
+    /**
+     * Emitted when the win animation should be started.
+     *
+     * Triggers scale and rotation animation.
+     */
+    signal playWinAnimation
+
     color: "#AAFFFFFF"
     width: subLevelText.width * 2
     height: subLevelText.height * 1.4
     radius: 10
     anchors.bottom: parent.bottom
     anchors.right: parent.right
-    anchors.margins: 30
+    anchors.margins: margins
 
     border.color: "black"
     border.width: 0
@@ -83,13 +109,52 @@ Rectangle {
 
     onCurrentSubLevelChanged: message = currentSubLevel + "/" + numberOfSubLevels
     onNumberOfSubLevelsChanged: message = currentSubLevel + "/" + numberOfSubLevels
+    onPlayWinAnimation: winAnimation.start()
+
+    readonly property bool isWinAnimationPlaying: winAnimation.running
 
     GCText {
         id: subLevelText
         anchors.centerIn: parent
-        fontSize: mediumSize
+        fontSizeMode: Text.Fit
         font.bold: true
-        color: "black"
+        color: "#373737"
         text: message
+    }
+
+    SequentialAnimation {
+        id: winAnimation
+        ParallelAnimation {
+            PropertyAnimation {
+                target: score
+                properties: "scale"
+                from: 1.0
+                to: 1.4
+                duration: 500
+            }
+            NumberAnimation {
+                target: score
+                property: "rotation"
+                from: -10; to: 10
+                duration: 750
+                easing.type: Easing.InOutQuad
+            }
+        }
+        ParallelAnimation {
+            PropertyAnimation {
+                target: score
+                properties: "scale"
+                from: 1.4
+                to: 1.0
+                duration: 500
+            }
+            NumberAnimation {
+                target: score
+                property: "rotation"
+                from: 10; to: 0
+                duration: 750
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 }

@@ -16,9 +16,9 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program; if not, see <http://www.gnu.org/licenses/>.
+ along with this program; if not, see <https://www.gnu.org/licenses/>.
 */
-import QtQuick 2.2
+import QtQuick 2.6
 import "planegame.js" as Activity
 import "../../core"
 import GCompris 1.0
@@ -64,7 +64,7 @@ Image {
 
     Component.onCompleted: {
         x = -cloud.width - 1
-        y = Activity.getRandomInt(0, background.height - cloud.height)
+        y = Activity.getRandomInt(0, background.height - (cloud.height + Activity.items.bar.height))
     }
 
     Behavior on x { PropertyAnimation { duration: 20000 } }

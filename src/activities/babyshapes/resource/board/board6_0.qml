@@ -17,14 +17,14 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.6
 
 QtObject {
    property string instruction: qsTr("Lock with colored shapes.")
    property bool glow: false
-   property variant levels: [
+   property var levels: [
 	  {
           "pixmapfile" : "dog3/dog.png",
           "type" : "SHAPE_BACKGROUND_IMAGE"

@@ -1,8 +1,5 @@
-if(SAILFISHOS)
-  cmake_minimum_required(VERSION 2.8.11)
-else(SAILfISHOS)
-  cmake_minimum_required(VERSION 2.8.12)
-endif()
+cmake_minimum_required(VERSION 2.8.12)
+cmake_policy(SET CMP0043 NEW)
 
 project(gcompris-qt C CXX)
 
@@ -29,11 +26,11 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${my_cxx_flags}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DQT_QML_DEBUG")
 
 set(GCOMPRIS_MAJOR_VERSION 0)
-set(GCOMPRIS_MINOR_VERSION 80)
+set(GCOMPRIS_MINOR_VERSION 98)
 set(GCOMPRIS_PATCH_VERSION 0)
 
 # Set the BUILD_DATE
-string(TIMESTAMP BUILD_DATE %Y%M)
+string(TIMESTAMP BUILD_DATE %Y%m)
 
 # cmake modules setup
 find_package(ECM 1.4.0 QUIET NO_MODULE)
@@ -42,17 +39,34 @@ set(CMAKE_PREFIX_PATH "${Qt5_DIR}/lib/cmake/Qt5")
 
 # KDE po to qm tools
 if(ECM_FOUND)
+  include(kdeFetchTranslation)
+  include(ECMAddTests)
   include(ECMPoQmTools)
   if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
     ecm_install_po_files_as_qm(po)
   endif()
+
+  option(BUILD_TESTING "Build and enable unit tests" OFF)
+  include(ECMCoverageOption)
 endif(ECM_FOUND)
+
+# add tools (cppcheck, clang-tidy...) if build on testing mode only
+# (slower compilation)
+if(BUILD_TESTING)
+  include(CodeQualityUtils)
+endif()
+
+set(QT_REQUIRED_VERSION 5.6.0)
 
 if(CMAKE_SYSTEM_NAME STREQUAL Android)
   find_package(ECM)
   set(ANDROID 1)
   # TODO: possibly should be setup by toolchain one day
   set(QT_QMAKE_EXECUTABLE "${_qt5Core_install_prefix}/bin/qmake")
+  if(ECM_VERSION VERSION_GREATER "5.55.0")
+    set(QT_REQUIRED_VERSION 5.12.0)
+  endif()
+
   # workaround until this fix is in released ECM
   if(ECM_VERSION VERSION_LESS "5.15.0")
     add_definitions(-DANDROID)
@@ -62,11 +76,6 @@ endif()
 # Set executable filename
 if(ANDROID)
   set(GCOMPRIS_EXECUTABLE_NAME GCompris)
-  if("${ANDROID_ARCHITECTURE}" STREQUAL "x86")
-    # We always want x86 to be a release above to arm one because the play
-    # store want x86 to be pushed after arm.
-    MATH(EXPR GCOMPRIS_MINOR_VERSION "${GCOMPRIS_MINOR_VERSION}+1")
-  endif("${ANDROID_ARCHITECTURE}" STREQUAL "x86")
 elseif(SAILFISHOS)
   set(GCOMPRIS_EXECUTABLE_NAME harbour-gcompris-qt)
 elseif(WIN32)
@@ -81,14 +90,6 @@ set(GCOMPRIS_VERSION ${GCOMPRIS_MAJOR_VERSION}.${GCOMPRIS_MINOR_VERSION})
 # Increase it at each release
 math(EXPR GCOMPRIS_VERSION_CODE "${GCOMPRIS_MAJOR_VERSION}*10000 + ${GCOMPRIS_MINOR_VERSION}*100 + ${GCOMPRIS_PATCH_VERSION}")
 
-# KDE po to qm tools
-if(ECM_FOUND)
-  include(ECMPoQmTools)
-  if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
-    ecm_install_po_files_as_qm(po)
-  endif()
-endif(ECM_FOUND)
-
 # prevent build in source directory
 if("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
     message(SEND_ERROR "Building in the source directory is not supported.")
@@ -96,36 +97,47 @@ if("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
             directory and create a build directory and call \"${CMAKE_COMMAND} <path to the sources>\".")
 endif("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 
-# Sailfish does not provide a recent Qt version
-if(SAILFISHOS)
-  set(QT_REQUIRED_VERSION 5.2.2)
-else()
-  set(QT_REQUIRED_VERSION 5.3.0)
-endif()
-
 find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED
-            Qml Quick Gui Multimedia Core Svg Xml XmlPatterns LinguistTools Sensors)
+    Qml Quick Gui Multimedia Core Svg Xml XmlPatterns LinguistTools Sensors)
+
+if(ANDROID)
+    find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED AndroidExtras)
+endif(ANDROID)
+
+if(SAILFISHOS)
+    find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED Widgets)
+endif(SAILFISHOS)
+
+## For now we workaround CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION to clang with a command variable, so not needed
+# if(ANDROID AND ECM_VERSION VERSION_LESS "5.56.0" AND Qt5Core_VERSION VERSION_GREATER "5.11.99")
+#   message(FATAL_ERROR "ECM ${ECM_VERSION} not compatible with Qt ${Qt5Core_VERSION} version for android.")
+# endif()
+
+if((UNIX AND NOT APPLE AND NOT SAILFISHOS AND NOT ANDROID) OR WIN32)
+    find_package(OpenSSL REQUIRED)
+endif()
 
 find_package (KF5 QUIET COMPONENTS
     DocTools
 )
-if(KF5_FOUND)
+if(ECM_FOUND)
     include(KDEInstallDirs)
 
-    if (ECM_VERSION VERSION_GREATER "1.6.0")
+    if(ECM_VERSION VERSION_GREATER "1.6.0")
         add_subdirectory(images)
         install(FILES org.kde.gcompris.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
         install(FILES org.kde.gcompris.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+    else()
+        message(STATUS "ECM_VERSION is ${ECM_VERSION}, icons and desktop files won't be installed.")
     endif()
 endif()
 
-FIND_PROGRAM(LRELEASE_EXECUTABLE lrelease-qt5 lrelease
-  PATHS
-  ${Qt5_DIR}/../../../bin/
-  /usr/local/bin
-  /usr/bin/
-  NO_DEFAULT_PATH
-)
+# Tell CMake to run moc when necessary:
+set(CMAKE_AUTOMOC ON)
+
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #get_cmake_property(_variableNames VARIABLES)
 #foreach (_variableName ${_variableNames})
@@ -141,12 +153,12 @@ option(WITH_DOWNLOAD "Internal download" ON)
 set(ANDROID_INTERNET_PERMISSION "<uses-permission android:name=\"android.permission.INTERNET\" />")
 set(ANDROID_ACCESS_NETWORK_STATE_PERMISSION "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />")
 
+set(GRAPHICAL_RENDERER "auto" CACHE STRING "Policy for choosing the renderer backend [opengl|software|auto]")
+
 # Set output directory
 if(CMAKE_HOST_APPLE)
   set(_bundle_bin gcompris-qt.app/Contents/MacOS)
   set(_data_dest_dir bin/${_bundle_bin}/../Resources)
-elseif(ANDROID)
-  set(_data_dest_dir android/assets)
 else()
   set(_data_dest_dir share/${GCOMPRIS_EXECUTABLE_NAME})
 endif()
@@ -154,7 +166,7 @@ if(ANDROID)
   # Android .so output
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/android/libs/${ANDROID_ABI}/)
   set(GCOMPRIS_TRANSLATIONS_DIR ${CMAKE_BINARY_DIR}/${_data_dest_dir} CACHE INTERNAL "" FORCE)
-  set(GCOMPRIS_RCC_DIR ${CMAKE_BINARY_DIR}/${_data_dest_dir} CACHE INTERNAL "" FORCE)
+  set(GCOMPRIS_RCC_DIR ${CMAKE_BINARY_DIR}/android/assets/${_data_dest_dir}/rcc CACHE INTERNAL "" FORCE)
   if(ACTIVATION_MODE STREQUAL "inapp")
     set(ANDROID_BILLING_PERMISSION "<uses-permission android:name=\"com.android.vending.BILLING\"/>")
     set(ANDROID_PACKAGE "net.gcompris")
@@ -269,6 +281,8 @@ add_custom_target(DlAndInstallBundledTranslations
 
 if(CMAKE_HOST_APPLE)
   install(DIRECTORY ${GCOMPRIS_TRANSLATIONS_DIR} DESTINATION ${_bundle_bin})
+elseif(ANDROID)
+  install(DIRECTORY ${GCOMPRIS_TRANSLATIONS_DIR} DESTINATION "share")
 else()
   install(DIRECTORY ${GCOMPRIS_TRANSLATIONS_DIR} DESTINATION ${_data_dest_dir})
 endif()
@@ -331,7 +345,7 @@ add_custom_target(
 set(DOWNLOAD_ASSETS "" CACHE STRING "Download and packages images and voices. use a list like: words,en,fr,pt_BR to retrieve multiple files")
 add_custom_command(
     OUTPUT predownloadAssets
-    COMMAND python2 tools/download-assets.py ${DOWNLOAD_ASSETS} ${COMPRESSED_AUDIO} ${GCOMPRIS_RCC_DIR}
+    COMMAND python tools/download-assets.py ${DOWNLOAD_ASSETS} ${COMPRESSED_AUDIO} ${GCOMPRIS_RCC_DIR}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
 
@@ -382,98 +396,21 @@ if(KF5_FOUND)
     add_subdirectory(docs/docbook)
 endif(KF5_FOUND)
 
+# qml-box2d
+include(cmake/box2d.cmake)
+
+add_subdirectory(src)
+
 if(SAILFISHOS)
   # Need to be done at the end, after src
   add_subdirectory(platforms/sailfishOS)
 endif()
 
-#
-# qml-box2d
-#
-
-set(QML_BOX2D_MODULE "auto" CACHE STRING "Policy for qml-box2d module [auto|submodule|system|disabled]")
-
-if (${QML_BOX2D_MODULE} STREQUAL "disabled")
-  # disable all activities depending on qml-box2d
-  set(_disabled_activities "balancebox,land_safe")
-  message(STATUS "Disabling qml-box2d module and depending activities: ${_disabled_activities}")
-else()
-  include(qt_helper)
-
-  getQtQmlPath(_qt_qml_system_path)
-  set (_box2d_system_dir "${_qt_qml_system_path}/Box2D.2.0")
-
-  if (${QML_BOX2D_MODULE} STREQUAL "submodule")
-    message(STATUS "Building qml-box2d module from submodule")
-    set(_need_box2d_submodule "TRUE")
-  else()
-    # try to find module in system scope
-    find_library(QML_BOX2D_LIBRARY NAMES Box2D libBox2D PATHS ${_box2d_system_dir} NO_DEFAULT_PATH)
-    if (QML_BOX2D_LIBRARY)
-      message(STATUS "Using system qml-box2d plugin at ${QML_BOX2D_LIBRARY}")
-      # for packaging builds, copy the module manually to the correct location
-      if(SAILFISHOS)
-        file(COPY ${_box2d_system_dir}/qmldir ${QML_BOX2D_LIBRARY} DESTINATION share/harbour-gcompris-qt/lib/qml/Box2D.2.0)
-      elseif(ANDROID)
-        file(COPY ${_box2d_system_dir}/qmldir ${QML_BOX2D_LIBRARY} DESTINATION lib/qml/Box2D.2.0)
-      endif()
-      # FIXME: add others as needed
-    else()
-      if (${QML_BOX2D_MODULE} STREQUAL "auto")
-        message(STATUS "Did not find the qml-box2d module in system scope, falling back to submodule build ...")
-        set (_need_box2d_submodule "TRUE")
-      else()
-        message(FATAL_ERROR "Did not find the qml-box2d module in system scope and submodule build was not requested. Can't continue!")
-      endif()
-    endif()
-  endif()
-
-  if (_need_box2d_submodule)
-    # build qml-box2d ourselves from submodule
-    include(ExternalProject)
-    get_property(_qmake_program TARGET ${Qt5Core_QMAKE_EXECUTABLE} PROPERTY IMPORT_LOCATION)
-    set (_box2d_source_dir ${CMAKE_CURRENT_SOURCE_DIR}/external/qml-box2d)
-    if(WIN32)
-      set (_box2d_library_dir "release/")
-      set (_box2d_library_file "Box2D.dll")
-    else()
-      set (_box2d_library_dir "")
-      set (_box2d_library_file "libBox2D.so")
-    endif()
-    set (_box2d_install_dir ${CMAKE_CURRENT_BINARY_DIR}/lib/qml/Box2D.2.0)
-    # make sure submodule is up2date
-    find_package(Git)
-    if(GIT_FOUND)
-      execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init)
-    endif()
-
-    # for visual studio, we need to create a vcxproj
-    if(WIN32 AND NOT MINGW)
-      set(_qmake_options -spec win32-msvc2015 -tp vc)
-    else()
-      set(_qmake_options "")
-    endif()
-    ExternalProject_Add(qml_box2d
-      DOWNLOAD_COMMAND ""
-      SOURCE_DIR ${_box2d_source_dir}
-      CONFIGURE_COMMAND ${_qmake_program} ${_qmake_options} ${_box2d_source_dir}/box2d.pro
-      BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-      INSTALL_DIR ${_box2d_install_dir}
-      INSTALL_COMMAND cp ${_box2d_library_dir}${_box2d_library_file} ${_box2d_source_dir}/qmldir ${_box2d_install_dir}
-      )
-
-    add_library(qml-box2d SHARED IMPORTED)
-    set_target_properties(qml-box2d PROPERTIES IMPORTED_LOCATION ${_box2d_install_dir}/${_box2d_library_file})
-
-    if(SAILFISHOS)
-      install(DIRECTORY ${_box2d_install_dir} DESTINATION share/harbour-gcompris-qt/lib/qml)
-    else()
-      install(DIRECTORY ${_box2d_install_dir} DESTINATION lib/qml)
-    endif()
-  endif()
-endif()
-
-add_subdirectory(src)
+# only enable unit tests for linux
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif(BUILD_TESTING)
 
 add_custom_target(binaries)
 add_dependencies(binaries ${GCOMPRIS_EXECUTABLE_NAME} rcc_core rcc_menu rcc_activities all_activities)

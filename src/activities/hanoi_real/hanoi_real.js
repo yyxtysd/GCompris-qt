@@ -6,6 +6,7 @@
  *   Bruno Coudoin <bruno.coudoin@gcompris.net> (GTK+ version)
  *   Amit Tomar <a.tomar@outlook.com> (Qt Quick hanoi tower port)
  *   Johnny Jazeix <jazeix@gmail.com> (Qt Quick hanoi simplified port)
+ *   Timothée Giet <animtim@gmail.com> (Graphics refactoring)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,10 +19,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 .pragma library
-.import QtQuick 2.0 as Quick
+.import QtQuick 2.6 as Quick
 .import "qrc:/gcompris/src/core/core.js" as Core
 
 var url = "qrc:/gcompris/src/activities/hanoi_real/resource/"
@@ -41,21 +42,21 @@ var symbols = [
 ]
 
 var colors = [
-    "#70ff0000", // red
-    "#7000ff00", // green
-    "#700000ff", // blue
-    "#70ffff00", // yellow
-    "#70ff00ff", // magenta
-    "#70ff4500", // orange
-    "#70e9967a", // darksalmon
-    "#70b0c4de", // pink
-    "#70ba55d3", // mediumorchid
-    "#70b0c4de", // lightsteelblue
-    "#70808000", // olive
-    "#70800080", // purple
-    "#7000ffff", // cyan
-    "#707cfc00", // lawngreen
-    "#70800000" // brown
+    "#e4230b", // red
+    "#2cd60a", // green
+    "#0b62e4", // blue
+    "#ddb20b", // yellow
+    "#e40bb6", // magenta
+    "#0bb1e4", // cyan
+    "#e4900b", // orange
+    "#bc0be4", // purple
+    "#e43e0b", // red2
+    "#0ad618", // green2
+    "#2749f5", // blue2
+    "#ddc70b", // yellow2
+    "#e40b80", // magenta2
+    "#0b80e4", // cyan2
+    "#e4710b"  // orange2
 ]
 
 var nbTowersLessExpectedAndResultOnes
@@ -173,7 +174,7 @@ function placeDisc(disc, towerImage)
 function setDiscY(disc, towerImage)
 {
     //  -(towerImage.height * 0.12) because we need to remove the base of the tower
-    // dependant of the image!
+    // dependent of the image!
     disc.y = towerImage.y + towerImage.height - disc.position * disc.height - (towerImage.height * 0.12)
 }
 
@@ -206,7 +207,6 @@ function discReleased(index)
     var disc = items.discRepeater.itemAt(index)
     var isCorrect = false;
 
-
     if(activityMode == "real") {
         for(var i = 0 ; i < items.towerModel.model ; ++ i) {
             var towerItem = items.towerModel.itemAt(i);
@@ -237,30 +237,7 @@ function discReleased(index)
     }
 
     disableNonDraggablediscs()
-    deHighlightTowers()
     checkSolved()
-}
-
-function performTowersHighlight(disc, x)
-{
-    deHighlightTowers()
-
-    var isCorrect = false;
-    var nbTower = items.towerModel.model
-    if(activityMode === "simplified")
-        nbTower--
-
-    for(var i = 0 ; i < nbTower ; ++ i) {
-        var towerItem = items.towerModel.itemAt(i);
-        if(checkIfDiscOnTowerImage(disc, towerItem)) {
-            towerItem.highlight = true
-            isCorrect = true
-            break
-        }
-    }
-    if(!isCorrect && disc.towerImage) {
-        disc.towerImage.highlight = true
-    }
 }
 
 function sceneSizeChanged()
@@ -276,7 +253,6 @@ function sceneSizeChanged()
     }
 
     disableNonDraggablediscs()
-    deHighlightTowers()
 }
 
 function disableNonDraggablediscs()
@@ -313,16 +289,6 @@ function disableNonDraggablediscs()
 
         for(var i in highestOnes) {
             items.discRepeater.itemAt(highestOnes[i].id).mouseEnabled = true
-        }
-    }
-}
-
-function deHighlightTowers()
-{
-    if(items.towerModel) {
-        for(var i = 0 ; i < items.towerModel.model ; ++ i) {
-            if(items.towerModel.itemAt(i))
-                items.towerModel.itemAt(i).highlight = false
         }
     }
 }

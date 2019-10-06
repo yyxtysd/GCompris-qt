@@ -17,10 +17,10 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *   along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import GCompris 1.0
 
 import "../../core"
@@ -99,6 +99,7 @@ ActivityBase {
                 type: activity.type
                 main: MAIN
                 bar: BAR
+                background: items.background
             }
         }
 
@@ -124,8 +125,9 @@ ActivityBase {
         }
 
         Score {
+            id: score
             anchors {
-                bottom: parent.bottom
+                bottom: (background.width >= background.height + 40 * ApplicationInfo.ratio) ? background.bottom : bar.top
                 bottomMargin: 10 * ApplicationInfo.ratio
                 right: parent.right
                 rightMargin: 10 * ApplicationInfo.ratio
