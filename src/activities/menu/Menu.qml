@@ -847,7 +847,7 @@ ActivityBase {
             }
 
             onSaveData: {
-                dialogActivityConfig.configItem.save();
+                dialogActivityConfig.configItem.save()
             }
             onClose: {
                 if(activity.currentTag != "search") {
@@ -857,6 +857,14 @@ ActivityBase {
                 } else
                     ActivityInfoTree.filterBySearch(searchTextField.text);
                 home()
+            }
+            
+            BackgroundMusicList {
+                id: backgroundMusicList
+                onClose: {
+                    visible = false
+                    dialogActivityConfig.configItem.visible = true
+                }
             }
         }
     }

@@ -261,6 +261,11 @@ class ApplicationSettings : public QObject
       * Either openGL or software renderer (only for Qt >= 5.8)
       */
     Q_PROPERTY(QString renderer READ renderer WRITE setRenderer NOTIFY rendererChanged)
+    
+    /**
+     * Stores the filtered background music playlist by the user.
+     */
+    Q_PROPERTY(QStringList filteredBackgroundMusic READ filteredBackgroundMusic WRITE setFilteredBackgroundMusic NOTIFY filteredBackgroundMusicChanged)
 
     // internal group
     Q_PROPERTY(quint32 exeCount READ exeCount WRITE setExeCount NOTIFY exeCountChanged)
@@ -497,6 +502,12 @@ public:
         m_renderer = newRenderer;
         emit rendererChanged();
     }
+    
+    QStringList filteredBackgroundMusic() const { return m_filteredBackgroundMusic; }
+    void setFilteredBackgroundMusic(const QStringList &newFilteredBackgroundMusic) {
+        m_filteredBackgroundMusic = newFilteredBackgroundMusic;
+        emit filteredBackgroundMusicChanged();
+    }
 
     /**
      * Check if we use the external wordset for activity based on lang_api
@@ -528,6 +539,7 @@ protected slots:
     Q_INVOKABLE void notifyKioskModeChanged();
     Q_INVOKABLE void notifySectionVisibleChanged();
     Q_INVOKABLE void notifyWordsetChanged();
+    Q_INVOKABLE void notifyFilteredBackgroundMusicChanged();
 
     Q_INVOKABLE void notifyDownloadServerUrlChanged();
     Q_INVOKABLE void notifyCachePathChanged();
@@ -600,6 +612,7 @@ signals:
     void sectionVisibleChanged();
     void wordsetChanged();
     void baseFontSizeChanged();
+    void filteredBackgroundMusicChanged();
 
     void downloadServerUrlChanged();
     void cachePathChanged();
@@ -643,6 +656,7 @@ private:
     bool m_isKioskMode;
     bool m_sectionVisible;
     QString m_wordset;
+    QStringList m_filteredBackgroundMusic;
     int m_baseFontSize;
     const int m_baseFontSizeMin;
     const int m_baseFontSizeMax;

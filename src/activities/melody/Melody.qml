@@ -31,8 +31,6 @@ ActivityBase {
     onStop: {}
     isMusicalActivity: true
 
-    isMusicalActivity: true
-
     pageComponent: Image {
         id: background
         anchors.fill: parent

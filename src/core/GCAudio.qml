@@ -80,7 +80,7 @@ Item {
      * conditions (see onStopped signal in "audio" element) and decides what needs to be done for the next audio.
      */
     signal nextAudio()
-    onNextAudio: audio.stop()
+    onNextAudio: stop()
 
     /**
      * type:var

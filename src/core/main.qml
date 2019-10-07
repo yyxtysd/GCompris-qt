@@ -55,6 +55,7 @@ Window {
     property var applicationState: Qt.application.state
 
     property var rccBackgroundMusic: ApplicationInfo.getBackgroundMusicFromRcc()
+    property var filteredBackgroundMusic: ApplicationSettings.filteredBackgroundMusic
     property alias backgroundMusic: backgroundMusic
 
     /**
@@ -85,7 +86,7 @@ Window {
             audioEffects.stop();
         }
     }
-    
+
     onClosing: Core.quit(main)
     
     GCAudio {
@@ -154,10 +155,12 @@ Window {
 
             function playBackgroundMusic() {
                 rccBackgroundMusic = ApplicationInfo.getBackgroundMusicFromRcc()
-                Core.shuffle(rccBackgroundMusic)
-                for(var i = 0; i < rccBackgroundMusic.length; i++)
-                    backgroundMusic.append(ApplicationInfo.getAudioFilePath("backgroundMusic/" + rccBackgroundMusic[i]))
-                if(!main.isBackgroundMusicEnabledInActivity)
+
+                for(var i = 0; i < filteredBackgroundMusic.length; i++) {
+                    backgroundMusic.append(ApplicationInfo.getAudioFilePath("backgroundMusic/" + filteredBackgroundMusic[i]))
+                }
+                
+                if(main.isMusicalActivityRunning)
                     backgroundMusic.pause()
             }
         }

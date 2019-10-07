@@ -247,10 +247,13 @@ Item {
                     var musicDirectoryPath = ApplicationInfo.getAudioFilePath("backgroundMusic/")
                     var musicName = String(backgroundMusic.source)
                     musicName = musicName.slice(musicDirectoryPath.length, musicName.length)
-                    print("Music name: " + musicName)
                     return musicName.slice(0, musicName.lastIndexOf('.'))
                 }
                 style: GCButtonStyle {}
+                onClicked: {
+                    dialogConfig.visible = false
+                    backgroundMusicList.visible = true
+                }
             }
             
             // Padding
@@ -585,6 +588,8 @@ Item {
     property bool isAutomaticDownloadsEnabled: ApplicationSettings.isAutomaticDownloadsEnabled
     property bool sectionVisible: ApplicationSettings.sectionVisible
     property string wordset: ApplicationSettings.wordset
+    property var filteredBackgroundMusic: ApplicationSettings.filteredBackgroundMusic
+    property var allBackgroundMusic: ApplicationInfo.getBackgroundMusicFromRcc()
     property int baseFontSize  // don't bind to ApplicationSettings.baseFontSize
     property real fontLetterSpacing // don't bind to ApplicationSettings.fontLetterSpacing
     // or we get a binding loop warning
@@ -617,8 +622,12 @@ Item {
         wordsetBox.checked = DownloadManager.isDataRegistered("words") || ApplicationSettings.wordset == 'data2/words/words.rcc'
         wordsetBox.enabled = !DownloadManager.isDataRegistered("words")
 
-        baseFontSize = ApplicationSettings.baseFontSize;
-        fontLetterSpacing = ApplicationSettings.fontLetterSpacing;
+        baseFontSize = ApplicationSettings.baseFontSize
+        fontLetterSpacing = ApplicationSettings.fontLetterSpacing
+        filteredBackgroundMusic = ApplicationSettings.filteredBackgroundMusic
+        allBackgroundMusic = ApplicationInfo.getBackgroundMusicFromRcc()
+        if(filteredBackgroundMusic.length === 0)
+            filteredBackgroundMusic = allBackgroundMusic
         // Set locale
         for(var i = 0 ; i < dialogConfig.languages.length ; i ++) {
             if(dialogConfig.languages[i].locale === ApplicationSettings.locale) {
@@ -649,6 +658,7 @@ Item {
         ApplicationSettings.isAudioVoicesEnabled = isAudioVoicesEnabled
         ApplicationSettings.isAudioEffectsEnabled = isAudioEffectsEnabled
         ApplicationSettings.isBackgroundMusicEnabled = isBackgroundMusicEnabled
+        ApplicationSettings.filteredBackgroundMusic = filteredBackgroundMusic
         ApplicationSettings.isFullscreen = isFullscreen
         ApplicationSettings.isVirtualKeyboard = isVirtualKeyboard
         ApplicationSettings.isAutomaticDownloadsEnabled = isAutomaticDownloadsEnabled
@@ -799,6 +809,17 @@ Item {
         { text: qsTr("All uppercase"), value: Font.AllUppercase },
         { text: qsTr("All lowercase"), value: Font.AllLowercase }
     ]
+    
+    function isFilteredBackgroundMusicChanged() {
+        initialFilteredMusic = ApplicationSettings.filteredBackgroundMusic
+        if(initialFilteredMusic.length != filteredBackgroundMusic.length)
+            return true
+        for(var i = 0; i < initialFilteredMusic.length; i++)
+            if(filteredBackgroundMusic.indexOf(initialFilteredMusic[i]) == -1)
+                return true
+        
+        return false
+    }
 
     function hasConfigChanged() {
         return (ApplicationSettings.locale !== dialogConfig.languages[languageBox.currentIndex].locale ||
@@ -816,7 +837,8 @@ Item {
         (ApplicationSettings.isVirtualKeyboard != isVirtualKeyboard) ||
         (ApplicationSettings.isAutomaticDownloadsEnabled != isAutomaticDownloadsEnabled) ||
         (ApplicationSettings.baseFontSize != baseFontSize) ||
-        (ApplicationSettings.showLockedActivities != showLockedActivities)
+        (ApplicationSettings.showLockedActivities != showLockedActivities) ||
+        isFilteredBackgroundMusicChanged()
         );
     }
 }
