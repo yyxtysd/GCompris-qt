@@ -24,6 +24,7 @@ import QtQuick.Controls 1.5
 import GCompris 1.0
 
 import "../../core"
+import "qrc:/gcompris/src/core/core.js" as Core
 
 Rectangle {
     id: dialogBackground
@@ -59,7 +60,7 @@ Rectangle {
 
                 GCText {
                     id: title
-                    text: qsTr("Background Musics")
+                    text: qsTr("Pieces of background music")
                     width: dialogBackground.width - 30
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -103,12 +104,33 @@ Rectangle {
                                 height: dialogBackground.height / 5
 
                                 Button {
-                                    text: modelData
+                                    text: modelData.slice(0, modelData.lastIndexOf('.'))
                                     onClicked: {
-                                        if(dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(modelData) == -1)
-                                            dialogActivityConfig.configItem.filteredBackgroundMusic.push(modelData)
-                                        else
+                                        if(dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(modelData) == -1) {
+                                            // Keep the filtered playlist sorted w.r.t to their positions in "allBackgroundMusic" to maintain their playing order
+                                            var musicOriginalPosition = dialogActivityConfig.configItem.allBackgroundMusic.indexOf(modelData)
+                                            var i = 0
+                                            while(i < dialogActivityConfig.configItem.filteredBackgroundMusic.length) {
+                                                var filteredMusicName = dialogActivityConfig.configItem.filteredBackgroundMusic[i]
+                                                if(dialogActivityConfig.configItem.allBackgroundMusic.indexOf(filteredMusicName) >  musicOriginalPosition)
+                                                    break
+                                                i++
+                                            }
+                                            dialogActivityConfig.configItem.filteredBackgroundMusic.splice(i, 0, modelData)
+                                        }
+                                        else {
                                             dialogActivityConfig.configItem.filteredBackgroundMusic.splice(dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(modelData), 1)
+                                            if(dialogActivityConfig.configItem.filteredBackgroundMusic == 0) {
+                                                dialogActivityConfig.configItem.filteredBackgroundMusic.push(modelData)
+                                                selectedIcon.visible = false
+                                                Core.showMessageDialog(dialogBackground,
+                                                    qsTr("Disable the backgroung music if you don't want to play them."),
+                                                    "", null,
+                                                    "", null,
+                                                    null
+                                                );
+                                            }
+                                        }
                                         
                                         selectedIcon.visible = !selectedIcon.visible
                                     }

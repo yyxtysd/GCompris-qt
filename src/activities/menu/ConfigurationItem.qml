@@ -244,10 +244,7 @@ Item {
                 text: {
                     if(backgroundMusic.playbackState != Audio.PlayingState)
                         return qsTr("Not playing")
-                    var musicDirectoryPath = ApplicationInfo.getAudioFilePath("backgroundMusic/")
-                    var musicName = String(backgroundMusic.source)
-                    musicName = musicName.slice(musicDirectoryPath.length, musicName.length)
-                    return musicName.slice(0, musicName.lastIndexOf('.'))
+                    return configItem.extractMusicNameFromPath(backgroundMusic.source)
                 }
                 style: GCButtonStyle {}
                 onClicked: {
@@ -593,7 +590,14 @@ Item {
     property int baseFontSize  // don't bind to ApplicationSettings.baseFontSize
     property real fontLetterSpacing // don't bind to ApplicationSettings.fontLetterSpacing
     // or we get a binding loop warning
-
+    
+    function extractMusicNameFromPath(musicPath) {
+        var musicDirectoryPath = ApplicationInfo.getAudioFilePath("backgroundMusic/")
+        var musicName = String(musicPath)
+        musicName = musicName.slice(musicDirectoryPath.length, musicName.length)
+        return musicName.slice(0, musicName.lastIndexOf('.'))
+    }
+    
     function loadFromConfig() {
         // Synchronize settings with data
         showLockedActivities = ApplicationSettings.showLockedActivities

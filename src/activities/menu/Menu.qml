@@ -856,6 +856,33 @@ ActivityBase {
                     ActivityInfoTree.filterEnabledActivities()
                 } else
                     ActivityInfoTree.filterBySearch(searchTextField.text);
+                
+                backgroundMusic.clearQueue()
+                /**
+                 * 1. If the current playing background music is in new filtered playlist too, continue playing it and append all the next filtered musics to backgroundMusic element.
+                 * 2. Else, stop the current music, find the filtered music which comes just after it, and append all the further musics after it.
+                 */
+                var backgroundMusicName = dialogActivityConfig.configItem.extractMusicNameFromPath(backgroundMusic.source) + ".ogg"
+                var nextMusicIndex = dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(backgroundMusicName)
+                if(nextMusicIndex != -1) {
+                    nextMusicIndex++
+                    while(nextMusicIndex < dialogActivityConfig.configItem.filteredBackgroundMusic.length)
+                        backgroundMusic.append(ApplicationInfo.getAudioFilePath("backgroundMusic/" + dialogActivityConfig.configItem.filteredBackgroundMusic[nextMusicIndex++]))
+                }
+                else {
+                    nextMusicIndex = dialogActivityConfig.configItem.allBackgroundMusic.indexOf(backgroundMusicName) + 1
+                    while(nextMusicIndex < dialogActivityConfig.configItem.allBackgroundMusic.length) {
+                        if(dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(dialogActivityConfig.configItem.allBackgroundMusic[nextMusicIndex]) != -1) {
+                            nextMusicIndex = dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(dialogActivityConfig.configItem.allBackgroundMusic[nextMusicIndex])
+                            break
+                        }
+                        nextMusicIndex++
+                    }
+                    
+                    while(nextMusicIndex < dialogActivityConfig.configItem.filteredBackgroundMusic.length)
+                        backgroundMusic.append(ApplicationInfo.getAudioFilePath("backgroundMusic/" + dialogActivityConfig.configItem.filteredBackgroundMusic[nextMusicIndex++]))
+                    backgroundMusic.nextAudio()
+                }
                 home()
             }
             

@@ -159,7 +159,7 @@ Window {
                 for(var i = 0; i < filteredBackgroundMusic.length; i++) {
                     backgroundMusic.append(ApplicationInfo.getAudioFilePath("backgroundMusic/" + filteredBackgroundMusic[i]))
                 }
-                
+
                 if(main.isMusicalActivityRunning)
                     backgroundMusic.pause()
             }
