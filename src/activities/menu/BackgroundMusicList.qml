@@ -124,7 +124,7 @@ Rectangle {
                                                 dialogActivityConfig.configItem.filteredBackgroundMusic.push(modelData)
                                                 selectedIcon.visible = false
                                                 Core.showMessageDialog(dialogBackground,
-                                                    qsTr("Disable the backgroung music if you don't want to play them."),
+                                                    qsTr("Disable the background music if you don't want to play them."),
                                                     "", null,
                                                     "", null,
                                                     null
