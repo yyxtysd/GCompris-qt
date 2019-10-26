@@ -862,7 +862,8 @@ ActivityBase {
                  * 1. If the current playing background music is in new filtered playlist too, continue playing it and append all the next filtered musics to backgroundMusic element.
                  * 2. Else, stop the current music, find the filtered music which comes just after it, and append all the further musics after it.
                  */
-                var backgroundMusicName = dialogActivityConfig.configItem.extractMusicNameFromPath(backgroundMusic.source) + ".ogg"
+                var backgroundMusicSource = String(backgroundMusic.source)
+                var backgroundMusicName = dialogActivityConfig.configItem.extractMusicNameFromPath(backgroundMusicSource) + backgroundMusicSource.slice(backgroundMusicSource.lastIndexOf('.'), backgroundMusicSource.length)
                 var nextMusicIndex = dialogActivityConfig.configItem.filteredBackgroundMusic.indexOf(backgroundMusicName)
                 if(nextMusicIndex != -1) {
                     nextMusicIndex++
