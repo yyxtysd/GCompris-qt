@@ -56,6 +56,8 @@ static const char *FONT_KEY = "font";
 static const char *IS_CURRENT_FONT_EMBEDDED = "isCurrentFontEmbedded";
 static const char *ENABLE_AUTOMATIC_DOWNLOADS = "enableAutomaticDownloads";
 static const char *FILTERED_BACKGROUND_MUSIC_KEY = "filteredBackgroundMusic";
+static const char *BACKGROUND_MUSIC_VOLUME_KEY = "backgroundMusicVolume";
+static const char *AUDIO_EFFECTS_VOLUME_KEY = "audioEffectsVolume";
 
 static const char *DOWNLOAD_SERVER_URL_KEY = "downloadServerUrl";
 static const char *CACHE_PATH_KEY = "cachePath";
@@ -112,6 +114,8 @@ ApplicationSettings::ApplicationSettings(const QString &configPath, QObject *par
     m_fontLetterSpacing = m_config.value(FONT_LETTER_SPACING, GC_DEFAULT_FONT_LETTER_SPACING).toReal();
     m_isEmbeddedFont = m_config.value(IS_CURRENT_FONT_EMBEDDED, true).toBool();
     m_filteredBackgroundMusic = m_config.value(FILTERED_BACKGROUND_MUSIC_KEY, ApplicationInfo::getInstance()->getBackgroundMusicFromRcc()).toStringList();
+    m_backgroundMusicVolume = m_config.value(BACKGROUND_MUSIC_VOLUME_KEY, 1).toReal();
+    m_audioEffectsVolume = m_config.value(AUDIO_EFFECTS_VOLUME_KEY, 1).toReal();
 
     // Init the activation mode
     if(QLatin1String(ACTIVATION_MODE) == "no")
@@ -198,6 +202,8 @@ ApplicationSettings::ApplicationSettings(const QString &configPath, QObject *par
     connect(this, &ApplicationSettings::exeCountChanged, this, &ApplicationSettings::notifyExeCountChanged);
     connect(this, &ApplicationSettings::barHiddenChanged, this, &ApplicationSettings::notifyBarHiddenChanged);
     connect(this, &ApplicationSettings::lastGCVersionRanChanged, this, &ApplicationSettings::notifyLastGCVersionRanChanged);
+    connect(this, &ApplicationSettings::backgroundMusicVolumeChanged, this, &ApplicationSettings::notifyBackgroundMusicVolumeChanged);
+    connect(this, &ApplicationSettings::audioEffectsVolumeChanged, this, &ApplicationSettings::notifyAudioEffectsVolumeChanged);
 }
 
 ApplicationSettings::~ApplicationSettings()
@@ -209,6 +215,8 @@ ApplicationSettings::~ApplicationSettings()
     m_config.setValue(ENABLE_AUDIO_VOICES_KEY, m_isAudioVoicesEnabled);
     m_config.setValue(ENABLE_BACKGROUND_MUSIC_KEY, m_isBackgroundMusicEnabled);
     m_config.setValue(FILTERED_BACKGROUND_MUSIC_KEY, m_filteredBackgroundMusic);
+    m_config.setValue(BACKGROUND_MUSIC_VOLUME_KEY, m_backgroundMusicVolume);
+    m_config.setValue(AUDIO_EFFECTS_VOLUME_KEY, m_audioEffectsVolume);
     m_config.setValue(LOCALE_KEY, m_locale);
     m_config.setValue(FONT_KEY, m_font);
     m_config.setValue(IS_CURRENT_FONT_EMBEDDED, m_isEmbeddedFont);
@@ -278,6 +286,18 @@ void ApplicationSettings::notifyFilteredBackgroundMusicChanged()
 {
     updateValueInConfig(GENERAL_GROUP_KEY, FILTERED_BACKGROUND_MUSIC_KEY, m_filteredBackgroundMusic);
     qDebug()<<"filteredBackgroundMusic: " << m_filteredBackgroundMusic;
+}
+
+void ApplicationSettings::notifyBackgroundMusicVolumeChanged()
+{
+    updateValueInConfig(GENERAL_GROUP_KEY, BACKGROUND_MUSIC_VOLUME_KEY, m_backgroundMusicVolume);
+    qDebug()<<"backgroundMusicVolume: " << m_backgroundMusicVolume;
+}
+
+void ApplicationSettings::notifyAudioEffectsVolumeChanged()
+{
+    updateValueInConfig(GENERAL_GROUP_KEY, AUDIO_EFFECTS_VOLUME_KEY, m_audioEffectsVolume);
+    qDebug()<<"audioEffectsVolume: " << m_audioEffectsVolume;
 }
 
 void ApplicationSettings::notifyLocaleChanged()

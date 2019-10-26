@@ -213,6 +213,26 @@ Item {
             }
         }
 
+        Flow {
+            spacing: 5
+            width: parent.width
+            GCSlider {
+                id: audioEffectsVolumeSlider
+                width: 250 * ApplicationInfo.ratio
+                maximumValue: 10
+                minimumValue: 0
+                value: audioEffectsVolume * 10
+                onValueChanged: ApplicationSettings.audioEffectsVolume = value / 10;
+                scrollEnabled: false
+            }
+            GCText {
+                id: audioEffectsVolumeText
+                text: qsTr("Audio effects volume")
+                fontSize: mediumSize
+                wrapMode: Text.WordWrap
+            }
+        }
+
 	    GCDialogCheckBox {
            id: enableBackgroundMusicBox
             text: qsTr("Enable background music")
@@ -268,6 +288,26 @@ Item {
                     enabled: (backgroundMusic.playbackState == Audio.PlayingState && !backgroundMusic.muted)
                     onClicked: backgroundMusic.nextAudio()
                 }
+            }
+        }
+
+        Flow {
+            spacing: 5
+            width: parent.width
+            GCSlider {
+                id: backgroundMusicVolumeSlider
+                width: 250 * ApplicationInfo.ratio
+                maximumValue: 10
+                minimumValue: 0
+                value: backgroundMusicVolume * 10
+                onValueChanged: ApplicationSettings.backgroundMusicVolume = value / 10;
+                scrollEnabled: false
+            }
+            GCText {
+                id: backgroundMusicVolumeText
+                text: qsTr("Background music volume")
+                fontSize: mediumSize
+                wrapMode: Text.WordWrap
             }
         }
 
@@ -590,6 +630,8 @@ Item {
     property int baseFontSize  // don't bind to ApplicationSettings.baseFontSize
     property real fontLetterSpacing // don't bind to ApplicationSettings.fontLetterSpacing
     // or we get a binding loop warning
+    property real backgroundMusicVolume
+    property real audioEffectsVolume
     
     function extractMusicNameFromPath(musicPath) {
         var musicDirectoryPath = ApplicationInfo.getAudioFilePath("backgroundMusic/")
@@ -628,6 +670,8 @@ Item {
 
         baseFontSize = ApplicationSettings.baseFontSize
         fontLetterSpacing = ApplicationSettings.fontLetterSpacing
+        backgroundMusicVolume = ApplicationSettings.backgroundMusicVolume
+        audioEffectsVolume = ApplicationSettings.audioEffectsVolume
         filteredBackgroundMusic = ApplicationSettings.filteredBackgroundMusic
         allBackgroundMusic = ApplicationInfo.getBackgroundMusicFromRcc()
         if(filteredBackgroundMusic.length === 0)

@@ -218,6 +218,16 @@ class ApplicationSettings : public QObject
     Q_PROPERTY(int baseFontSize READ baseFontSize WRITE setBaseFontSize NOTIFY baseFontSizeChanged)
 
     /**
+     * Stores the background music volume set by the user.
+     */
+    Q_PROPERTY(qreal backgroundMusicVolume READ backgroundMusicVolume WRITE setBackgroundMusicVolume NOTIFY backgroundMusicVolumeChanged)
+
+    /**
+     * Stores the audio effects volume set by the user.
+     */
+    Q_PROPERTY(qreal audioEffectsVolume READ audioEffectsVolume WRITE setAudioEffectsVolume NOTIFY audioEffectsVolumeChanged)
+
+    /**
      * Minimum allowed value for font-scaling.
      *
      * Constant value: -7
@@ -491,6 +501,18 @@ public:
     int baseFontSizeMin() const { return m_baseFontSizeMin; }
     int baseFontSizeMax() const { return m_baseFontSizeMax; }
 
+    qreal backgroundMusicVolume() const { return m_backgroundMusicVolume; }
+    void setBackgroundMusicVolume(const qreal newBackgroundMusicVolume) {
+        m_backgroundMusicVolume = newBackgroundMusicVolume;
+        emit backgroundMusicVolumeChanged();
+    }
+
+    qreal audioEffectsVolume() const { return m_audioEffectsVolume; }
+    void setAudioEffectsVolume(const qreal newAudioEffectsVolume) {
+        m_audioEffectsVolume = newAudioEffectsVolume;
+        emit audioEffectsVolumeChanged();
+    }
+
     int lastGCVersionRan() const { return m_lastGCVersionRan; }
     void setLastGCVersionRan(const int newLastGCVersionRan) {
         m_lastGCVersionRan = newLastGCVersionRan;
@@ -540,6 +562,8 @@ protected slots:
     Q_INVOKABLE void notifySectionVisibleChanged();
     Q_INVOKABLE void notifyWordsetChanged();
     Q_INVOKABLE void notifyFilteredBackgroundMusicChanged();
+    Q_INVOKABLE void notifyBackgroundMusicVolumeChanged();
+    Q_INVOKABLE void notifyAudioEffectsVolumeChanged();
 
     Q_INVOKABLE void notifyDownloadServerUrlChanged();
     Q_INVOKABLE void notifyCachePathChanged();
@@ -613,6 +637,8 @@ signals:
     void wordsetChanged();
     void baseFontSizeChanged();
     void filteredBackgroundMusicChanged();
+    void backgroundMusicVolumeChanged();
+    void audioEffectsVolumeChanged();
 
     void downloadServerUrlChanged();
     void cachePathChanged();
@@ -657,6 +683,8 @@ private:
     bool m_sectionVisible;
     QString m_wordset;
     QStringList m_filteredBackgroundMusic;
+    qreal m_backgroundMusicVolume;
+    qreal m_audioEffectsVolume;
     int m_baseFontSize;
     const int m_baseFontSizeMin;
     const int m_baseFontSizeMax;

@@ -126,15 +126,14 @@ Window {
     GCSfx {
         id: audioEffects
         muted: !ApplicationSettings.isAudioEffectsEnabled && !main.isMusicalActivityRunning
+        volume: ApplicationSettings.audioEffectsVolume
     }
 
     GCAudio {
         id: backgroundMusic
         muted: !ApplicationSettings.isBackgroundMusicEnabled
 
-        readonly property real backgroundMusicVolume: 0.5
-
-        volume: backgroundMusicVolume
+        volume: ApplicationSettings.backgroundMusicVolume
 
         onMutedChanged: {
             if(!hasAudio && !delayedbackgroundMusic.running && !files.length) {
