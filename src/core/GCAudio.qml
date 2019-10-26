@@ -172,7 +172,7 @@ Item {
             source = ""
             source = file
             files.push(file)
-            silenceTimer.start()
+            _playNextFile()
         } else {
             files.push(file)
         }
@@ -201,8 +201,10 @@ Item {
     /// @cond INTERNAL_DOCS
 
     function _playNextFile() {
+        if(files.length == 0)
+            return
         var nextFile = files.shift()
-        if(nextFile.length === 0) {
+        if(nextFile === '') {
             audio.source = ""
             gcaudio.done()
         } else {
