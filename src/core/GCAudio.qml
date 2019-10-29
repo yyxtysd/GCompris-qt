@@ -76,6 +76,18 @@ Item {
     property alias errorString: audio.errorString
     
     /**
+     * type:bool
+     * check if the player is for background music
+     */
+    property bool isBackgroundMusic: false
+    
+    /**
+     * type:array
+     * backgrounMusic metadata
+     */
+    property var metaDataMusic: ["", "", "", ""]
+    
+    /**
      * Trigger this signal externally to play the next audio in the "files". This, in turn, stops the currently playing audio and check the necessary
      * conditions (see onStopped signal in "audio" element) and decides what needs to be done for the next audio.
      */
@@ -231,6 +243,11 @@ Item {
                 silenceTimer.start()
             else
                 gcaudio.done()
+        }
+        metaData.onMetaDataChanged: {
+            if(isBackgroundMusic) {
+                metaDataMusic = [metaData.title, metaData.contributingArtist, metaData.year, metaData.copyright]
+            }
         }
     }
 
