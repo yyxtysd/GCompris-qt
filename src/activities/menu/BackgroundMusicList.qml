@@ -155,14 +155,14 @@ Rectangle {
                             }
                         }
                     }
-                    
+
                     Column {
                         id: musicInfo
                         spacing: 10 * ApplicationInfo.ratio
                         width: parent.width
                         anchors.top: musicGrid.bottom
                         anchors.leftMargin: 20
-                        
+
                         GCText {
                             //: Current background music playing
                             text: qsTr("Now Playing:")

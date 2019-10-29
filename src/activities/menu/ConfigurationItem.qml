@@ -223,7 +223,7 @@ Item {
                 wrapMode: Text.WordWrap
             }
         }
-        
+
         Flow {
             spacing: 5 * ApplicationInfo.ratio
             width: parent.width
@@ -246,7 +246,7 @@ Item {
                 isBackgroundMusicEnabled = checked;
             }
         }
-        
+
         Flow {
             spacing: 5 * ApplicationInfo.ratio
             width: parent.width
@@ -267,11 +267,11 @@ Item {
                 }
             }
         }
-        
+
         Flow {
             width: parent.width
             spacing: 5 * ApplicationInfo.ratio
-            
+
             Button {
                 id: backgroundMusicName
                 height: 30 * ApplicationInfo.ratio
@@ -303,7 +303,7 @@ Item {
                 wrapMode: Text.WordWrap
             }
         }
-        
+
         GCSlider {
             id: backgroundMusicVolumeSlider
             width: 250 * ApplicationInfo.ratio
@@ -501,11 +501,11 @@ Item {
                 }
             }
         }
-        
+
         Flow {
             width: parent.width
             spacing: 5 * ApplicationInfo.ratio
-            
+
             GCText {
                 text: qsTr("Difficulty filter:")
                 fontSize: mediumSize
