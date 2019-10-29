@@ -164,7 +164,8 @@ Rectangle {
                         anchors.leftMargin: 20
                         
                         GCText {
-                            text: qsTr("Now Playing" + " :")
+                            //: Current background music playing
+                            text: qsTr("Now Playing:")
                             width: dialogBackground.width - 30
                             horizontalAlignment: Text.AlignHCenter
                             color: "black"
@@ -172,7 +173,8 @@ Rectangle {
                             wrapMode: Text.WordWrap
                         }
                         GCText {
-                            text: qsTr("Title" + " : " + backgroundMusic.metaDataMusic[0])
+                            //: Title of the current background music playing
+                            text: qsTr("Title: %1").arg(backgroundMusic.metaDataMusic[0])
                             width: dialogBackground.width - 30
                             horizontalAlignment: Text.AlignLeft
                             color: "black"
@@ -180,7 +182,8 @@ Rectangle {
                             wrapMode: Text.WordWrap
                         }
                         GCText {
-                            text: qsTr("Artist" + " : " + backgroundMusic.metaDataMusic[1])
+                            //: Artist of the current background music playing
+                            text: qsTr("Artist: %1").arg(backgroundMusic.metaDataMusic[1])
                             width: dialogBackground.width - 30
                             horizontalAlignment: Text.AlignLeft
                             color: "black"
@@ -188,7 +191,8 @@ Rectangle {
                             wrapMode: Text.WordWrap
                         }
                         GCText {
-                            text: qsTr("Date" + " : " + backgroundMusic.metaDataMusic[2])
+                            //: Date of the current background music playing
+                            text: qsTr("Date: %1").arg(backgroundMusic.metaDataMusic[2])
                             width: dialogBackground.width - 30
                             horizontalAlignment: Text.AlignLeft
                             color: "black"
@@ -196,7 +200,8 @@ Rectangle {
                             wrapMode: Text.WordWrap
                         }
                         GCText {
-                            text: qsTr("Copyright" + " : " + backgroundMusic.metaDataMusic[3])
+                            //: Copyright of the current background music playing
+                            text: qsTr("Copyright: %1").arg(backgroundMusic.metaDataMusic[3])
                             width: dialogBackground.width - 30
                             horizontalAlignment: Text.AlignLeft
                             color: "black"

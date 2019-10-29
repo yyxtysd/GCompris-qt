@@ -83,7 +83,7 @@ Item {
     
     /**
      * type:array
-     * backgrounMusic metadata
+     * background music metadata
      */
     property var metaDataMusic: ["", "", "", ""]
     

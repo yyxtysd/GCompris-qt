@@ -280,10 +280,10 @@ Item {
                     if(backgroundMusic.playbackState != Audio.PlayingState)
                         return qsTr("Not playing")
                     else if (backgroundMusic.metaDataMusic[0] != undefined)
-                        return (qsTr("Title") + ": " + backgroundMusic.metaDataMusic[0] + "  " + qsTr("Artist") + ": " + backgroundMusic.metaDataMusic[1])
+                        return (qsTr("Title: %1  Artist: %2").arg(backgroundMusic.metaDataMusic[0]).arg(backgroundMusic.metaDataMusic[1]))
                     else if (String(backgroundMusic.source).slice(0, 37) === "qrc:/gcompris/src/core/resource/intro")
-                        return (qsTr("Introduction music"))
-                    return ("")
+                        return qsTr("Introduction music")
+                    return ""
                 }
                 style: GCButtonStyle {}
                 onClicked: {
