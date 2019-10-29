@@ -184,7 +184,7 @@ Item {
             source = ""
             source = file
             files.push(file)
-            _playNextFile()
+            silenceTimer.start()
         } else {
             files.push(file)
         }
@@ -215,13 +215,14 @@ Item {
     function _playNextFile() {
         if(files.length == 0)
             return
+
         var nextFile = files.shift()
         if(nextFile === '') {
-            audio.source = ""
+            source = ""
             gcaudio.done()
         } else {
-            audio.source = ""
-            audio.source = nextFile
+            source = ""
+            source = nextFile
             if(!muted)
                 audio.play()
         }
