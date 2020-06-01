@@ -51,6 +51,7 @@ ActivityBase {
         property bool keyNavigationVisible: false
 
         Component.onCompleted: {
+            dialogActivityConfig.initialize()
             activity.start.connect(start)
             activity.stop.connect(stop)
         }
@@ -66,7 +67,7 @@ ActivityBase {
             property int selectionCount
             property int tuxScore: tuxScore.text
             property int playerScore: playerScore.text
-            property var dataset: activity.dataset
+            property var levels: activity.datasetLoader.data !==  0 ? activity.datasetLoader.data : activity.dataset
             property alias containerModel: containerModel
             property alias grid: grid
             property bool blockClicks: false
@@ -143,13 +144,35 @@ ActivityBase {
             onClose: home()
         }
 
+        DialogChooseLevel {
+            id: dialogActivityConfig
+            currentActivity: activity.activityInfo
+
+            onSaveData: {
+                levelFolder = dialogActivityConfig.chosenLevel
+                currentActivity.currentLevel = dialogActivityConfig.chosenLevel
+                ApplicationSettings.setCurrentLevel(currentActivity.name, dialogActivityConfig.chosenLevel)
+                home()
+            }
+            onClose: {
+                home()
+            }
+            onStartActivity: {
+                background.start()
+            }
+        }
+
+
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level }
+            content: BarEnumContent { value: help | home | level | activityConfig }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
             onPreviousLevelClicked: Activity.previousLevel()
+            onActivityConfigClicked: {
+                displayDialog(dialogActivityConfig)
+            }
             onNextLevelClicked: Activity.nextLevel()
             onHomeClicked: home()
         }

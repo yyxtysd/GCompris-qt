@@ -36,4 +36,5 @@ ActivityInfo {
   credit: ""
   section: "math numeration"
   createdInVersion: 0
+  levels: "1"
 }
