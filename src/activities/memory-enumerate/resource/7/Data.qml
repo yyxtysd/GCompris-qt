@@ -26,7 +26,7 @@ Data {
     objective: qsTr("Match the numbers up to 8.")
     difficulty: 3
 
-    property var url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
+    property string url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
 
     property var texts: [
         ["", 0],
