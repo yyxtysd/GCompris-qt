@@ -67,7 +67,7 @@ ActivityBase {
             property int selectionCount
             property int tuxScore: tuxScore.text
             property int playerScore: playerScore.text
-            property var levels: activity.datasetLoader.data !==  0 ? activity.datasetLoader.data : activity.dataset
+            property var levels: activity.datasetLoader.data !=  0 ? activity.datasetLoader.data : activity.dataset
             property alias containerModel: containerModel
             property alias grid: grid
             property bool blockClicks: false
@@ -149,15 +149,15 @@ ActivityBase {
             currentActivity: activity.activityInfo
 
             onSaveData: {
-                levelFolder = dialogActivityConfig.chosenLevel
-                currentActivity.currentLevel = dialogActivityConfig.chosenLevel
-                ApplicationSettings.setCurrentLevel(currentActivity.name, dialogActivityConfig.chosenLevel)
-                home()
+                levelFolder = dialogActivityConfig.chosenLevels
+                currentActivity.currentLevels = dialogActivityConfig.chosenLevels
+                ApplicationSettings.setCurrentLevels(currentActivity.name, dialogActivityConfig.chosenLevels)
             }
             onClose: {
                 home()
             }
             onStartActivity: {
+                background.stop()
                 background.start()
             }
         }

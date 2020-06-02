@@ -1,9 +1,9 @@
 /* GCompris - Data.qml
  *
- * Copyright (C) 2018 Johnny Jazeix <jazeix@gmail.com>
+ * Copyright (C) 2020 Deepak Kumar <deepakdk2431@gmail.com>
  *
  * Authors:
- *   Johnny Jazeix <jazeix@gmail.com>
+ *   Deepak Kumar <deepakdk2431@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,31 +18,68 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+
 import GCompris 1.0
+import GCompris 1.0 as GCompris
 
 Data {
-    objective: qsTr("Numbers between 1 and 8")
-    difficulty: 1
+    objective: qsTr("Match the numbers up to 8.")
+    difficulty: 3
+
+    property var url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
+
+    property var texts: [
+        ["", 0],
+        ["", 1],
+        ["", 2],
+        ["", 3],
+        ["", 4],
+        ["", 5],
+        ["", 6],
+        ["", 7],
+        ["", 8]
+    ]
+
+    property var images: [
+        [url + 'math_0.svg', ''],
+        [url + 'math_1.svg', ''],
+        [url + 'math_2.svg', ''],
+        [url + 'math_3.svg', ''],
+        [url + 'math_4.svg', ''],
+        [url + 'math_5.svg', ''],
+        [url + 'math_6.svg', ''],
+        [url + 'math_7.svg', ''],
+        [url + 'math_8.svg', ''],
+    ]
+
+    property var sounds: [
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0030.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0031.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0032.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0033.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0034.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0035.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0036.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0037.$CA")],
+        ["",
+         GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0038.$CA")]
+    ]
+
     data: [
-    {
-        "minNumber": 1,
-        "maxNumber": 1, /* Max number on each domino side */
-        "numberOfFish": 3
-    },
-    {
-        "minNumber": 1,
-        "maxNumber": 2,
-        "numberOfFish": 4
-    },
-    {
-        "minNumber": 1,
-        "maxNumber": 3,
-        "numberOfFish": 5
-    },
-    {
-        "minNumber": 1,
-        "maxNumber": 4,
-        "numberOfFish": 5
-    }
+        { // Level 1
+            "columns": 4,
+            "rows": 2,
+            "texts": texts.slice(0, 9),
+            "images": images.slice(0, 9),
+            "sounds": sounds.slice(0, 9)
+        }
     ]
 }
