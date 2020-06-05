@@ -29,24 +29,25 @@ Data {
     property string url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
 
     property var texts: [
-                ["", 0],
                 ["", 1],
                 ["", 2],
+                ["", 2],
                 ["", 3]
+
             ]
 
     property var images: [
-                [url + 'math_0.svg', ''],
                 [url + 'math_1.svg', ''],
+                [url + 'math_2.svg', ''],
                 [url + 'math_2.svg', ''],
                 [url + 'math_3.svg', '']
             ]
 
     property var sounds: [
                 ["",
-                 GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0030.$CA")],
-                ["",
                  GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0031.$CA")],
+                ["",
+                 GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0032.$CA")],
                 ["",
                  GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0032.$CA")],
                 ["",
