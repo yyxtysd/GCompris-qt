@@ -29,7 +29,6 @@ Data {
     property string url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
 
     property var texts: [
-                ["", 0],
                 ["", 1],
                 ["", 2],
                 ["", 3],
@@ -37,7 +36,6 @@ Data {
             ]
 
     property var images: [
-                [url + 'math_0.svg', ''],
                 [url + 'math_1.svg', ''],
                 [url + 'math_2.svg', ''],
                 [url + 'math_3.svg', ''],
@@ -45,8 +43,6 @@ Data {
             ]
 
     property var sounds: [
-                ["",
-                 GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0030.$CA")],
                 ["",
                  GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0031.$CA")],
                 ["",
@@ -61,9 +57,9 @@ Data {
         { // Level 1
             "columns": 2,
             "rows": 2,
-            "texts": texts.slice(0, 5),
-            "images": images.slice(0, 5),
-            "sounds": sounds.slice(0, 5)
+            "texts": texts.slice(0, 4),
+            "images": images.slice(0, 4),
+            "sounds": sounds.slice(0, 4)
         }
     ]
 }
