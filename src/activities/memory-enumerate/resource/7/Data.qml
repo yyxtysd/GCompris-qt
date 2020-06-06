@@ -76,7 +76,7 @@ Data {
     data: [
         { // Level 1
             "columns": 4,
-            "rows": 2,
+            "rows": 4,
             "texts": texts.slice(0, 9),
             "images": images.slice(0, 9),
             "sounds": sounds.slice(0, 9)

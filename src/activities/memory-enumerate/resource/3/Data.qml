@@ -55,7 +55,7 @@ Data {
 
     data: [
         { // Level 1
-            "columns": 2,
+            "columns": 4,
             "rows": 2,
             "texts": texts.slice(0, 4),
             "images": images.slice(0, 4),

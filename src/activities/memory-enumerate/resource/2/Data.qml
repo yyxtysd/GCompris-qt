@@ -31,14 +31,12 @@ Data {
     property var texts: [
                 ["", 1],
                 ["", 2],
-                ["", 2],
                 ["", 3]
 
             ]
 
     property var images: [
                 [url + 'math_1.svg', ''],
-                [url + 'math_2.svg', ''],
                 [url + 'math_2.svg', ''],
                 [url + 'math_3.svg', '']
             ]
@@ -49,14 +47,12 @@ Data {
                 ["",
                  GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0032.$CA")],
                 ["",
-                 GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0032.$CA")],
-                ["",
                  GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0033.$CA")]
             ]
 
     data: [
         { // Level 1
-            "columns": 2,
+            "columns": 3,
             "rows": 2,
             "texts": texts.slice(0, 4),
             "images": images.slice(0, 4),
