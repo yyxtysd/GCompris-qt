@@ -63,8 +63,8 @@ Data {
 
     data: [
         { // Level 1
-            "columns": 3,
-            "rows": 2,
+            "columns": 4,
+            "rows": 3,
             "texts": texts.slice(0, 6),
             "images": images.slice(0, 6),
             "sounds": sounds.slice(0, 6)

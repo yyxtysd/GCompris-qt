@@ -80,7 +80,7 @@ Data {
     data: [
         { // Level 1
             "columns": 5,
-            "rows": 2,
+            "rows": 4,
             "texts": texts.slice(0, 10),
             "images": images.slice(0, 10),
             "sounds": sounds.slice(0, 10)
