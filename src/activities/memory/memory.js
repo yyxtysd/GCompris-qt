@@ -70,7 +70,7 @@ function initLevel() {
                 sounds ? sounds.length : 0,
                 texts ? texts.length : 0)
 
-    if(rows * columns  > maxData * 2) {
+    if(rows * columns > maxData * 2) {
         console.log("ERROR: Memory dataset does not have enough data pairs at level ",
                     currentLevel + 1)
         return
