@@ -74,6 +74,7 @@ ActivityBase {
             property int columns
             property int rows
             property int spacing: 5 * ApplicationInfo.ratio
+            property bool isMultipleDatasetMode: activity.datasetLoader.data != 0
         }
 
         onStart: Activity.start(items)
@@ -165,7 +166,7 @@ ActivityBase {
 
         Bar {
             id: bar
-            content: BarEnumContent { value: help | home | level | activityConfig }
+            content: BarEnumContent { value: items.isMultipleDatasetMode ? (help | home | level | activityConfig) : (help | home | level) }
             onHelpClicked: {
                 displayDialog(dialogHelp)
             }
