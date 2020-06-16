@@ -23,8 +23,8 @@ import GCompris 1.0
 import "qrc:/gcompris/src/activities/memory/math_util.js" as Memory
 
 Data {
-    objective: qsTr("Subtraction table of 7 with maximum minuend 17.")
-    difficulty: 5
+    objective: qsTr("Subtraction table of 7.")
+    difficulty: 4
 
     data: [
         { // Level 1
