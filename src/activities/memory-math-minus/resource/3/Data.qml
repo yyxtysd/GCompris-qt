@@ -24,7 +24,7 @@ import "qrc:/gcompris/src/activities/memory/math_util.js" as Memory
 
 Data {
     objective: qsTr("Subtraction table of 3.")
-    difficulty: 2
+    difficulty: 4
 
     data: [
         { // Level 1
