@@ -24,7 +24,7 @@ import "qrc:/gcompris/src/activities/memory/math_util.js" as Memory
 
 Data {
     objective: qsTr("Find cards with equivalent quantities until 16.")
-    difficulty: 4
+    difficulty: 5
 
     data: [
         { // Level 1

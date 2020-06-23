@@ -24,7 +24,7 @@ import "qrc:/gcompris/src/activities/memory/math_util.js" as Memory
 
 Data {
     objective: qsTr("Table of 9.")
-    difficulty: 6
+    difficulty: 5
 
     data: [
         { // Level 1
