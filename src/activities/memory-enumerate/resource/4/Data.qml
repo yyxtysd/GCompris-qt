@@ -26,9 +26,9 @@ Data {
     objective: qsTr("Match the numbers up to 5.")
     difficulty: 2
 
-    property string url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
+    readonly property string url: "qrc:/gcompris/src/activities/memory-enumerate/resource/"
 
-    property var texts: [
+    readonly property var texts: [
         ["", 0],
         ["", 1],
         ["", 2],
@@ -37,7 +37,7 @@ Data {
         ["", 5]
     ]
 
-    property var images: [
+    readonly property var images: [
         [url + 'math_0.svg', ''],
         [url + 'math_1.svg', ''],
         [url + 'math_2.svg', ''],
@@ -46,7 +46,7 @@ Data {
         [url + 'math_5.svg', ''],
     ]
 
-    property var sounds: [
+    readonly property var sounds: [
         ["",
          GCompris.ApplicationInfo.getAudioFilePath("voices-$CA/$LOCALE/alphabet/U0030.$CA")],
         ["",
