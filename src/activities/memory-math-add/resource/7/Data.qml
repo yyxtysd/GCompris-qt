@@ -23,8 +23,8 @@ import GCompris 1.0
 import "qrc:/gcompris/src/activities/memory/math_util.js" as Memory
 
 Data {
-    objective: qsTr("Find cards with equivalent quantities until 17.")
-    difficulty: 4
+    objective: qsTr("Addition table of 7.")
+    difficulty: 5
 
     data: [
         { // Level 1
