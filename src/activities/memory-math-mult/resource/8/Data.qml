@@ -23,7 +23,7 @@ import GCompris 1.0
 import "qrc:/gcompris/src/activities/memory/math_util.js" as Memory
 
 Data {
-    objective: qsTr("Table of 8.")
+    objective: qsTr("Multiplication table of 8.")
     difficulty: 5
 
     data: [
